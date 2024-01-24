@@ -1,0 +1,21 @@
+version: '3'
+services:
+  web-time-machine-db:
+    image: 'postgres:15'
+    restart: unless-stopped
+    container_name: web-time-machine-db-postgres
+    ports:
+      - 5433:5432
+    env_file:
+      - db.env
+
+    volumes:
+      - web-time-machine-db-data:/var/lib/postgresql/data/
+
+networks:
+  default:
+    name: web-time-machine-network
+
+volumes:
+  web-time-machine-db-data:
+    name: web-time-machine-db-data
