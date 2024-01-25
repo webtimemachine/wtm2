@@ -1,0 +1,86 @@
+
+/* Add some basic styling */
+
+* {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+
+}
+html, body {
+padding: 0px;
+}
+#sites-list {
+overflow-y: scroll;
+height: 400px;
+padding-top: 20px;
+padding-left: 20px;
+border-top: solid 1px rgba(0, 0, 0, 0.23);
+margin: -8px;
+}
+#sites-list img {
+display: flex;
+width: 16px;
+height: 16px;
+margin-right: 8px;
+}
+#sites-list a {
+display: flex;
+align-items: center;
+justify-content: start;
+flex-direction: row-reverse;
+list-style-type: none;
+background-color: white;
+width: 300px;
+box-shadow: 0px 0px 100px rgba(0, 0, 0, 0.23);
+border-radius: 6px;
+cursor: pointer;
+margin-bottom: 10px;
+margin-right: 20px;
+padding: 8px;
+overflow: hidden;
+white-space: nowrap;
+text-overflow: ellipsis;
+transition: 300ms;
+color: black;
+underline: none;
+text-decoration: none;
+}
+#sites-list li:hover {
+background-color: rgba(72, 72, 72, 0.027);
+}
+#sites-list div {
+flex-grow: 1;
+display: flex;
+flex-direction: column;
+width: 100%;
+}
+input[type="text"] {
+padding: 8px;
+border: solid 1px transparent;
+border-radius: 6px;
+border: solid 1px rgba(0, 0, 0, 0.112);
+background-color: rgba(0, 133, 249, 0);
+width: 75%;
+box-shadow: 0px 0px 80px rgba(14, 22, 27, 0.193);
+}
+#button {
+background-color: rgba(96, 96, 96, 0.694);
+color: rgb(237, 243, 255);
+border: none;
+outline: none;
+padding: 8px;
+border-radius: 6px;;
+}
+#sites-list .truncate {
+overflow: hidden;
+white-space: nowrap;
+text-overflow: ellipsis;
+}
+#sites-list .date {
+font-size: 0.8em;
+color: #0000007c; /* Bootstrap primary color for example */
+padding: 2px 4px;
+border-radius: 4px;
+margin-top: 4px;
+width: fit-content;
+align-self: flex-start;
+}
