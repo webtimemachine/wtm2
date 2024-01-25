@@ -12,7 +12,34 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-model Example {
-  id   Int     @id @default(autoincrement())
-  text String?
+enum UserType {
+  MEMBER
+  ADMIN
+}
+
+model User {
+  id        BigInt    @id @default(autoincrement())
+  userType  UserType
+  email     String    @unique @db.VarChar()
+  password  String?   @db.VarChar()
+  createdAt DateTime  @default(now()) @db.Timestamptz(0)
+  updateAt  DateTime? @updatedAt @db.Timestamptz(0)
+  deletedAt DateTime? @db.Timestamptz(0)
+  sessions   Session[]
+
+  @@map("users")
+}
+
+model Session {
+  id           BigInt    @id @default(autoincrement())
+  refreshToken String    @db.VarChar()
+  deviceId     String    @unique @db.VarChar()
+  expiration   DateTime? @db.Timestamptz(0)
+  user         User      @relation(fields: [userId], references: [id])
+  userId       BigInt
+
+  createdAt DateTime  @default(now()) @db.Timestamptz(0)
+  updateAt  DateTime? @updatedAt @db.Timestamptz(0)
+
+  @@map("sessions")
 }
