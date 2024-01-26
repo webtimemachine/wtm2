@@ -124,10 +124,10 @@
 		137F0D8A2AF9C7F700277A9C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		137F0D8B2AF9C7F700277A9C /* Web Time Machine.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Web Time Machine.entitlements"; sourceTree = "<group>"; };
 		13E24D012AFAC00700D981A3 /* content.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = content.js; sourceTree = "<group>"; };
-		548A88A42B640D94009C7C21 /* background.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = background.js; path = "Chrome Web/background.js"; sourceTree = "<group>"; };
-		548A88A52B640D94009C7C21 /* popup.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = popup.js; path = "Chrome Web/popup.js"; sourceTree = "<group>"; };
-		548A88A62B640D94009C7C21 /* popup.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = popup.html; path = "Chrome Web/popup.html"; sourceTree = "<group>"; };
-		548A88A72B640D94009C7C21 /* styles.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; name = styles.css; path = "Chrome Web/styles.css"; sourceTree = "<group>"; };
+		548A88A42B640D94009C7C21 /* background.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = background.js; sourceTree = "<group>"; };
+		548A88A52B640D94009C7C21 /* popup.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = popup.js; sourceTree = "<group>"; };
+		548A88A62B640D94009C7C21 /* popup.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = popup.html; sourceTree = "<group>"; };
+		548A88A72B640D94009C7C21 /* styles.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = styles.css; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -181,10 +181,7 @@
 		137F0D482AF9C7F500277A9C = {
 			isa = PBXGroup;
 			children = (
-				548A88A42B640D94009C7C21 /* background.js */,
-				548A88A62B640D94009C7C21 /* popup.html */,
-				548A88A52B640D94009C7C21 /* popup.js */,
-				548A88A72B640D94009C7C21 /* styles.css */,
+				5414C8EE2B640F0A0075471F /* CommonFiles */,
 				13564CCC2B11DC77007E905E /* Web Time Machine (iOS) Github.xctestplan */,
 				137F0D4D2AF9C7F500277A9C /* Shared (App) */,
 				137F0D562AF9C7F700277A9C /* Shared (Extension) */,
@@ -288,6 +285,18 @@
 			name = Resources;
 			path = "Shared (Extension)";
 			sourceTree = SOURCE_ROOT;
+		};
+		5414C8EE2B640F0A0075471F /* CommonFiles */ = {
+			isa = PBXGroup;
+			children = (
+				548A88A62B640D94009C7C21 /* popup.html */,
+				548A88A52B640D94009C7C21 /* popup.js */,
+				548A88A72B640D94009C7C21 /* styles.css */,
+				548A88A42B640D94009C7C21 /* background.js */,
+			);
+			name = CommonFiles;
+			path = "Chrome Web";
+			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
