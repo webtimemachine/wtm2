@@ -1,0 +1,29 @@
+{
+  "configurations" : [
+    {
+      "id" : "342EDB78-87AE-4457-93CA-F45C66B8030F",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : false,
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:Web Time Machine.xcodeproj",
+      "identifier" : "137F0D5B2AF9C7F700277A9C",
+      "name" : "Web Time Machine (iOS)"
+    }
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:Web Time Machine.xcodeproj",
+        "identifier" : "13564CD12B11EF3A007E905E",
+        "name" : "Web Time MachineUITests"
+      }
+    }
+  ],
+  "version" : 1
+}

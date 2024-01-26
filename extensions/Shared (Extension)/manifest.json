@@ -1,0 +1,32 @@
+{
+  "manifest_version": 3,
+  "name": "Web Time Machine",
+  "version": "1.0",
+  "description": "Web Time Machine",
+  "permissions": [
+      "tabs",
+      "activeTab",
+      "storage",
+      "<all_urls>",
+      "http://127.0.0.1:5000/"
+    ], 
+    "content_scripts": [
+      {
+        "matches": ["<all_urls>"],
+        "js": ["content.js"]
+      }
+    ],
+
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  }
+}
+
