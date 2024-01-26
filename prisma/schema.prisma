@@ -17,6 +17,11 @@ enum UserType {
   ADMIN
 }
 
+model Example {
+  id   Int     @id @default(autoincrement())
+  text String?
+}
+
 model User {
   id        BigInt    @id @default(autoincrement())
   userType  UserType
