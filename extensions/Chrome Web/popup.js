@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     chrome.runtime.sendMessage({ type: "getHistory" }, function (response) {
-        response && response.history.forEach(record => {
+        response && response.history?.forEach(record => {
             appendHistoryItem(record);
         });
     });
