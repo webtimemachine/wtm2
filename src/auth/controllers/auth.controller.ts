@@ -20,7 +20,6 @@ import {
   SignUpRequestDto,
   SignUpResponseDto,
 } from '../dtos';
-import { AuthGuard } from '@nestjs/passport';
 import { LocalAuthGuard } from '../guards';
 
 @ApiTags('auth')
