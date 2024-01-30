@@ -35,6 +35,14 @@
 		137F0D972AF9C7F700277A9C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 137F0D552AF9C7F700277A9C /* Assets.xcassets */; };
 		13E24D022AFAC00700D981A3 /* content.js in Resources */ = {isa = PBXBuildFile; fileRef = 13E24D012AFAC00700D981A3 /* content.js */; };
 		13E24D032AFAC00700D981A3 /* content.js in Resources */ = {isa = PBXBuildFile; fileRef = 13E24D012AFAC00700D981A3 /* content.js */; };
+		540C0DC32B6937630049CE6A /* popup-sign-in-script.js in Resources */ = {isa = PBXBuildFile; fileRef = 540C0DBF2B6937630049CE6A /* popup-sign-in-script.js */; };
+		540C0DC42B6937630049CE6A /* popup-sign-in-script.js in Resources */ = {isa = PBXBuildFile; fileRef = 540C0DBF2B6937630049CE6A /* popup-sign-in-script.js */; };
+		540C0DC52B6937630049CE6A /* auth.js in Resources */ = {isa = PBXBuildFile; fileRef = 540C0DC02B6937630049CE6A /* auth.js */; };
+		540C0DC62B6937630049CE6A /* auth.js in Resources */ = {isa = PBXBuildFile; fileRef = 540C0DC02B6937630049CE6A /* auth.js */; };
+		540C0DC72B6937630049CE6A /* sign-in-styles.css in Resources */ = {isa = PBXBuildFile; fileRef = 540C0DC12B6937630049CE6A /* sign-in-styles.css */; };
+		540C0DC82B6937630049CE6A /* sign-in-styles.css in Resources */ = {isa = PBXBuildFile; fileRef = 540C0DC12B6937630049CE6A /* sign-in-styles.css */; };
+		540C0DC92B6937630049CE6A /* popup-sign-in.html in Resources */ = {isa = PBXBuildFile; fileRef = 540C0DC22B6937630049CE6A /* popup-sign-in.html */; };
+		540C0DCA2B6937630049CE6A /* popup-sign-in.html in Resources */ = {isa = PBXBuildFile; fileRef = 540C0DC22B6937630049CE6A /* popup-sign-in.html */; };
 		548A88A82B640D94009C7C21 /* background.js in Resources */ = {isa = PBXBuildFile; fileRef = 548A88A42B640D94009C7C21 /* background.js */; };
 		548A88A92B640D94009C7C21 /* background.js in Resources */ = {isa = PBXBuildFile; fileRef = 548A88A42B640D94009C7C21 /* background.js */; };
 		548A88AA2B640D94009C7C21 /* popup.js in Resources */ = {isa = PBXBuildFile; fileRef = 548A88A52B640D94009C7C21 /* popup.js */; };
@@ -124,6 +132,10 @@
 		137F0D8A2AF9C7F700277A9C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		137F0D8B2AF9C7F700277A9C /* Web Time Machine.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Web Time Machine.entitlements"; sourceTree = "<group>"; };
 		13E24D012AFAC00700D981A3 /* content.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = content.js; sourceTree = "<group>"; };
+		540C0DBF2B6937630049CE6A /* popup-sign-in-script.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "popup-sign-in-script.js"; sourceTree = "<group>"; };
+		540C0DC02B6937630049CE6A /* auth.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = auth.js; sourceTree = "<group>"; };
+		540C0DC12B6937630049CE6A /* sign-in-styles.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = "sign-in-styles.css"; sourceTree = "<group>"; };
+		540C0DC22B6937630049CE6A /* popup-sign-in.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = "popup-sign-in.html"; sourceTree = "<group>"; };
 		548A88A42B640D94009C7C21 /* background.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = background.js; sourceTree = "<group>"; };
 		548A88A52B640D94009C7C21 /* popup.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = popup.js; sourceTree = "<group>"; };
 		548A88A62B640D94009C7C21 /* popup.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = popup.html; sourceTree = "<group>"; };
@@ -289,6 +301,10 @@
 		5414C8EE2B640F0A0075471F /* CommonFiles */ = {
 			isa = PBXGroup;
 			children = (
+				540C0DC02B6937630049CE6A /* auth.js */,
+				540C0DBF2B6937630049CE6A /* popup-sign-in-script.js */,
+				540C0DC22B6937630049CE6A /* popup-sign-in.html */,
+				540C0DC12B6937630049CE6A /* sign-in-styles.css */,
 				548A88A62B640D94009C7C21 /* popup.html */,
 				548A88A52B640D94009C7C21 /* popup.js */,
 				548A88A72B640D94009C7C21 /* styles.css */,
@@ -481,11 +497,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				548A88A82B640D94009C7C21 /* background.js in Resources */,
+				540C0DC92B6937630049CE6A /* popup-sign-in.html in Resources */,
+				540C0DC72B6937630049CE6A /* sign-in-styles.css in Resources */,
 				548A88AE2B640D94009C7C21 /* styles.css in Resources */,
 				13564CCA2B0BEF25007E905E /* manifest.json in Resources */,
 				548A88AC2B640D94009C7C21 /* popup.html in Resources */,
+				540C0DC52B6937630049CE6A /* auth.js in Resources */,
 				13E24D022AFAC00700D981A3 /* content.js in Resources */,
 				548A88AA2B640D94009C7C21 /* popup.js in Resources */,
+				540C0DC32B6937630049CE6A /* popup-sign-in-script.js in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -494,11 +514,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				548A88A92B640D94009C7C21 /* background.js in Resources */,
+				540C0DCA2B6937630049CE6A /* popup-sign-in.html in Resources */,
+				540C0DC82B6937630049CE6A /* sign-in-styles.css in Resources */,
 				548A88AF2B640D94009C7C21 /* styles.css in Resources */,
 				13564CCB2B0BEF25007E905E /* manifest.json in Resources */,
 				548A88AD2B640D94009C7C21 /* popup.html in Resources */,
+				540C0DC62B6937630049CE6A /* auth.js in Resources */,
 				13E24D032AFAC00700D981A3 /* content.js in Resources */,
 				548A88AB2B640D94009C7C21 /* popup.js in Resources */,
+				540C0DC42B6937630049CE6A /* popup-sign-in-script.js in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
