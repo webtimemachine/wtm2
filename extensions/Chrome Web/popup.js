@@ -1,3 +1,11 @@
+const logoutButton = document.getElementById('logout-button');
+
+logoutButton.addEventListener('click', function () {
+    chrome.runtime.sendMessage({ type: "logout" }, function (response) {
+        window.location.replace('./popup-sign-in.html');
+    });
+})
+
 document.addEventListener('DOMContentLoaded', function () {
     const input = document.getElementById('input');
     const button = document.getElementById('button');

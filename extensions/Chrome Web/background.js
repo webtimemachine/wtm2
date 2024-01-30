@@ -1,4 +1,4 @@
-import { loginUser } from './auth.js'
+import { loginUser, logoutUser } from './auth.js'
 
 let historyArray = [];
 
@@ -62,6 +62,11 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         console.log('res', res);
         sendResponse(res)
       })
+      .catch(err => console.log(err));
+    return true;
+  } else if (request.type === 'logout') {
+    logoutUser()
+      .then(res => sendResponse(res))
       .catch(err => console.log(err));
     return true;
   }
