@@ -7,11 +7,11 @@ let browser;
 
 beforeEach(async () => {
   browser = await puppeteer.launch({
-    headless: false,
+    headless: 'new',
     args: [
       `--disable-extensions-except=${EXTENSION_PATH}`,
       `--load-extension=${EXTENSION_PATH}`,
-      '--headless=new'
+      '--no-sandbox'
     ]
   });
 });
