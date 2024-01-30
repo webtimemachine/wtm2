@@ -12,12 +12,12 @@ import {
   SignUpRequestDto,
   SignUpResponseDto,
 } from '../dtos';
-import { hashValue } from 'src/common/helpers/bcryptjs.helper';
+import { hashValue } from '../../common/helpers/bcryptjs.helper';
 import { Session, User, UserType } from '@prisma/client';
 import { plainToInstance } from 'class-transformer';
 import * as bcrypt from 'bcrypt';
 import { JWTPayload } from '../interfaces';
-import { appEnv } from 'src/config';
+import { appEnv } from '../../config';
 import { JwtService } from '@nestjs/jwt';
 import { createHash } from 'crypto';
 
