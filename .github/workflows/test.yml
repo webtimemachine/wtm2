@@ -9,6 +9,20 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    env:
+      PORT: ${{ secrets.PORT }}
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      DIRECT_URL: ${{ secrets.DIRECT_URL }}
+      BCRYPT_SALT: ${{ secrets.BCRYPT_SALT }}
+      CRYPTO_SALT: ${{ secrets.CRYPTO_SALT }}
+      CRYPTO_KEY: ${{ secrets.CRYPTO_KEY }}
+      JWT_ACCESS_SECRET: ${{ secrets.JWT_ACCESS_SECRET }}
+      JWT_ACCESS_EXPIRATION: ${{ secrets.JWT_ACCESS_EXPIRATION }}
+      JWT_REFRESH_SECRET: ${{ secrets.JWT_REFRESH_SECRET }}
+      JWT_REFRESH_EXPIRATION: ${{ secrets.JWT_REFRESH_EXPIRATION }}
+      JWT_PARTIAL_SECRET: ${{ secrets.JWT_PARTIAL_SECRET }}
+
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
