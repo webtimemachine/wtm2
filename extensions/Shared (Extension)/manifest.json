@@ -18,13 +18,14 @@
     ],
 
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "background.js",
+    "type": "module"
   },
   "host_permissions": [
     "<all_urls>"
    ],
   "action": {
-    "default_popup": "popup.html"
+    "default_popup": "popup-sign-in.html"
   },
   "icons": {
     "16": "icon16.png",
