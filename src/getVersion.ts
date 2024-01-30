@@ -1,7 +1,8 @@
+// eslint-disable-next-line
 const fs = require('fs');
 
 const readJsonFile = async (filename) => {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     fs.readFile(filename, 'utf8', (error, data) => {
       resolve(JSON.parse(data));
     });
