@@ -43,8 +43,5 @@ export async function loginUser (user_info) {
 }
 
 export async function logoutUser () {
-  chrome.storage.local.set({ userStatus: false, user_info: {} }, function (response) {
-    if (chrome.runtime.lastError) resolve('fail');
-    resolve('success');
-  });
+  chrome.storage.local.set({ userStatus: false, user_info: {} });
 }
