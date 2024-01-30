@@ -29,7 +29,7 @@ document.querySelector('form').addEventListener('submit', event => {
 
 //When popup is ready, check if user is already logged in
 document.addEventListener('DOMContentLoaded', function () {
-  is_user_signed_in().then((res) => {
+  is_user_signed_in(chrome).then((res) => {
     if (res.userStatus) {
       window.location.replace('./popup.html');
     }

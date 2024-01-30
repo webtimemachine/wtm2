@@ -1,4 +1,5 @@
-const auth = require('./auth');
+import { jest } from '@jest/globals'
+import * as auth from './auth.js'
 
 describe('is_user_signed_in', () => {
   test('should resolve with userStatus false and empty user_info if chrome.storage.local returns an error', async () => {
