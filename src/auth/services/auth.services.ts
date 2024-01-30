@@ -119,21 +119,25 @@ export class AuthService {
   }
 
   async validateUserOrThrow(LoginRequestDto: LoginRequestDto): Promise<User> {
-    const user = await this.prismaService.user.findFirstOrThrow({
+    const user = await this.prismaService.user.findFirst({
       where: {
         email: LoginRequestDto.email,
         deletedAt: null,
       },
     });
 
+    if (!user) {
+      this.logger.error('Unauthorized');
+      throw new UnauthorizedException();
+    }
+
     const passwordMatch = bcrypt.compareSync(
       LoginRequestDto.password,
       user.password,
     );
 
-    if (!user || !passwordMatch) {
+    if (!passwordMatch) {
       this.logger.error('Unauthorized');
-
       throw new UnauthorizedException();
     }
 

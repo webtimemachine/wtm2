@@ -21,6 +21,7 @@ import {
   SignUpResponseDto,
 } from '../dtos';
 import { AuthGuard } from '@nestjs/passport';
+import { LocalAuthGuard } from '../guards';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -50,8 +51,7 @@ export class AuthController {
     status: 200,
     type: LoginResponseDto,
   })
-  // @UseGuards(LocalStrategy)
-  @UseGuards(AuthGuard('local'))
+  @UseGuards(LocalAuthGuard)
   @HttpCode(200)
   @Post('login')
   async login(
