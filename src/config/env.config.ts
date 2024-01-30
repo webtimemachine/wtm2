@@ -15,6 +15,11 @@ const envSchemas = {
   BCRYPT_SALT: z.number(),
   CRYPTO_SALT: z.string(),
   CRYPTO_KEY: z.string(),
+  JWT_ACCESS_SECRET: z.string(),
+  JWT_ACCESS_EXPIRATION: z.string(),
+  JWT_REFRESH_SECRET: z.string(),
+  JWT_REFRESH_EXPIRATION: z.string(),
+  JWT_PARTIAL_SECRET: z.string(),
 };
 
 const envSchema = z.object({
