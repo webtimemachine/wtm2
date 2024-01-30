@@ -23,7 +23,7 @@ jobs:
       - name: Install dependencies
         working-directory: extensions/Chrome Web
         run: npm install
-
+        
       - name: Run Jest tests
         working-directory: extensions/Chrome Web
         run: npm run test
