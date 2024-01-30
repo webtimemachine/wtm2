@@ -1,4 +1,4 @@
-export { MessageResponse } from './message-response.dto.js';
+export { MessageResponse } from './message-response.dto';
 export {
   DataResponse,
   Pagination,
