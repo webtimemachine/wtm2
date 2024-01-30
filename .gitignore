@@ -37,3 +37,6 @@ lerna-debug.log*
 # Enviroment files
 .env
 db.env
+
+# Node Libraries
+extensions/Chrome Web/node_modules
