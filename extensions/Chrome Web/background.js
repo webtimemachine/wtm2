@@ -1,3 +1,5 @@
+import { loginUser } from './auth.js'
+
 let historyArray = [];
 
 chrome.runtime.onStartup.addListener(function () {
@@ -51,5 +53,16 @@ chrome.tabs.onUpdated.addListener(async function (tabId, changeInfo, tab) {
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.type === "getHistory") {
     sendResponse({ history: historyArray });
+  }
+
+
+  if (request.type === 'login') {
+    loginUser(request.payload)
+      .then(res => {
+        console.log('res', res);
+        sendResponse(res)
+      })
+      .catch(err => console.log(err));
+    return true;
   }
 });
