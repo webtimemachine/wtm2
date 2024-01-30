@@ -1,6 +1,6 @@
 
 // Check if user details is saved on browser data
-function is_user_signed_in (chrome) {
+export function is_user_signed_in (chrome) {
   return new Promise(resolve => {
     chrome.storage.local.get(['userStatus', 'user_info'],
       function (response) {
@@ -19,7 +19,7 @@ function is_user_signed_in (chrome) {
   });
 }
 
-async function loginUser (user_info) {
+export async function loginUser (user_info) {
   try {
     const res = {
       status: 200,
@@ -42,15 +42,9 @@ async function loginUser (user_info) {
   }
 }
 
-async function logoutUser () {
+export async function logoutUser () {
   chrome.storage.local.set({ userStatus: false, user_info: {} }, function (response) {
     if (chrome.runtime.lastError) resolve('fail');
     resolve('success');
   });
-}
-
-module.exports = {
-  is_user_signed_in,
-  loginUser,
-  logoutUser
 }
