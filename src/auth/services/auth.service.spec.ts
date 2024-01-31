@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { AuthService } from './auth.services';
+import { AuthService } from './auth.service';
 import { JwtService } from '@nestjs/jwt';
 import { LocalStrategy } from '../strategies';
 import { CommonTestingModule } from '../../common/common.testing.module';
@@ -19,7 +19,6 @@ describe('AuthService', () => {
 
   const accessToken = 'accessToken';
   const refreshToken = 'refreshToken';
-
 
   const existingUser = {
     id: BigInt(1),
@@ -50,7 +49,7 @@ describe('AuthService', () => {
   const loginReult = {
     accessToken,
     refreshToken,
-  }
+  };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({

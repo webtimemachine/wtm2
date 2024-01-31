@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   Post,
   Req,
@@ -21,6 +22,9 @@ import {
   SignUpResponseDto,
 } from '../dtos';
 import { LocalAuthGuard } from '../guards';
+import { JwtRefreshToken, JwtRequestContext } from '../decorators';
+import { JwtContext } from '../interfaces';
+import { RefreshResponseDto } from '../dtos';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -59,5 +63,17 @@ export class AuthController {
   ): Promise<LoginResponseDto> {
     const user = req.user;
     return await this.authService.login(body, user);
+  }
+
+  @ApiOkResponse({
+    status: 200,
+    type: RefreshResponseDto,
+  })
+  @JwtRefreshToken()
+  @Get('refresh')
+  async refreshToken(
+    @JwtRequestContext() context: JwtContext,
+  ): Promise<RefreshResponseDto> {
+    return this.authService.refreshToken(context);
   }
 }
