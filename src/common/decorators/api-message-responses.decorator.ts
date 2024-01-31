@@ -9,7 +9,7 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { MessageResponse } from '../dtos';
-import { ApiDocsDescriptions } from '../enums'
+import { ApiDocsDescriptions } from '../enums';
 
 /** 200 response code and ApiDocsDescriptions.OK message */
 export const ApiOkMessageResponse = () => {

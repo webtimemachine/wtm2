@@ -16,10 +16,11 @@ import { hashValue } from '../../common/helpers/bcryptjs.helper';
 import { Session, User, UserType } from '@prisma/client';
 import { plainToInstance } from 'class-transformer';
 import * as bcrypt from 'bcrypt';
-import { JWTPayload } from '../interfaces';
+import { JWTPayload, JwtContext } from '../interfaces';
 import { appEnv } from '../../config';
 import { JwtService } from '@nestjs/jwt';
 import { createHash } from 'crypto';
+import { RefreshResponseDto } from '../dtos';
 
 @Injectable()
 export class AuthService {
@@ -70,7 +71,9 @@ export class AuthService {
     const { accessToken, refreshToken } = await this.prismaService.$transaction(
       async (prismaService) => {
         await prismaService.session.deleteMany({
-          where: { userId: BigInt(user.id) },
+          where: {
+            deviceId: body.deviceId,
+          },
         });
 
         const session: Session = await prismaService.session.create({
@@ -117,6 +120,31 @@ export class AuthService {
     };
   }
 
+  async refreshToken(context: JwtContext): Promise<RefreshResponseDto> {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { iat, exp, ...rest } = context.payload;
+    const accessToken = this.buildAccessToken(rest);
+    const refreshToken = this.buildRefreshToken(rest);
+
+    const { exp: expiration } = this.jwtService.decode(refreshToken) as {
+      exp: number;
+    };
+
+    await this.prismaService.session.update({
+      where: {
+        id: rest.sessionId,
+      },
+      data: {
+        expiration: new Date(expiration * 1000),
+        refreshToken: this.hashIt(refreshToken),
+      },
+    });
+    return plainToInstance(RefreshResponseDto, {
+      accessToken,
+      refreshToken,
+    });
+  }
+
   async validateUserOrThrow(loginRequestDto: LoginRequestDto): Promise<User> {
     const user = await this.prismaService.user.findFirst({
       where: {
@@ -149,6 +177,11 @@ export class AuthService {
     const user = await this.prismaService.user.findFirstOrThrow({
       where: { id: payload.userId, deletedAt: null },
     });
+
+    await this.prismaService.session.findFirstOrThrow({
+      where: { id: payload.sessionId },
+    });
+
     return user;
   }
 
