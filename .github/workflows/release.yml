@@ -1,0 +1,53 @@
+on:
+  push:
+    tags:
+    - 'v*'
+
+name: Create Release and Upload Release Asset
+
+jobs:
+  build:
+    name: Upload Release Asset
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Create ZIP file for Chrome extension
+        working-directory: extensions
+        run: |
+          zip -r chrome-extension.zip ./Chrome\ Web
+      - name: Install dependencies & build backend project
+        run: |
+          npm install
+          npm run build
+          zip -r backend.zip ./dist
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+      - name: Upload Release Chrome extension Asset
+        id: upload-release-asset 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: extensions/chrome-extension.zip
+          asset_name: chrome-extension.zip
+          asset_content_type: application/zip
+      - name: Upload Release Backend Asset
+        id: upload-release-asset-backend
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} 
+          asset_path: backend.zip
+          asset_name: backend.zip
+          asset_content_type: application/zip
