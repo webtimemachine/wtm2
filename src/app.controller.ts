@@ -1,35 +1,19 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
-import { ApiProperty, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Controller, Get, Logger } from '@nestjs/common';
+import { ApiProperty, ApiTags } from '@nestjs/swagger';
 import { AppService } from './app.service';
-import { CreateExampleInput, ExampleDto } from './dtos';
-import { ApiBadRequestMessageResponse } from './common/decorators';
+import { JwtAccessToken } from './auth/decorators';
 
-@ApiTags('root')
+@ApiTags('Root')
 @Controller()
 export class AppController {
+  private readonly logger: Logger = new Logger(AppController.name);
+
   constructor(private readonly appService: AppService) {}
 
   @Get('/hello')
   @ApiProperty()
+  @JwtAccessToken([])
   getHello() {
     return this.appService.getHello();
-  }
-
-  @Get('/example')
-  @ApiProperty()
-  @ApiResponse({
-    status: 200,
-    type: ExampleDto,
-    isArray: true,
-  })
-  getExampleEntries() {
-    return this.appService.getExampleEntries();
-  }
-
-  @Post('/example')
-  @ApiProperty()
-  @ApiBadRequestMessageResponse()
-  createExampleEntry(@Body() body: CreateExampleInput) {
-    return this.appService.createExampleEntry(body.text);
   }
 }
