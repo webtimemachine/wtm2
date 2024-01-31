@@ -22,7 +22,7 @@ import {
 } from '../dtos';
 import { LocalAuthGuard } from '../guards';
 
-@ApiTags('auth')
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}

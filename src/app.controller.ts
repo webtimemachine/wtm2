@@ -4,7 +4,7 @@ import { AppService } from './app.service';
 import { CreateExampleInput, ExampleDto } from './dtos';
 import { ApiBadRequestMessageResponse } from './common/decorators';
 
-@ApiTags('root')
+@ApiTags('Root')
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}

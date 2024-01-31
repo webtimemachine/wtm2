@@ -1,8 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 import { IsEmail, IsNotEmpty, Matches } from 'class-validator';
-import { PASSWORD_REGEX } from '../../common/constants';
-import { ValidationMessages } from '../../common/enums';
+
+const validationErrorMessage =
+  'Password must contain at least one digit, one lowercase letter, one uppercase letter, and be between 8 and 20 characters in length.';
 
 export class SignUpRequestDto {
   @ApiProperty()
@@ -13,8 +14,8 @@ export class SignUpRequestDto {
 
   @ApiProperty()
   @IsNotEmpty()
-  @Matches(PASSWORD_REGEX, {
-    message: ValidationMessages.PASSWORD,
+  @Matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[^\s]{8,20}$/, {
+    message: validationErrorMessage,
   })
   password: string;
 }

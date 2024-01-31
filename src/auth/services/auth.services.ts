@@ -89,9 +89,8 @@ export class AuthService {
           sessionId: Number(session.id),
         };
 
-        const accessToken = this.getAccessToken(payload);
-
-        const refreshToken = this.getRefreshToken(payload);
+        const accessToken = this.buildAccessToken(payload);
+        const refreshToken = this.buildRefreshToken(payload);
 
         const { exp: expiration } = this.jwtService.decode(refreshToken) as {
           exp: number;
@@ -118,10 +117,10 @@ export class AuthService {
     };
   }
 
-  async validateUserOrThrow(LoginRequestDto: LoginRequestDto): Promise<User> {
+  async validateUserOrThrow(loginRequestDto: LoginRequestDto): Promise<User> {
     const user = await this.prismaService.user.findFirst({
       where: {
-        email: LoginRequestDto.email,
+        email: loginRequestDto.email,
         deletedAt: null,
       },
     });
@@ -132,7 +131,7 @@ export class AuthService {
     }
 
     const passwordMatch = bcrypt.compareSync(
-      LoginRequestDto.password,
+      loginRequestDto.password,
       user.password,
     );
 
@@ -146,25 +145,20 @@ export class AuthService {
     };
   }
 
-  private async findUser(payload: JWTPayload): Promise<User> {
-    const { userId } = payload;
-
-    const user = await this.prismaService.user.findFirstOrThrow({
-      where: { id: userId, deletedAt: null },
-    });
-
-    return user;
-  }
-
   async validateJwtAccessPayloadOrThrow(payload: JWTPayload): Promise<User> {
-    return this.findUser(payload);
+    const user = await this.prismaService.user.findFirstOrThrow({
+      where: { id: payload.userId, deletedAt: null },
+    });
+    return user;
   }
 
   async validateJwtRefreshPayloadOrThrow(
     payload: JWTPayload,
     refreshToken: string,
   ): Promise<User> {
-    const user = this.findUser(payload);
+    const user = await this.prismaService.user.findFirstOrThrow({
+      where: { id: payload.userId, deletedAt: null },
+    });
 
     if (!user) {
       this.logger.error('User does not exist');
@@ -181,14 +175,14 @@ export class AuthService {
     return createHash('sha256').update(payload).digest('hex');
   }
 
-  private getRefreshToken(payload: JWTPayload): string {
+  private buildRefreshToken(payload: JWTPayload): string {
     return this.jwtService.sign(payload, {
       secret: appEnv.JWT_REFRESH_SECRET,
       expiresIn: appEnv.JWT_REFRESH_EXPIRATION,
     });
   }
 
-  private getAccessToken(payload: JWTPayload): string {
+  private buildAccessToken(payload: JWTPayload): string {
     return this.jwtService.sign(payload, {
       secret: appEnv.JWT_ACCESS_SECRET,
       expiresIn: appEnv.JWT_ACCESS_EXPIRATION,
