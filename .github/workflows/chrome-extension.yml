@@ -1,0 +1,29 @@
+name: Check Chrome Extension tests
+
+on:
+  push:
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  testcheck:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18.16
+        
+      - name: Install missing dependencies
+        run: sudo apt-get update && sudo apt-get install -y libnss3 libnspr4 libatk1.0-0 libatk-bridge2.0-0 libcups2 libdrm2 libxkbcommon0 libxcomposite1 libxdamage1 libxfixes3 libxrandr2 libgbm1 libasound2
+
+      - name: Install dependencies
+        working-directory: extensions/Chrome Web
+        run: npm install
+        
+      - name: Run Jest tests
+        working-directory: extensions/Chrome Web
+        run: npm run test

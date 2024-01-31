@@ -1,3 +1,11 @@
+const logoutButton = document.getElementById('logout-button');
+
+logoutButton.addEventListener('click', function () {
+    chrome.runtime.sendMessage({ type: "logout" }, function (response) {
+        window.location.replace('./popup-sign-in.html');
+    });
+})
+
 document.addEventListener('DOMContentLoaded', function () {
     const input = document.getElementById('input');
     const button = document.getElementById('button');
@@ -20,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     chrome.runtime.sendMessage({ type: "getHistory" }, function (response) {
-        response && response.history.forEach(record => {
+        response && response.history?.forEach(record => {
             appendHistoryItem(record);
         });
     });

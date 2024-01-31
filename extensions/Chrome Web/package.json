@@ -1,0 +1,12 @@
+{
+  "name": "web-time-machine",
+  "version": "1.0",
+  "type": "module",
+  "dependencies": {
+    "jest": "^29.7.0",
+    "puppeteer": "^21.10.0"
+  },
+  "scripts": {
+    "test": "NODE_OPTIONS=--experimental-vm-modules npx jest"
+  }
+}
