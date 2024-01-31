@@ -2,12 +2,12 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Exclude, Expose } from 'class-transformer';
 
 @Exclude()
-export class ExampleDto {
+export class RefreshResponseDto {
+  @Expose()
   @ApiProperty()
-  @Expose()
-  id: number;
+  accessToken: string;
 
-  @ApiProperty({ required: false })
   @Expose()
-  text?: string;
+  @ApiProperty()
+  refreshToken: string;
 }
