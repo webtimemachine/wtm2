@@ -19,7 +19,6 @@ const envSchemas = {
   JWT_ACCESS_EXPIRATION: z.string(),
   JWT_REFRESH_SECRET: z.string(),
   JWT_REFRESH_EXPIRATION: z.string(),
-  JWT_PARTIAL_SECRET: z.string(),
 };
 
 const envSchema = z.object({

@@ -1,10 +1,9 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { HttpExceptionMessages } from '../../common/enums';
-import { appEnv } from '../../config';
 import { JwtContext, JWTPayload } from '../interfaces';
 import { AuthService } from '../services';
+import { appEnv } from '../../config';
 
 @Injectable()
 export class JWTRefreshStrategy extends PassportStrategy(
@@ -41,7 +40,7 @@ export class JWTRefreshStrategy extends PassportStrategy(
         user,
       };
     } catch (err) {
-      throw new UnauthorizedException(HttpExceptionMessages.UNAUTHORIZED);
+      throw new UnauthorizedException();
     }
   }
 }

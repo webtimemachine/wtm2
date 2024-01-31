@@ -6,7 +6,6 @@ import { PrismaService } from './common/services';
 
 import { ExampleDto, GetHelloReseponse } from './dtos';
 
-@Injectable()
 export class AppService {
   private readonly logger = new Logger(AppService.name);
 
