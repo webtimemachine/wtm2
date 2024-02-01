@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Transform, Type } from 'class-transformer';
-import { IsDate, IsISO8601, IsNotEmpty, IsOptional } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsDate, IsNotEmpty, IsOptional } from 'class-validator';
 
 export class CreateNavigationEntryInputDto {
   @IsNotEmpty()
