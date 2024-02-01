@@ -26,8 +26,8 @@ model User {
   updateAt  DateTime? @updatedAt @db.Timestamptz(0)
   deletedAt DateTime? @db.Timestamptz(0)
 
-  sessions        Session[]
-  navigationEntry NavigationEntry[]
+  sessions          Session[]
+  navigationEntries NavigationEntry[]
 
   @@map("users")
 }
