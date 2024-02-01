@@ -1,7 +1,6 @@
 name: Check Chrome Extension tests
 
 on:
-  push:
   pull_request:
     branches: [ "main" ]
 
