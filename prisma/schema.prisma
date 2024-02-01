@@ -51,8 +51,11 @@ model NavigationEntry {
   url     String  @db.VarChar()
   title   String  @db.VarChar()
   content String? @db.VarChar()
-  user    User    @relation(fields: [userId], references: [id])
-  userId  BigInt
+
+  navigationDate DateTime @default(now()) @db.Timestamptz(0)
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId BigInt
 
   createdAt DateTime  @default(now()) @db.Timestamptz(0)
   updateAt  DateTime? @updatedAt @db.Timestamptz(0)
