@@ -6,14 +6,10 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-
 import { UserType } from '@prisma/client';
 import { UserTypesGuard } from '../guards';
-
 import {
-  ApiBadRequestResponse,
   ApiBearerAuth,
-  ApiForbiddenResponse,
   ApiInternalServerErrorResponse,
   ApiOperation,
   ApiUnauthorizedResponse,
@@ -31,16 +27,8 @@ export function JwtAccessToken(
     UseGuards(AuthGuard('jwt-access-token'), UserTypesGuard, ...guards),
     ApiBearerAuth('accessToken'),
     ApiOperation({ summary: buildSummary(userTypes) }),
-    ApiBadRequestResponse({
-      description: ApiDocsDescriptions.BAD_REQUEST,
-      type: MessageResponse,
-    }),
     ApiUnauthorizedResponse({
       description: ApiDocsDescriptions.UNAUTHORIZED,
-      type: MessageResponse,
-    }),
-    ApiForbiddenResponse({
-      description: ApiDocsDescriptions.FORBIDDEN,
       type: MessageResponse,
     }),
     ApiInternalServerErrorResponse({
@@ -56,7 +44,6 @@ export function JwtRefreshToken(guards: Type<CanActivate>[] = []) {
     UseGuards(AuthGuard('jwt-refresh-token'), ...guards),
     ApiBearerAuth('refreshToken'),
     ApiUnauthorizedResponse({ description: ApiDocsDescriptions.UNAUTHORIZED }),
-    ApiForbiddenResponse({ description: ApiDocsDescriptions.FORBIDDEN }),
     ApiInternalServerErrorResponse({
       description: ApiDocsDescriptions.SERVER_ERROR,
     }),

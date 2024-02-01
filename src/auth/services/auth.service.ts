@@ -113,11 +113,12 @@ export class AuthService {
         return { accessToken, refreshToken };
       },
     );
-    return {
+
+    return plainToInstance(LoginResponseDto, {
       accessToken,
       refreshToken,
       user: { email: user.email, id: Number(user.id) },
-    };
+    });
   }
 
   async refreshToken(context: JwtContext): Promise<RefreshResponseDto> {
@@ -145,10 +146,10 @@ export class AuthService {
     });
   }
 
-  async validateUserOrThrow(loginRequestDto: LoginRequestDto): Promise<User> {
+  async validateUserOrThrow(email: string, password: string): Promise<User> {
     const user = await this.prismaService.user.findFirst({
       where: {
-        email: loginRequestDto.email,
+        email,
         deletedAt: null,
       },
     });
@@ -158,10 +159,7 @@ export class AuthService {
       throw new UnauthorizedException();
     }
 
-    const passwordMatch = bcrypt.compareSync(
-      loginRequestDto.password,
-      user.password,
-    );
+    const passwordMatch = bcrypt.compareSync(password, user.password);
 
     if (!passwordMatch) {
       this.logger.error('Unauthorized');

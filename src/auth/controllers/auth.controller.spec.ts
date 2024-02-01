@@ -73,6 +73,7 @@ describe('AuthController', () => {
       const loginRequestDto = {
         email: 'email@email.com',
         password: '123456',
+        deviceId: '123456',
       };
 
       const loginResponseDto = {

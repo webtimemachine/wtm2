@@ -15,5 +15,5 @@ export class LoginRequestDto {
   @ApiProperty()
   @IsNotEmpty()
   @Transform(({ value }) => value?.toString().trim())
-  deviceId?: string;
+  deviceId: string;
 }
