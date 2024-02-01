@@ -1,9 +1,15 @@
-import { loginUser, logoutUser } from './auth.js'
+import { loginUser, logoutUser, is_user_signed_in, refreshUser } from './auth.js'
 
 let historyArray = [];
 
 chrome.runtime.onStartup.addListener(function () {
-  // Here is where we have to auth the user
+  // Here is where we have to refresh the user authentication
+
+  is_user_signed_in(chrome).then((res) => {
+    if (res.userStatus) {
+      refreshUser(res)
+    }
+  })
 })
 
 /**
@@ -59,12 +65,13 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.type === 'login') {
     loginUser(request.payload)
       .then(res => {
-        console.log('res', res);
         sendResponse(res)
       })
       .catch(err => console.log(err));
     return true;
-  } else if (request.type === 'logout') {
+  }
+
+  if (request.type === 'logout') {
     logoutUser()
       .then(res => sendResponse(res))
       .catch(err => console.log(err));
