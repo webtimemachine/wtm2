@@ -1,9 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { JwtContext } from 'src/auth/interfaces';
 import { PrismaService } from 'src/common/services';
-
 import { CreateNavigationEntryInputDto, NavigationEntryDto } from '../dtos';
-import { NavigationEntry, User } from '@prisma/client';
+import { NavigationEntry } from '@prisma/client';
 import { plainToInstance } from 'class-transformer';
 
 @Injectable()

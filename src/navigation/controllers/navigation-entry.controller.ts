@@ -4,7 +4,6 @@ import { NavigationEntryService } from '../services';
 import { CreateNavigationEntryInputDto, NavigationEntryDto } from '../dtos';
 import {
   ApiBadRequestMessageResponse,
-  ApiConflictMessageResponse,
   ApiInternalServerErrorMessageResponse,
 } from 'src/common/decorators';
 import { JwtAccessToken, JwtRequestContext } from 'src/auth/decorators';

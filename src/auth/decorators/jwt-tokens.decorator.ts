@@ -6,14 +6,10 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-
 import { UserType } from '@prisma/client';
 import { UserTypesGuard } from '../guards';
-
 import {
-  ApiBadRequestResponse,
   ApiBearerAuth,
-  ApiForbiddenResponse,
   ApiInternalServerErrorResponse,
   ApiOperation,
   ApiUnauthorizedResponse,
