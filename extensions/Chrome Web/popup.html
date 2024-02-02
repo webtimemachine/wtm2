@@ -6,7 +6,7 @@
   <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 
-<body>
+<body style='position: relative;'>
   <script defer src="popup.js" type="module"></script>
   <div style='display: flex; align-items: center; justify-content: space-between; '>
     <h1>Web Time Machine</h1>
@@ -21,6 +21,10 @@
   <input id="input" type="text" placeholder="Search through time...">
   <button id="button">Search</button>
   <h4 style="color: #00000099">History</h4>
+  <div style='display: flex; align-items: center; justify-content: center; left: 38%; top: 40%; position: absolute;'
+    id='loader-container'>
+    <div class='loader'></div>
+  </div>
   <ul id="sites-list">
     <!-- Sites will be listed here -->
   </ul>
