@@ -1,4 +1,5 @@
 import { loginUser, logoutUser, is_user_signed_in, refreshUser } from './auth.js'
+import { saveHistoryEntry, getHistoryEntries } from './history-entries.js'
 
 let historyArray = [];
 
@@ -46,19 +47,28 @@ chrome.tabs.onUpdated.addListener(async function (tabId, changeInfo, tab) {
 
       const record = {
         url: tab.url,
-        time: new Date().getTime(),
+        navigationDate: new Date().toISOString(),
         title: tab.title,
-        content: htmlContent
+        content: htmlContent.substring(0, 1000) //TODO: FIX CONTENT SIZE
       }
 
-      historyArray.push(record);
+      is_user_signed_in(chrome).then((data) => {
+        if (data.userStatus) {
+          saveHistoryEntry(data.user_info, record).then(historyArray.push(record))
+        }
+      })
     }
   }
 });
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.type === "getHistory") {
-    sendResponse({ history: historyArray });
+    is_user_signed_in(chrome).then((data) => {
+      if (data.userStatus) {
+        getHistoryEntries(data.user_info).then((res) => sendResponse({ history: res }))
+      }
+    })
+    return true;
   }
 
 
