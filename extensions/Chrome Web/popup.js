@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function () {
         anchor.href = item.url;
         anchor.target = '_blank';
 
-        anchor.textContent = `${new Date(item.time).toLocaleString()} - ${item.title}`;
+        anchor.textContent = `${new Date(item.navigationDate).toLocaleString()} - ${item.title}`;
         anchor.classList.add('truncate');
 
         listItem.appendChild(anchor);
