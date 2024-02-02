@@ -6,16 +6,18 @@ document.querySelector('form').addEventListener('submit', event => {
   event.preventDefault();
 
   const email = document.querySelector('#email').value;
-  const pass = document.querySelector('#password').value;
+  const password = document.querySelector('#password').value;
 
-  if (email && pass) {
+  if (email && password) {
     // send message to background script with email and password
     chrome.runtime.sendMessage({
       type: 'login',
-      payload: { email, pass }
+      payload: { email, password }
     },
       function (response) {
-        window.location.replace('./popup.html');
+        if (response.user) {
+          window.location.replace('./popup.html');
+        }
       })
   } else {
     document.querySelector('#email').placeholder = "Enter an email.";
