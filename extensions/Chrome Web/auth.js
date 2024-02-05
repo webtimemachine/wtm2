@@ -1,4 +1,4 @@
-const API_URL = 'https://wtm-back.vercel.app'
+import { API_URL } from './consts.js';
 
 /**
  * Generates a random token using the crypto API.
@@ -74,17 +74,17 @@ export async function loginUser (payload) {
 
     const response = await resp.json()
 
-    return await new Promise(resolve => {
-      if (!response.user) resolve('fail');
+    return await new Promise((resolve, reject) => {
+      if (!response.user) reject('fail');
 
       chrome.storage.local.set({ userStatus: true, user_info: response, device_id: deviceId },
         function () {
-          if (chrome.runtime.lastError) resolve('fail');
+          if (chrome.runtime.lastError) reject('fail');
           resolve(response);
         });
     });
   } catch (err) {
-    resolve('success');
+    reject('fail');
     return console.log(err);
   }
 }
@@ -102,17 +102,17 @@ export async function refreshUser (data) {
 
     const response = await resp.json()
 
-    return await new Promise(resolve => {
-      if (!response.user) resolve('fail');
+    return await new Promise((resolve, reject) => {
+      if (!response.user) reject('fail');
 
       chrome.storage.local.set({ userStatus: true, user_info: { ...data.user_info, ...response } },
         function () {
-          if (chrome.runtime.lastError) resolve('fail');
+          if (chrome.runtime.lastError) reject('fail');
           resolve(response);
         });
     });
   } catch (err) {
-    resolve('success');
+    reject('fail');
     return console.log(err);
   }
 }
