@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, Post } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Post, Query } from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { NavigationEntryService } from '../services';
 import { CreateNavigationEntryInputDto, NavigationEntryDto } from '../dtos';
@@ -8,6 +8,7 @@ import {
 } from 'src/common/decorators';
 import { JwtAccessToken, JwtRequestContext } from 'src/auth/decorators';
 import { JwtContext } from 'src/auth/interfaces';
+import { GetNavigationEntryDto } from '../dtos/get-navigation-entry.dto';
 
 @ApiTags('Navigation Entry')
 @Controller('navigation-entry')
@@ -44,7 +45,8 @@ export class NavigationEntryController {
   @Get('/')
   getNavigationEntry(
     @JwtRequestContext() context: JwtContext,
+    @Query() queryParams: GetNavigationEntryDto,
   ): Promise<NavigationEntryDto[]> {
-    return this.navigationService.getNavigationEntry(context);
+    return this.navigationService.getNavigationEntry(context, queryParams);
   }
 }
