@@ -54,14 +54,23 @@ export async function getDeviceId () {
   return data.device_id || getRandomToken()
 }
 
+/**
+ * Asynchronous function to log in a user by sending a login request to the server.
+ * 
+ * @param {object} payload - An object containing user credentials (email and password).
+ * @param {string} deviceId - The device ID associated with the user's device.
+ * @returns {Promise<Response>} A Promise that resolves to the response from the login request.
+ */
 export async function loginUser (payload, deviceId) {
   try {
+    // Create the request body by converting payload to JSON
     const body = JSON.stringify({
       email: payload.email,
       password: payload.password,
       deviceId
     })
 
+    // Send a POST request to the login endpoint with the provided body
     return await fetch(`${API_URL}/api/auth/login`, {
       method: 'POST',
       headers: {
@@ -74,8 +83,15 @@ export async function loginUser (payload, deviceId) {
   }
 }
 
+/**
+ * Asynchronous function to refresh a user's authentication token by sending a request to the server.
+ * 
+ * @param {object} data - An object containing user information, including the refresh token.
+ * @returns {Promise<Response>} A Promise that resolves to the response from the token refresh request.
+ */
 export async function refreshUser (data) {
   try {
+    // Send a GET request to the refresh endpoint with the user's refresh token in the Authorization header
     return await fetch(`${API_URL}/api/auth/refresh`, {
       method: 'GET',
       headers: {
