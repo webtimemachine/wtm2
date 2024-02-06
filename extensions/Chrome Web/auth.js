@@ -76,29 +76,15 @@ export async function loginUser (payload, deviceId) {
 
 export async function refreshUser (data) {
   try {
-
-    const resp = await fetch(`${API_URL}/api/auth/refresh`, {
+    return await fetch(`${API_URL}/api/auth/refresh`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${data.user_info.refreshToken}`
+        'Authorization': `Bearer ${data.user_info?.refreshToken}`
       }
     })
-
-    const response = await resp.json()
-
-    return await new Promise((resolve, reject) => {
-      if (!response.user) reject('fail');
-
-      chrome.storage.local.set({ userStatus: true, user_info: { ...data.user_info, ...response } },
-        function () {
-          if (chrome.runtime.lastError) reject('fail');
-          resolve(response);
-        });
-    });
   } catch (err) {
-    reject('fail');
-    return console.log(err);
+    return console.error(err);
   }
 }
 
