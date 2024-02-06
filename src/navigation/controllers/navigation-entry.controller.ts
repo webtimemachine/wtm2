@@ -9,6 +9,8 @@ import {
 import { JwtAccessToken, JwtRequestContext } from 'src/auth/decorators';
 import { JwtContext } from 'src/auth/interfaces';
 import { GetNavigationEntryDto } from '../dtos/get-navigation-entry.dto';
+import { PaginationResponse } from 'src/common/dtos';
+import { ApiPaginationResponse } from 'src/common/decorators';
 
 @ApiTags('Navigation Entry')
 @Controller('navigation-entry')
@@ -35,18 +37,14 @@ export class NavigationEntryController {
   }
 
   @ApiInternalServerErrorMessageResponse()
-  @ApiOkResponse({
-    status: 200,
-    type: NavigationEntryDto,
-    isArray: true,
-  })
+  @ApiPaginationResponse(NavigationEntryDto)
   @JwtAccessToken([])
   @HttpCode(200)
   @Get('/')
   getNavigationEntry(
     @JwtRequestContext() context: JwtContext,
     @Query() queryParams: GetNavigationEntryDto,
-  ): Promise<NavigationEntryDto[]> {
+  ): Promise<PaginationResponse<NavigationEntryDto>> {
     return this.navigationService.getNavigationEntry(context, queryParams);
   }
 }
