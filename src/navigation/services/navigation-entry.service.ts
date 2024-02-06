@@ -47,8 +47,7 @@ export class NavigationEntryService {
       await this.prismaService.navigationEntry.findMany({
         where: {
           userId: jwtContext.user.id,
-          title: queryFilter,
-          url: queryFilter,
+          OR: [{ url: queryFilter }, { title: queryFilter }],
         },
         take,
         skip,
