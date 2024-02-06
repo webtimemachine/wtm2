@@ -5,6 +5,7 @@ import { CreateNavigationEntryInputDto, NavigationEntryDto } from '../dtos';
 import { NavigationEntry } from '@prisma/client';
 import { plainToInstance } from 'class-transformer';
 import { GetNavigationEntryDto } from '../dtos/get-navigation-entry.dto';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class NavigationEntryService {
@@ -37,11 +38,17 @@ export class NavigationEntryService {
   ): Promise<NavigationEntryDto[]> {
     const { limit: take, offset: skip, query } = queryParams;
 
+    const queryFilter: Prisma.StringFilter<'NavigationEntry'> = {
+      contains: query,
+      mode: 'insensitive',
+    };
+
     const navigationEntries: NavigationEntry[] =
       await this.prismaService.navigationEntry.findMany({
         where: {
           userId: jwtContext.user.id,
-          title: { contains: query, mode: 'insensitive' },
+          title: queryFilter,
+          url: queryFilter,
         },
         take,
         skip,
