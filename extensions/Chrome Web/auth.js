@@ -6,7 +6,7 @@ import { API_URL } from './consts.js';
  * 
  * @returns {string}
  */
-function getRandomToken () {
+export function getRandomToken () {
   // E.g. 8 * 32 = 256 bits token
   var randomPool = new Uint8Array(32);
   crypto.getRandomValues(randomPool);
@@ -47,7 +47,7 @@ export function is_user_signed_in (chrome) {
  * 
  * @returns {Promise<string>}
  */
-async function getDeviceId () {
+export async function getDeviceId () {
   // Retrieve data from local storage
   const data = await chrome.storage.local.get(['device_id'])
   // Return the device ID if found, otherwise generate a random token
@@ -84,7 +84,6 @@ export async function loginUser (payload) {
         });
     });
   } catch (err) {
-    reject('fail');
     return console.log(err);
   }
 }
