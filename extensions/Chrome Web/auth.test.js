@@ -1,7 +1,7 @@
 import { jest } from '@jest/globals'
 import * as auth from './auth.js'
 
-describe('is_user_signed_in', () => {
+describe('Should run all unit tests related to authorization', () => {
   test('should resolve with userStatus false and empty user_info if chrome.storage.local returns an error', async () => {
     const chromeMock = {
       storage: {
