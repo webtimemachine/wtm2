@@ -6,6 +6,7 @@ import { NavigationEntry } from '@prisma/client';
 import { plainToInstance } from 'class-transformer';
 import { GetNavigationEntryDto } from '../dtos/get-navigation-entry.dto';
 import { Prisma } from '@prisma/client';
+import { PaginationResponse } from 'src/common/dtos';
 
 @Injectable()
 export class NavigationEntryService {
@@ -35,13 +36,20 @@ export class NavigationEntryService {
   async getNavigationEntry(
     jwtContext: JwtContext,
     queryParams: GetNavigationEntryDto,
-  ): Promise<NavigationEntryDto[]> {
-    const { limit: take, offset: skip, query } = queryParams;
+  ): Promise<PaginationResponse<NavigationEntryDto>> {
+    const { limit, offset, query } = queryParams;
 
     const queryFilter: Prisma.StringFilter<'NavigationEntry'> = {
       contains: query,
       mode: 'insensitive',
     };
+
+    const count: number = await this.prismaService.navigationEntry.count({
+      where: {
+        userId: jwtContext.user.id,
+        OR: [{ url: queryFilter }, { title: queryFilter }],
+      },
+    });
 
     const navigationEntries: NavigationEntry[] =
       await this.prismaService.navigationEntry.findMany({
@@ -49,11 +57,11 @@ export class NavigationEntryService {
           userId: jwtContext.user.id,
           OR: [{ url: queryFilter }, { title: queryFilter }],
         },
-        take,
-        skip,
+        take: limit,
+        skip: offset,
       });
 
-    return plainToInstance(
+    const navigationEntryDtos = plainToInstance(
       NavigationEntryDto,
       navigationEntries.map((navigationEntry) => ({
         ...navigationEntry,
@@ -61,5 +69,12 @@ export class NavigationEntryService {
         userId: Number(navigationEntry.userId),
       })),
     );
+
+    return plainToInstance(PaginationResponse<NavigationEntryDto>, {
+      offset,
+      limit,
+      count,
+      items: navigationEntryDtos,
+    });
   }
 }
