@@ -143,4 +143,47 @@ describe('Should run all unit tests related to authorization', () => {
     expect(spyConsoleError).toHaveBeenCalledWith('Mock error');
     spyConsoleError.mockRestore();
   });
+
+  test('should call fetch with the correct arguments', async () => {
+    const data = {
+      user_info: {
+        refreshToken: 'mockRefreshToken',
+      },
+    };
+
+    await auth.refreshUser(data);
+
+    expect(fetch).toHaveBeenCalledWith(
+      `${API_URL}/api/auth/refresh`,
+      expect.objectContaining({
+        method: 'GET',
+        headers: expect.objectContaining({
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${data.user_info.refreshToken}`,
+        }),
+      })
+    );
+  });
+
+  test('should return a response when successful', async () => {
+    const data = {
+      user_info: {
+        refreshToken: 'mockRefreshToken',
+      },
+    };
+
+    const response = await auth.refreshUser(data);
+
+    expect(response.ok).toBe(true);
+  });
+
+  test('should log error when fetch fails', async () => {
+    global.fetch.mockImplementationOnce(() => Promise.reject('Mock error'));
+    const spyConsoleError = jest.spyOn(console, 'error').mockImplementation();
+
+    await auth.refreshUser({});
+
+    expect(spyConsoleError).toHaveBeenCalledWith('Mock error');
+    spyConsoleError.mockRestore();
+  });
 });

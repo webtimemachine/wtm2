@@ -9,6 +9,18 @@ chrome.runtime.onStartup.addListener(function () {
   is_user_signed_in(chrome).then((res) => {
     if (res.userStatus) {
       refreshUser(res)
+        .then(async response => await response.json())
+        .then(async () => {
+          return await new Promise((resolve, reject) => {
+            if (!response.user) reject('fail');
+
+            chrome.storage.local.set({ userStatus: true, user_info: { ...data.user_info, ...response } },
+              function () {
+                if (chrome.runtime.lastError) reject('fail');
+                resolve(response);
+              });
+          });
+        })
     }
   })
 })
