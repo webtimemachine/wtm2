@@ -14,7 +14,7 @@ export async function saveHistoryEntry (user_info, payload) {
       body: body
     })
   } catch (err) {
-    return console.log(err);
+    return console.error(err);
   }
 }
 
@@ -32,6 +32,6 @@ export async function getHistoryEntries (user_info) {
 
     return response
   } catch (err) {
-    return console.log(err);
+    return console.error(err);
   }
 }
