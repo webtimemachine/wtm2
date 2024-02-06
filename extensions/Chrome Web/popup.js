@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     chrome.runtime.sendMessage({ type: "getHistory" }, function (response) {
         loaderContainer.style.display = 'none';
-        response && response.history?.forEach(record => {
+        response && response.history?.length && response.history.forEach(record => {
             appendHistoryItem(record);
         });
     });

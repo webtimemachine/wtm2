@@ -65,7 +65,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.type === "getHistory") {
     is_user_signed_in(chrome).then((data) => {
       if (data.userStatus) {
-        getHistoryEntries(data.user_info).then((res) => sendResponse({ history: res }))
+        getHistoryEntries(data.user_info).then((res) => sendResponse({ history: res.items }))
       }
     })
     return true;
