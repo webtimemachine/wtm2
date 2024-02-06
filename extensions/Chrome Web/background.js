@@ -1,4 +1,4 @@
-import { loginUser, logoutUser, is_user_signed_in, refreshUser } from './auth.js'
+import { loginUser, logoutUser, is_user_signed_in, refreshUser, getDeviceId } from './auth.js'
 import { saveHistoryEntry, getHistoryEntries } from './history-entries.js'
 
 let historyArray = [];
@@ -73,11 +73,25 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
 
   if (request.type === 'login') {
-    loginUser(request.payload)
-      .then(res => {
-        sendResponse(res)
-      })
-      .catch(err => console.log(err));
+    getDeviceId()
+      .then((deviceId) =>
+        loginUser(request.payload, deviceId)
+          .then(async response => await response.json())
+          .then(async (response) => {
+            return await new Promise((resolve, reject) => {
+              if (!response.user) reject('fail');
+              chrome.storage.local.set({ userStatus: true, user_info: response, device_id: deviceId },
+                function () {
+                  if (chrome.runtime.lastError) reject('fail');
+                  resolve(response);
+                });
+            });
+          })
+          .then(res => {
+            sendResponse(res)
+          })
+          .catch(err => console.log(err)))
+
     return true;
   }
 

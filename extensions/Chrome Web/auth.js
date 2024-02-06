@@ -54,37 +54,23 @@ export async function getDeviceId () {
   return data.device_id || getRandomToken()
 }
 
-export async function loginUser (payload) {
+export async function loginUser (payload, deviceId) {
   try {
-    const deviceId = await getDeviceId()
-
     const body = JSON.stringify({
       email: payload.email,
       password: payload.password,
       deviceId
     })
 
-    const resp = await fetch(`${API_URL}/api/auth/login`, {
+    return await fetch(`${API_URL}/api/auth/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: body
     })
-
-    const response = await resp.json()
-
-    return await new Promise((resolve, reject) => {
-      if (!response.user) reject('fail');
-
-      chrome.storage.local.set({ userStatus: true, user_info: response, device_id: deviceId },
-        function () {
-          if (chrome.runtime.lastError) reject('fail');
-          resolve(response);
-        });
-    });
   } catch (err) {
-    return console.log(err);
+    return console.error(err);
   }
 }
 
