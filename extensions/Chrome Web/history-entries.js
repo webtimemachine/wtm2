@@ -27,15 +27,17 @@ export async function saveHistoryEntry (user_info, payload) {
 }
 
 /**
- * Asynchronous function to retrieve navigation history entries for a user by sending a request to the server.
+ * Asynchronous function to retrieve navigation history entries for a user with pagination support by sending a request to the server.
  * 
  * @param {object} user_info - An object containing user information, including the access token.
+ * @param {number} offset - The offset for pagination, specifying the starting index of the entries to retrieve.
+ * @param {number} limit - The limit for pagination, specifying the maximum number of entries to retrieve.
  * @returns {Promise<object>} A Promise that resolves to an object containing the navigation history entries.
  */
-export async function getHistoryEntries (user_info) {
+export async function getHistoryEntries (user_info, offset, limit) {
   try {
-    // Send a GET request to the endpoint for retrieving navigation history
-    const resp = await fetch(`${API_URL}/api/navigation-entry`, {
+    // Send a GET request to the endpoint for retrieving navigation history with pagination parameters
+    const resp = await fetch(`${API_URL}/api/navigation-entry?offset=${offset}&limit=${limit}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

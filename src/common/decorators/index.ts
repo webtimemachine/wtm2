@@ -7,3 +7,5 @@ export {
   ApiOkMessageResponse,
   ApiUnauthorizedMessageResponse,
 } from './api-message-responses.decorator';
+
+export { ApiPaginationResponse } from './api-pagination-response.decorator';
