@@ -18,9 +18,9 @@ export async function saveHistoryEntry (user_info, payload) {
   }
 }
 
-export async function getHistoryEntries (user_info) {
+export async function getHistoryEntries (user_info, offset, limit) {
   try {
-    const resp = await fetch(`${API_URL}/api/navigation-entry`, {
+    const resp = await fetch(`${API_URL}/api/navigation-entry?offset=${offset}&limit=${limit}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

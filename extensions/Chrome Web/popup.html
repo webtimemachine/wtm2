@@ -8,9 +8,9 @@
 
 <body style='position: relative;'>
   <script defer src="popup.js" type="module"></script>
-  <div style='display: flex; align-items: center; justify-content: space-between; '>
+  <div class='title-container'>
     <h1>Web Time Machine</h1>
-    <div style='width: 20px; height: 20px; cursor: pointer;' id='logout-button'>
+    <div id='logout-button'>
       <svg xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
         <path
@@ -21,13 +21,17 @@
   <input id="input" type="text" placeholder="Search through time...">
   <button id="button">Search</button>
   <h4 style="color: #00000099">History</h4>
-  <div style='display: flex; align-items: center; justify-content: center; left: 38%; top: 40%; position: absolute;'
-    id='loader-container'>
+  <div id='loader-container'>
     <div class='loader'></div>
   </div>
   <ul id="sites-list">
     <!-- Sites will be listed here -->
   </ul>
+  <div class='pagination-container'>
+    <button id='left-arrow'>&larr;</button>
+    <p id='pagination-info'></p>
+    <button id='right-arrow'>&rarr;</button>
+  </div>
 </body>
 
 </html>
