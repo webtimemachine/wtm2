@@ -59,10 +59,10 @@ describe('Should run all test for saveHistoryEntry & getHistoryEntries functions
       accessToken: 'mockAccessToken',
     };
 
-    await getHistoryEntries(user_info);
+    await getHistoryEntries(user_info, 0, 10);
 
     expect(fetch).toHaveBeenCalledWith(
-      `${API_URL}/api/navigation-entry`,
+      `${API_URL}/api/navigation-entry?offset=0&limit=10`,
       expect.objectContaining({
         method: 'GET',
         headers: expect.objectContaining({
@@ -85,7 +85,7 @@ describe('Should run all test for saveHistoryEntry & getHistoryEntries functions
       })
     );
 
-    const response = await getHistoryEntries(user_info);
+    const response = await getHistoryEntries(user_info, 0, 10);
 
     expect(response).toEqual(responseData);
   });
@@ -94,7 +94,7 @@ describe('Should run all test for saveHistoryEntry & getHistoryEntries functions
     global.fetch.mockImplementationOnce(() => Promise.reject('Mock error'));
     const spyConsoleError = jest.spyOn(console, 'error').mockImplementation();
 
-    await getHistoryEntries({});
+    await getHistoryEntries({}, 0, 10);
 
     expect(spyConsoleError).toHaveBeenCalledWith('Mock error');
     spyConsoleError.mockRestore();
