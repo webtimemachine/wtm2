@@ -7,6 +7,11 @@
     "puppeteer": "^21.10.0"
   },
   "scripts": {
-    "test": "NODE_OPTIONS=--experimental-vm-modules npx jest"
+    "test": "NODE_OPTIONS=--experimental-vm-modules npx jest",
+    "test:cov": "NODE_OPTIONS=--experimental-vm-modules npx jest --coverage"
+  },
+  "jest": {
+    "testEnvironment": "jest-environment-node",
+    "transform": {}
   }
 }

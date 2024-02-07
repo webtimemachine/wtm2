@@ -6,7 +6,7 @@ import { API_URL } from './consts.js';
  * 
  * @returns {string}
  */
-function getRandomToken () {
+export function getRandomToken () {
   // E.g. 8 * 32 = 256 bits token
   var randomPool = new Uint8Array(32);
   crypto.getRandomValues(randomPool);
@@ -47,73 +47,60 @@ export function is_user_signed_in (chrome) {
  * 
  * @returns {Promise<string>}
  */
-async function getDeviceId () {
+export async function getDeviceId () {
   // Retrieve data from local storage
   const data = await chrome.storage.local.get(['device_id'])
   // Return the device ID if found, otherwise generate a random token
   return data.device_id || getRandomToken()
 }
 
-export async function loginUser (payload) {
+/**
+ * Asynchronous function to log in a user by sending a login request to the server.
+ * 
+ * @param {object} payload - An object containing user credentials (email and password).
+ * @param {string} deviceId - The device ID associated with the user's device.
+ * @returns {Promise<Response>} A Promise that resolves to the response from the login request.
+ */
+export async function loginUser (payload, deviceId) {
   try {
-    const deviceId = await getDeviceId()
-
+    // Create the request body by converting payload to JSON
     const body = JSON.stringify({
       email: payload.email,
       password: payload.password,
       deviceId
     })
 
-    const resp = await fetch(`${API_URL}/api/auth/login`, {
+    // Send a POST request to the login endpoint with the provided body
+    return await fetch(`${API_URL}/api/auth/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: body
     })
-
-    const response = await resp.json()
-
-    return await new Promise((resolve, reject) => {
-      if (!response.user) reject('fail');
-
-      chrome.storage.local.set({ userStatus: true, user_info: response, device_id: deviceId },
-        function () {
-          if (chrome.runtime.lastError) reject('fail');
-          resolve(response);
-        });
-    });
   } catch (err) {
-    reject('fail');
-    return console.log(err);
+    return console.error(err);
   }
 }
 
+/**
+ * Asynchronous function to refresh a user's authentication token by sending a request to the server.
+ * 
+ * @param {object} data - An object containing user information, including the refresh token.
+ * @returns {Promise<Response>} A Promise that resolves to the response from the token refresh request.
+ */
 export async function refreshUser (data) {
   try {
-
-    const resp = await fetch(`${API_URL}/api/auth/refresh`, {
+    // Send a GET request to the refresh endpoint with the user's refresh token in the Authorization header
+    return await fetch(`${API_URL}/api/auth/refresh`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${data.user_info.refreshToken}`
+        'Authorization': `Bearer ${data.user_info?.refreshToken}`
       }
     })
-
-    const response = await resp.json()
-
-    return await new Promise((resolve, reject) => {
-      if (!response.user) reject('fail');
-
-      chrome.storage.local.set({ userStatus: true, user_info: { ...data.user_info, ...response } },
-        function () {
-          if (chrome.runtime.lastError) reject('fail');
-          resolve(response);
-        });
-    });
   } catch (err) {
-    reject('fail');
-    return console.log(err);
+    return console.error(err);
   }
 }
 
