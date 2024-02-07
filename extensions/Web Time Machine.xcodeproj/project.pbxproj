@@ -51,6 +51,8 @@
 		548A88AD2B640D94009C7C21 /* popup.html in Resources */ = {isa = PBXBuildFile; fileRef = 548A88A62B640D94009C7C21 /* popup.html */; };
 		548A88AE2B640D94009C7C21 /* styles.css in Resources */ = {isa = PBXBuildFile; fileRef = 548A88A72B640D94009C7C21 /* styles.css */; };
 		548A88AF2B640D94009C7C21 /* styles.css in Resources */ = {isa = PBXBuildFile; fileRef = 548A88A72B640D94009C7C21 /* styles.css */; };
+		ED3CF6F32B73BE4500C64983 /* pagination.js in Resources */ = {isa = PBXBuildFile; fileRef = ED3CF6F22B73BE4500C64983 /* pagination.js */; };
+		ED3CF6F42B73BE4500C64983 /* pagination.js in Resources */ = {isa = PBXBuildFile; fileRef = ED3CF6F22B73BE4500C64983 /* pagination.js */; };
 		ED4324B32B6D378E00F3521C /* consts.js in Resources */ = {isa = PBXBuildFile; fileRef = ED4324B12B6D378E00F3521C /* consts.js */; };
 		ED4324B42B6D378E00F3521C /* consts.js in Resources */ = {isa = PBXBuildFile; fileRef = ED4324B12B6D378E00F3521C /* consts.js */; };
 		ED4324B52B6D378E00F3521C /* history-entries.js in Resources */ = {isa = PBXBuildFile; fileRef = ED4324B22B6D378E00F3521C /* history-entries.js */; };
@@ -144,6 +146,7 @@
 		548A88A52B640D94009C7C21 /* popup.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = popup.js; sourceTree = "<group>"; };
 		548A88A62B640D94009C7C21 /* popup.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = popup.html; sourceTree = "<group>"; };
 		548A88A72B640D94009C7C21 /* styles.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = styles.css; sourceTree = "<group>"; };
+		ED3CF6F22B73BE4500C64983 /* pagination.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = pagination.js; sourceTree = "<group>"; };
 		ED4324B12B6D378E00F3521C /* consts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = consts.js; sourceTree = "<group>"; };
 		ED4324B22B6D378E00F3521C /* history-entries.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "history-entries.js"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -307,6 +310,7 @@
 		5414C8EE2B640F0A0075471F /* CommonFiles */ = {
 			isa = PBXGroup;
 			children = (
+				ED3CF6F22B73BE4500C64983 /* pagination.js */,
 				ED4324B12B6D378E00F3521C /* consts.js */,
 				ED4324B22B6D378E00F3521C /* history-entries.js */,
 				540C0DC02B6937630049CE6A /* auth.js */,
@@ -513,6 +517,7 @@
 				548A88AC2B640D94009C7C21 /* popup.html in Resources */,
 				540C0DC52B6937630049CE6A /* auth.js in Resources */,
 				13E24D022AFAC00700D981A3 /* content.js in Resources */,
+				ED3CF6F32B73BE4500C64983 /* pagination.js in Resources */,
 				ED4324B32B6D378E00F3521C /* consts.js in Resources */,
 				548A88AA2B640D94009C7C21 /* popup.js in Resources */,
 				540C0DC32B6937630049CE6A /* popup-sign-in-script.js in Resources */,
@@ -532,6 +537,7 @@
 				548A88AD2B640D94009C7C21 /* popup.html in Resources */,
 				540C0DC62B6937630049CE6A /* auth.js in Resources */,
 				13E24D032AFAC00700D981A3 /* content.js in Resources */,
+				ED3CF6F42B73BE4500C64983 /* pagination.js in Resources */,
 				ED4324B42B6D378E00F3521C /* consts.js in Resources */,
 				548A88AB2B640D94009C7C21 /* popup.js in Resources */,
 				540C0DC42B6937630049CE6A /* popup-sign-in-script.js in Resources */,
