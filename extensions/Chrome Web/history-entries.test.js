@@ -10,6 +10,13 @@ describe('Should run all test for saveHistoryEntry & getHistoryEntries functions
         ok: true,
       })
     );
+    global.chrome = {
+      storage: {
+        local: {
+          set: jest.fn()
+        }
+      }
+    }
   });
 
   test('should call fetch with the correct arguments', async () => {
@@ -44,13 +51,13 @@ describe('Should run all test for saveHistoryEntry & getHistoryEntries functions
     expect(response.ok).toBe(true);
   });
 
-  test('should log error when fetch fails', async () => {
-    global.fetch.mockImplementationOnce(() => Promise.reject('Mock error'));
+  test('should call refresh token function when fetch fails with 401', async () => {
+    global.fetch.mockImplementationOnce(() => Promise.reject({ status: 401 }));
     const spyConsoleError = jest.spyOn(console, 'error').mockImplementation();
 
     await saveHistoryEntry({}, {});
 
-    expect(spyConsoleError).toHaveBeenCalledWith('Mock error');
+    expect(spyConsoleError).toHaveBeenCalledWith({ status: 401 });
     spyConsoleError.mockRestore();
   });
 
@@ -90,13 +97,13 @@ describe('Should run all test for saveHistoryEntry & getHistoryEntries functions
     expect(response).toEqual(responseData);
   });
 
-  test('should log error when fetch fails', async () => {
-    global.fetch.mockImplementationOnce(() => Promise.reject('Mock error'));
+  test('should call refresh token function when fetch fails with 401', async () => {
+    global.fetch.mockImplementationOnce(() => Promise.reject({ status: 401 }));
     const spyConsoleError = jest.spyOn(console, 'error').mockImplementation();
 
     await getHistoryEntries({}, 0, 10);
 
-    expect(spyConsoleError).toHaveBeenCalledWith('Mock error');
+    expect(spyConsoleError).toHaveBeenCalledWith({ status: 401 });
     spyConsoleError.mockRestore();
   });
 });
