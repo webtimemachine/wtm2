@@ -1,16 +1,7 @@
 import { loginUser, logoutUser, is_user_signed_in, refreshUser, getDeviceId } from './auth.js'
 import { saveHistoryEntry, getHistoryEntries } from './history-entries.js'
 
-export const refreshTokenData = async (res) => {
-  return await refreshUser(res)
-    .then(async response => await response.json())
-    .then(async (response) => {
-      return await new Promise((resolve, reject) => {
-        chrome.storage.local.set({ userStatus: true, user_info: { ...res.user_info, ...response } });
-        resolve(response);
-      });
-    })
-}
+
 
 chrome.runtime.onStartup.addListener(function () {
   // Here is where we have to refresh the user authentication

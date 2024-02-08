@@ -1,4 +1,4 @@
-import { refreshTokenData } from './background.js';
+import { refreshTokenData } from './auth.js';
 import { API_URL } from './consts.js';
 
 /**
@@ -27,11 +27,9 @@ export async function saveHistoryEntry (user_info, payload, reexecuted = false) 
       throw Error('accessToken expired!')
     }
 
-    // Parse the response body as JSON
-    const response = await resp.json()
-    // Return the parsed response
-    return response
+    return resp
   } catch (err) {
+    console.error(err);
     if (reexecuted) return
     return await refreshTokenData({ user_info }).then(async (res) => await saveHistoryEntry({ ...user_info, ...res }, payload, true))
   }
@@ -64,6 +62,7 @@ export async function getHistoryEntries (user_info, offset, limit, reexecuted = 
     // Return the parsed response
     return response
   } catch (err) {
+    console.error(err);
     if (reexecuted) return
     return await refreshTokenData({ user_info }).then(async (res) => await getHistoryEntries({ ...user_info, ...res }, offset, limit, true))
   }
