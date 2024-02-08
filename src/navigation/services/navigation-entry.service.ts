@@ -18,13 +18,34 @@ export class NavigationEntryService {
     jwtContext: JwtContext,
     createNavigationEntryInputDto: CreateNavigationEntryInputDto,
   ): Promise<NavigationEntryDto> {
-    const navigationEntry: NavigationEntry =
-      await this.prismaService.navigationEntry.create({
+    const lastEntry = await this.prismaService.navigationEntry.findFirst({
+      where: {
+        userId: jwtContext.user.id,
+      },
+      take: 1,
+      orderBy: {
+        navigationDate: 'desc',
+      },
+    });
+
+    let navigationEntry: NavigationEntry;
+    if (lastEntry?.url === createNavigationEntryInputDto.url) {
+      navigationEntry = await this.prismaService.navigationEntry.update({
+        where: {
+          id: lastEntry.id,
+        },
+        data: {
+          ...createNavigationEntryInputDto,
+        },
+      });
+    } else {
+      navigationEntry = await this.prismaService.navigationEntry.create({
         data: {
           ...createNavigationEntryInputDto,
           userId: jwtContext.user.id,
         },
       });
+    }
 
     return plainToInstance(NavigationEntryDto, {
       ...navigationEntry,
