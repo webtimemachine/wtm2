@@ -4,9 +4,10 @@ import { AppService } from './app.service';
 import { CommonModule } from './common/common.module';
 import { AuthModule } from './auth/auth.module';
 import { NavigationModule } from './navigation/navigation.module';
+import { HealthModule } from './health/health.module';
 
 @Module({
-  imports: [CommonModule, AuthModule, NavigationModule],
+  imports: [CommonModule, AuthModule, NavigationModule, HealthModule],
   controllers: [AppController],
   providers: [AppService],
 })
