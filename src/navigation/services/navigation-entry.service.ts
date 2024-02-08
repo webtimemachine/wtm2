@@ -80,6 +80,9 @@ export class NavigationEntryService {
         },
         take: limit,
         skip: offset,
+        orderBy: {
+          navigationDate: 'desc',
+        },
       });
 
     const navigationEntryDtos = plainToInstance(
