@@ -1,7 +1,7 @@
 import { loginUser, logoutUser, is_user_signed_in, refreshUser, getDeviceId } from './auth.js'
 import { saveHistoryEntry, getHistoryEntries } from './history-entries.js'
 
-let historyArray = [];
+
 
 chrome.runtime.onStartup.addListener(function () {
   // Here is where we have to refresh the user authentication
@@ -66,7 +66,7 @@ chrome.tabs.onUpdated.addListener(async function (tabId, changeInfo, tab) {
 
       is_user_signed_in(chrome).then((data) => {
         if (data.userStatus) {
-          saveHistoryEntry(data.user_info, record).then(historyArray.push(record))
+          saveHistoryEntry(data.user_info, record)
         }
       })
     }
