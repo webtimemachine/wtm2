@@ -26,7 +26,7 @@ function appendHistoryItem (item) {
     anchor.classList.add('truncate');
 
     listItem.appendChild(anchor);
-    sitesList.insertBefore(listItem, sitesList.firstChild); // Insert at the top
+    sitesList.appendChild(listItem)
 }
 
 document.addEventListener('DOMContentLoaded', function () {
