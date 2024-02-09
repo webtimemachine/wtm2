@@ -8,5 +8,5 @@ export class GetNavigationEntryDto extends GetPaginationsParamsDto {
   @IsOptional()
   @IsString()
   @Type(() => String)
-  query: string = '';
+  query?: string;
 }
