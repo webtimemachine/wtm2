@@ -32,7 +32,7 @@ export async function saveHistoryEntry (user_info, payload, reexecuted = false) 
   } catch (err) {
     console.error(err);
     // If the function is being re-executed after refreshing the access token, return without re-executing refreshTokenData to prevent an infinite loop
-    if (reexecuted) return
+    if (reexecuted) throw Error('refreshToken expired!')
     // Refresh the access token and re-execute saveHistoryEntry
     return await refreshTokenData({ user_info }).then(async (res) => await saveHistoryEntry({ ...user_info, ...res }, payload, true))
   }
@@ -69,7 +69,7 @@ export async function getHistoryEntries (user_info, offset, limit, query, reexec
   } catch (err) {
     console.error(err);
     // If the function is being re-executed after refreshing the access token, return without re-executing refreshTokenData to prevent an infinite loop
-    if (reexecuted) return
+    if (reexecuted) throw Error('refreshToken expired!')
     // Refresh the access token and re-execute getHistoryEntries
     return await refreshTokenData({ user_info }).then(async (res) => await getHistoryEntries({ ...user_info, ...res }, offset, limit, query, true))
   }
