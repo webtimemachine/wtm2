@@ -65,10 +65,16 @@ export class NavigationEntryService {
       mode: 'insensitive',
     };
 
+    const whereQuery = {
+      ...(query !== undefined
+        ? { OR: [{ url: queryFilter }, { title: queryFilter }] }
+        : {}),
+    };
+
     const count: number = await this.prismaService.navigationEntry.count({
       where: {
         userId: jwtContext.user.id,
-        OR: [{ url: queryFilter }, { title: queryFilter }],
+        ...whereQuery,
       },
     });
 
@@ -76,7 +82,7 @@ export class NavigationEntryService {
       await this.prismaService.navigationEntry.findMany({
         where: {
           userId: jwtContext.user.id,
-          OR: [{ url: queryFilter }, { title: queryFilter }],
+          ...whereQuery,
         },
         take: limit,
         skip: offset,
