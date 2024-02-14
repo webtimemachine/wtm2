@@ -2,12 +2,17 @@ import { Pagination } from './pagination.js'
 let paginationData = undefined
 const ITEMS_PER_PAGE = 10;
 
-const logoutButton = document.getElementById('logout-button');
 
-logoutButton.addEventListener('click', function () {
+function handleLogoutUser () {
     chrome.runtime.sendMessage({ type: "logout" }, function (response) {
         window.location.replace('./popup-sign-in.html');
     });
+}
+
+const logoutButton = document.getElementById('logout-button');
+
+logoutButton.addEventListener('click', function () {
+    handleLogoutUser()
 })
 
 const input = document.getElementById('input');
@@ -19,6 +24,11 @@ searchButton.addEventListener('click', function () {
     loaderContainer.style.display = 'block';
 
     chrome.runtime.sendMessage({ type: "getHistory", offset: 0, limit: ITEMS_PER_PAGE, search: searchText }, function (response) {
+        if (response.error) {
+            handleLogoutUser()
+            return
+        }
+
         loaderContainer.style.display = 'none';
         if (response && response.items?.length) {
             paginationData = new Pagination(response.count, ITEMS_PER_PAGE)
@@ -63,6 +73,11 @@ function appendHistoryItem (item) {
 
 document.addEventListener('DOMContentLoaded', function () {
     chrome.runtime.sendMessage({ type: "getHistory", offset: 0, limit: ITEMS_PER_PAGE, search: '' }, function (response) {
+        if (response.error) {
+            handleLogoutUser()
+            return
+        }
+
         loaderContainer.style.display = 'none';
         if (response && response.items?.length) {
             paginationData = new Pagination(response.count, ITEMS_PER_PAGE)
@@ -93,6 +108,11 @@ leftButton.addEventListener('click', function () {
     const searchText = input.value
 
     chrome.runtime.sendMessage({ type: "getHistory", offset: paginationData.getStartIndex(), limit: ITEMS_PER_PAGE, search: searchText }, function (response) {
+        if (response.error) {
+            handleLogoutUser()
+            return
+        }
+
         loaderContainer.style.display = 'none';
         if (response && response.items?.length) {
             response.items.forEach(record => {
@@ -123,6 +143,11 @@ rightButton.addEventListener('click', function () {
     const searchText = input.value
 
     chrome.runtime.sendMessage({ type: "getHistory", offset: paginationData.getStartIndex(), limit: ITEMS_PER_PAGE, search: searchText }, function (response) {
+        if (response.error) {
+            handleLogoutUser()
+            return
+        }
+
         loaderContainer.style.display = 'none';
         if (response && response.items?.length) {
             response.items.forEach(record => {
