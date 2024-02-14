@@ -67,7 +67,8 @@ export async function loginUser (payload, deviceId) {
     const body = JSON.stringify({
       email: payload.email,
       password: payload.password,
-      deviceId
+      userAgent: payload.userAgent,
+      deviceId,
     })
 
     // Send a POST request to the login endpoint with the provided body
