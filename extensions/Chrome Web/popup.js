@@ -11,7 +11,39 @@ logoutButton.addEventListener('click', function () {
 })
 
 const input = document.getElementById('input');
-const button = document.getElementById('button');
+const searchButton = document.getElementById('search-button');
+
+searchButton.addEventListener('click', function () {
+    const searchText = input.value
+    sitesList.innerHTML = ''
+    loaderContainer.style.display = 'block';
+
+    chrome.runtime.sendMessage({ type: "getHistory", offset: 0, limit: ITEMS_PER_PAGE, search: searchText }, function (response) {
+        loaderContainer.style.display = 'none';
+        if (response && response.items?.length) {
+            paginationData = new Pagination(response.count, ITEMS_PER_PAGE)
+            response.items.forEach(record => {
+                appendHistoryItem(record);
+            });
+            //When popup is open, left arrow always is going to be disable
+            const leftButton = document.getElementById('left-arrow');
+            leftButton.setAttribute('disabled', true)
+
+            if (response.count <= response.limit) {
+                const rightButton = document.getElementById('right-arrow');
+                rightButton.setAttribute('disabled', true)
+            } else {
+                rightButton.removeAttribute('disabled')
+            }
+
+            const paginationInfo = document.getElementById('pagination-info');
+            paginationInfo.innerHTML = `${paginationData.getCurrentPage()} / ${paginationData.getTotalPages()}`
+        }
+    });
+})
+
+
+
 const sitesList = document.getElementById('sites-list');
 const loaderContainer = document.getElementById('loader-container');
 // Function to create and append history item to list
@@ -26,11 +58,11 @@ function appendHistoryItem (item) {
     anchor.classList.add('truncate');
 
     listItem.appendChild(anchor);
-    sitesList.insertBefore(listItem, sitesList.firstChild); // Insert at the top
+    sitesList.appendChild(listItem)
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    chrome.runtime.sendMessage({ type: "getHistory", offset: 0, limit: ITEMS_PER_PAGE }, function (response) {
+    chrome.runtime.sendMessage({ type: "getHistory", offset: 0, limit: ITEMS_PER_PAGE, search: '' }, function (response) {
         loaderContainer.style.display = 'none';
         if (response && response.items?.length) {
             paginationData = new Pagination(response.count, ITEMS_PER_PAGE)
@@ -58,7 +90,9 @@ leftButton.addEventListener('click', function () {
     paginationData.prevPage()
     sitesList.innerHTML = ''
     loaderContainer.style.display = 'block';
-    chrome.runtime.sendMessage({ type: "getHistory", offset: paginationData.getStartIndex(), limit: ITEMS_PER_PAGE }, function (response) {
+    const searchText = input.value
+
+    chrome.runtime.sendMessage({ type: "getHistory", offset: paginationData.getStartIndex(), limit: ITEMS_PER_PAGE, search: searchText }, function (response) {
         loaderContainer.style.display = 'none';
         if (response && response.items?.length) {
             response.items.forEach(record => {
@@ -86,7 +120,9 @@ rightButton.addEventListener('click', function () {
     paginationData.nextPage()
     sitesList.innerHTML = ''
     loaderContainer.style.display = 'block';
-    chrome.runtime.sendMessage({ type: "getHistory", offset: paginationData.getStartIndex(), limit: ITEMS_PER_PAGE }, function (response) {
+    const searchText = input.value
+
+    chrome.runtime.sendMessage({ type: "getHistory", offset: paginationData.getStartIndex(), limit: ITEMS_PER_PAGE, search: searchText }, function (response) {
         loaderContainer.style.display = 'none';
         if (response && response.items?.length) {
             response.items.forEach(record => {
