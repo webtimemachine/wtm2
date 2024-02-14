@@ -36,6 +36,7 @@ export class NavigationEntryService {
         },
         data: {
           ...createNavigationEntryInputDto,
+          userAgent: jwtContext?.session?.userAgent || '',
         },
       });
     } else {

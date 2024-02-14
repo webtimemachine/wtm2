@@ -26,4 +26,8 @@ export class NavigationEntryDto {
   @ApiProperty()
   @Expose()
   userId: number;
+
+  @ApiProperty()
+  @Expose()
+  userAgent: string;
 }
