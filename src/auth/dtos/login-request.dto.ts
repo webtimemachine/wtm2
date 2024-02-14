@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, IsOptional } from 'class-validator';
 
 export class LoginRequestDto {
   @ApiProperty()
@@ -16,4 +16,9 @@ export class LoginRequestDto {
   @IsNotEmpty()
   @Transform(({ value }) => value?.toString().trim())
   deviceId: string;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @Transform(({ value }) => (value || '').toString().trim())
+  userAgent?: string = '';
 }

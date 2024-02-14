@@ -80,6 +80,7 @@ export class AuthService {
           data: {
             userId: BigInt(user.id),
             deviceId: body.deviceId,
+            userAgent: body.userAgent,
             refreshToken: '',
             createdAt: new Date(),
           },
@@ -171,16 +172,16 @@ export class AuthService {
     };
   }
 
-  async validateJwtAccessPayloadOrThrow(payload: JWTPayload): Promise<User> {
+  async validateJwtAccessPayloadOrThrow(payload: JWTPayload) {
     const user = await this.prismaService.user.findFirstOrThrow({
       where: { id: payload.userId, deletedAt: null },
     });
 
-    await this.prismaService.session.findFirstOrThrow({
+    const session: Session = await this.prismaService.session.findFirstOrThrow({
       where: { id: payload.sessionId },
     });
 
-    return user;
+    return { user, session };
   }
 
   async validateJwtRefreshPayloadOrThrow(
