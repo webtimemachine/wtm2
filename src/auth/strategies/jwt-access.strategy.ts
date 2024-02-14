@@ -20,12 +20,13 @@ export class JWTAccessStrategy extends PassportStrategy(
 
   async validate(payload: JWTPayload): Promise<JwtContext> {
     try {
-      const user =
+      const { user, session } =
         await this.authService.validateJwtAccessPayloadOrThrow(payload);
 
       return {
         payload,
         user,
+        session,
       };
     } catch (err) {
       throw new UnauthorizedException();

@@ -1,4 +1,4 @@
-import { User } from '@prisma/client';
+import { User, Session } from '@prisma/client';
 import { JWTPayload } from './jwt.interface';
 
 export interface JwtContext {
@@ -8,4 +8,5 @@ export interface JwtContext {
   verificationToken?: string;
   recoveryToken?: string;
   user: User;
+  session?: Session;
 }
