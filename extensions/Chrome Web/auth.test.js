@@ -101,6 +101,7 @@ describe('Should run all unit tests related to authorization', () => {
     const payload = {
       email: 'mockEmail',
       password: 'mockPassword',
+      userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36'
     };
     const deviceId = 'mockDeviceId';
 
@@ -116,6 +117,7 @@ describe('Should run all unit tests related to authorization', () => {
         body: JSON.stringify({
           email: payload.email,
           password: payload.password,
+          userAgent: payload.userAgent,
           deviceId,
         }),
       })

@@ -12,7 +12,7 @@ document.querySelector('form').addEventListener('submit', event => {
     // send message to background script with email and password
     chrome.runtime.sendMessage({
       type: 'login',
-      payload: { email, password }
+      payload: { email, password, userAgent: navigator.userAgent }
     },
       function (response) {
         if (response.user) {
