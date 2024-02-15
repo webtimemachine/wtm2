@@ -1,5 +1,4 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { JwtService } from '@nestjs/jwt';
 import { CommonTestingModule } from '../../common/common.testing.module';
 import { PrismaService } from '../../common/services';
 import { NavigationEntry, PrismaClient, UserType } from '@prisma/client';
@@ -42,6 +41,7 @@ const createdNavigationEntry: NavigationEntryDto = {
   url: 'example.com',
   title: 'Example Title',
   userId: 1,
+  userAgent: 'Chrome/121.0.6167.161',
   navigationDate: new Date(),
 };
 
@@ -52,6 +52,7 @@ const mockedEntry = {
   content: 'Content 1',
   navigationDate: new Date('2024-02-09T12:00:00Z'),
   userId: BigInt(1),
+  userAgent: 'Chrome/121.0.6167.161',
   createdAt: new Date('2024-02-09T12:00:00Z'),
   updateAt: null,
 };
