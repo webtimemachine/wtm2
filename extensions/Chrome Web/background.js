@@ -61,7 +61,7 @@ chrome.tabs.onUpdated.addListener(async function (tabId, changeInfo, tab) {
         url: tab.url,
         navigationDate: new Date().toISOString(),
         title: tab.title,
-        content: htmlContent.substring(0, 1000) //TODO: FIX CONTENT SIZE
+        content: htmlContent.replace(/<[^>]*>/g, '')
       }
 
       is_user_signed_in(chrome).then((data) => {
