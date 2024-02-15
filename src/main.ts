@@ -7,13 +7,16 @@ import { SecuritySchemeObject } from '@nestjs/swagger/dist/interfaces/open-api-s
 import { AppModule } from './app.module';
 import { appEnv } from './config';
 import { options } from './swagger-options';
-
+import * as bodyParser from 'body-parser';
 import { getVersion } from './getVersion';
 
 async function bootstrap() {
   const logger = new Logger('bootstrap');
 
   const app = await NestFactory.create(AppModule);
+  app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+  app.use(bodyParser.json({ limit: '50mb' }));
+
   app.enableCors();
   app.setGlobalPrefix('api');
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
