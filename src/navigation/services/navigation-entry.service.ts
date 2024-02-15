@@ -44,6 +44,7 @@ export class NavigationEntryService {
         data: {
           ...createNavigationEntryInputDto,
           userId: jwtContext.user.id,
+          userAgent: jwtContext?.session?.userAgent || '',
         },
       });
     }
