@@ -61,7 +61,7 @@ chrome.tabs.onUpdated.addListener(async function (tabId, changeInfo, tab) {
         url: tab.url,
         navigationDate: new Date().toISOString(),
         title: tab.title,
-        content: htmlContent.replace(/<[^>]*>/g, '')
+        content: htmlContent.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ')
       }
 
       is_user_signed_in(chrome).then((data) => {
