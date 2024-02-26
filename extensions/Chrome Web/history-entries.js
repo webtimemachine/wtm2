@@ -65,7 +65,7 @@ export async function getHistoryEntries (user_info, offset, limit, query, reexec
     // Parse the response body as JSON
     const response = await resp.json()
     // Return the parsed response
-    return response
+    return { ...response, user: user_info.user.email }
   } catch (err) {
     console.error(err);
     // If the function is being re-executed after refreshing the access token, return without re-executing refreshTokenData to prevent an infinite loop
