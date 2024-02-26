@@ -1,4 +1,6 @@
 import { Pagination } from './pagination.js'
+import { API_URL } from './consts.js'
+
 let paginationData = undefined
 const ITEMS_PER_PAGE = 10;
 
@@ -78,9 +80,12 @@ document.addEventListener('DOMContentLoaded', function () {
             return
         }
 
-        if (response.user) { //Display user email connected
+        if (response.user) { //Display user email connected & backend information
             const userDiv = document.getElementById('user-connected');
             userDiv.innerHTML = `User: ${response.user}`
+
+            const apiDiv = document.getElementById('backend-connected');
+            apiDiv.innerHTML = `Backend API: ${API_URL}`
         }
 
         loaderContainer.style.display = 'none';
