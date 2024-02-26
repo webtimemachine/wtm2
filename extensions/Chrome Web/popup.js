@@ -58,7 +58,7 @@ const sitesList = document.getElementById('sites-list');
 const loaderContainer = document.getElementById('loader-container');
 // Function to create and append history item to list
 function appendHistoryItem (item) {
-    var listItem = document.createElement('li');
+    var listItem = document.createElement('div');
     var anchor = document.createElement('a');
 
     anchor.href = item.url;
@@ -76,6 +76,11 @@ document.addEventListener('DOMContentLoaded', function () {
         if (response.error) {
             handleLogoutUser()
             return
+        }
+
+        if (response.user) { //Display user email connected
+            const userDiv = document.getElementById('user-connected');
+            userDiv.innerHTML = `User: ${response.user}`
         }
 
         loaderContainer.style.display = 'none';
