@@ -12,6 +12,10 @@ form {
   border-top: solid 1px rgba(0, 0, 0, 0.23);
 }
 
+.header-container {
+  padding: 8px 8px;
+}
+
 input {
   margin: 10px;
   font-size: 120%;
@@ -35,6 +39,7 @@ button {
   font-weight: bold;
   transition-duration: 0.3s;
   padding: 10px;
+  cursor: pointer;
 }
 
 .white_placeholder::placeholder {
