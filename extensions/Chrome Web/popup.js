@@ -61,13 +61,15 @@ const loaderContainer = document.getElementById('loader-container');
 // Function to create and append history item to list
 function appendHistoryItem (item) {
     var listItem = document.createElement('div');
+    var paragraph = document.createElement('p');
     var anchor = document.createElement('a');
+
+    paragraph.textContent = `${new Date(item.navigationDate).toLocaleString()} - ${item.title}`;
+    paragraph.classList.add('truncate');
 
     anchor.href = item.url;
     anchor.target = '_blank';
-
-    anchor.textContent = `${new Date(item.navigationDate).toLocaleString()} - ${item.title}`;
-    anchor.classList.add('truncate');
+    anchor.appendChild(paragraph)
 
     listItem.appendChild(anchor);
     sitesList.appendChild(listItem)
