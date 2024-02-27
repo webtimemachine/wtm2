@@ -1,12 +1,12 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { JwtContext } from 'src/auth/interfaces';
 import { PrismaService } from '../../common/services';
 import { CreateNavigationEntryInputDto, NavigationEntryDto } from '../dtos';
 import { NavigationEntry } from '@prisma/client';
-import { plainToInstance } from 'class-transformer';
+import { plainToClassFromExist, plainToInstance } from 'class-transformer';
 import { GetNavigationEntryDto } from '../dtos/get-navigation-entry.dto';
 import { Prisma } from '@prisma/client';
-import { PaginationResponse } from '../../common/dtos';
+import { MessageResponse, PaginationResponse } from '../../common/dtos';
 
 @Injectable()
 export class NavigationEntryService {
@@ -107,6 +107,32 @@ export class NavigationEntryService {
       limit,
       count,
       items: navigationEntryDtos,
+    });
+  }
+
+  async deleteNavigationEntry(
+    jwtContext: JwtContext,
+    id: number,
+  ): Promise<MessageResponse> {
+    const navigationEntry = await this.prismaService.navigationEntry.findUnique(
+      {
+        where: {
+          userId: jwtContext.user.id,
+          id,
+        },
+      },
+    );
+
+    if (!navigationEntry) {
+      throw new NotFoundException();
+    }
+
+    await this.prismaService.navigationEntry.delete({
+      where: { id, userId: jwtContext.user.id },
+    });
+
+    return plainToClassFromExist(new MessageResponse(), {
+      message: 'Navigation entry has been deleted',
     });
   }
 }
