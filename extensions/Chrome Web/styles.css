@@ -12,12 +12,21 @@ body {
   min-width: 350px;
 }
 
+body {
+  position: relative;
+}
+
 h1 {
   margin-block: 0px;
 }
 
 h4 {
   margin-block: 8px;
+}
+
+.tab-title {
+  color: #00000099;
+  padding: 0px 8px;
 }
 
 #sites-list {
