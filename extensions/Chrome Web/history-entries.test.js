@@ -22,6 +22,9 @@ describe('Should run all test for saveHistoryEntry & getHistoryEntries functions
   test('should call fetch with the correct arguments', async () => {
     const user_info = {
       accessToken: 'mockAccessToken',
+      user: {
+        email: 'user-connected@mail.com'
+      }
     };
     const payload = { data: 'mockPayload' };
 
@@ -43,6 +46,9 @@ describe('Should run all test for saveHistoryEntry & getHistoryEntries functions
   test('should return a response when successful', async () => {
     const user_info = {
       accessToken: 'mockAccessToken',
+      user: {
+        email: 'user-connected@mail.com'
+      }
     };
     const payload = { data: 'mockPayload' };
 
@@ -64,6 +70,9 @@ describe('Should run all test for saveHistoryEntry & getHistoryEntries functions
   test('should call fetch with the correct arguments', async () => {
     const user_info = {
       accessToken: 'mockAccessToken',
+      user: {
+        email: 'user-connected@mail.com'
+      }
     };
 
     await getHistoryEntries(user_info, 0, 10);
@@ -83,8 +92,11 @@ describe('Should run all test for saveHistoryEntry & getHistoryEntries functions
   test('should return the response data when successful', async () => {
     const user_info = {
       accessToken: 'mockAccessToken',
+      user: {
+        email: 'user-connected@mail.com'
+      }
     };
-    const responseData = { data: 'mockData' };
+    const responseData = { data: 'mockData', user: "user-connected@mail.com", };
     global.fetch.mockImplementationOnce(() =>
       Promise.resolve({
         json: () => Promise.resolve(responseData),
@@ -98,7 +110,13 @@ describe('Should run all test for saveHistoryEntry & getHistoryEntries functions
   });
 
   test('should call refresh token function when fetch fails with 401', async () => {
-    global.fetch.mockImplementationOnce(() => Promise.reject({ status: 401 }));
+    const responseData = { data: 'mockData', user: "user-connected@mail.com", };
+    global.fetch.mockImplementationOnce(() => Promise.reject({ status: 401 })).mockImplementationOnce(() =>
+      Promise.resolve({
+        json: () => Promise.resolve(responseData),
+        ok: true,
+      })
+    );
     const spyConsoleError = jest.spyOn(console, 'error').mockImplementation();
 
     await getHistoryEntries({}, 0, 10);

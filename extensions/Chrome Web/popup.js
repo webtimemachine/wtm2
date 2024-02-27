@@ -1,4 +1,6 @@
 import { Pagination } from './pagination.js'
+import { API_URL } from './consts.js'
+
 let paginationData = undefined
 const ITEMS_PER_PAGE = 10;
 
@@ -58,14 +60,16 @@ const sitesList = document.getElementById('sites-list');
 const loaderContainer = document.getElementById('loader-container');
 // Function to create and append history item to list
 function appendHistoryItem (item) {
-    var listItem = document.createElement('li');
+    var listItem = document.createElement('div');
+    var paragraph = document.createElement('p');
     var anchor = document.createElement('a');
+
+    paragraph.textContent = `${new Date(item.navigationDate).toLocaleString()} - ${item.title}`;
+    paragraph.classList.add('truncate');
 
     anchor.href = item.url;
     anchor.target = '_blank';
-
-    anchor.textContent = `${new Date(item.navigationDate).toLocaleString()} - ${item.title}`;
-    anchor.classList.add('truncate');
+    anchor.appendChild(paragraph)
 
     listItem.appendChild(anchor);
     sitesList.appendChild(listItem)
@@ -76,6 +80,14 @@ document.addEventListener('DOMContentLoaded', function () {
         if (response.error) {
             handleLogoutUser()
             return
+        }
+
+        if (response.user) { //Display user email connected & backend information
+            const userDiv = document.getElementById('user-connected');
+            userDiv.innerHTML = `User: ${response.user}`
+
+            const apiDiv = document.getElementById('backend-connected');
+            apiDiv.innerHTML = `Backend API: ${API_URL}`
         }
 
         loaderContainer.style.display = 'none';
