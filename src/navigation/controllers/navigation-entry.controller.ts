@@ -1,4 +1,14 @@
-import { Body, Controller, Get, HttpCode, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  Param,
+  ParseIntPipe,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { NavigationEntryService } from '../services';
 import { CreateNavigationEntryInputDto, NavigationEntryDto } from '../dtos';
@@ -9,7 +19,7 @@ import {
 import { JwtAccessToken, JwtRequestContext } from 'src/auth/decorators';
 import { JwtContext } from 'src/auth/interfaces';
 import { GetNavigationEntryDto } from '../dtos/get-navigation-entry.dto';
-import { PaginationResponse } from 'src/common/dtos';
+import { MessageResponse, PaginationResponse } from 'src/common/dtos';
 import { ApiPaginationResponse } from 'src/common/decorators';
 
 @ApiTags('Navigation Entry')
@@ -46,5 +56,20 @@ export class NavigationEntryController {
     @Query() queryParams: GetNavigationEntryDto,
   ): Promise<PaginationResponse<NavigationEntryDto>> {
     return this.navigationService.getNavigationEntry(context, queryParams);
+  }
+
+  @ApiInternalServerErrorMessageResponse()
+  @ApiBadRequestMessageResponse()
+  @ApiOkResponse({
+    type: MessageResponse,
+  })
+  @JwtAccessToken([])
+  @HttpCode(200)
+  @Delete('/:id')
+  deleteNavigationEntry(
+    @Param('id', ParseIntPipe) id: number,
+    @JwtRequestContext() context: JwtContext,
+  ): Promise<MessageResponse> {
+    return this.navigationService.deleteNavigationEntry(context, id);
   }
 }
