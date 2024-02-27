@@ -66,7 +66,7 @@ chrome.tabs.onUpdated.addListener(async function (tabId, changeInfo, tab) {
 
       is_user_signed_in(chrome).then((data) => {
         if (data.userStatus) {
-          saveHistoryEntry(data.user_info, record)
+          saveHistoryEntry(data.user_info, record).catch(() => logoutUser())
         }
       })
     }

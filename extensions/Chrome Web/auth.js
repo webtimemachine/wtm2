@@ -106,7 +106,7 @@ export async function refreshUser (data) {
 }
 
 export async function logoutUser () {
-  chrome.storage.local.set({ userStatus: false, user_info: {} });
+  return await chrome.storage.local.set({ userStatus: false, user_info: {} });
 }
 
 export const refreshTokenData = async (res) => {
