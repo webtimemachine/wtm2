@@ -57,6 +57,10 @@
 		ED4324B42B6D378E00F3521C /* consts.js in Resources */ = {isa = PBXBuildFile; fileRef = ED4324B12B6D378E00F3521C /* consts.js */; };
 		ED4324B52B6D378E00F3521C /* history-entries.js in Resources */ = {isa = PBXBuildFile; fileRef = ED4324B22B6D378E00F3521C /* history-entries.js */; };
 		ED4324B62B6D378E00F3521C /* history-entries.js in Resources */ = {isa = PBXBuildFile; fileRef = ED4324B22B6D378E00F3521C /* history-entries.js */; };
+		EDF736962B90AC6400B97FB4 /* icons in Resources */ = {isa = PBXBuildFile; fileRef = EDF736952B90AC6300B97FB4 /* icons */; };
+		EDF736972B90AC6400B97FB4 /* icons in Resources */ = {isa = PBXBuildFile; fileRef = EDF736952B90AC6300B97FB4 /* icons */; };
+		EDF736982B90AC6400B97FB4 /* icons in Resources */ = {isa = PBXBuildFile; fileRef = EDF736952B90AC6300B97FB4 /* icons */; };
+		EDF736992B90AC6400B97FB4 /* icons in Resources */ = {isa = PBXBuildFile; fileRef = EDF736952B90AC6300B97FB4 /* icons */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
