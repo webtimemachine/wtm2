@@ -75,6 +75,14 @@ export async function getHistoryEntries (user_info, offset, limit, query, reexec
   }
 }
 
+/**
+ * Asynchronous function to delete a navigation history entry for a user by sending a request to the server.
+ * 
+ * @param {object} user_info - An object containing user information, including the access token.
+ * @param {object} payload - An object containing the history entry's id to be deleted.
+ * @param {boolean} [reexecuted=false] - An optional flag indicating whether the function is being re-executed after refreshing the access token.
+ * @returns {Promise<Response>} A Promise that resolves to the response from the delete history entry request.
+ */
 export async function deleteHistoryEntries (user_info, payload, reexecuted = false) {
   try {
     // Send a GET request to the endpoint for retrieving navigation history with pagination parameters
