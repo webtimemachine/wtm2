@@ -12,6 +12,7 @@ jobs:
     env:
       PORT: ${{ secrets.PORT }}
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      DATABASE_URL_NON_POOLING: ${{ secrets.DATABASE_URL_NON_POOLING }}
       BCRYPT_SALT: ${{ secrets.BCRYPT_SALT }}
       CRYPTO_SALT: ${{ secrets.CRYPTO_SALT }}
       CRYPTO_KEY: ${{ secrets.CRYPTO_KEY }}
