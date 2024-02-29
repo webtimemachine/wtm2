@@ -25,30 +25,25 @@ $ npm run start:prod
 
 To see the Opne API Specification navigate to /
 
-# How to deploy your own backend of WTM
+# How to deploy your own Backend of WTM
 
 If you want to use Web Time Machine app saving and managing your own navigation data the best way to do it is to deploy your own backend and connect it to the extension. Next we detail the steps to do achieve this.
 
-- [Fork WTM repository](#fork-wtm-repository)
-- [Create a **Supabase** database](#create-a-supabase-database)
-- [Deploy the backend instance on **Vercel**](#deploy-the-backend-instance-on-vercel)
+- [Deploy WTM on Vercel](#deploy-wtm-on-vercel)
+- [Create a Vercel Postgres Serverless SQL](#create-a-vercel-postgres-serverless-sql)
 - [Set the environment variables](#set-the-environment-variables)
 
-### Fork WTM repository
+### Deploy WTM on Vercel
 
 Deploy [this repository](https://github.com/webtimemachine/wtm2) into your vercel account using the following button.
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fwebtimemachine%2Fwtm2)
 
-## Create a Supabase database
+## Create a Vercel Postgres Serverless SQL
 
-The backend of WTM uses a PostgressDB, we recommend using Supabase. First you have to create an Account on [Supabase](https://supabase.com/) and create a new project.
+The backend of WTM uses a PostgressDB, we recommend using Vercel Postgres. In order to do that you need to go to your Vercel dashboard on the tab 'Storage' and create a new DB. Then you need to setup the connection with your app, open the Advanced Options an set `DATABASE` as the envaronment variables prefix. After that you can do to the env variables of you project and get the DATABASE_URL to use on your local, connect to the database using an SQL client like [DBeaver](https://dbeaver.io/) and update your repository secrets.
 
-After this, you will be able to get the DATABASE_URL and the DIRECT_URL for the next steps.
-
-## Deploy the backend instance on Vercel
-
-Signup into [Vercel](https://vercel.com/) with your Github account and then follow [this documentation](https://vercel.com/docs/getting-started-with-vercel/import) to deploy the forked repository. Note that after this you have to setup the environment variables in the Settings of the project.
+![db-connect-project](./docs/db-connect-project.png)
 
 ## Set the environment variables
 
@@ -61,32 +56,31 @@ To run the project in a local environment create a .env file on the root of the 
    - Example: **`BASE_URL='http://localhost:5000'`**
    - Usage: Defines the base URL of the application. This can be useful for generating absolute URLs within the application or for configuring external services to communicate with the application.
 3. **DATABASE_URL**:
-   - Example: **`DATABASE_URL='postgresql://postgres:\***@localhost:5432/web-time-machine-db'`\*\*
+   - Example: **`DATABASE_URL='postgres://default:\*\***\*\***\*\***@ep-little-**\*\*\***.us-east-1.aws.neon.tech:5432/verceldb?sslmode=require'`\*\*
    - Usage: Contains the connection URL for the PostgreSQL database used by the application. It typically includes the username, password (hidden here), host, port, and database name.
-4. **DIRECT_URL**:
-   - Example: **`DIRECT_URL='postgresql://postgres:\***@localhost:5432/web-time-machine-db'`\*\*
-   - Usage: Similar to DATABASE_URL, it holds the connection information for the PostgreSQL database.
-5. **BCRYPT_SALT**:
+4. **BCRYPT_SALT**:
    - Example: **`BCRYPT_SALT=10`**
    - Usage: Specifies the cost factor or salt value used in the Bcrypt hashing algorithm for securely hashing passwords. In this case, the salt value is "10".
-6. **CRYPTO_SALT**:
+5. **CRYPTO_SALT**:
    - Example: **`CRYPTO_SALT=1a9af5a9ebe7853`**
    - Usage: A salt value used in cryptographic operations to add entropy and enhance security.
-7. **CRYPTO_KEY**:
+6. **CRYPTO_KEY**:
    - Example: **`CRYPTO_KEY=4ff64f746022599`**
    - Usage: Contains a cryptographic key used for encryption or decryption operations.
-8. **JWT_ACCESS_SECRET**:
+7. **JWT_ACCESS_SECRET**:
    - Example: **`JWT_ACCESS_SECRET=d5e3719e-c66b-4504-9b10-6b5a4a678ffb`**
    - Usage: Secret key used to sign and verify JWT access tokens for user authentication.
-9. **JWT_ACCESS_EXPIRATION**:
+8. **JWT_ACCESS_EXPIRATION**:
    - Example: **`JWT_ACCESS_EXPIRATION=1d`**
    - Usage: Specifies the expiration time for JWT access tokens. In this case, "1d" indicates a validity period of one day.
-10. **JWT_REFRESH_SECRET**:
-    - Example: **`JWT_REFRESH_SECRET=0f0d7c71-f0a0-421f-a0c4-9152072281b5`**
-    - Usage: Secret key used to sign and verify JWT refresh tokens, typically used for refreshing expired access tokens.
-11. **JWT_REFRESH_EXPIRATION**:
+9. **JWT_REFRESH_SECRET**:
+   - Example: **`JWT_REFRESH_SECRET=0f0d7c71-f0a0-421f-a0c4-9152072281b5`**
+   - Usage: Secret key used to sign and verify JWT refresh tokens, typically used for refreshing expired access tokens.
+10. **JWT_REFRESH_EXPIRATION**:
     - Example: **`JWT_REFRESH_EXPIRATION=1d`**
     - Usage: Specifies the expiration time for JWT refresh tokens. In this case, "1d" indicates a validity period of one day.
-12. **JWT_PARTIAL_SECRET**:
+11. **JWT_PARTIAL_SECRET**:
     - Example: **`JWT_PARTIAL_SECRET=0f0d7c71-f0a0-421f-a0c4-9152072281b5`**
     - Usage: It seems to be another secret key related to JWT, but its specific usage is not clear from the provided context.
+
+You will also need to set this env variables as secrets on your GitHub repository for the db migrations GitHub action to work properly.
