@@ -1,5 +1,5 @@
 import { loginUser, logoutUser, is_user_signed_in, refreshUser, getDeviceId } from './auth.js'
-import { saveHistoryEntry, getHistoryEntries } from './history-entries.js'
+import { saveHistoryEntry, getHistoryEntries, deleteHistoryEntries } from './history-entries.js'
 
 
 
@@ -115,4 +115,21 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       .catch(err => console.log(err));
     return true;
   }
+
+  if (request.type === 'deleteHistoryEntry') {
+    is_user_signed_in(chrome).then((data) => {
+      if (data.userStatus) {
+        const payload = {
+          id: request.item.id
+        }
+
+        deleteHistoryEntries(data.user_info, payload)
+          .then(() => getHistoryEntries(data.user_info, request.offset, request.limit, request.search))
+          .then((res) => sendResponse(res))
+          .catch(() => sendResponse({ error: true }))
+      }
+    })
+    return true;
+  }
+
 });

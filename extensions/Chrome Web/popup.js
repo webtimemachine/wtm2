@@ -20,6 +20,29 @@ logoutButton.addEventListener('click', function () {
 const input = document.getElementById('input');
 const searchButton = document.getElementById('search-button');
 
+function refreshNavigationHistoryList (response) {
+    loaderContainer.style.display = 'none';
+    if (response && response.items?.length) {
+        paginationData = new Pagination(response.count, ITEMS_PER_PAGE)
+        response.items.forEach(record => {
+            appendHistoryItem(record);
+        });
+        //When popup is open, left arrow always is going to be disable
+        const leftButton = document.getElementById('left-arrow');
+        leftButton.setAttribute('disabled', true)
+
+        if (response.count <= response.limit) {
+            const rightButton = document.getElementById('right-arrow');
+            rightButton.setAttribute('disabled', true)
+        } else {
+            rightButton.removeAttribute('disabled')
+        }
+
+        const paginationInfo = document.getElementById('pagination-info');
+        paginationInfo.innerHTML = `${paginationData.getCurrentPage()} / ${paginationData.getTotalPages()}`
+    }
+}
+
 searchButton.addEventListener('click', function () {
     const searchText = input.value
     sitesList.innerHTML = ''
@@ -31,30 +54,9 @@ searchButton.addEventListener('click', function () {
             return
         }
 
-        loaderContainer.style.display = 'none';
-        if (response && response.items?.length) {
-            paginationData = new Pagination(response.count, ITEMS_PER_PAGE)
-            response.items.forEach(record => {
-                appendHistoryItem(record);
-            });
-            //When popup is open, left arrow always is going to be disable
-            const leftButton = document.getElementById('left-arrow');
-            leftButton.setAttribute('disabled', true)
-
-            if (response.count <= response.limit) {
-                const rightButton = document.getElementById('right-arrow');
-                rightButton.setAttribute('disabled', true)
-            } else {
-                rightButton.removeAttribute('disabled')
-            }
-
-            const paginationInfo = document.getElementById('pagination-info');
-            paginationInfo.innerHTML = `${paginationData.getCurrentPage()} / ${paginationData.getTotalPages()}`
-        }
+        refreshNavigationHistoryList(response)
     });
 })
-
-
 
 const sitesList = document.getElementById('sites-list');
 const loaderContainer = document.getElementById('loader-container');
@@ -62,18 +64,42 @@ const loaderContainer = document.getElementById('loader-container');
 function appendHistoryItem (item) {
     var listItem = document.createElement('div');
     var paragraph = document.createElement('p');
+    var deleteIcon = document.createElement('img');
     var anchor = document.createElement('a');
 
     paragraph.textContent = `${new Date(item.navigationDate).toLocaleString()} - ${item.title}`;
     paragraph.classList.add('truncate');
 
+    deleteIcon.src = './icons/xmark.svg'
+    deleteIcon.alt = 'Delete record'
+    deleteIcon.addEventListener('click', () => deleteItem(item))
+
     anchor.href = item.url;
     anchor.target = '_blank';
+
     anchor.appendChild(paragraph)
 
     listItem.appendChild(anchor);
+    listItem.appendChild(deleteIcon)
+
     sitesList.appendChild(listItem)
 }
+
+function deleteItem (item) {
+    const searchText = input.value
+    sitesList.innerHTML = ''
+    loaderContainer.style.display = 'block';
+
+    chrome.runtime.sendMessage({ type: "deleteHistoryEntry", item, offset: 0, limit: ITEMS_PER_PAGE, search: searchText }, function (response) {
+        if (response.error) {
+            handleLogoutUser()
+            return
+        }
+
+        refreshNavigationHistoryList(response)
+    })
+}
+
 
 document.addEventListener('DOMContentLoaded', function () {
     chrome.runtime.sendMessage({ type: "getHistory", offset: 0, limit: ITEMS_PER_PAGE, search: '' }, function (response) {
