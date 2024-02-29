@@ -1,5 +1,5 @@
 import { jest } from '@jest/globals'
-import { saveHistoryEntry, getHistoryEntries } from './history-entries.js';
+import { saveHistoryEntry, getHistoryEntries, deleteHistoryEntries } from './history-entries.js';
 import { API_URL } from './consts.js';
 
 describe('Should run all test for saveHistoryEntry & getHistoryEntries functions', () => {
@@ -120,6 +120,45 @@ describe('Should run all test for saveHistoryEntry & getHistoryEntries functions
     const spyConsoleError = jest.spyOn(console, 'error').mockImplementation();
 
     await getHistoryEntries({}, 0, 10);
+
+    expect(spyConsoleError).toHaveBeenCalledWith({ status: 401 });
+    spyConsoleError.mockRestore();
+  });
+
+  test('should delete history entry successfully', async () => {
+    global.fetch.mockImplementationOnce(() => Promise.resolve({
+      status: 200,
+      json: () => Promise.resolve({ success: true }),
+    }))
+
+    const user_info = { accessToken: 'mockAccessToken' };
+    const payload = { id: 123 };
+    const result = await deleteHistoryEntries(user_info, payload);
+    expect(result).toEqual({ success: true });
+    expect(fetch).toHaveBeenCalledWith(
+      `${API_URL}/api/navigation-entry/${payload.id}`,
+      expect.objectContaining({
+        method: 'DELETE',
+        headers: expect.objectContaining({
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${user_info.accessToken}`,
+        }),
+      })
+    );
+  });
+
+  test('should throw error if access token has expired when try to delete history entry', async () => {
+    global.fetch.mockImplementationOnce(() => Promise.reject({ status: 401 })).mockImplementationOnce(() =>
+      Promise.resolve({
+        status: 200,
+        json: () => Promise.resolve({ success: true }),
+      })
+    );
+    const spyConsoleError = jest.spyOn(console, 'error').mockImplementation();
+
+    const user_info = { accessToken: 'expiredAccessToken' };
+    const payload = { id: 123 };
+    await deleteHistoryEntries(user_info, payload);
 
     expect(spyConsoleError).toHaveBeenCalledWith({ status: 401 });
     spyConsoleError.mockRestore();
