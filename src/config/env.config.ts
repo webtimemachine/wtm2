@@ -11,6 +11,7 @@ const envSchemas = {
   BASE_URL: z.string().default('http://localhost:3000'),
   NODE_ENV: z.string().default('development'),
   DATABASE_URL: z.string(),
+  DATABASE_URL_NON_POOLING: z.string(),
   BCRYPT_SALT: z.number(),
   CRYPTO_SALT: z.string(),
   CRYPTO_KEY: z.string(),
