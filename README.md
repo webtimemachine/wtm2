@@ -29,9 +29,16 @@ To see the Opne API Specification navigate to /
 
 If you want to use Web Time Machine app saving and managing your own navigation data the best way to do it is to deploy your own backend and connect it to the extension. Next we detail the steps to do achieve this.
 
-- [Deploy WTM on Vercel](#deploy-wtm-on-vercel)
-- [Create a Vercel Postgres Serverless SQL](#create-a-vercel-postgres-serverless-sql)
-- [Set the environment variables](#set-the-environment-variables)
+- [Web Time Machine](#web-time-machine)
+  - [Installation](#installation)
+  - [Running the app](#running-the-app)
+  - [Open API Docs](#open-api-docs)
+- [How to deploy your own Backend of WTM](#how-to-deploy-your-own-backend-of-wtm)
+    - [Deploy WTM on Vercel](#deploy-wtm-on-vercel)
+  - [Create a Vercel Postgres Serverless SQL](#create-a-vercel-postgres-serverless-sql)
+  - [Set the environment variables](#set-the-environment-variables)
+- [Chrome Extension](#chrome-extension)
+  - [How to run it locally](#how-to-run-it-locally)
 
 ### Deploy WTM on Vercel
 
@@ -87,3 +94,18 @@ To run the project in a local environment create a .env file on the root of the 
     - Usage: It seems to be another secret key related to JWT, but its specific usage is not clear from the provided context.
 
 You will also need to set this env variables as secrets on your GitHub repository for the db migrations GitHub action to work properly.
+
+# Chrome Extension
+
+## How to run it locally
+
+- **Step 1**: Clone the Extension Repository.
+- **Step 2**: Access Chrome Extensions Settings.<br>
+    You can directly enter the following URL in the address bar: ```chrome://extensions/```
+- **Step 3**: Enable Developer Mode.
+- **Step 4**: Load the Unpacked Extension.<br>
+  After enabling Developer mode, three new buttons will appear at the top of the Extensions page. Click on the “LOAD UNPACKED” button.
+- **Step 5**: Select the Unzipped Extension Folder.
+   Note: If you want to change the backend to connect to, you have to update the file located in: ```extensions/Chrome Web/consts.js```
+- **Step 6**: Pin the Extension (Optional).
+- **Step 7**: Start Using the Extension Locally.

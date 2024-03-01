@@ -57,10 +57,10 @@
 		ED4324B42B6D378E00F3521C /* consts.js in Resources */ = {isa = PBXBuildFile; fileRef = ED4324B12B6D378E00F3521C /* consts.js */; };
 		ED4324B52B6D378E00F3521C /* history-entries.js in Resources */ = {isa = PBXBuildFile; fileRef = ED4324B22B6D378E00F3521C /* history-entries.js */; };
 		ED4324B62B6D378E00F3521C /* history-entries.js in Resources */ = {isa = PBXBuildFile; fileRef = ED4324B22B6D378E00F3521C /* history-entries.js */; };
-		EDF736962B90AC6400B97FB4 /* icons in Resources */ = {isa = PBXBuildFile; fileRef = EDF736952B90AC6300B97FB4 /* icons */; };
-		EDF736972B90AC6400B97FB4 /* icons in Resources */ = {isa = PBXBuildFile; fileRef = EDF736952B90AC6300B97FB4 /* icons */; };
-		EDF736982B90AC6400B97FB4 /* icons in Resources */ = {isa = PBXBuildFile; fileRef = EDF736952B90AC6300B97FB4 /* icons */; };
-		EDF736992B90AC6400B97FB4 /* icons in Resources */ = {isa = PBXBuildFile; fileRef = EDF736952B90AC6300B97FB4 /* icons */; };
+		ED47451A2B91F9740061FBAB /* icons in Resources */ = {isa = PBXBuildFile; fileRef = ED4745192B91F9740061FBAB /* icons */; };
+		ED47451B2B91F9740061FBAB /* icons in Resources */ = {isa = PBXBuildFile; fileRef = ED4745192B91F9740061FBAB /* icons */; };
+		ED47451C2B91F9740061FBAB /* icons in Resources */ = {isa = PBXBuildFile; fileRef = ED4745192B91F9740061FBAB /* icons */; };
+		ED47451D2B91F9740061FBAB /* icons in Resources */ = {isa = PBXBuildFile; fileRef = ED4745192B91F9740061FBAB /* icons */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -153,7 +153,7 @@
 		ED3CF6F22B73BE4500C64983 /* pagination.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = pagination.js; sourceTree = "<group>"; };
 		ED4324B12B6D378E00F3521C /* consts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = consts.js; sourceTree = "<group>"; };
 		ED4324B22B6D378E00F3521C /* history-entries.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "history-entries.js"; sourceTree = "<group>"; };
-		EDF736952B90AC6300B97FB4 /* icons */ = {isa = PBXFileReference; lastKnownFileType = folder; path = icons; sourceTree = "<group>"; };
+		ED4745192B91F9740061FBAB /* icons */ = {isa = PBXFileReference; lastKnownFileType = folder; path = icons; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -315,9 +315,9 @@
 		5414C8EE2B640F0A0075471F /* CommonFiles */ = {
 			isa = PBXGroup;
 			children = (
+				ED4745192B91F9740061FBAB /* icons */,
 				ED3CF6F22B73BE4500C64983 /* pagination.js */,
 				ED4324B12B6D378E00F3521C /* consts.js */,
-				EDF736952B90AC6300B97FB4 /* icons */,
 				ED4324B22B6D378E00F3521C /* history-entries.js */,
 				540C0DC02B6937630049CE6A /* auth.js */,
 				540C0DBF2B6937630049CE6A /* popup-sign-in-script.js */,
@@ -488,7 +488,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				137F0D8E2AF9C7F700277A9C /* Icon.png in Resources */,
-				EDF736962B90AC6400B97FB4 /* icons in Resources */,
+				ED47451A2B91F9740061FBAB /* icons in Resources */,
 				137F0D652AF9C7F700277A9C /* LaunchScreen.storyboard in Resources */,
 				137F0D8C2AF9C7F700277A9C /* Main.html in Resources */,
 				137F0D922AF9C7F700277A9C /* Script.js in Resources */,
@@ -507,7 +507,7 @@
 				137F0D742AF9C7F700277A9C /* Main.storyboard in Resources */,
 				137F0D932AF9C7F700277A9C /* Script.js in Resources */,
 				137F0D972AF9C7F700277A9C /* Assets.xcassets in Resources */,
-				EDF736972B90AC6400B97FB4 /* icons in Resources */,
+				ED47451B2B91F9740061FBAB /* icons in Resources */,
 				137F0D8D2AF9C7F700277A9C /* Main.html in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -521,7 +521,7 @@
 				ED4324B52B6D378E00F3521C /* history-entries.js in Resources */,
 				540C0DC72B6937630049CE6A /* sign-in-styles.css in Resources */,
 				548A88AE2B640D94009C7C21 /* styles.css in Resources */,
-				EDF736982B90AC6400B97FB4 /* icons in Resources */,
+				ED47451C2B91F9740061FBAB /* icons in Resources */,
 				13564CCA2B0BEF25007E905E /* manifest.json in Resources */,
 				548A88AC2B640D94009C7C21 /* popup.html in Resources */,
 				540C0DC52B6937630049CE6A /* auth.js in Resources */,
@@ -542,7 +542,7 @@
 				ED4324B62B6D378E00F3521C /* history-entries.js in Resources */,
 				540C0DC82B6937630049CE6A /* sign-in-styles.css in Resources */,
 				548A88AF2B640D94009C7C21 /* styles.css in Resources */,
-				EDF736992B90AC6400B97FB4 /* icons in Resources */,
+				ED47451D2B91F9740061FBAB /* icons in Resources */,
 				13564CCB2B0BEF25007E905E /* manifest.json in Resources */,
 				548A88AD2B640D94009C7C21 /* popup.html in Resources */,
 				540C0DC62B6937630049CE6A /* auth.js in Resources */,
