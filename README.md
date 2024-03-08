@@ -8,6 +8,17 @@ Web Time Machine is a cross-platform solution to integrate the navigation histor
 $ npm install
 ```
 
+Copy the `sample.env` to `.env` and edit the values if necessary. Please watch the [Set the environment variables](#set-the-environment-variables).
+
+## Running with Docker
+
+If you are pointing to your local database, you can use Docker Compose to run the application. Before running the command, ensure that you have Docker and Docker compose installed on your system. You can download and install Docker Desktop from [here](https://www.docker.com/products/docker-desktop/).
+Execute the following command in your terminal:
+
+```bash
+docker compose up
+```
+
 ## Running the app
 
 ```bash
@@ -23,7 +34,7 @@ $ npm run start:prod
 
 ## Open API Docs
 
-To see the Opne API Specification navigate to /
+To see the Open API Specification navigate to / of your API running on the port you have enter in the .env. Ex: [http://localhost:5000/](http://localhost:5000/)
 
 # How to deploy your own Backend of WTM
 
@@ -63,10 +74,10 @@ To run the project in a local environment create a .env file on the root of the 
    - Example: **`BASE_URL='http://localhost:5000'`**
    - Usage: Defines the base URL of the application. This can be useful for generating absolute URLs within the application or for configuring external services to communicate with the application.
 3. **DATABASE_URL**:
-   - Example: **`DATABASE_URL='postgres://default:\*\*\***@ep-**\***-art-a4ufofu4-pooler.us-east-1.aws.neon.tech/verceldb?sslmode=require'`\*\*
+   - Example: **`DATABASE_URL='postgres://myuser:mypassword@localhost:5433/web-time-machine'`\*\*
    - Usage: Contains the connection URL for the PostgreSQL database used by the application. It typically includes the username, password (hidden here), host, port, and database name.
 4. **DATABASE_URL_NON_POOLING**:
-   - Example: **`DATABASE_URL_NON_POOLING='postgres://default:\*\*\***@ep-**\***-art-a4ufofu4.us-east-1.aws.neon.tech/verceldb?sslmode=require'`\*\*
+   - Example: **`DATABASE_URL_NON_POOLING='postgres://myuser:mypassword@localhost:5433/web-time-machine'`\*\*
    - Usage: Contains the connection URL for the PostgreSQL database used by the migrations. It typically includes the username, password (hidden here), host, port, and database name.
 5. **BCRYPT_SALT**:
    - Example: **`BCRYPT_SALT=10`**
@@ -97,15 +108,18 @@ You will also need to set this env variables as secrets on your GitHub repositor
 
 # Chrome Extension
 
-## How to run it locally
+## Install the extension in Chrome (using the .zip file or the extension folder)
 
-- **Step 1**: Clone the Extension Repository.
-- **Step 2**: Access Chrome Extensions Settings.<br>
-    You can directly enter the following URL in the address bar: ```chrome://extensions/```
-- **Step 3**: Enable Developer Mode.
-- **Step 4**: Load the Unpacked Extension.<br>
-  After enabling Developer mode, three new buttons will appear at the top of the Extensions page. Click on the “LOAD UNPACKED” button.
-- **Step 5**: Select the Unzipped Extension Folder.
-   Note: If you want to change the backend to connect to, you have to update the file located in: ```extensions/Chrome Web/consts.js```
-- **Step 6**: Pin the Extension (Optional).
-- **Step 7**: Start Using the Extension Locally.
+- Click on the **Settings** icon located in the top-right corner of your Chrome browser. It resembles three vertically aligned dots, also known as the 'hamburger' icon.
+
+- From the dropdown menu, hover over the **Tools** option, then select **Extensions**.
+
+- Navigate to the location of the .zip file you wish to install. Unzip it where you want to let it installed (Desktop, for example). Keep in mind that if you want to use your local code, don't do anything.
+
+- Click on the **Load unpacked** button located in the top-left corner of the screen. This action opens a file selection dialog.
+
+- Select the folder where you had unziped or select the folder where your extension code is in local and click on the **Open** button. Chrome will begin installing the extension.
+
+- Once completed, you'll see a notification confirming the successful installation. The extension should now be visible in your list of installed extensions.
+
+- This step is if only if your are using your local extension folder: [const.js](./extensions/Chrome%20Web/consts.js) is the file where you can change the API environment. Remember that every time you change the code, you should go to **Extensions** and click in update.
