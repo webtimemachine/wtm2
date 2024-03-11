@@ -19,6 +19,15 @@ Execute the following command in your terminal:
 docker compose up
 ```
 
+Also you can run the ngrok to get a public access to your API. That's so useful when you are debugging on from any device regardless your local network. For that, do:
+
+1. Visit the [Ngrok website](https://ngrok.com/) and sign up for an account.
+2. After signing up, navigate to the dashboard to obtain your authentication token and domain
+3. Run the following command:
+```
+docker run --net=host -it -e NGROK_AUTHTOKEN=2L3OvbfDz... ngrok/ngrok:latest http --domain=youronwdomain.ngrok-free.app API_PORT
+```
+
 ## Running the app
 
 ```bash
@@ -65,7 +74,7 @@ The backend of WTM uses a PostgressDB, we recommend using Vercel Postgres. In or
 
 ## Set the environment variables
 
-To run the project in a local environment create a .env file on the root of the project and follow the example on .env.example
+To run the project in a local environment create a .env file on the root of the project and follow the example on sample.env
 
 1. **PORT**:
    - Example: **`PORT=5000`**
@@ -122,4 +131,4 @@ You will also need to set this env variables as secrets on your GitHub repositor
 
 - Once completed, you'll see a notification confirming the successful installation. The extension should now be visible in your list of installed extensions.
 
-- This step is if only if your are using your local extension folder: [const.js](./extensions/Chrome%20Web/consts.js) is the file where you can change the API environment. Remember that every time you change the code, you should go to **Extensions** and click in update.
+- This step only applies if you want to change the API URL. In local extension folder: [const.js](./extensions/Chrome%20Web/consts.js) is the file where you can change the API environment. Remember that every time you change the code, you should go to **Extensions** in your browser and then click in update.
