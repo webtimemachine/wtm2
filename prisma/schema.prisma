@@ -28,8 +28,24 @@ model User {
 
   sessions          Session[]
   navigationEntries NavigationEntry[]
+  userPreferences   UserPreferences?
 
   @@map("users")
+}
+
+model UserPreferences {
+  id BigInt @id @default(autoincrement())
+
+  userId BigInt @unique()
+  user   User   @relation(fields: [userId], references: [id])
+
+  enableNavigationEntryExpiration Boolean @default(false)
+  navigationEntryExpirationInDays Int?
+
+  createdAt DateTime  @default(now()) @db.Timestamptz(0)
+  updateAt  DateTime? @updatedAt @db.Timestamptz(0)
+
+  @@map("user_preferences")
 }
 
 model Session {
