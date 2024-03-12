@@ -45,3 +45,12 @@ button {
 .white_placeholder::placeholder {
   color: white;
 }
+
+#login-error {
+  display: none;
+}
+
+.error {
+  color: red;
+  padding-bottom: 8px;
+}
