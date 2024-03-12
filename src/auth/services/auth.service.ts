@@ -21,6 +21,8 @@ import { appEnv } from '../../config';
 import { JwtService } from '@nestjs/jwt';
 import { createHash } from 'crypto';
 import { RefreshResponseDto } from '../dtos';
+import { CompleteUser } from 'src/user/types';
+import { completeUserInclude } from 'src/user/services/user.service';
 
 @Injectable()
 export class AuthService {
@@ -44,7 +46,9 @@ export class AuthService {
               email,
               password: hashedPassword,
               userType: UserType.MEMBER,
-              createdAt: new Date(),
+              userPreferences: {
+                create: {},
+              },
             },
           });
 
@@ -173,9 +177,19 @@ export class AuthService {
   }
 
   async validateJwtAccessPayloadOrThrow(payload: JWTPayload) {
-    const user = await this.prismaService.user.findFirstOrThrow({
+    const user: CompleteUser = await this.prismaService.user.findFirstOrThrow({
       where: { id: payload.userId, deletedAt: null },
+      include: completeUserInclude,
     });
+
+    if (!user.userPreferences) {
+      const userPreferences = await this.prismaService.userPreferences.create({
+        data: {
+          userId: user.id,
+        },
+      });
+      user.userPreferences = userPreferences;
+    }
 
     const session: Session = await this.prismaService.session.findFirstOrThrow({
       where: { id: payload.sessionId },
@@ -187,9 +201,10 @@ export class AuthService {
   async validateJwtRefreshPayloadOrThrow(
     payload: JWTPayload,
     refreshToken: string,
-  ): Promise<User> {
-    const user = await this.prismaService.user.findFirstOrThrow({
+  ): Promise<CompleteUser> {
+    const user: CompleteUser = await this.prismaService.user.findFirstOrThrow({
       where: { id: payload.userId, deletedAt: null },
+      include: completeUserInclude,
     });
 
     if (!user) {
@@ -200,6 +215,7 @@ export class AuthService {
     await this.prismaService.session.findFirstOrThrow({
       where: { id: payload.sessionId, refreshToken: this.hashIt(refreshToken) },
     });
+
     return user;
   }
 
