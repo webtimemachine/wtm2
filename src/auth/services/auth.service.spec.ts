@@ -28,6 +28,14 @@ describe('AuthService', () => {
     createdAt: new Date(),
     updateAt: new Date(),
     deletedAt: null,
+    userPreferences: {
+      id: BigInt(1),
+      userId: BigInt(1),
+      enableNavigationEntryExpiration: true,
+      navigationEntryExpirationInDays: 120,
+      createdAt: new Date(),
+      updateAt: new Date(),
+    },
   };
 
   const signUpDtoRequest = {
