@@ -24,6 +24,7 @@ function refreshNavigationHistoryList (response) {
     loaderContainer.style.display = 'none';
     if (response && response.items?.length) {
         paginationData = new Pagination(response.count, ITEMS_PER_PAGE)
+
         response.items.forEach(record => {
             appendHistoryItem(record);
         });
@@ -40,6 +41,8 @@ function refreshNavigationHistoryList (response) {
 
         const paginationInfo = document.getElementById('pagination-info');
         paginationInfo.innerHTML = `${paginationData.getCurrentPage()} / ${paginationData.getTotalPages()}`
+    } else {
+        emptyHistoryList()
     }
 }
 
@@ -85,6 +88,23 @@ function appendHistoryItem (item) {
     sitesList.appendChild(listItem)
 }
 
+function emptyHistoryList () {
+    //Display text
+    const paragraph = document.createElement('p');
+    paragraph.classList.add('no-records');
+
+    paragraph.textContent = 'There are no records saved. Start browsing!'
+
+    sitesList.appendChild(paragraph)
+
+    //Disable arrow buttons
+    const leftButton = document.getElementById('left-arrow');
+    leftButton.setAttribute('disabled', true)
+
+    const rightButton = document.getElementById('right-arrow');
+    rightButton.setAttribute('disabled', true)
+}
+
 function deleteItem (item) {
     const searchText = input.value
     sitesList.innerHTML = ''
@@ -119,9 +139,12 @@ document.addEventListener('DOMContentLoaded', function () {
         loaderContainer.style.display = 'none';
         if (response && response.items?.length) {
             paginationData = new Pagination(response.count, ITEMS_PER_PAGE)
+
             response.items.forEach(record => {
                 appendHistoryItem(record);
             });
+
+
             //When popup is open, left arrow always is going to be disable
             const leftButton = document.getElementById('left-arrow');
             leftButton.setAttribute('disabled', true)
@@ -132,6 +155,8 @@ document.addEventListener('DOMContentLoaded', function () {
             }
             const paginationInfo = document.getElementById('pagination-info');
             paginationInfo.innerHTML = `${paginationData.getCurrentPage()} / ${paginationData.getTotalPages()}`
+        } else {
+            emptyHistoryList()
         }
     });
 });
