@@ -6,21 +6,27 @@ import {
 } from '@nestjs/common';
 
 import { PrismaService } from '../../common/services';
+import { hashValue } from '../../common/helpers/bcryptjs.helper';
+import * as bcrypt from 'bcrypt';
+
+import { CompleteUser } from '../../user/types';
+import { completeUserInclude } from '../../user/services/user.service';
+
 import {
   LoginRequestDto,
   LoginResponseDto,
   SignUpRequestDto,
   SignUpResponseDto,
 } from '../dtos';
-import { hashValue } from '../../common/helpers/bcryptjs.helper';
+
 import { Session, User, UserType } from '@prisma/client';
 import { plainToInstance } from 'class-transformer';
-import * as bcrypt from 'bcrypt';
 import { JWTPayload, JwtContext } from '../interfaces';
-import { appEnv } from '../../config';
 import { JwtService } from '@nestjs/jwt';
 import { createHash } from 'crypto';
 import { RefreshResponseDto } from '../dtos';
+
+import { appEnv } from '../../config';
 
 @Injectable()
 export class AuthService {
@@ -44,7 +50,9 @@ export class AuthService {
               email,
               password: hashedPassword,
               userType: UserType.MEMBER,
-              createdAt: new Date(),
+              userPreferences: {
+                create: {},
+              },
             },
           });
 
@@ -173,9 +181,19 @@ export class AuthService {
   }
 
   async validateJwtAccessPayloadOrThrow(payload: JWTPayload) {
-    const user = await this.prismaService.user.findFirstOrThrow({
+    const user: CompleteUser = await this.prismaService.user.findFirstOrThrow({
       where: { id: payload.userId, deletedAt: null },
+      include: completeUserInclude,
     });
+
+    if (!user.userPreferences) {
+      const userPreferences = await this.prismaService.userPreferences.create({
+        data: {
+          userId: user.id,
+        },
+      });
+      user.userPreferences = userPreferences;
+    }
 
     const session: Session = await this.prismaService.session.findFirstOrThrow({
       where: { id: payload.sessionId },
@@ -187,9 +205,10 @@ export class AuthService {
   async validateJwtRefreshPayloadOrThrow(
     payload: JWTPayload,
     refreshToken: string,
-  ): Promise<User> {
-    const user = await this.prismaService.user.findFirstOrThrow({
+  ): Promise<CompleteUser> {
+    const user: CompleteUser = await this.prismaService.user.findFirstOrThrow({
       where: { id: payload.userId, deletedAt: null },
+      include: completeUserInclude,
     });
 
     if (!user) {
@@ -200,6 +219,7 @@ export class AuthService {
     await this.prismaService.session.findFirstOrThrow({
       where: { id: payload.sessionId, refreshToken: this.hashIt(refreshToken) },
     });
+
     return user;
   }
 

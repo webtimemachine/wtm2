@@ -10,7 +10,6 @@ import { UserType } from '@prisma/client';
 import { UserTypesGuard } from '../guards';
 import {
   ApiBearerAuth,
-  ApiInternalServerErrorResponse,
   ApiOperation,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
@@ -31,10 +30,6 @@ export function JwtAccessToken(
       description: ApiDocsDescriptions.UNAUTHORIZED,
       type: MessageResponse,
     }),
-    ApiInternalServerErrorResponse({
-      description: ApiDocsDescriptions.SERVER_ERROR,
-      type: MessageResponse,
-    }),
   );
 }
 
@@ -44,9 +39,6 @@ export function JwtRefreshToken(guards: Type<CanActivate>[] = []) {
     UseGuards(AuthGuard('jwt-refresh-token'), ...guards),
     ApiBearerAuth('refreshToken'),
     ApiUnauthorizedResponse({ description: ApiDocsDescriptions.UNAUTHORIZED }),
-    ApiInternalServerErrorResponse({
-      description: ApiDocsDescriptions.SERVER_ERROR,
-    }),
   );
 }
 
