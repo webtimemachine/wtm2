@@ -6,23 +6,27 @@ import {
 } from '@nestjs/common';
 
 import { PrismaService } from '../../common/services';
+import { hashValue } from '../../common/helpers/bcryptjs.helper';
+import * as bcrypt from 'bcrypt';
+
+import { CompleteUser } from '../../user/types';
+import { completeUserInclude } from '../../user/services/user.service';
+
 import {
   LoginRequestDto,
   LoginResponseDto,
   SignUpRequestDto,
   SignUpResponseDto,
 } from '../dtos';
-import { hashValue } from '../../common/helpers/bcryptjs.helper';
+
 import { Session, User, UserType } from '@prisma/client';
 import { plainToInstance } from 'class-transformer';
-import * as bcrypt from 'bcrypt';
 import { JWTPayload, JwtContext } from '../interfaces';
-import { appEnv } from '../../config';
 import { JwtService } from '@nestjs/jwt';
 import { createHash } from 'crypto';
 import { RefreshResponseDto } from '../dtos';
-import { CompleteUser } from 'src/user/types';
-import { completeUserInclude } from 'src/user/services/user.service';
+
+import { appEnv } from '../../config';
 
 @Injectable()
 export class AuthService {

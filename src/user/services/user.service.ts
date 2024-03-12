@@ -1,10 +1,11 @@
 import { Injectable, Logger } from '@nestjs/common';
-
-import { PrismaService } from 'src/common/services';
-import { JwtContext } from 'src/auth/interfaces';
 import { Prisma } from '@prisma/client';
 
 import { CompleteUser } from '../types';
+
+import { PrismaService } from '../../common/services';
+import { JwtContext } from '../../auth/interfaces';
+
 import { plainToInstance } from 'class-transformer';
 import {
   UpdateUserPreferencesInput,
