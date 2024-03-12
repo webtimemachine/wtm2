@@ -15,6 +15,10 @@ document.querySelector('form').addEventListener('submit', event => {
       payload: { email, password, userAgent: navigator.userAgent }
     },
       function (response) {
+        if (response.error) {
+          document.querySelector('#login-error').style.display = 'block'
+        }
+
         if (response.user) {
           window.location.replace('./popup.html');
         }

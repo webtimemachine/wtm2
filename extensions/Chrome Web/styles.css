@@ -149,6 +149,11 @@ button {
   cursor: pointer;
 }
 
+.pagination-container button:disabled {
+  background-color: #DDD;
+  cursor: not-allowed;
+}
+
 #loader-container {
   display: flex;
   align-items: center;
@@ -186,4 +191,10 @@ button {
   margin-bottom: 4px;
   font-size: 11px;
   color: #666
+}
+
+.no-records {
+  display: flex;
+  justify-content: center;
+  padding-top: 16px;
 }
