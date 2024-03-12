@@ -5,6 +5,10 @@ import { z } from 'zod';
 const isProduction = process.env.NODE_ENV === 'production';
 if (isProduction) process.env.NO_COLOR = 'TRUE';
 
+BigInt.prototype['toJSON'] = function () {
+  return Number(this);
+};
+
 dotenv.config();
 const envSchemas = {
   PORT: z.number(),
