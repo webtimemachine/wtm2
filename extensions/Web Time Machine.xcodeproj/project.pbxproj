@@ -61,6 +61,18 @@
 		ED47451B2B91F9740061FBAB /* icons in Resources */ = {isa = PBXBuildFile; fileRef = ED4745192B91F9740061FBAB /* icons */; };
 		ED47451C2B91F9740061FBAB /* icons in Resources */ = {isa = PBXBuildFile; fileRef = ED4745192B91F9740061FBAB /* icons */; };
 		ED47451D2B91F9740061FBAB /* icons in Resources */ = {isa = PBXBuildFile; fileRef = ED4745192B91F9740061FBAB /* icons */; };
+		ED964EC42BA1C59D00925F5B /* popup-sign-up.html in Resources */ = {isa = PBXBuildFile; fileRef = ED964EC12BA1C59D00925F5B /* popup-sign-up.html */; };
+		ED964EC52BA1C59D00925F5B /* popup-sign-up.html in Resources */ = {isa = PBXBuildFile; fileRef = ED964EC12BA1C59D00925F5B /* popup-sign-up.html */; };
+		ED964EC62BA1C59D00925F5B /* popup-sign-up.html in Resources */ = {isa = PBXBuildFile; fileRef = ED964EC12BA1C59D00925F5B /* popup-sign-up.html */; };
+		ED964EC72BA1C59D00925F5B /* popup-sign-up.html in Resources */ = {isa = PBXBuildFile; fileRef = ED964EC12BA1C59D00925F5B /* popup-sign-up.html */; };
+		ED964EC82BA1C59D00925F5B /* popup-sign-up.js in Resources */ = {isa = PBXBuildFile; fileRef = ED964EC22BA1C59D00925F5B /* popup-sign-up.js */; };
+		ED964EC92BA1C59D00925F5B /* popup-sign-up.js in Resources */ = {isa = PBXBuildFile; fileRef = ED964EC22BA1C59D00925F5B /* popup-sign-up.js */; };
+		ED964ECA2BA1C59D00925F5B /* popup-sign-up.js in Resources */ = {isa = PBXBuildFile; fileRef = ED964EC22BA1C59D00925F5B /* popup-sign-up.js */; };
+		ED964ECB2BA1C59D00925F5B /* popup-sign-up.js in Resources */ = {isa = PBXBuildFile; fileRef = ED964EC22BA1C59D00925F5B /* popup-sign-up.js */; };
+		ED964ECC2BA1C59D00925F5B /* sign-up.css in Resources */ = {isa = PBXBuildFile; fileRef = ED964EC32BA1C59D00925F5B /* sign-up.css */; };
+		ED964ECD2BA1C59D00925F5B /* sign-up.css in Resources */ = {isa = PBXBuildFile; fileRef = ED964EC32BA1C59D00925F5B /* sign-up.css */; };
+		ED964ECE2BA1C59D00925F5B /* sign-up.css in Resources */ = {isa = PBXBuildFile; fileRef = ED964EC32BA1C59D00925F5B /* sign-up.css */; };
+		ED964ECF2BA1C59D00925F5B /* sign-up.css in Resources */ = {isa = PBXBuildFile; fileRef = ED964EC32BA1C59D00925F5B /* sign-up.css */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -154,6 +166,9 @@
 		ED4324B12B6D378E00F3521C /* consts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = consts.js; sourceTree = "<group>"; };
 		ED4324B22B6D378E00F3521C /* history-entries.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "history-entries.js"; sourceTree = "<group>"; };
 		ED4745192B91F9740061FBAB /* icons */ = {isa = PBXFileReference; lastKnownFileType = folder; path = icons; sourceTree = "<group>"; };
+		ED964EC12BA1C59D00925F5B /* popup-sign-up.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = "popup-sign-up.html"; sourceTree = "<group>"; };
+		ED964EC22BA1C59D00925F5B /* popup-sign-up.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "popup-sign-up.js"; sourceTree = "<group>"; };
+		ED964EC32BA1C59D00925F5B /* sign-up.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = "sign-up.css"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -321,6 +336,9 @@
 				ED4324B22B6D378E00F3521C /* history-entries.js */,
 				540C0DC02B6937630049CE6A /* auth.js */,
 				540C0DBF2B6937630049CE6A /* popup-sign-in-script.js */,
+				ED964EC12BA1C59D00925F5B /* popup-sign-up.html */,
+				ED964EC22BA1C59D00925F5B /* popup-sign-up.js */,
+				ED964EC32BA1C59D00925F5B /* sign-up.css */,
 				540C0DC22B6937630049CE6A /* popup-sign-in.html */,
 				540C0DC12B6937630049CE6A /* sign-in-styles.css */,
 				548A88A62B640D94009C7C21 /* popup.html */,
@@ -492,9 +510,12 @@
 				137F0D652AF9C7F700277A9C /* LaunchScreen.storyboard in Resources */,
 				137F0D8C2AF9C7F700277A9C /* Main.html in Resources */,
 				137F0D922AF9C7F700277A9C /* Script.js in Resources */,
+				ED964EC42BA1C59D00925F5B /* popup-sign-up.html in Resources */,
+				ED964ECC2BA1C59D00925F5B /* sign-up.css in Resources */,
 				137F0D962AF9C7F700277A9C /* Assets.xcassets in Resources */,
 				137F0D682AF9C7F700277A9C /* Main.storyboard in Resources */,
 				137F0D902AF9C7F700277A9C /* Style.css in Resources */,
+				ED964EC82BA1C59D00925F5B /* popup-sign-up.js in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -503,10 +524,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				137F0D8F2AF9C7F700277A9C /* Icon.png in Resources */,
+				ED964EC52BA1C59D00925F5B /* popup-sign-up.html in Resources */,
 				137F0D912AF9C7F700277A9C /* Style.css in Resources */,
+				ED964EC92BA1C59D00925F5B /* popup-sign-up.js in Resources */,
 				137F0D742AF9C7F700277A9C /* Main.storyboard in Resources */,
 				137F0D932AF9C7F700277A9C /* Script.js in Resources */,
 				137F0D972AF9C7F700277A9C /* Assets.xcassets in Resources */,
+				ED964ECD2BA1C59D00925F5B /* sign-up.css in Resources */,
 				ED47451B2B91F9740061FBAB /* icons in Resources */,
 				137F0D8D2AF9C7F700277A9C /* Main.html in Resources */,
 			);
@@ -521,7 +545,9 @@
 				ED4324B52B6D378E00F3521C /* history-entries.js in Resources */,
 				540C0DC72B6937630049CE6A /* sign-in-styles.css in Resources */,
 				548A88AE2B640D94009C7C21 /* styles.css in Resources */,
+				ED964EC62BA1C59D00925F5B /* popup-sign-up.html in Resources */,
 				ED47451C2B91F9740061FBAB /* icons in Resources */,
+				ED964ECE2BA1C59D00925F5B /* sign-up.css in Resources */,
 				13564CCA2B0BEF25007E905E /* manifest.json in Resources */,
 				548A88AC2B640D94009C7C21 /* popup.html in Resources */,
 				540C0DC52B6937630049CE6A /* auth.js in Resources */,
@@ -530,6 +556,7 @@
 				ED4324B32B6D378E00F3521C /* consts.js in Resources */,
 				548A88AA2B640D94009C7C21 /* popup.js in Resources */,
 				540C0DC32B6937630049CE6A /* popup-sign-in-script.js in Resources */,
+				ED964ECA2BA1C59D00925F5B /* popup-sign-up.js in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -542,7 +569,9 @@
 				ED4324B62B6D378E00F3521C /* history-entries.js in Resources */,
 				540C0DC82B6937630049CE6A /* sign-in-styles.css in Resources */,
 				548A88AF2B640D94009C7C21 /* styles.css in Resources */,
+				ED964EC72BA1C59D00925F5B /* popup-sign-up.html in Resources */,
 				ED47451D2B91F9740061FBAB /* icons in Resources */,
+				ED964ECF2BA1C59D00925F5B /* sign-up.css in Resources */,
 				13564CCB2B0BEF25007E905E /* manifest.json in Resources */,
 				548A88AD2B640D94009C7C21 /* popup.html in Resources */,
 				540C0DC62B6937630049CE6A /* auth.js in Resources */,
@@ -551,6 +580,7 @@
 				ED4324B42B6D378E00F3521C /* consts.js in Resources */,
 				548A88AB2B640D94009C7C21 /* popup.js in Resources */,
 				540C0DC42B6937630049CE6A /* popup-sign-in-script.js in Resources */,
+				ED964ECB2BA1C59D00925F5B /* popup-sign-up.js in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
