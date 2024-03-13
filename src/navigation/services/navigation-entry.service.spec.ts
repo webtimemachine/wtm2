@@ -29,7 +29,7 @@ const existingUser = {
   userPreferences: {
     id: BigInt(1),
     userId: BigInt(1),
-    enableNavigationEntryExpiration: true,
+    enableNavigationEntryExpiration: false,
     navigationEntryExpirationInDays: 120,
     createdAt: new Date(),
     updateAt: new Date(),
