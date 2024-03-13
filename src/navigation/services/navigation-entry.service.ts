@@ -7,12 +7,42 @@ import { plainToClassFromExist, plainToInstance } from 'class-transformer';
 import { GetNavigationEntryDto } from '../dtos/get-navigation-entry.dto';
 import { Prisma } from '@prisma/client';
 import { MessageResponse, PaginationResponse } from '../../common/dtos';
+import { CompleteUser } from 'src/user/types';
 
 @Injectable()
 export class NavigationEntryService {
   private readonly logger = new Logger(NavigationEntryService.name);
 
   constructor(private readonly prismaService: PrismaService) {}
+
+  getExpitationDate(
+    user: CompleteUser,
+    navigationEntry: NavigationEntry,
+  ): Date | undefined {
+    const enableNavigationEntryExpiration =
+      user?.userPreferences?.enableNavigationEntryExpiration;
+    const navigationEntryExpirationInDays =
+      user?.userPreferences?.navigationEntryExpirationInDays;
+
+    if (enableNavigationEntryExpiration && navigationEntryExpirationInDays) {
+      const expirationDate = new Date(navigationEntry.navigationDate);
+      expirationDate.setDate(
+        expirationDate.getDate() + navigationEntryExpirationInDays,
+      );
+      return expirationDate;
+    }
+  }
+
+  getNavigationEntryExpirationInDays(user: CompleteUser): number | undefined {
+    const enableNavigationEntryExpiration =
+      user?.userPreferences?.enableNavigationEntryExpiration;
+    const navigationEntryExpirationInDays =
+      user?.userPreferences?.navigationEntryExpirationInDays;
+
+    if (enableNavigationEntryExpiration && navigationEntryExpirationInDays) {
+      return navigationEntryExpirationInDays;
+    }
+  }
 
   async createNavigationEntry(
     jwtContext: JwtContext,
@@ -53,6 +83,7 @@ export class NavigationEntryService {
       ...navigationEntry,
       id: Number(navigationEntry.id),
       userId: Number(navigationEntry.userId),
+      expirationDate: this.getExpitationDate(jwtContext.user, navigationEntry),
     });
   }
 
@@ -62,14 +93,32 @@ export class NavigationEntryService {
   ): Promise<PaginationResponse<NavigationEntryDto>> {
     const { limit, offset, query } = queryParams;
 
+    const navigationEntryExpirationInDays =
+      this.getNavigationEntryExpirationInDays(jwtContext.user);
+
+    let expirationThreshold: Date | undefined;
+    if (navigationEntryExpirationInDays) {
+      expirationThreshold = new Date();
+      expirationThreshold.setDate(
+        expirationThreshold.getDate() - navigationEntryExpirationInDays,
+      );
+    }
+
     const queryFilter: Prisma.StringFilter<'NavigationEntry'> = {
       contains: query,
       mode: 'insensitive',
     };
 
-    const whereQuery = {
+    const whereQuery: Prisma.NavigationEntryWhereInput = {
       ...(query !== undefined
         ? { OR: [{ url: queryFilter }, { title: queryFilter }] }
+        : {}),
+      ...(expirationThreshold
+        ? {
+            navigationDate: {
+              gte: expirationThreshold,
+            },
+          }
         : {}),
     };
 
@@ -99,6 +148,10 @@ export class NavigationEntryService {
         ...navigationEntry,
         id: Number(navigationEntry.id),
         userId: Number(navigationEntry.userId),
+        expirationDate: this.getExpitationDate(
+          jwtContext.user,
+          navigationEntry,
+        ),
       })),
     );
 
