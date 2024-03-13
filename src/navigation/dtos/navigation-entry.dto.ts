@@ -23,6 +23,10 @@ export class NavigationEntryDto {
   @Expose()
   navigationDate: Date;
 
+  @ApiProperty({ required: false })
+  @Expose()
+  expirationDate?: Date;
+
   @ApiProperty()
   @Expose()
   userId: number;
