@@ -188,4 +188,25 @@ describe('Should run all unit tests related to authorization', () => {
     expect(spyConsoleError).toHaveBeenCalledWith('Mock error');
     spyConsoleError.mockRestore();
   });
+
+  test('should return a successful response when user create a new account', async () => {
+    const payload = {
+      email: 'mockNewEmail',
+      password: 'mockNewPassword',
+    };
+
+    const response = await auth.sigUpUser(payload);
+
+    expect(response.ok).toBe(true);
+  });
+
+  test('should log error when fetch sign up user function fails', async () => {
+    global.fetch.mockImplementationOnce(() => Promise.reject('Mock error'));
+    const spyConsoleError = jest.spyOn(console, 'error').mockImplementation();
+
+    await auth.sigUpUser({}, '');
+
+    expect(spyConsoleError).toHaveBeenCalledWith('Mock error');
+    spyConsoleError.mockRestore();
+  });
 });
