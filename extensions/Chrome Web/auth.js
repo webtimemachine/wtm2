@@ -119,3 +119,30 @@ export const refreshTokenData = async (res) => {
       });
     })
 }
+
+/**
+ * Asynchronous function to create an account for a user by sending a sign up request to the server.
+ * 
+ * @param {object} payload - An object containing user credentials for the new user (email and password).
+ * @returns {Promise<Response>} A Promise that resolves to the response from the sign up request.
+ */
+export async function sigUpUser (payload) {
+  try {
+    // Create the request body by converting payload to JSON
+    const body = JSON.stringify({
+      email: payload.email,
+      password: payload.password,
+    })
+
+    // Send a POST request to the sign up endpoint with the provided body
+    return await fetch(`${API_URL}/api/auth/signup`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: body
+    })
+  } catch (err) {
+    return console.error(err);
+  }
+}
