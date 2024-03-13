@@ -1,4 +1,4 @@
-import { loginUser, logoutUser, is_user_signed_in, refreshUser, getDeviceId } from './auth.js'
+import { loginUser, logoutUser, is_user_signed_in, refreshUser, getDeviceId, sigUpUser } from './auth.js'
 import { saveHistoryEntry, getHistoryEntries, deleteHistoryEntries } from './history-entries.js'
 
 
@@ -129,6 +129,13 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
           .catch(() => sendResponse({ error: true }))
       }
     })
+    return true;
+  }
+
+  if (request.type === 'sigUp') {
+    sigUpUser(request.payload)
+      .then(res => sendResponse({ success: true }))
+      .catch(err => sendResponse({ error: true }));
     return true;
   }
 

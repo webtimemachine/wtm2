@@ -2,6 +2,13 @@ import { is_user_signed_in, } from './auth.js'
 
 const button = document.querySelector('button');
 
+const signUpLink = document.querySelector('#sign-up-link');
+
+signUpLink.addEventListener('click', function () {
+  window.location.replace('./popup-sign-up.html');
+})
+
+
 document.querySelector('form').addEventListener('submit', event => {
   event.preventDefault();
 
