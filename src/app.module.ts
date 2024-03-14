@@ -6,7 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { NavigationModule } from './navigation/navigation.module';
 import { HealthModule } from './health/health.module';
-import { SemanticSearchModule } from "./semanticSearch/semanticSearch.module"
+import { SemanticSearchModule } from './semanticSearch/semanticSearch.module';
 
 @Module({
   imports: [
@@ -20,4 +20,4 @@ import { SemanticSearchModule } from "./semanticSearch/semanticSearch.module"
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule { }
+export class AppModule {}

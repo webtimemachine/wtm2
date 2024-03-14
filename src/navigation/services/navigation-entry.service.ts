@@ -108,11 +108,15 @@ export class NavigationEntryService {
       },
     });
 
-    await this.semanticProcessor.index(createNavigationEntryInputDto.content!, createNavigationEntryInputDto.url)
+    await this.semanticProcessor.index(
+      createNavigationEntryInputDto.content!,
+      createNavigationEntryInputDto.url,
+    );
 
-
-    await this.semanticProcessor.index(createNavigationEntryInputDto.content!, createNavigationEntryInputDto.url)
-
+    await this.semanticProcessor.index(
+      createNavigationEntryInputDto.content!,
+      createNavigationEntryInputDto.url,
+    );
 
     let completeNavigationEntry: CompleteNavigationEntry;
     if (lastEntry?.url === createNavigationEntryInputDto.url) {
@@ -166,18 +170,14 @@ export class NavigationEntryService {
     }
     let whereQuery: Prisma.NavigationEntryWhereInput
     if (isSemantic) {
-      let urls: Set<string> | undefined
+      let urls: Set<string> | undefined;
       if (query) {
-        urls = await this.semanticProcessor.search(query)
+        urls = await this.semanticProcessor.search(query);
       }
       whereQuery = {
-        ...(query !== undefined
-          ? { url: { in: [...urls!] } }
-          : {}),
+        ...(query !== undefined ? { url: { in: [...urls!] } } : {}),
       };
-    }
-    else {
-
+    } else {
       const queryFilter: Prisma.StringFilter<'NavigationEntry'> = {
         contains: query,
         mode: 'insensitive',
@@ -196,7 +196,6 @@ export class NavigationEntryService {
         : {}),
       };
     }
-
 
     const count: number = await this.prismaService.navigationEntry.count({
       where: {
