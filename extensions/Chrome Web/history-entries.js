@@ -57,6 +57,7 @@ export async function saveHistoryEntry(
  * @param {number} offset - The offset for pagination, specifying the starting index of the entries to retrieve.
  * @param {number} limit - The limit for pagination, specifying the maximum number of entries to retrieve.
  * @param {string} [query] - An optional query string for filtering history entries.
+ * @param {boolean} isSemantic - Indicates whether the query should be treated as a semantic query
  * @param {boolean} [reexecuted=false] - An optional flag indicating whether the function is being re-executed after refreshing the access token.
  * @returns {Promise<object>} A Promise that resolves to an object containing the navigation history entries.
  */
@@ -66,12 +67,13 @@ export async function getHistoryEntries(
   offset,
   limit,
   query,
+  isSemantic
   reexecuted = false,
 ) {
   try {
     // Send a GET request to the endpoint for retrieving navigation history with pagination parameters
     const resp = await fetch(
-      `${baseURL}/api/navigation-entry?offset=${offset}&limit=${limit}${query ? `&query=${query}` : ''}`,
+      `${baseURL}/api/navigation-entry?offset=${offset}&limit=${limit}${query ? `&query=${query}` : ''}&isSemantic=${isSemantic}`,
       {
         method: 'GET',
         headers: {
@@ -101,6 +103,7 @@ export async function getHistoryEntries(
           offset,
           limit,
           query,
+          isSemantic,
           true,
         ),
     );
