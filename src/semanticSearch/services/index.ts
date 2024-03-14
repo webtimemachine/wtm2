@@ -7,6 +7,8 @@ import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { appEnv } from 'src/config';
 
 
+const GOOGLE_PREFIX = "https://www.google.com/search?q"
+
 const weaviateArgs: WeaviateLibArgs = {
     client: weaviate.client({ scheme: appEnv.WEAVIATE_SCHEME, host: appEnv.WEAVIATE_HOST }),
     indexName: "WtmIndex",
@@ -23,6 +25,10 @@ export class SemanticProcessor {
     constructor(private readonly prismaService: PrismaService) { }
 
     async index(content: string, url: string) {
+        if (url.startsWith(GOOGLE_PREFIX)) {
+            this.logger.log("Ignoring google search content")
+            return;
+        }
         const exist = await this.prismaService.navigationEntry.findFirst(
             { where: { url: url } }
         ) !== null;
