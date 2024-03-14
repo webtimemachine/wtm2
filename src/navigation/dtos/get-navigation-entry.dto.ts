@@ -14,7 +14,7 @@ export class GetNavigationEntryDto extends GetPaginationsParamsDto {
   @IsBoolean()
   @Transform(({ value }) => {
     // a transform function was provided because `IsBoolean` didn't work properly
-    return value === 'true' ? true : false
+    return value === 'true' ? true : false;
   })
   isSemantic: boolean;
 }
