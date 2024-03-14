@@ -138,6 +138,44 @@ label {
   cursor: pointer;
 }
 
+input[type="checkbox"]:checked::before {
+  transform: scale(1);
+}
+
+input[type="checkbox"]:hover {
+  color: black;
+}
+
+input[type="checkbox"]::before {
+  content: "";
+  width: 1em;
+  height: 1em;
+
+  clip-path: polygon(45.25% 66.6%, 97% 3.25%, 48% 90.38%, 8.55% 53.64%);
+
+  transform: scale(0);
+  background-color: white;
+}
+
+input[type="checkbox"]:checked {
+  background-color: blue;
+}
+
+input[type="checkbox"] {
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  display: flex;
+  font-size: 2rem;
+  margin: 0 0.5rem 0 0.5rem;
+  background-color: #eee;
+}
+
+
+label {
+  cursor: pointer;
+}
+
 #sites-list .truncate {
   overflow: hidden;
   white-space: nowrap;
