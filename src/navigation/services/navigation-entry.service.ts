@@ -19,12 +19,13 @@ import { MessageResponse, PaginationResponse } from '../../common/dtos';
 
 import { CompleteUser } from '../../user/types';
 import { UserService } from '../../user/services';
+import { SemanticProcessor } from 'src/semanticSearch/services/'
 
 @Injectable()
 export class NavigationEntryService {
   private readonly logger = new Logger(NavigationEntryService.name);
 
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(private readonly prismaService: PrismaService, private readonly semanticProcessor: SemanticProcessor) { }
 
   static getExpitationDate(
     user: CompleteUser,
@@ -107,6 +108,12 @@ export class NavigationEntryService {
       },
     });
 
+    await this.semanticProcessor.index(createNavigationEntryInputDto.content!, createNavigationEntryInputDto.url)
+
+
+    await this.semanticProcessor.index(createNavigationEntryInputDto.content!, createNavigationEntryInputDto.url)
+
+
     let completeNavigationEntry: CompleteNavigationEntry;
     if (lastEntry?.url === createNavigationEntryInputDto.url) {
       completeNavigationEntry = await this.prismaService.navigationEntry.update(
@@ -134,6 +141,7 @@ export class NavigationEntryService {
       );
     }
 
+
     return NavigationEntryService.completeNavigationEntryToDto(
       jwtContext,
       completeNavigationEntry,
@@ -144,7 +152,7 @@ export class NavigationEntryService {
     jwtContext: JwtContext,
     queryParams: GetNavigationEntryDto,
   ): Promise<PaginationResponse<CompleteNavigationEntryDto>> {
-    const { limit, offset, query } = queryParams;
+    const { limit, offset, query, isSemantic } = queryParams;
 
     const navigationEntryExpirationInDays =
       this.getNavigationEntryExpirationInDays(jwtContext.user);
@@ -156,16 +164,29 @@ export class NavigationEntryService {
         expirationThreshold.getDate() - navigationEntryExpirationInDays,
       );
     }
+    let whereQuery: Prisma.NavigationEntryWhereInput
+    if (isSemantic) {
+      let urls: Set<string> | undefined
+      if (query) {
+        urls = await this.semanticProcessor.search(query)
+      }
+      whereQuery = {
+        ...(query !== undefined
+          ? { url: { in: [...urls!] } }
+          : {}),
+      };
+    }
+    else {
 
-    const queryFilter: Prisma.StringFilter<'NavigationEntry'> = {
-      contains: query,
-      mode: 'insensitive',
-    };
+      const queryFilter: Prisma.StringFilter<'NavigationEntry'> = {
+        contains: query,
+        mode: 'insensitive',
+      };
 
-    const whereQuery: Prisma.NavigationEntryWhereInput = {
-      ...(query !== undefined
-        ? { OR: [{ url: queryFilter }, { title: queryFilter }] }
-        : {}),
+      whereQuery = {
+        ...(query !== undefined
+          ? { OR: [{ url: queryFilter }, { title: queryFilter }] }
+          : {}),
       ...(expirationThreshold
         ? {
             navigationDate: {
@@ -173,7 +194,9 @@ export class NavigationEntryService {
             },
           }
         : {}),
-    };
+      };
+    }
+
 
     const count: number = await this.prismaService.navigationEntry.count({
       where: {
