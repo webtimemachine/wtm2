@@ -7,9 +7,8 @@ import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { appEnv } from 'src/config';
 
 
-
 const weaviateArgs: WeaviateLibArgs = {
-    client: weaviate.client({ scheme: "http", host: "localhost:8084" }),
+    client: weaviate.client({ scheme: appEnv.WEAVIATE_SCHEME, host: appEnv.WEAVIATE_HOST }),
     indexName: "WtmIndex",
     metadataKeys: ["source"],
     textKey: "text",
@@ -28,14 +27,14 @@ export class SemanticProcessor {
             { where: { url: url } }
         ) !== null;
         if (!exist) {
-            this.logger.log(`Indexing chunks of ${url}`)
+            this.logger.log(`Indexing chunks of '${url}'`)
             const documents = await textSplitter.createDocuments([content], [{ source: url }])
             const documentChunks = await textSplitter.splitDocuments(documents)
             await WeaviateStore.fromDocuments(documentChunks, new OpenAIEmbeddings({ openAIApiKey: appEnv.OPENAI_ACCESS_TOKEN }), weaviateArgs)
             this.logger.log(`Chunks of ${url} successfully indexed`)
         }
         else
-            this.logger.log(`${url} was already indexed. Ignoring...`)
+            this.logger.log(`'${url}' was already indexed. Ignoring...`)
 
     }
 
