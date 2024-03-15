@@ -116,6 +116,15 @@ To run the project in a local environment create a .env file on the root of the 
 13. **EMAIL_URI**:
     - Example: **`EMAIL_URI='smtps://mail@gmail.com:password@smtp.gmail.com'`**
     - Usage: SMTP mailer.
+13. **OPENAI_ACCESS_TOKEN**:
+    - Example: **`OPENAI_ACCESS_TOKEN=sk-70s0d030f0thg043whsGsjBNV62skUiFz1LoPMm34BtrEs1I`**
+    - Usage: Access token to use OpenAI's models.
+14. **WEAVIATE_SCHEME**:
+    - Example: **`WEAVIATE_SCHEME=http`**
+    - Usage: Specifies the scheme the vector store is using.
+15. **WEAVIATE_HOST**:
+    - Example: **`WEAVIATE_HOST=localhost:8080`**
+    - Usage: Specifies the vector store host.
 
 You will also need to set this env variables as secrets on your GitHub repository for the db migrations GitHub action to work properly.
 
