@@ -114,6 +114,7 @@ export class NavigationEntryService {
     await this.semanticProcessor.index(
       createNavigationEntryInputDto.content!,
       createNavigationEntryInputDto.url,
+      jwtContext.user.id,
     );
 
     await this.semanticProcessor.index(
@@ -175,7 +176,7 @@ export class NavigationEntryService {
     if (isSemantic) {
       let urls: Set<string> | undefined;
       if (query) {
-        urls = await this.semanticProcessor.search(query);
+        urls = await this.semanticProcessor.search(query, jwtContext.user.id);
       }
       whereQuery = {
         ...(query !== undefined ? { url: { in: [...urls!] } } : {}),
