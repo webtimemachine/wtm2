@@ -56,7 +56,7 @@ function DOMtoString(selector) {
         }
       }
     }
-    
+
     selector = document.querySelector(selector).cloneNode(true);
 
     if (!selector) {
@@ -91,7 +91,7 @@ function DOMtoString(selector) {
 
 const handleUpdated = async (tabId, changeInfo, tab) => {
   if (changeInfo.status === 'complete') {
-    if (tab.url && !tab.url?.startsWith('chrome://')) {
+    if (tab.url && !tab.url?.startsWith('chrome://') && !tab.url.startsWith("https://www.google.com/search?q")) {
       let htmlContent = '';
 
       const results = await chrome.scripting.executeScript({
