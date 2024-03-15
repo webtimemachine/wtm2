@@ -6,7 +6,6 @@ import { OpenAIEmbeddings } from '@langchain/openai';
 import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
 import { appEnv } from 'src/config';
 
-
 const weaviateArgs: WeaviateLibArgs = {
   client: weaviate.client({
     scheme: appEnv.WEAVIATE_SCHEME,
@@ -27,7 +26,7 @@ const textSplitter = new RecursiveCharacterTextSplitter({
 export class SemanticProcessor {
   private readonly logger = new Logger(SemanticProcessor.name);
 
-  constructor(private readonly prismaService: PrismaService) { }
+  constructor(private readonly prismaService: PrismaService) {}
 
   async index(content: string, url: string) {
     const exist =

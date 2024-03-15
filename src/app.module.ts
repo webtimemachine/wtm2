@@ -15,7 +15,7 @@ import { SemanticSearchModule } from './semanticSearch/semanticSearch.module';
     UserModule,
     NavigationModule,
     HealthModule,
-    SemanticSearchModule
+    SemanticSearchModule,
   ],
   controllers: [AppController],
   providers: [AppService],
