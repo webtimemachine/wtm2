@@ -25,7 +25,10 @@ import { SemanticProcessor } from 'src/semanticSearch/services/'
 export class NavigationEntryService {
   private readonly logger = new Logger(NavigationEntryService.name);
 
-  constructor(private readonly prismaService: PrismaService, private readonly semanticProcessor: SemanticProcessor) { }
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly semanticProcessor: SemanticProcessor,
+  ) {}
 
   static getExpitationDate(
     user: CompleteUser,
@@ -168,7 +171,7 @@ export class NavigationEntryService {
         expirationThreshold.getDate() - navigationEntryExpirationInDays,
       );
     }
-    let whereQuery: Prisma.NavigationEntryWhereInput
+    let whereQuery: Prisma.NavigationEntryWhereInput;
     if (isSemantic) {
       let urls: Set<string> | undefined;
       if (query) {
@@ -187,13 +190,13 @@ export class NavigationEntryService {
         ...(query !== undefined
           ? { OR: [{ url: queryFilter }, { title: queryFilter }] }
           : {}),
-      ...(expirationThreshold
-        ? {
-            navigationDate: {
-              gte: expirationThreshold,
-            },
-          }
-        : {}),
+        ...(expirationThreshold
+          ? {
+              navigationDate: {
+                gte: expirationThreshold,
+              },
+            }
+          : {}),
       };
     }
 
