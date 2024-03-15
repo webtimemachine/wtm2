@@ -6,7 +6,6 @@ import { OpenAIEmbeddings } from '@langchain/openai';
 import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
 import { appEnv } from 'src/config';
 
-const GOOGLE_PREFIX = 'https://www.google.com/search?q';
 
 const weaviateArgs: WeaviateLibArgs = {
   client: weaviate.client({
@@ -28,13 +27,9 @@ const textSplitter = new RecursiveCharacterTextSplitter({
 export class SemanticProcessor {
   private readonly logger = new Logger(SemanticProcessor.name);
 
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(private readonly prismaService: PrismaService) { }
 
   async index(content: string, url: string) {
-    if (url.startsWith(GOOGLE_PREFIX)) {
-      this.logger.log('Ignoring google search content');
-      return;
-    }
     const exist =
       (await this.prismaService.navigationEntry.findFirst({
         where: { url: url },
