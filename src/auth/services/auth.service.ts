@@ -21,7 +21,7 @@ import {
 
 import { Session, User, UserType } from '@prisma/client';
 import { plainToInstance } from 'class-transformer';
-import { JWTPayload, JwtContext } from '../interfaces';
+import { JWTPayload, JwtRefreshContext } from '../interfaces';
 import { JwtService } from '@nestjs/jwt';
 import { createHash } from 'crypto';
 import { RefreshResponseDto } from '../dtos';
@@ -130,7 +130,7 @@ export class AuthService {
     });
   }
 
-  async refreshToken(context: JwtContext): Promise<RefreshResponseDto> {
+  async refreshToken(context: JwtRefreshContext): Promise<RefreshResponseDto> {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { iat, exp, ...rest } = context.payload;
     const accessToken = this.buildAccessToken(rest);

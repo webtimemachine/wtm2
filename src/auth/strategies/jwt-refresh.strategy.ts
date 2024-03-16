@@ -1,7 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { JwtContext, JWTPayload } from '../interfaces';
+import { JwtRefreshContext, JWTPayload } from '../interfaces';
 import { AuthService } from '../services';
 import { appEnv } from '../../config';
 
@@ -24,7 +24,7 @@ export class JWTRefreshStrategy extends PassportStrategy(
   async validate(
     request: any, // eslint-disable-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
     payload: JWTPayload,
-  ): Promise<JwtContext> {
+  ): Promise<JwtRefreshContext> {
     try {
       const refreshToken: string | null =
         JWTRefreshStrategy.jwtFromRequest(request);
