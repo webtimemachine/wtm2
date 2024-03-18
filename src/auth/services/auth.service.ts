@@ -6,11 +6,14 @@ import {
 } from '@nestjs/common';
 
 import { PrismaService } from '../../common/services';
-import { hashValue } from '../../common/helpers/bcryptjs.helper';
-import * as bcrypt from 'bcrypt';
+import { Device, Session, User, UserDevice, UserType } from '@prisma/client';
 
-import { CompleteUser } from '../../user/types';
-import { completeUserInclude } from '../../user/services/user.service';
+import {
+  CompleteSession,
+  CompleteUser,
+  completeSessionInclude,
+  completeUserInclude,
+} from '../../user/types';
 
 import {
   LoginRequestDto,
@@ -19,12 +22,14 @@ import {
   SignUpResponseDto,
 } from '../dtos';
 
-import { Session, User, UserType } from '@prisma/client';
 import { plainToInstance } from 'class-transformer';
 import { JWTPayload, JwtRefreshContext } from '../interfaces';
 import { JwtService } from '@nestjs/jwt';
 import { createHash } from 'crypto';
 import { RefreshResponseDto } from '../dtos';
+
+import { hashValue } from '../../common/helpers/bcryptjs.helper';
+import * as bcrypt from 'bcrypt';
 
 import { appEnv } from '../../config';
 
@@ -77,20 +82,72 @@ export class AuthService {
 
   async login(body: LoginRequestDto, user: User): Promise<LoginResponseDto> {
     const { accessToken, refreshToken } = await this.prismaService.$transaction(
-      async (prismaService) => {
-        await prismaService.session.deleteMany({
+      async (prismaClient) => {
+        //
+
+        let device: Device | null = await prismaClient.device.findUnique({
           where: {
-            deviceId: body.deviceId,
+            deviceKey: body.deviceKey,
           },
         });
 
-        const session: Session = await prismaService.session.create({
+        if (!device) {
+          device = await prismaClient.device.create({
+            data: {
+              deviceKey: body.deviceKey,
+              userAgent: body.userAgent,
+            },
+          });
+        } else {
+          if (body.userAgent && body.userAgent !== '') {
+            device = await prismaClient.device.update({
+              where: {
+                deviceKey: body.deviceKey,
+              },
+              data: {
+                userAgent: body.userAgent,
+              },
+            });
+          }
+        }
+
+        let userDevice: UserDevice | null =
+          await prismaClient.userDevice.findUnique({
+            where: {
+              userId_deviceId: {
+                userId: user.id,
+                deviceId: device.id,
+              },
+            },
+          });
+
+        if (!userDevice) {
+          userDevice = await prismaClient.userDevice.create({
+            data: {
+              userId: user.id,
+              deviceId: device.id,
+            },
+          });
+        }
+
+        await prismaClient.session.deleteMany({
+          where: {
+            userDevice: {
+              device: {
+                deviceKey: body.deviceKey,
+              },
+            },
+          },
+        });
+
+        const session: Session = await prismaClient.session.create({
           data: {
-            userId: BigInt(user.id),
-            deviceId: body.deviceId,
-            userAgent: body.userAgent,
             refreshToken: '',
-            createdAt: new Date(),
+            userDevice: {
+              connect: {
+                id: userDevice.id,
+              },
+            },
           },
         });
 
@@ -108,7 +165,7 @@ export class AuthService {
           exp: number;
         };
 
-        await prismaService.session.update({
+        await prismaClient.session.update({
           where: {
             id: session.id,
           },
@@ -195,9 +252,11 @@ export class AuthService {
       user.userPreferences = userPreferences;
     }
 
-    const session: Session = await this.prismaService.session.findFirstOrThrow({
-      where: { id: payload.sessionId },
-    });
+    const session: CompleteSession =
+      await this.prismaService.session.findFirstOrThrow({
+        where: { id: payload.sessionId },
+        include: completeSessionInclude,
+      });
 
     return { user, session };
   }
