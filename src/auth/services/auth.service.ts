@@ -5,15 +5,23 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 
-import { PrismaService } from '../../common/services';
-import { Device, Session, User, UserDevice, UserType } from '@prisma/client';
+import { JwtService } from '@nestjs/jwt';
+import { JWTPayload, JwtRefreshContext } from '../interfaces';
+
+import { plainToInstance } from 'class-transformer';
+import { createHash } from 'crypto';
+import * as bcrypt from 'bcrypt';
+
+import { Device, UserDevice, UserType } from '@prisma/client';
 
 import {
   CompleteSession,
   CompleteUser,
   completeSessionInclude,
+  completeUserDeviceInclude,
   completeUserInclude,
 } from '../../user/types';
+import { UserService } from '../../user/services';
 
 import {
   LoginRequestDto,
@@ -22,14 +30,10 @@ import {
   SignUpResponseDto,
 } from '../dtos';
 
-import { plainToInstance } from 'class-transformer';
-import { JWTPayload, JwtRefreshContext } from '../interfaces';
-import { JwtService } from '@nestjs/jwt';
-import { createHash } from 'crypto';
 import { RefreshResponseDto } from '../dtos';
 
+import { PrismaService } from '../../common/services';
 import { hashValue } from '../../common/helpers/bcryptjs.helper';
-import * as bcrypt from 'bcrypt';
 
 import { appEnv } from '../../config';
 
@@ -80,9 +84,12 @@ export class AuthService {
     }
   }
 
-  async login(body: LoginRequestDto, user: User): Promise<LoginResponseDto> {
-    const { accessToken, refreshToken } = await this.prismaService.$transaction(
-      async (prismaClient) => {
+  async login(
+    body: LoginRequestDto,
+    user: CompleteUser,
+  ): Promise<LoginResponseDto> {
+    const { accessToken, refreshToken, session, payload } =
+      await this.prismaService.$transaction(async (prismaClient) => {
         //
 
         let device: Device | null = await prismaClient.device.findUnique({
@@ -140,13 +147,18 @@ export class AuthService {
           },
         });
 
-        const session: Session = await prismaClient.session.create({
+        let session: CompleteSession = await prismaClient.session.create({
           data: {
             refreshToken: '',
             userDevice: {
               connect: {
                 id: userDevice.id,
               },
+            },
+          },
+          include: {
+            userDevice: {
+              include: completeUserDeviceInclude,
             },
           },
         });
@@ -165,7 +177,7 @@ export class AuthService {
           exp: number;
         };
 
-        await prismaClient.session.update({
+        session = await prismaClient.session.update({
           where: {
             id: session.id,
           },
@@ -174,16 +186,28 @@ export class AuthService {
             refreshToken: this.hashIt(refreshToken),
             updateAt: new Date(),
           },
+          include: {
+            userDevice: {
+              include: completeUserDeviceInclude,
+            },
+          },
         });
 
-        return { accessToken, refreshToken };
-      },
-    );
+        return { accessToken, refreshToken, payload, session };
+      });
 
     return plainToInstance(LoginResponseDto, {
       accessToken,
       refreshToken,
       user: { email: user.email, id: Number(user.id) },
+      userDevice: UserService.userDeviceToDto(
+        {
+          payload,
+          session,
+          user,
+        },
+        session.userDevice,
+      ),
     });
   }
 
@@ -212,12 +236,16 @@ export class AuthService {
     });
   }
 
-  async validateUserOrThrow(email: string, password: string): Promise<User> {
+  async validateUserOrThrow(
+    email: string,
+    password: string,
+  ): Promise<CompleteUser> {
     const user = await this.prismaService.user.findFirst({
       where: {
         email,
         deletedAt: null,
       },
+      include: completeUserInclude,
     });
 
     if (!user) {
@@ -232,9 +260,7 @@ export class AuthService {
       throw new UnauthorizedException();
     }
 
-    return {
-      ...user,
-    };
+    return user;
   }
 
   async validateJwtAccessPayloadOrThrow(payload: JWTPayload) {
