@@ -154,4 +154,63 @@ describe('SemanticProcessor', () => {
       );
     });
   });
+
+
+  describe('Delete data', () => {
+
+    it('should delete documents successfully', async () => {
+
+      const deleteMock = jest.fn();
+
+      const mockFromExistingIndex = jest.fn().mockResolvedValue({
+        delete: deleteMock,
+      });
+      const mockWeaviate = jest
+        .spyOn(WeaviateStore, 'fromExistingIndex')
+        .mockImplementation(mockFromExistingIndex);
+
+      const expectedData = {
+        client: weaviate.client({ scheme: 'http', host: 'localhost:8084' }),
+        indexName: 'MultiTenancyCollection',
+        metadataKeys: ['source'],
+        textKey: 'text',
+        tenant: `Tenant-1`,
+      };
+
+      prismaService.navigationEntry.count = jest.fn().mockResolvedValue(1);
+
+      await semanticProcessor.delete("example.com", 1n);
+
+      expect(mockWeaviate).toHaveBeenCalledWith(
+        expect.any(OpenAIEmbeddings),
+        expectedData,
+      );
+      expect(deleteMock).toHaveBeenCalledWith(
+        {
+          filter: {
+            where: {
+              operator: 'Equal',
+              path: ['source'],
+              valueText: "example.com",
+            },
+          },
+        }
+      )
+      mockWeaviate.mockRestore();
+    });
+
+    it('should skip deletion', async () => {
+      const mockFromExistingIndex = jest.fn()
+      const mockWeaviate = jest
+        .spyOn(WeaviateStore, 'fromExistingIndex')
+        .mockImplementation();
+
+      prismaService.navigationEntry.count = jest.fn().mockResolvedValue(2);
+
+      await semanticProcessor.delete("example.com", 1n);
+
+      expect(mockFromExistingIndex).not.toHaveBeenCalled();
+      mockWeaviate.mockRestore();
+    });
+  });
 });
