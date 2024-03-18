@@ -1,13 +1,16 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CommonTestingModule } from '../../common/common.testing.module';
 import { PrismaService } from '../../common/services';
-import { NavigationEntry, PrismaClient, UserType } from '@prisma/client';
+import { PrismaClient, UserType } from '@prisma/client';
 import { NavigationEntryService } from './navigation-entry.service';
 import { JWTPayload, JwtContext } from 'src/auth/interfaces';
-import { CreateNavigationEntryInputDto, NavigationEntryDto } from '../dtos';
+import {
+  CompleteNavigationEntryDto,
+  CreateNavigationEntryInputDto,
+} from '../dtos';
 import { PaginationResponse } from 'src/common/dtos';
 import { GetNavigationEntryDto } from '../dtos/get-navigation-entry.dto';
-import { plainToInstance } from 'class-transformer';
+import { CompleteNavigationEntry } from '../types';
 
 jest.mock('../../common/services/prisma.service');
 
@@ -36,21 +39,62 @@ const existingUser = {
   },
 };
 
+const mockedSession = {
+  id: BigInt(1),
+  refreshToken: '',
+  userDeviceId: BigInt(1),
+  expiration: new Date(),
+  createdAt: new Date(),
+  updateAt: new Date(),
+  userDevice: {
+    id: BigInt(1),
+    userId: BigInt(1),
+    deviceId: BigInt(1),
+    deviceAlias: 'Personal Computer',
+    createdAt: new Date(),
+    updateAt: new Date(),
+    device: {
+      id: BigInt(1),
+      deviceKey: '123',
+      userAgent: 'Chrome/121.0.6167.161',
+      createdAt: new Date(),
+      updateAt: new Date(),
+    },
+  },
+};
+
+const navigationDate = new Date();
+
 const createNavigationEntryInputDto: CreateNavigationEntryInputDto = {
   url: 'example.com',
   title: 'Example Title',
-  navigationDate: new Date(),
+  navigationDate,
 };
 
-const jwtContext: JwtContext = { user: existingUser, payload: mockJWTPayload };
+const jwtContext: JwtContext = {
+  user: existingUser,
+  session: mockedSession,
+  payload: mockJWTPayload,
+};
 
-const createdNavigationEntry: NavigationEntryDto = {
+const createdNavigationEntry: CompleteNavigationEntryDto = {
   id: 1,
   url: 'example.com',
   title: 'Example Title',
   userId: 1,
-  userAgent: 'Chrome/121.0.6167.161',
-  navigationDate: new Date(),
+  userDeviceId: 1,
+  userDevice: {
+    id: 1,
+    userId: 1,
+    deviceId: 1,
+    deviceAlias: 'Personal Computer',
+    device: {
+      id: 1,
+      deviceKey: '123',
+      userAgent: 'Chrome/121.0.6167.161',
+    },
+  },
+  navigationDate,
 };
 
 const mockedEntry = {
@@ -60,31 +104,43 @@ const mockedEntry = {
   content: 'Content 1',
   navigationDate: new Date('2024-02-09T12:00:00Z'),
   userId: BigInt(1),
-  userAgent: 'Chrome/121.0.6167.161',
+  userDeviceId: BigInt(1),
   createdAt: new Date('2024-02-09T12:00:00Z'),
   updateAt: null,
+  userDevice: {
+    id: BigInt(1),
+    userId: BigInt(1),
+    deviceId: BigInt(1),
+    deviceAlias: 'Personal Computer',
+    createdAt: new Date(),
+    updateAt: new Date(),
+    device: {
+      id: BigInt(1),
+      deviceKey: '123',
+      userAgent: 'Chrome/121.0.6167.161',
+      createdAt: new Date(),
+      updateAt: new Date(),
+    },
+  },
 };
 
-const mockedEntries: NavigationEntry[] = [
+const mockedEntries: CompleteNavigationEntry[] = [
   mockedEntry,
   mockedEntry,
   mockedEntry,
 ];
 
-const navigationEntryDtos = plainToInstance(
-  NavigationEntryDto,
-  mockedEntries.map((navigationEntry) => ({
-    ...navigationEntry,
-    id: Number(navigationEntry.id),
-    userId: Number(navigationEntry.userId),
-  })),
-);
+const completeNavigationEntriesDtos =
+  NavigationEntryService.completeNavigationEntriesToDtos(
+    jwtContext,
+    mockedEntries,
+  );
 
-const expectedResponse: PaginationResponse<NavigationEntryDto> = {
+const expectedResponse: PaginationResponse<CompleteNavigationEntryDto> = {
   offset: 0,
   limit: 10,
   count: mockedEntries.length,
-  items: navigationEntryDtos,
+  items: completeNavigationEntriesDtos,
 };
 
 const queryParams: GetNavigationEntryDto = {

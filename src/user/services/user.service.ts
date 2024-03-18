@@ -1,17 +1,16 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
 
 import { CompleteUser } from '../types';
-
 import { PrismaService } from '../../common/services';
 import { JwtContext } from '../../auth/interfaces';
 
-import { plainToInstance } from 'class-transformer';
 import {
   UpdateUserPreferencesInput,
   UserDto,
   UserPreferencesDto,
 } from '../dtos';
+
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class UserService {
@@ -19,7 +18,7 @@ export class UserService {
 
   constructor(private readonly prismaService: PrismaService) {}
 
-  completeUserToDto(completeUser: CompleteUser): UserDto {
+  static completeUserToDto(completeUser: CompleteUser): UserDto {
     const userPreferencesDto = plainToInstance(
       UserPreferencesDto,
       completeUser.userPreferences,
@@ -30,7 +29,7 @@ export class UserService {
   }
 
   async getMe(jwtContext: JwtContext): Promise<UserDto> {
-    return this.completeUserToDto(jwtContext.user);
+    return UserService.completeUserToDto(jwtContext.user);
   }
 
   async getPreferences(jwtContext: JwtContext): Promise<UserPreferencesDto> {
@@ -68,7 +67,3 @@ export class UserService {
     return userPreferencesDto;
   }
 }
-
-export const completeUserInclude = Prisma.validator<Prisma.UserInclude>()({
-  userPreferences: true,
-});

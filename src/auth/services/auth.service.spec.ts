@@ -51,7 +51,7 @@ describe('AuthService', () => {
   const loginRequestDto = {
     email: existingUser.email,
     password: 'password123',
-    deviceId: '1234',
+    deviceKey: '1234',
   };
 
   const loginReult = {

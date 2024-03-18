@@ -11,7 +11,11 @@ import {
 } from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { NavigationEntryService } from '../services';
-import { CreateNavigationEntryInputDto, NavigationEntryDto } from '../dtos';
+import {
+  CompleteNavigationEntryDto,
+  CreateNavigationEntryInputDto,
+  NavigationEntryDto,
+} from '../dtos';
 import {
   ApiBadRequestMessageResponse,
   ApiInternalServerErrorMessageResponse,
@@ -31,7 +35,7 @@ export class NavigationEntryController {
   @ApiBadRequestMessageResponse()
   @ApiOkResponse({
     status: 200,
-    type: NavigationEntryDto,
+    type: CompleteNavigationEntryDto,
   })
   @JwtAccessToken([])
   @HttpCode(200)
@@ -39,7 +43,7 @@ export class NavigationEntryController {
   createNavigationEntry(
     @Body() createNavigationEntryInputDto: CreateNavigationEntryInputDto,
     @JwtRequestContext() context: JwtContext,
-  ): Promise<NavigationEntryDto> {
+  ): Promise<CompleteNavigationEntryDto> {
     return this.navigationService.createNavigationEntry(
       context,
       createNavigationEntryInputDto,
@@ -47,14 +51,14 @@ export class NavigationEntryController {
   }
 
   @ApiInternalServerErrorMessageResponse()
-  @ApiPaginationResponse(NavigationEntryDto)
+  @ApiPaginationResponse(CompleteNavigationEntryDto)
   @JwtAccessToken([])
   @HttpCode(200)
   @Get('/')
   getNavigationEntry(
     @JwtRequestContext() context: JwtContext,
     @Query() queryParams: GetNavigationEntryDto,
-  ): Promise<PaginationResponse<NavigationEntryDto>> {
+  ): Promise<PaginationResponse<CompleteNavigationEntryDto>> {
     return this.navigationService.getNavigationEntry(context, queryParams);
   }
 
