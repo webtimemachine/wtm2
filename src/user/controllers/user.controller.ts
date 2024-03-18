@@ -65,4 +65,16 @@ export class UserController {
   ): Promise<UserDeviceDto[]> {
     return this.userService.getUserDevices(context);
   }
+
+  @ApiOkResponse({
+    status: 200,
+    type: UserDeviceDto,
+  })
+  @JwtAccessToken([])
+  @Get('/current-device')
+  getCurrentUserDevice(
+    @JwtRequestContext() context: JwtContext,
+  ): Promise<UserDeviceDto> {
+    return this.userService.getCurrentUserDevice(context);
+  }
 }

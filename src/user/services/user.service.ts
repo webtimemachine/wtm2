@@ -108,4 +108,11 @@ export class UserService {
 
     return UserService.userDevicesToDtos(jwtContext, userDevices);
   }
+
+  async getCurrentUserDevice(jwtContext: JwtContext): Promise<UserDeviceDto> {
+    return UserService.userDeviceToDto(
+      jwtContext,
+      jwtContext.session.userDevice,
+    );
+  }
 }
