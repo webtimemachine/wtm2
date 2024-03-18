@@ -23,7 +23,7 @@ import {
 } from '../dtos';
 import { LocalAuthGuard } from '../guards';
 import { JwtRefreshToken, JwtRequestContext } from '../decorators';
-import { JwtContext } from '../interfaces';
+import { JwtRefreshContext } from '../interfaces';
 import { RefreshResponseDto } from '../dtos';
 
 @ApiTags('Auth')
@@ -72,7 +72,7 @@ export class AuthController {
   @JwtRefreshToken()
   @Get('refresh')
   async refreshToken(
-    @JwtRequestContext() context: JwtContext,
+    @JwtRequestContext() context: JwtRefreshContext,
   ): Promise<RefreshResponseDto> {
     return this.authService.refreshToken(context);
   }

@@ -118,7 +118,7 @@ describe('Should run all unit tests related to authorization', () => {
           email: payload.email,
           password: payload.password,
           userAgent: payload.userAgent,
-          deviceId,
+          deviceKey: deviceId,
         }),
       })
     );

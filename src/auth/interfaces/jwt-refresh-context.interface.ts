@@ -1,12 +1,11 @@
 import { JWTPayload } from './jwt.interface';
-import { CompleteSession, CompleteUser } from 'src/user/types';
+import { CompleteUser } from 'src/user/types';
 
-export interface JwtContext {
+export interface JwtRefreshContext {
   payload: JWTPayload;
   accessToken?: string;
   refreshToken?: string;
   verificationToken?: string;
   recoveryToken?: string;
   user: CompleteUser;
-  session: CompleteSession;
 }

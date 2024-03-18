@@ -1,13 +1,24 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
-import { JwtContext } from 'src/auth/interfaces';
-import { PrismaService } from '../../common/services';
-import { CreateNavigationEntryInputDto, NavigationEntryDto } from '../dtos';
-import { NavigationEntry } from '@prisma/client';
 import { plainToClassFromExist, plainToInstance } from 'class-transformer';
-import { GetNavigationEntryDto } from '../dtos/get-navigation-entry.dto';
-import { Prisma } from '@prisma/client';
+import { NavigationEntry, Prisma } from '@prisma/client';
+import { JwtContext } from 'src/auth/interfaces';
+
+import {
+  CompleteNavigationEntryDto,
+  CreateNavigationEntryInputDto,
+  GetNavigationEntryDto,
+} from '../dtos';
+
+import {
+  CompleteNavigationEntry,
+  completeNavigationEntryInclude,
+} from '../types';
+
+import { PrismaService } from '../../common/services';
 import { MessageResponse, PaginationResponse } from '../../common/dtos';
-import { CompleteUser } from 'src/user/types';
+
+import { CompleteUser } from '../../user/types';
+import { UserService } from '../../user/services';
 
 @Injectable()
 export class NavigationEntryService {
@@ -15,7 +26,7 @@ export class NavigationEntryService {
 
   constructor(private readonly prismaService: PrismaService) {}
 
-  getExpitationDate(
+  static getExpitationDate(
     user: CompleteUser,
     navigationEntry: NavigationEntry,
   ): Date | undefined {
@@ -33,6 +44,44 @@ export class NavigationEntryService {
     }
   }
 
+  static completeNavigationEntryToDto(
+    jwtContext: JwtContext,
+    completeNavigationEntry: CompleteNavigationEntry,
+  ): CompleteNavigationEntryDto {
+    const userDeviceDto = UserService.userDeviceToDto(
+      jwtContext,
+      completeNavigationEntry.userDevice,
+    );
+
+    const completeNavigationEntryDto = plainToInstance(
+      CompleteNavigationEntryDto,
+      {
+        ...completeNavigationEntry,
+        id: Number(completeNavigationEntry.id),
+        userId: Number(completeNavigationEntry.userId),
+        userDeviceId: Number(completeNavigationEntry.userDeviceId),
+        expirationDate: NavigationEntryService.getExpitationDate(
+          jwtContext.user,
+          completeNavigationEntry,
+        ),
+      },
+    );
+    completeNavigationEntryDto.userDevice = userDeviceDto;
+    return completeNavigationEntryDto;
+  }
+
+  static completeNavigationEntriesToDtos(
+    jwtContext: JwtContext,
+    completeNavigationEntries: CompleteNavigationEntry[],
+  ): CompleteNavigationEntryDto[] {
+    return completeNavigationEntries.map((completeNavigationEntry) =>
+      NavigationEntryService.completeNavigationEntryToDto(
+        jwtContext,
+        completeNavigationEntry,
+      ),
+    );
+  }
+
   getNavigationEntryExpirationInDays(user: CompleteUser): number | undefined {
     const enableNavigationEntryExpiration =
       user?.userPreferences?.enableNavigationEntryExpiration;
@@ -47,7 +96,7 @@ export class NavigationEntryService {
   async createNavigationEntry(
     jwtContext: JwtContext,
     createNavigationEntryInputDto: CreateNavigationEntryInputDto,
-  ): Promise<NavigationEntryDto> {
+  ): Promise<CompleteNavigationEntryDto> {
     const lastEntry = await this.prismaService.navigationEntry.findFirst({
       where: {
         userId: jwtContext.user.id,
@@ -58,39 +107,43 @@ export class NavigationEntryService {
       },
     });
 
-    let navigationEntry: NavigationEntry;
+    let completeNavigationEntry: CompleteNavigationEntry;
     if (lastEntry?.url === createNavigationEntryInputDto.url) {
-      navigationEntry = await this.prismaService.navigationEntry.update({
-        where: {
-          id: lastEntry.id,
+      completeNavigationEntry = await this.prismaService.navigationEntry.update(
+        {
+          where: {
+            id: lastEntry.id,
+          },
+          data: {
+            ...createNavigationEntryInputDto,
+            userDeviceId: jwtContext.session.userDeviceId,
+          },
+          include: completeNavigationEntryInclude,
         },
-        data: {
-          ...createNavigationEntryInputDto,
-          userAgent: jwtContext?.session?.userAgent || '',
-        },
-      });
+      );
     } else {
-      navigationEntry = await this.prismaService.navigationEntry.create({
-        data: {
-          ...createNavigationEntryInputDto,
-          userId: jwtContext.user.id,
-          userAgent: jwtContext?.session?.userAgent || '',
+      completeNavigationEntry = await this.prismaService.navigationEntry.create(
+        {
+          data: {
+            userId: jwtContext.user.id,
+            ...createNavigationEntryInputDto,
+            userDeviceId: jwtContext.session.userDeviceId,
+          },
+          include: completeNavigationEntryInclude,
         },
-      });
+      );
     }
 
-    return plainToInstance(NavigationEntryDto, {
-      ...navigationEntry,
-      id: Number(navigationEntry.id),
-      userId: Number(navigationEntry.userId),
-      expirationDate: this.getExpitationDate(jwtContext.user, navigationEntry),
-    });
+    return NavigationEntryService.completeNavigationEntryToDto(
+      jwtContext,
+      completeNavigationEntry,
+    );
   }
 
   async getNavigationEntry(
     jwtContext: JwtContext,
     queryParams: GetNavigationEntryDto,
-  ): Promise<PaginationResponse<NavigationEntryDto>> {
+  ): Promise<PaginationResponse<CompleteNavigationEntryDto>> {
     const { limit, offset, query } = queryParams;
 
     const navigationEntryExpirationInDays =
@@ -129,37 +182,31 @@ export class NavigationEntryService {
       },
     });
 
-    const navigationEntries: NavigationEntry[] =
+    const completeNavigationEntries: CompleteNavigationEntry[] =
       await this.prismaService.navigationEntry.findMany({
         where: {
           userId: jwtContext.user.id,
           ...whereQuery,
         },
-        take: limit,
+        include: completeNavigationEntryInclude,
         skip: offset,
+        take: limit,
         orderBy: {
           navigationDate: 'desc',
         },
       });
 
-    const navigationEntryDtos = plainToInstance(
-      NavigationEntryDto,
-      navigationEntries.map((navigationEntry) => ({
-        ...navigationEntry,
-        id: Number(navigationEntry.id),
-        userId: Number(navigationEntry.userId),
-        expirationDate: this.getExpitationDate(
-          jwtContext.user,
-          navigationEntry,
-        ),
-      })),
-    );
+    const completeNavigationEntryDtos =
+      NavigationEntryService.completeNavigationEntriesToDtos(
+        jwtContext,
+        completeNavigationEntries,
+      );
 
-    return plainToInstance(PaginationResponse<NavigationEntryDto>, {
+    return plainToInstance(PaginationResponse<CompleteNavigationEntryDto>, {
       offset,
       limit,
       count,
-      items: navigationEntryDtos,
+      items: completeNavigationEntryDtos,
     });
   }
 
