@@ -22,7 +22,7 @@ export class SemanticProcessor {
   private readonly logger = new Logger(SemanticProcessor.name);
   private readonly multitenantCollection = 'MultiTenancyCollection';
 
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(private readonly prismaService: PrismaService) { }
 
   private async vectorStoreArgs(userId: bigint): Promise<WeaviateLibArgs> {
     try {
@@ -60,7 +60,7 @@ export class SemanticProcessor {
         where: { url: url, userId: userId },
       })) > 0;
     if (!exist) {
-      this.logger.log(`Indexing chunks of '${url}'`);
+      this.logger.debug(`Indexing chunks of '${url}'`);
       const documents = await textSplitter.createDocuments(
         [content],
         [{ source: url }],
@@ -72,8 +72,8 @@ export class SemanticProcessor {
         new OpenAIEmbeddings({ openAIApiKey: appEnv.OPENAI_ACCESS_TOKEN }),
         await this.vectorStoreArgs(userId),
       );
-      this.logger.log(`Chunks of ${url} successfully indexed`);
-    } else this.logger.log(`'${url}' was already indexed. Ignoring...`);
+      this.logger.debug(`Chunks of ${url} successfully indexed`);
+    } else this.logger.debug(`'${url}' was already indexed. Ignoring...`);
   }
 
   async search(query: string, userId: bigint): Promise<Set<string>> {
@@ -84,5 +84,28 @@ export class SemanticProcessor {
     const retriever = store.asRetriever({ k: 5 });
     const relevantChunks = await retriever.getRelevantDocuments(query);
     return new Set(relevantChunks.map((chunk) => chunk.metadata['source']));
+  }
+
+  async delete(url: string, userId: bigint) {
+    const urlEntriesCount = await this.prismaService.navigationEntry.count({
+      where: { url: url, userId: userId },
+    });
+    // perform chunks/documents deletion only if the entry is the last one related to that URL
+    if (urlEntriesCount == 1) {
+      const store = await WeaviateStore.fromExistingIndex(
+        new OpenAIEmbeddings({ openAIApiKey: appEnv.OPENAI_ACCESS_TOKEN }),
+        await this.vectorStoreArgs(userId),
+      );
+      // remove the chunks/documents related to the given URL
+      store.delete({
+        filter: {
+          where: {
+            operator: 'Equal',
+            path: ['source'],
+            valueText: url,
+          },
+        },
+      });
+    }
   }
 }

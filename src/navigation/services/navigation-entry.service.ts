@@ -19,7 +19,7 @@ import { MessageResponse, PaginationResponse } from '../../common/dtos';
 
 import { CompleteUser } from '../../user/types';
 import { UserService } from '../../user/services';
-import { SemanticProcessor } from '../../semanticSearch/services/'
+import { SemanticProcessor } from '../../semanticSearch/services/';
 
 @Injectable()
 export class NavigationEntryService {
@@ -144,7 +144,6 @@ export class NavigationEntryService {
       );
     }
 
-
     return NavigationEntryService.completeNavigationEntryToDto(
       jwtContext,
       completeNavigationEntry,
@@ -248,7 +247,7 @@ export class NavigationEntryService {
     if (!navigationEntry) {
       throw new NotFoundException();
     }
-
+    this.semanticProcessor.delete(navigationEntry.url, jwtContext.user.id);
     await this.prismaService.navigationEntry.delete({
       where: { id, userId: jwtContext.user.id },
     });
