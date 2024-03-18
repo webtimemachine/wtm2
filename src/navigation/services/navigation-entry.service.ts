@@ -19,7 +19,7 @@ import { MessageResponse, PaginationResponse } from '../../common/dtos';
 
 import { CompleteUser } from '../../user/types';
 import { UserService } from '../../user/services';
-import { SemanticProcessor } from 'src/semanticSearch/services/'
+import { SemanticProcessor } from '../../semanticSearch/services/'
 
 @Injectable()
 export class NavigationEntryService {

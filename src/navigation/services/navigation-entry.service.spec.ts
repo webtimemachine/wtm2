@@ -11,6 +11,8 @@ import {
 import { PaginationResponse } from 'src/common/dtos';
 import { GetNavigationEntryDto } from '../dtos/get-navigation-entry.dto';
 import { CompleteNavigationEntry } from '../types';
+import { SemanticProcessor } from '../../semanticSearch/services';
+import { SemanticSearchTestingModule } from '../../semanticSearch/semanticSearch.testing.module';
 
 jest.mock('../../common/services/prisma.service');
 
@@ -69,6 +71,7 @@ const createNavigationEntryInputDto: CreateNavigationEntryInputDto = {
   url: 'example.com',
   title: 'Example Title',
   navigationDate,
+  content: 'Test content',
 };
 
 const jwtContext: JwtContext = {
@@ -149,17 +152,23 @@ const queryParams: GetNavigationEntryDto = {
   limit: 10,
   offset: 0,
   query: 'example',
+  isSemantic: true,
 };
 
 describe('NavigationEntryService', () => {
   let navigationEntryService: NavigationEntryService;
   let prismaService: PrismaService;
+  let semanticProcessor: SemanticProcessor;
 
   const prismaClient = new PrismaClient();
 
   beforeEach(async () => {
+    const commonTestModule = CommonTestingModule.forTest(prismaClient);
     const module: TestingModule = await Test.createTestingModule({
-      imports: [CommonTestingModule.forTest(prismaClient)],
+      imports: [
+        commonTestModule,
+        SemanticSearchTestingModule.forTest(commonTestModule),
+      ],
       providers: [NavigationEntryService],
     }).compile();
 
@@ -167,6 +176,7 @@ describe('NavigationEntryService', () => {
       NavigationEntryService,
     );
     prismaService = module.get<PrismaService>(PrismaService);
+    semanticProcessor = module.get<SemanticProcessor>(SemanticProcessor);
   });
 
   it('navigationEntryService should be defined', () => {
@@ -177,12 +187,24 @@ describe('NavigationEntryService', () => {
     expect(prismaService).toBeDefined();
   });
 
+  it('semanticProcessor should be defined', () => {
+    expect(semanticProcessor).toBeDefined();
+  });
+
   describe('createNavigationEntry', () => {
     it('should create a new navigation entry successfully', async () => {
-      prismaService.navigationEntry.findFirst = jest.fn().mockReturnValue(null);
+      const mockIndex = jest
+        .spyOn(semanticProcessor, 'index')
+        .mockImplementation();
+
+      prismaService.navigationEntry.findFirst = jest
+        .fn()
+        .mockReturnValue(mockedEntry);
       prismaService.navigationEntry.create = jest
         .fn()
         .mockReturnValue(createdNavigationEntry);
+
+      prismaService.navigationEntry.count = jest.fn().mockReturnValue(1);
 
       const result = await navigationEntryService.createNavigationEntry(
         jwtContext,
@@ -191,9 +213,14 @@ describe('NavigationEntryService', () => {
 
       expect(result).toBeDefined();
       expect(result).toEqual(createdNavigationEntry);
+      expect(mockIndex).toHaveBeenCalledWith('Test content', 'example.com', 1n);
     });
 
     it('should create a new navigation entry successfully on repetitive entry', async () => {
+      const mockIndex = jest
+        .spyOn(semanticProcessor, 'index')
+        .mockImplementation();
+
       prismaService.navigationEntry.findFirst = jest
         .fn()
         .mockReturnValue(createdNavigationEntry);
@@ -208,11 +235,19 @@ describe('NavigationEntryService', () => {
 
       expect(result).toBeDefined();
       expect(result).toEqual(createdNavigationEntry);
+      expect(mockIndex).toHaveBeenCalledWith('Test content', 'example.com', 1n);
     });
   });
 
   describe('getNavigationEntry', () => {
     it('should get navigation entries successfully', async () => {
+      const mockSearch = jest
+        .spyOn(semanticProcessor, 'search')
+        .mockImplementation()
+        .mockReturnValue(
+          new Promise((resolve) => resolve(new Set(['example1', 'example2']))),
+        );
+
       prismaService.navigationEntry.count = jest
         .fn()
         .mockReturnValue(mockedEntries.length);
@@ -226,6 +261,10 @@ describe('NavigationEntryService', () => {
 
       expect(result).toBeDefined();
       expect(result).toEqual(expectedResponse);
+      expect(mockSearch).toHaveBeenCalledWith(queryParams.query, 1n);
+      expect(mockSearch).toHaveReturnedWith(
+        new Promise((resolve) => resolve(new Set(['example1', 'example2']))),
+      );
     });
   });
 });
