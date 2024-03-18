@@ -54,9 +54,26 @@ describe('AuthService', () => {
     deviceKey: '1234',
   };
 
-  const loginReult = {
+  const loginResult = {
     accessToken,
     refreshToken,
+    user: {
+      id: 1,
+      email: 'test@example.com',
+    },
+    session: {
+      userDevice: {
+        id: 1,
+        userId: 1,
+        deviceId: 1,
+        isCurrentDevice: true,
+        deviceAlias: null,
+        device: {
+          id: 1,
+          deviceKey: '1234',
+        },
+      },
+    },
   };
 
   beforeEach(async () => {
@@ -103,7 +120,7 @@ describe('AuthService', () => {
 
   describe('login', () => {
     it('should login successfully and return tokens', async () => {
-      prismaService.$transaction = jest.fn().mockReturnValue(loginReult);
+      prismaService.$transaction = jest.fn().mockReturnValue(loginResult);
 
       const result = await authService.login(loginRequestDto, existingUser);
 
