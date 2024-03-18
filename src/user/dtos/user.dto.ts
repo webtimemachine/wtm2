@@ -16,8 +16,4 @@ export class UserDto {
   @ApiProperty()
   @Expose()
   email: string;
-
-  @ApiProperty({ type: () => UserPreferencesDto })
-  @Expose()
-  userPreferences: UserPreferencesDto;
 }

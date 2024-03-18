@@ -88,6 +88,7 @@ const createdNavigationEntry: CompleteNavigationEntryDto = {
     userId: 1,
     deviceId: 1,
     deviceAlias: 'Personal Computer',
+    isCurrentDevice: true,
     device: {
       id: 1,
       deviceKey: '123',

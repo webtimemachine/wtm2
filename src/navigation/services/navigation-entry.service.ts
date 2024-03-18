@@ -18,8 +18,7 @@ import { PrismaService } from '../../common/services';
 import { MessageResponse, PaginationResponse } from '../../common/dtos';
 
 import { CompleteUser } from '../../user/types';
-import { DeviceDto } from '../../user/dtos/device.dto';
-import { UserDeviceDto } from '../../user/dtos/user-device.dto';
+import { UserService } from '../../user/services';
 
 @Injectable()
 export class NavigationEntryService {
@@ -49,18 +48,10 @@ export class NavigationEntryService {
     jwtContext: JwtContext,
     completeNavigationEntry: CompleteNavigationEntry,
   ): CompleteNavigationEntryDto {
-    const deviceDto = plainToInstance(DeviceDto, {
-      ...completeNavigationEntry.userDevice.device,
-      id: Number(completeNavigationEntry.userDevice.device.id),
-    });
-
-    const userDeviceDto = plainToInstance(UserDeviceDto, {
-      ...completeNavigationEntry.userDevice,
-      id: Number(completeNavigationEntry.userDevice.id),
-      userId: Number(completeNavigationEntry.userDevice.userId),
-      deviceId: Number(completeNavigationEntry.userDevice.deviceId),
-    });
-    userDeviceDto.device = deviceDto;
+    const userDeviceDto = UserService.userDeviceToDto(
+      jwtContext,
+      completeNavigationEntry.userDevice,
+    );
 
     const completeNavigationEntryDto = plainToInstance(
       CompleteNavigationEntryDto,
