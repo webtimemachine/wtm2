@@ -18,6 +18,10 @@ export class UserDeviceDto {
 
   @ApiProperty()
   @Expose()
+  isCurrentDevice: boolean;
+
+  @ApiProperty()
+  @Expose()
   deviceAlias: string;
 
   @ApiProperty({ type: () => DeviceDto })

@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
+import { User } from '@prisma/client';
 
-import { CompleteUser } from '../types';
 import { PrismaService } from '../../common/services';
 import { JwtContext } from '../../auth/interfaces';
 
@@ -11,6 +11,9 @@ import {
 } from '../dtos';
 
 import { plainToInstance } from 'class-transformer';
+import { CompleteUserDevice, completeUserDeviceInclude } from '../types';
+import { UserDeviceDto } from '../dtos/user-device.dto';
+import { DeviceDto } from '../dtos/device.dto';
 
 @Injectable()
 export class UserService {
@@ -18,14 +21,41 @@ export class UserService {
 
   constructor(private readonly prismaService: PrismaService) {}
 
-  static completeUserToDto(completeUser: CompleteUser): UserDto {
-    const userPreferencesDto = plainToInstance(
-      UserPreferencesDto,
-      completeUser.userPreferences,
-    );
-    const userDto = plainToInstance(UserDto, completeUser);
-    userDto.userPreferences = userPreferencesDto;
+  static completeUserToDto(user: User): UserDto {
+    const userDto = plainToInstance(UserDto, user);
     return userDto;
+  }
+
+  static userDeviceToDto(
+    jwtContext: JwtContext,
+    userDevice: CompleteUserDevice,
+  ): UserDeviceDto {
+    const deviceDto = plainToInstance(DeviceDto, {
+      ...userDevice.device,
+      id: Number(userDevice.device.id),
+    });
+
+    const userDeviceDto = plainToInstance(UserDeviceDto, {
+      ...userDevice,
+      id: Number(userDevice.id),
+      userId: Number(userDevice.userId),
+      deviceId: Number(userDevice.deviceId),
+      isCurrentDevice:
+        userDevice.device.deviceKey ===
+        jwtContext.session.userDevice.device.deviceKey,
+    });
+    userDeviceDto.device = deviceDto;
+
+    return userDeviceDto;
+  }
+
+  static userDevicesToDtos(
+    jwtContext: JwtContext,
+    userDevices: CompleteUserDevice[],
+  ): UserDeviceDto[] {
+    return userDevices.map((userDevice) =>
+      UserService.userDeviceToDto(jwtContext, userDevice),
+    );
   }
 
   async getMe(jwtContext: JwtContext): Promise<UserDto> {
@@ -65,5 +95,17 @@ export class UserService {
     );
 
     return userPreferencesDto;
+  }
+
+  async getUserDevices(jwtContext: JwtContext): Promise<UserDeviceDto[]> {
+    const userDevices: CompleteUserDevice[] =
+      await this.prismaService.userDevice.findMany({
+        where: {
+          userId: jwtContext.user.id,
+        },
+        include: completeUserDeviceInclude,
+      });
+
+    return UserService.userDevicesToDtos(jwtContext, userDevices);
   }
 }

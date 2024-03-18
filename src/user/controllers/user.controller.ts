@@ -8,6 +8,7 @@ import {
   UserDto,
   UserPreferencesDto,
 } from '../dtos';
+import { UserDeviceDto } from '../dtos/user-device.dto';
 
 @ApiTags('User')
 @Controller('user')
@@ -50,5 +51,18 @@ export class UserController {
       context,
       updateUserPreferencesInput,
     );
+  }
+
+  @ApiOkResponse({
+    status: 200,
+    type: UserDeviceDto,
+    isArray: true,
+  })
+  @JwtAccessToken([])
+  @Get('/devices')
+  getUserDevices(
+    @JwtRequestContext() context: JwtContext,
+  ): Promise<UserDeviceDto[]> {
+    return this.userService.getUserDevices(context);
   }
 }
