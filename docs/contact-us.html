@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Web Time Machine</title>
+  <link rel="icon" href="/assets/logo/logo.svg">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="google-site-verification" content="1-mSQlenqgE5pzJnhzDmBOqCm7Mllp3Fjj2SOdbUzzo" />
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <!-- <script src="/js/index.js"></script> -->
+</head>
+
+<body>
+  <div class="container">
+    <div class="h-100 align-content-center pt-4">
+      <!-- Contact Start -->
+      <div class="py-5" id="contact">
+        <div class="py-5 px-lg-5 d-flex flex-column align-content-center">
+          <h1 class="pb-5">Contact Us</h1>
+          <div class="row justify-content-center">
+            <div class="col-lg-9">
+              <form id="contact-form">
+                <div class="row">
+                  <div class="col-md-6 pb-4">
+                    <!-- <div class="form-floating"> -->
+                    <input type="text" class="form-control" id="name" placeholder="Your Name">
+                    <!-- </div> -->
+                  </div>
+                  <div class="col-md-6 pb-4">
+                    <!-- <div class="form-floating"> -->
+                    <input type="email" class="form-control" id="email" placeholder="Your Email">
+                    <!-- </div> -->
+                  </div>
+                  <div class="col-12 pb-4">
+                    <!-- <div class="form-floating"> -->
+                    <select id="query-type" class="form-control" name="query-type">
+                      <option value="">-- Please select an option --</option>
+                      <option value="Technical Support">Technical Support</option>
+                      <option value="Delete Account Request">Delete Account Request</option>
+                      <option value="Other">Other</option>
+                    </select>
+                    <!-- </div> -->
+                  </div>
+                  <div class="col-12 pb-4">
+                    <!-- <div class="form-floating"> -->
+                    <input type="text" class="form-control" id="subject" placeholder="Subject">
+                    <!-- </div> -->
+                  </div>
+                  <div class="col-12 pb-4">
+                    <!-- <div class="form-floating"> -->
+                    <textarea class="form-control" placeholder="Leave a message here" id="message"
+                      style="height: 150px"></textarea>
+                    <!-- </div> -->
+                  </div>
+                  <div class="col-12 text-center">
+                    <button class="btn btn-secondary py-2 px-3" id='submitButton' type="submit">Send Message</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Contact End -->
+    </div>
+    <div class="pb-4 d-flex justify-content-end">
+      <a href="./index.html" class="p-3 text-secondary">Home</a>
+      <a href="./privacy-policies.html" class="float-right p-3 text-secondary">Privacy Policies</a>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    crossorigin="anonymous"></script>
+
+
+  <script>
+    const form = document.getElementById('contact-form');
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault(); // Prevents normal form submission
+
+      // Retrieve form field values
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const queryType = document.getElementById('query-type').value;
+      const subject = document.getElementById('subject').value;
+      const message = document.getElementById('message').value;
+
+      // Create the message body
+      const messageBody = `Name: ${name} \n Email: ${email} \n Query Type: ${queryType} \n Subject: ${subject} \n Message: ${message}`;
+
+      const mailtoLink = `mailto:info@webtimemachine.io?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(messageBody)}`;
+      window.open(mailtoLink, '_blank');
+    });
+  </script>
+</body>
+
+</html>
