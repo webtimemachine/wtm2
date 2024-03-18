@@ -1,10 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { PrismaService } from 'src/common/services';
+import { PrismaService } from '../../common/services';
 import weaviate from 'weaviate-ts-client';
 import { WeaviateStore, WeaviateLibArgs } from '@langchain/weaviate';
 import { OpenAIEmbeddings } from '@langchain/openai';
 import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
-import { appEnv } from 'src/config';
+import { appEnv } from '../../config';
 
 const textSplitter = new RecursiveCharacterTextSplitter({
   chunkSize: 1000,
@@ -35,7 +35,7 @@ export class SemanticProcessor {
         .do();
       this.logger.log('Creating main multitenancy collection');
     } catch (e) {
-      // the main multitenancy collection only can be created once, instead an error is thrown
+      // The main multitenant collection can only be created once; otherwise, an error is thrown
       if (!e.message.includes('already exists')) throw e;
     }
 
@@ -66,6 +66,7 @@ export class SemanticProcessor {
         [{ source: url }],
       );
       const documentChunks = await textSplitter.splitDocuments(documents);
+
       await WeaviateStore.fromDocuments(
         documentChunks,
         new OpenAIEmbeddings({ openAIApiKey: appEnv.OPENAI_ACCESS_TOKEN }),
