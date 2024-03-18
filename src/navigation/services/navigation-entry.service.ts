@@ -117,11 +117,6 @@ export class NavigationEntryService {
       jwtContext.user.id,
     );
 
-    await this.semanticProcessor.index(
-      createNavigationEntryInputDto.content!,
-      createNavigationEntryInputDto.url,
-    );
-
     let completeNavigationEntry: CompleteNavigationEntry;
     if (lastEntry?.url === createNavigationEntryInputDto.url) {
       completeNavigationEntry = await this.prismaService.navigationEntry.update(
