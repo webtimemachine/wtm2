@@ -68,7 +68,7 @@ export async function loginUser (payload, deviceId) {
       email: payload.email,
       password: payload.password,
       userAgent: payload.userAgent,
-      deviceId,
+      deviceKey: deviceId,
     })
 
     // Send a POST request to the login endpoint with the provided body

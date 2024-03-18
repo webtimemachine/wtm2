@@ -1,13 +1,22 @@
-import { Body, Controller, Get, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Put,
+} from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { UserService } from '../services';
 import { JwtAccessToken, JwtRequestContext } from 'src/auth/decorators';
 import { JwtContext } from 'src/auth/interfaces';
 import {
+  UpdateUserDeviceInput,
   UpdateUserPreferencesInput,
   UserDto,
   UserPreferencesDto,
 } from '../dtos';
+import { UserDeviceDto } from '../dtos/user-device.dto';
 
 @ApiTags('User')
 @Controller('user')
@@ -49,6 +58,49 @@ export class UserController {
     return this.userService.updatePreferences(
       context,
       updateUserPreferencesInput,
+    );
+  }
+
+  @ApiOkResponse({
+    status: 200,
+    type: UserDeviceDto,
+    isArray: true,
+  })
+  @JwtAccessToken([])
+  @Get('/devices')
+  getUserDevices(
+    @JwtRequestContext() context: JwtContext,
+  ): Promise<UserDeviceDto[]> {
+    return this.userService.getUserDevices(context);
+  }
+
+  @ApiOkResponse({
+    status: 200,
+    type: UserDeviceDto,
+  })
+  @JwtAccessToken([])
+  @Get('/current-device')
+  getCurrentUserDevice(
+    @JwtRequestContext() context: JwtContext,
+  ): Promise<UserDeviceDto> {
+    return this.userService.getCurrentUserDevice(context);
+  }
+
+  @ApiOkResponse({
+    status: 200,
+    type: UserPreferencesDto,
+  })
+  @JwtAccessToken([])
+  @Put('/device/:id')
+  async updateUserDevice(
+    @Param('id', ParseIntPipe) userDeviceId: number,
+    @Body() updateUserDeviceInput: UpdateUserDeviceInput,
+    @JwtRequestContext() context: JwtContext,
+  ): Promise<UserDeviceDto> {
+    return this.userService.updateUserDevice(
+      context,
+      userDeviceId,
+      updateUserDeviceInput,
     );
   }
 }

@@ -5,12 +5,23 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 
-import { PrismaService } from '../../common/services';
-import { hashValue } from '../../common/helpers/bcryptjs.helper';
+import { JwtService } from '@nestjs/jwt';
+import { JWTPayload, JwtRefreshContext } from '../interfaces';
+
+import { plainToInstance } from 'class-transformer';
+import { createHash } from 'crypto';
 import * as bcrypt from 'bcrypt';
 
-import { CompleteUser } from '../../user/types';
-import { completeUserInclude } from '../../user/services/user.service';
+import { Device, UserDevice, UserType } from '@prisma/client';
+
+import {
+  CompleteSession,
+  CompleteUser,
+  completeSessionInclude,
+  completeUserDeviceInclude,
+  completeUserInclude,
+} from '../../user/types';
+import { UserService } from '../../user/services';
 
 import {
   LoginRequestDto,
@@ -19,12 +30,10 @@ import {
   SignUpResponseDto,
 } from '../dtos';
 
-import { Session, User, UserType } from '@prisma/client';
-import { plainToInstance } from 'class-transformer';
-import { JWTPayload, JwtContext } from '../interfaces';
-import { JwtService } from '@nestjs/jwt';
-import { createHash } from 'crypto';
 import { RefreshResponseDto } from '../dtos';
+
+import { PrismaService } from '../../common/services';
+import { hashValue } from '../../common/helpers/bcryptjs.helper';
 
 import { appEnv } from '../../config';
 
@@ -75,22 +84,82 @@ export class AuthService {
     }
   }
 
-  async login(body: LoginRequestDto, user: User): Promise<LoginResponseDto> {
-    const { accessToken, refreshToken } = await this.prismaService.$transaction(
-      async (prismaService) => {
-        await prismaService.session.deleteMany({
+  async login(
+    body: LoginRequestDto,
+    user: CompleteUser,
+  ): Promise<LoginResponseDto> {
+    const { accessToken, refreshToken, session, payload } =
+      await this.prismaService.$transaction(async (prismaClient) => {
+        //
+
+        let device: Device | null = await prismaClient.device.findUnique({
           where: {
-            deviceId: body.deviceId,
+            deviceKey: body.deviceKey,
           },
         });
 
-        const session: Session = await prismaService.session.create({
+        if (!device) {
+          device = await prismaClient.device.create({
+            data: {
+              deviceKey: body.deviceKey,
+              userAgent: body.userAgent,
+            },
+          });
+        } else {
+          if (body.userAgent && body.userAgent !== '') {
+            device = await prismaClient.device.update({
+              where: {
+                deviceKey: body.deviceKey,
+              },
+              data: {
+                userAgent: body.userAgent,
+              },
+            });
+          }
+        }
+
+        let userDevice: UserDevice | null =
+          await prismaClient.userDevice.findUnique({
+            where: {
+              userId_deviceId: {
+                userId: user.id,
+                deviceId: device.id,
+              },
+            },
+          });
+
+        if (!userDevice) {
+          userDevice = await prismaClient.userDevice.create({
+            data: {
+              userId: user.id,
+              deviceId: device.id,
+            },
+          });
+        }
+
+        await prismaClient.session.deleteMany({
+          where: {
+            userDevice: {
+              device: {
+                deviceKey: body.deviceKey,
+              },
+            },
+          },
+        });
+
+        let session: CompleteSession = await prismaClient.session.create({
           data: {
-            userId: BigInt(user.id),
-            deviceId: body.deviceId,
-            userAgent: body.userAgent,
             refreshToken: '',
-            createdAt: new Date(),
+            userDevice: {
+              connect: {
+                id: userDevice.id,
+              },
+            },
+          },
+          include: {
+            userDevice: {
+              include: completeUserDeviceInclude,
+            },
           },
         });
 
@@ -108,7 +177,7 @@ export class AuthService {
           exp: number;
         };
 
-        await prismaService.session.update({
+        session = await prismaClient.session.update({
           where: {
             id: session.id,
           },
@@ -117,20 +186,32 @@ export class AuthService {
             refreshToken: this.hashIt(refreshToken),
             updateAt: new Date(),
           },
+          include: {
+            userDevice: {
+              include: completeUserDeviceInclude,
+            },
+          },
         });
 
-        return { accessToken, refreshToken };
-      },
-    );
+        return { accessToken, refreshToken, payload, session };
+      });
 
     return plainToInstance(LoginResponseDto, {
       accessToken,
       refreshToken,
       user: { email: user.email, id: Number(user.id) },
+      userDevice: UserService.userDeviceToDto(
+        {
+          payload,
+          session,
+          user,
+        },
+        session.userDevice,
+      ),
     });
   }
 
-  async refreshToken(context: JwtContext): Promise<RefreshResponseDto> {
+  async refreshToken(context: JwtRefreshContext): Promise<RefreshResponseDto> {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { iat, exp, ...rest } = context.payload;
     const accessToken = this.buildAccessToken(rest);
@@ -155,12 +236,16 @@ export class AuthService {
     });
   }
 
-  async validateUserOrThrow(email: string, password: string): Promise<User> {
+  async validateUserOrThrow(
+    email: string,
+    password: string,
+  ): Promise<CompleteUser> {
     const user = await this.prismaService.user.findFirst({
       where: {
         email,
         deletedAt: null,
       },
+      include: completeUserInclude,
     });
 
     if (!user) {
@@ -175,9 +260,7 @@ export class AuthService {
       throw new UnauthorizedException();
     }
 
-    return {
-      ...user,
-    };
+    return user;
   }
 
   async validateJwtAccessPayloadOrThrow(payload: JWTPayload) {
@@ -195,9 +278,11 @@ export class AuthService {
       user.userPreferences = userPreferences;
     }
 
-    const session: Session = await this.prismaService.session.findFirstOrThrow({
-      where: { id: payload.sessionId },
-    });
+    const session: CompleteSession =
+      await this.prismaService.session.findFirstOrThrow({
+        where: { id: payload.sessionId },
+        include: completeSessionInclude,
+      });
 
     return { user, session };
   }

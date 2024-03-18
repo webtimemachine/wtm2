@@ -1,18 +1,17 @@
 import { Expose, Exclude } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
-import { UserType } from '@prisma/client';
 
 @Exclude()
-export class UserDto {
+export class DeviceDto {
   @ApiProperty()
   @Expose()
   id: number;
 
-  @ApiProperty({ enum: UserType })
+  @ApiProperty()
   @Expose()
-  userType: UserType;
+  deviceKey: string;
 
   @ApiProperty()
   @Expose()
-  email: string;
+  userAgent: string;
 }

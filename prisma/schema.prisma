@@ -18,17 +18,18 @@ enum UserType {
 }
 
 model User {
-  id        BigInt    @id @default(autoincrement())
+  id        BigInt   @id @default(autoincrement())
   userType  UserType
-  email     String    @unique @db.VarChar()
-  password  String?   @db.VarChar()
-  createdAt DateTime  @default(now()) @db.Timestamptz(0)
+  email     String   @unique @db.VarChar()
+  password  String?  @db.VarChar()
+  createdAt DateTime @default(now()) @db.Timestamptz(0)
+
+  userPreferences   UserPreferences?
+  userDevices       UserDevice[]
+  navigationEntries NavigationEntry[]
+
   updateAt  DateTime? @updatedAt @db.Timestamptz(0)
   deletedAt DateTime? @db.Timestamptz(0)
-
-  sessions          Session[]
-  navigationEntries NavigationEntry[]
-  userPreferences   UserPreferences?
 
   @@map("users")
 }
@@ -48,32 +49,69 @@ model UserPreferences {
   @@map("user_preferences")
 }
 
-model Session {
-  id           BigInt    @id @default(autoincrement())
-  refreshToken String    @db.VarChar()
-  deviceId     String    @unique @db.VarChar()
-  userAgent    String    @default("") @db.VarChar()
-  expiration   DateTime? @db.Timestamptz(0)
-  user         User      @relation(fields: [userId], references: [id])
-  userId       BigInt
+model Device {
+  id BigInt @id @default(autoincrement())
+
+  deviceKey String  @unique @db.VarChar()
+  userAgent String? @db.VarChar()
 
   createdAt DateTime  @default(now()) @db.Timestamptz(0)
   updateAt  DateTime? @updatedAt @db.Timestamptz(0)
 
-  @@map("sessions")
+  userDevices UserDevice[]
+
+  @@map("device")
+}
+
+model UserDevice {
+  id BigInt @id @default(autoincrement())
+
+  deviceAlias String? @db.VarChar()
+
+  userId BigInt
+  user   User   @relation(fields: [userId], references: [id])
+
+  deviceId BigInt
+  device   Device @relation(fields: [deviceId], references: [id])
+
+  session           Session?
+  navigationEntries NavigationEntry[]
+
+  createdAt DateTime  @default(now()) @db.Timestamptz(0)
+  updateAt  DateTime? @updatedAt @db.Timestamptz(0)
+
+  @@unique([userId, deviceId])
+  @@map("user_device")
+}
+
+model Session {
+  id           BigInt @id @default(autoincrement())
+  refreshToken String @db.VarChar()
+
+  userDeviceId BigInt     @unique
+  userDevice   UserDevice @relation(fields: [userDeviceId], references: [id])
+
+  expiration DateTime? @db.Timestamptz(0)
+
+  createdAt DateTime  @default(now()) @db.Timestamptz(0)
+  updateAt  DateTime? @updatedAt @db.Timestamptz(0)
+
+  @@map("session")
 }
 
 model NavigationEntry {
-  id        BigInt  @id @default(autoincrement())
-  url       String  @db.VarChar()
-  title     String  @db.VarChar()
-  content   String? @db.Text
-  userAgent String  @default("") @db.VarChar()
+  id      BigInt  @id @default(autoincrement())
+  url     String  @db.VarChar()
+  title   String  @db.VarChar()
+  content String? @db.Text
+
+  userId BigInt
+  user   User   @relation(fields: [userId], references: [id])
 
   navigationDate DateTime @default(now()) @db.Timestamptz(0)
 
-  user   User   @relation(fields: [userId], references: [id])
-  userId BigInt
+  userDeviceId BigInt
+  userDevice   UserDevice @relation(fields: [userDeviceId], references: [id])
 
   createdAt DateTime  @default(now()) @db.Timestamptz(0)
   updateAt  DateTime? @updatedAt @db.Timestamptz(0)

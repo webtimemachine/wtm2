@@ -1,17 +1,20 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
-
-import { CompleteUser } from '../types';
+import { User } from '@prisma/client';
 
 import { PrismaService } from '../../common/services';
 import { JwtContext } from '../../auth/interfaces';
 
-import { plainToInstance } from 'class-transformer';
 import {
+  UpdateUserDeviceInput,
   UpdateUserPreferencesInput,
   UserDto,
   UserPreferencesDto,
 } from '../dtos';
+
+import { plainToInstance } from 'class-transformer';
+import { CompleteUserDevice, completeUserDeviceInclude } from '../types';
+import { UserDeviceDto } from '../dtos/user-device.dto';
+import { DeviceDto } from '../dtos/device.dto';
 
 @Injectable()
 export class UserService {
@@ -19,18 +22,45 @@ export class UserService {
 
   constructor(private readonly prismaService: PrismaService) {}
 
-  completeUserToDto(completeUser: CompleteUser): UserDto {
-    const userPreferencesDto = plainToInstance(
-      UserPreferencesDto,
-      completeUser.userPreferences,
-    );
-    const userDto = plainToInstance(UserDto, completeUser);
-    userDto.userPreferences = userPreferencesDto;
+  static completeUserToDto(user: User): UserDto {
+    const userDto = plainToInstance(UserDto, user);
     return userDto;
   }
 
+  static userDeviceToDto(
+    jwtContext: JwtContext,
+    userDevice: CompleteUserDevice,
+  ): UserDeviceDto {
+    const deviceDto = plainToInstance(DeviceDto, {
+      ...userDevice.device,
+      id: Number(userDevice.device.id),
+    });
+
+    const userDeviceDto = plainToInstance(UserDeviceDto, {
+      ...userDevice,
+      id: Number(userDevice.id),
+      userId: Number(userDevice.userId),
+      deviceId: Number(userDevice.deviceId),
+      isCurrentDevice:
+        userDevice.device.deviceKey ===
+        jwtContext.session.userDevice.device.deviceKey,
+    });
+    userDeviceDto.device = deviceDto;
+
+    return userDeviceDto;
+  }
+
+  static userDevicesToDtos(
+    jwtContext: JwtContext,
+    userDevices: CompleteUserDevice[],
+  ): UserDeviceDto[] {
+    return userDevices.map((userDevice) =>
+      UserService.userDeviceToDto(jwtContext, userDevice),
+    );
+  }
+
   async getMe(jwtContext: JwtContext): Promise<UserDto> {
-    return this.completeUserToDto(jwtContext.user);
+    return UserService.completeUserToDto(jwtContext.user);
   }
 
   async getPreferences(jwtContext: JwtContext): Promise<UserPreferencesDto> {
@@ -67,8 +97,44 @@ export class UserService {
 
     return userPreferencesDto;
   }
-}
 
-export const completeUserInclude = Prisma.validator<Prisma.UserInclude>()({
-  userPreferences: true,
-});
+  async getUserDevices(jwtContext: JwtContext): Promise<UserDeviceDto[]> {
+    const userDevices: CompleteUserDevice[] =
+      await this.prismaService.userDevice.findMany({
+        where: {
+          userId: jwtContext.user.id,
+        },
+        include: completeUserDeviceInclude,
+      });
+
+    return UserService.userDevicesToDtos(jwtContext, userDevices);
+  }
+
+  async getCurrentUserDevice(jwtContext: JwtContext): Promise<UserDeviceDto> {
+    return UserService.userDeviceToDto(
+      jwtContext,
+      jwtContext.session.userDevice,
+    );
+  }
+
+  async updateUserDevice(
+    jwtContext: JwtContext,
+    userDeviceId: number,
+    updateUserPreferencesInput: UpdateUserDeviceInput,
+  ): Promise<UserDeviceDto> {
+    const { deviceAlias } = updateUserPreferencesInput;
+
+    const userDevice: CompleteUserDevice =
+      await this.prismaService.userDevice.update({
+        where: {
+          id: userDeviceId,
+        },
+        data: {
+          deviceAlias,
+        },
+        include: completeUserDeviceInclude,
+      });
+
+    return UserService.userDeviceToDto(jwtContext, userDevice);
+  }
+}
