@@ -14,7 +14,6 @@ import { NavigationEntryService } from '../services';
 import {
   CompleteNavigationEntryDto,
   CreateNavigationEntryInputDto,
-  NavigationEntryDto,
 } from '../dtos';
 import {
   ApiBadRequestMessageResponse,

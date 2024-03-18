@@ -1,9 +1,17 @@
-import { Body, Controller, Get, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Put,
+} from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { UserService } from '../services';
 import { JwtAccessToken, JwtRequestContext } from 'src/auth/decorators';
 import { JwtContext } from 'src/auth/interfaces';
 import {
+  UpdateUserDeviceInput,
   UpdateUserPreferencesInput,
   UserDto,
   UserPreferencesDto,
@@ -76,5 +84,23 @@ export class UserController {
     @JwtRequestContext() context: JwtContext,
   ): Promise<UserDeviceDto> {
     return this.userService.getCurrentUserDevice(context);
+  }
+
+  @ApiOkResponse({
+    status: 200,
+    type: UserPreferencesDto,
+  })
+  @JwtAccessToken([])
+  @Put('/device/:id')
+  async updateUserDevice(
+    @Param('id', ParseIntPipe) userDeviceId: number,
+    @Body() updateUserDeviceInput: UpdateUserDeviceInput,
+    @JwtRequestContext() context: JwtContext,
+  ): Promise<UserDeviceDto> {
+    return this.userService.updateUserDevice(
+      context,
+      userDeviceId,
+      updateUserDeviceInput,
+    );
   }
 }

@@ -1,5 +1,4 @@
 import { Expose, Exclude } from 'class-transformer';
-import { UserPreferencesDto } from './user-preferences.dto';
 import { ApiProperty } from '@nestjs/swagger';
 import { UserType } from '@prisma/client';
 

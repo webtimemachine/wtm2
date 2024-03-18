@@ -5,6 +5,7 @@ import { PrismaService } from '../../common/services';
 import { JwtContext } from '../../auth/interfaces';
 
 import {
+  UpdateUserDeviceInput,
   UpdateUserPreferencesInput,
   UserDto,
   UserPreferencesDto,
@@ -114,5 +115,26 @@ export class UserService {
       jwtContext,
       jwtContext.session.userDevice,
     );
+  }
+
+  async updateUserDevice(
+    jwtContext: JwtContext,
+    userDeviceId: number,
+    updateUserPreferencesInput: UpdateUserDeviceInput,
+  ): Promise<UserDeviceDto> {
+    const { deviceAlias } = updateUserPreferencesInput;
+
+    const userDevice: CompleteUserDevice =
+      await this.prismaService.userDevice.update({
+        where: {
+          id: userDeviceId,
+        },
+        data: {
+          deviceAlias,
+        },
+        include: completeUserDeviceInclude,
+      });
+
+    return UserService.userDeviceToDto(jwtContext, userDevice);
   }
 }
