@@ -116,7 +116,7 @@ To run the project in a local environment create a .env file on the root of the 
 13. **EMAIL_URI**:
     - Example: **`EMAIL_URI='smtps://mail@gmail.com:password@smtp.gmail.com'`**
     - Usage: SMTP mailer.
-13. **OPENAI_ACCESS_TOKEN**:
+13. **OPENAI_ACCESS_TOKEN**: To obtain a token, first, you need to create an account [here](https://auth0.openai.com/u/signup/identifier?state=hKFo2SBMLTJkWUFpa2dVWlBrTDdrTjdxbEp2ZGt6RmZBakdvbKFur3VuaXZlcnNhbC1sb2dpbqN0aWTZIEhleHE1SGYzQkdpMjhDM3d3dnFVZERmamF6TVpTMEpGo2NpZNkgRFJpdnNubTJNdTQyVDNLT3BxZHR3QjNOWXZpSFl6d0Q). Then, you can generate and get the access token [here](https://platform.openai.com/account/api-keys)
     - Example: **`OPENAI_ACCESS_TOKEN=sk-70s0d030f0thg043whsGsjBNV62skUiFz1LoPMm34BtrEs1I`**
     - Usage: Access token to use OpenAI's models.
 14. **WEAVIATE_SCHEME**:
