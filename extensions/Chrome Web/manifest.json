@@ -18,5 +18,9 @@
   },
   "host_permissions": [
     "<all_urls>"
-  ]
+  ],
+  "icons": {
+    "32": "./icons/app-icon.png",
+    "128": "./icons/app-icon.png"
+  }
 }
