@@ -110,12 +110,17 @@ export class NavigationEntryService {
         navigationDate: 'desc',
       },
     });
-
-    await this.semanticProcessor.index(
-      createNavigationEntryInputDto.content!,
-      createNavigationEntryInputDto.url,
-      jwtContext.user.id,
-    );
+    try {
+      await this.semanticProcessor.index(
+        createNavigationEntryInputDto.content!,
+        createNavigationEntryInputDto.url,
+        jwtContext.user.id,
+      );
+    } catch (error) {
+      this.logger.error(
+        `An error occurred indexing '${createNavigationEntryInputDto.url}'. Cause: ${error.message}`,
+      );
+    }
 
     let completeNavigationEntry: CompleteNavigationEntry;
     if (lastEntry?.url === createNavigationEntryInputDto.url) {
