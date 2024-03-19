@@ -22,7 +22,7 @@ export class SemanticProcessor {
   private readonly logger = new Logger(SemanticProcessor.name);
   private readonly multitenantCollection = 'MultiTenancyCollection';
 
-  constructor(private readonly prismaService: PrismaService) { }
+  constructor(private readonly prismaService: PrismaService) {}
 
   private async vectorStoreArgs(userId: bigint): Promise<WeaviateLibArgs> {
     try {
