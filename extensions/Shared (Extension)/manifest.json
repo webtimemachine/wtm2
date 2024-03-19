@@ -4,33 +4,35 @@
   "version": "1.0",
   "description": "Web Time Machine",
   "permissions": [
-      "tabs",
-      "activeTab",
-      "storage",
-      "<all_urls>",
-      "scripting"
-    ],
-    "content_scripts": [
-      {
-        "matches": ["<all_urls>"],
-        "js": ["content.js"]
-      }
-    ],
-
+    "tabs",
+    "activeTab",
+    "storage",
+    "<all_urls>",
+    "scripting"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "content.js"
+      ]
+    }
+  ],
   "background": {
     "service_worker": "background.js",
     "type": "module"
   },
   "host_permissions": [
     "<all_urls>"
-   ],
+  ],
   "action": {
     "default_popup": "popup-sign-in.html"
   },
   "icons": {
-    "16": "icon16.png",
-    "48": "icon48.png",
-    "128": "icon128.png"
+    "16": "../Shared (App)/Assets.xcassets/AppIcon.appiconset/16.png",
+    "32": "../Shared (App)/Assets.xcassets/AppIcon.appiconset/32.png",
+    "128": "../Shared (App)/Assets.xcassets/AppIcon.appiconset/128.png"
   }
 }
-
