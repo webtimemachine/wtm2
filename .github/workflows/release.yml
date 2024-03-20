@@ -24,82 +24,66 @@ jobs:
           npm run build
           zip -r backend.zip ./dist
 
-      # - name: Install Fastlane
-      #   working-directory: 'extensions'
-      #   run: gem install fastlane
+      - name: Install Dependencies
+        working-directory: 'extensions'
+        run: brew install coreutils
 
-      # - name: Run Fastlane Match
-      #   working-directory: 'extensions'
-      #   run: fastlane match development --readonly --app_identifier "com.yourCompany.Web-Time-Machine" --git_basic_authorization ${{ secrets.GIT_AUTHORIZATION }} --git_url "https://github.com/eefh/certificates.git"
-      #   env:
-      #     MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
-
-      # - name: Run Fastlane Match (Extension
-      #   working-directory: 'extensions'
-      #   run: fastlane match development --readonly --app_identifier "com.yourCompany.Web-Time-Machine.Extension" --git_basic_authorization ${{ secrets.GIT_AUTHORIZATION }} --git_url "https://github.com/eefh/certificates.git"
-      #   env:
-      #     MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
-
-      # - name: Install Dependencies
-      #   working-directory: 'extensions'
-      #   run: brew install coreutils
-
-      # - name: Decode and Install Apple Provisioning Profiles and Certificate
-      #   working-directory: 'extensions'
-      #   run: |
-      #     echo "${{ secrets.ENCODED_CERTIFICATE }}" | base64 --decode --output cert.p12
-      #     echo "${{ secrets.ENCODED_PROVISIONING_PROFILE_APP }}" | base64 --decode --output app.mobileprovision
-      #     echo "${{ secrets.ENCODED_PROVISIONING_PROFILE_EXTENSION }}" | base64 --decode --output extension.mobileprovision
+      - name: Decode and Install Apple Provisioning Profiles and Certificate
+        working-directory: 'extensions'
+        run: |
+          echo "${{ secrets.ENCODED_CERTIFICATE }}" | base64 --decode --output cert.p12
+          echo "${{ secrets.ENCODED_PROVISIONING_PROFILE_APP }}" | base64 --decode --output app.mobileprovision
+          echo "${{ secrets.ENCODED_PROVISIONING_PROFILE_EXTENSION }}" | base64 --decode --output extension.mobileprovision
       
-      #     KEYCHAIN_PATH=$RUNNER_TEMP/my_temporary.keychain
-      #     security create-keychain -p "${{ secrets.KEYCHAIN_PASSWORD }}" $KEYCHAIN_PATH
-      #     security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
-      #     security unlock-keychain -p "${{ secrets.KEYCHAIN_PASSWORD }}" $KEYCHAIN_PATH
-      #     security import cert.p12 -P "${{ secrets.P12_PASSWORD }}" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
-      #     security list-keychains -d user -s $KEYCHAIN_PATH
-      #     security default-keychain -s $KEYCHAIN_PATH
-      #     security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "${{ secrets.KEYCHAIN_PASSWORD }}" $KEYCHAIN_PATH
+          KEYCHAIN_PATH=$RUNNER_TEMP/my_temporary.keychain
+          security create-keychain -p "${{ secrets.KEYCHAIN_PASSWORD }}" $KEYCHAIN_PATH
+          security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
+          security unlock-keychain -p "${{ secrets.KEYCHAIN_PASSWORD }}" $KEYCHAIN_PATH
+          security import cert.p12 -P "${{ secrets.P12_PASSWORD }}" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
+          security list-keychains -d user -s $KEYCHAIN_PATH
+          security default-keychain -s $KEYCHAIN_PATH
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "${{ secrets.KEYCHAIN_PASSWORD }}" $KEYCHAIN_PATH
       
-      #     mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-      #     cp app.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
-      #     cp extension.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
-      #   env:
-      #     ENCODED_CERTIFICATE: ${{ secrets.ENCODED_CERTIFICATE }}
-      #     ENCODED_PROVISIONING_PROFILE_APP: ${{ secrets.ENCODED_PROVISIONING_PROFILE_APP }}
-      #     ENCODED_PROVISIONING_PROFILE_EXTENSION: ${{ secrets.ENCODED_PROVISIONING_PROFILE_EXTENSION }}
-      #     KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
-      #     P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
-      # - name: List all schemes
-      #   working-directory: 'extensions'
-      #   run: xcodebuild -list
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          cp app.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
+          cp extension.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
+        env:
+          ENCODED_CERTIFICATE: ${{ secrets.ENCODED_CERTIFICATE }}
+          ENCODED_PROVISIONING_PROFILE_APP: ${{ secrets.ENCODED_PROVISIONING_PROFILE_APP }}
+          ENCODED_PROVISIONING_PROFILE_EXTENSION: ${{ secrets.ENCODED_PROVISIONING_PROFILE_EXTENSION }}
+          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+          P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
+      - name: List all schemes
+        working-directory: 'extensions'
+        run: xcodebuild -list
 
-      # - name: Build Safari Extension for Testing
-      #   working-directory: 'extensions'
-      #   run: |
-      #     xcodebuild build-for-testing -scheme "Web Time Machine (iOS)" -sdk iphonesimulator -derivedDataPath './build' -allowProvisioningUpdates
+      - name: Build Safari Extension for Testing
+        working-directory: 'extensions'
+        run: |
+          xcodebuild build-for-testing -scheme "Web Time Machine (iOS)" -sdk iphonesimulator -derivedDataPath './build' -allowProvisioningUpdates
 
-      # - name: Test Safari Extension
-      #   working-directory: 'extensions'
-      #   run: |
-      #       if [ "`ls -A | grep -i \\.xcworkspace\$`" ]; then
-      #         filetype_parameter="workspace"
-      #         file_to_build="`ls -A | grep -i \\.xcworkspace\$`"
-      #       else
-      #         filetype_parameter="project"
-      #         file_to_build="`ls -A | grep -i \\.xcodeproj\$`"
-      #       fi
-      #       file_to_build=`echo $file_to_build | awk '{$1=$1;print}'`
-      #       xcodebuild test-without-building -scheme "Web Time Machine (iOS)" -"$filetype_parameter" "$file_to_build" -destination 'platform=iOS Simulator,name=iPhone 14,OS=16.2' -derivedDataPath './build'
+      - name: Test Safari Extension
+        working-directory: 'extensions'
+        run: |
+            if [ "`ls -A | grep -i \\.xcworkspace\$`" ]; then
+              filetype_parameter="workspace"
+              file_to_build="`ls -A | grep -i \\.xcworkspace\$`"
+            else
+              filetype_parameter="project"
+              file_to_build="`ls -A | grep -i \\.xcodeproj\$`"
+            fi
+            file_to_build=`echo $file_to_build | awk '{$1=$1;print}'`
+            xcodebuild test-without-building -scheme "Web Time Machine (iOS)" -"$filetype_parameter" "$file_to_build" -destination 'platform=iOS Simulator,name=iPhone 14,OS=16.2' -derivedDataPath './build'
 
-      # - name: Archive the iOS App
-      #   working-directory: 'extensions'
-      #   run: |
-      #     xcodebuild archive -scheme "Web Time Machine (iOS)" -sdk iphoneos -configuration AppStoreDistribution archive -archivePath "$PWD/build/Web Time Machine.xcarchive" -allowProvisioningUpdates
+      - name: Archive the iOS App
+        working-directory: 'extensions'
+        run: |
+          xcodebuild archive -scheme "Web Time Machine (iOS)" -sdk iphoneos -configuration AppStoreDistribution archive -archivePath "$PWD/build/Web Time Machine.xcarchive" -allowProvisioningUpdates
 
-      # - name: Export the .ipa File
-      #   working-directory: 'extensions'
-      #   run: |
-      #     xcodebuild -exportArchive -archivePath "$PWD/build/Web Time Machine.xcarchive" -exportOptionsPlist "$PWD/ExportOptions.plist" -exportPath "$PWD/build"
+      - name: Export the .ipa File
+        working-directory: 'extensions'
+        run: |
+          xcodebuild -exportArchive -archivePath "$PWD/build/Web Time Machine.xcarchive" -exportOptionsPlist "$PWD/ExportOptions.plist" -exportPath "$PWD/build"
 
       - name: Create Release
         id: create_release
@@ -134,13 +118,13 @@ jobs:
           asset_name: backend.zip
           asset_content_type: application/zip
           
-      # - name: Upload .ipa to Release
-      #   id: upload-release-asset-ipa
-      #   uses: actions/upload-release-asset@v1
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   with:
-      #     upload_url: ${{ steps.create_release.outputs.upload_url }}
-      #     asset_path: "extensions/build/Web Time Machine.ipa"
-      #     asset_name: Web Time Machine.ipa
-      #     asset_content_type: application/octet-stream
+      - name: Upload .ipa to Release
+        id: upload-release-asset-ipa
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: "extensions/build/Web Time Machine.ipa"
+          asset_name: Web Time Machine.ipa
+          asset_content_type: application/octet-stream
