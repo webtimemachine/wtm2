@@ -1,4 +1,5 @@
 import { OutputParserException } from '@langchain/core/output_parsers';
+import { HttpException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaClient } from '@prisma/client';
 import { CommonTestingModule } from '../../common/common.testing.module';
@@ -38,9 +39,23 @@ describe('ExplicitFilterService', () => {
   });
 
   describe('Filter content', () => {
-    it('should build and invoke chain', async () => {
-      const isExplicit = await explicitFilterService.filter('True');
-      expect(isExplicit).toEqual(true);
+    it('should throw HTTP exception based on DB result', async () => {
+      prismaService.blackList.count = jest.fn().mockResolvedValue(1);
+      await expect(
+        explicitFilterService.filter('Test content', 'example.com', 1n),
+      ).rejects.toThrow(HttpException);
+    });
+
+    it('should throw HTTP exception based on chain response', async () => {
+      const mockCreate = jest.fn();
+      prismaService.blackList.count = jest.fn().mockResolvedValue(0);
+      prismaService.blackList.create = mockCreate;
+      await expect(
+        explicitFilterService.filter('Test content', 'example.com', 1n),
+      ).rejects.toThrow(HttpException);
+      expect(mockCreate).toHaveBeenCalledWith({
+        data: { userId: 1n, url: 'example.com' },
+      });
     });
   });
 
