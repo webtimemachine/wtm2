@@ -5,13 +5,13 @@
     <key>method</key>
     <string>development</string>
     <key>teamID</key>
-    <string>L7B5V7W6H3</string>
+    <string>2858MX5336</string>
     <key>provisioningProfiles</key>
     <dict>
-        <key>com.yourCompany.Web-Time-Machine</key>
-        <string>match Development com.yourCompany.Web-Time-Machine</string>
-        <key>com.yourCompany.Web-Time-Machine.Extension</key>
-        <string>match Development com.yourCompany.Web-Time-Machine.Extension</string>
+        <key>com.ttt246llc.wtm</key>
+        <string>Web Time Machine Prov Profile Dev</string>
+        <key>com.ttt246llc.wtm.Extension</key>
+        <string>Web Time Machine Prov Profile Dev Extension</string>
     </dict>
 </dict>
 </plist>
