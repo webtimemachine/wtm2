@@ -8,7 +8,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../common/services';
 import { appEnv } from '../../config';
 
-class FlagParser extends BaseOutputParser<boolean> {
+export class FlagParser extends BaseOutputParser<boolean> {
   lc_namespace = ['langchain', 'output_parsers'];
   async parse(text: string): Promise<boolean> {
     if (text.length != 4 && text.length != 5) {
