@@ -27,6 +27,7 @@ model User {
   userPreferences   UserPreferences?
   userDevices       UserDevice[]
   navigationEntries NavigationEntry[]
+  blackListUrls BlackList[]
 
   updateAt  DateTime? @updatedAt @db.Timestamptz(0)
   deletedAt DateTime? @db.Timestamptz(0)
@@ -117,4 +118,17 @@ model NavigationEntry {
   updateAt  DateTime? @updatedAt @db.Timestamptz(0)
 
   @@map("navigation_entry")
+}
+
+
+model BlackList {
+  id      BigInt  @id @default(autoincrement())
+  url     String  @db.VarChar()
+
+  userId BigInt
+  user   User   @relation(fields: [userId], references: [id])
+
+  flaggedAt DateTime @default(now()) @db.Timestamptz(0)
+
+  @@map("black_list")
 }

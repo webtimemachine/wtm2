@@ -9,8 +9,6 @@ import {
   ParseIntPipe,
   Post,
   Query,
-  HttpException,
-  HttpStatus,
 } from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { JwtAccessToken, JwtRequestContext } from 'src/auth/decorators';
@@ -51,14 +49,6 @@ export class NavigationEntryController {
     @Body() createNavigationEntryInputDto: CreateNavigationEntryInputDto,
     @JwtRequestContext() context: JwtContext,
   ): Promise<CompleteNavigationEntryDto> {
-    if (
-      await this.explicitFilter.filter(createNavigationEntryInputDto.content!)
-    ) {
-      throw new HttpException(
-        'Content contains explicit material',
-        HttpStatus.UNPROCESSABLE_ENTITY,
-      );
-    }
     return this.navigationService.createNavigationEntry(
       context,
       createNavigationEntryInputDto,

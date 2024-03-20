@@ -4,7 +4,7 @@ import {
 } from '@langchain/core/output_parsers';
 import { ChatOpenAI } from '@langchain/openai';
 import { ChatPromptTemplate } from '@langchain/core/prompts';
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { PrismaService } from '../../common/services';
 import { appEnv } from '../../config';
 
@@ -41,8 +41,33 @@ export class ExplicitFilterService {
     openAIApiKey: appEnv.OPENAI_ACCESS_TOKEN,
   });
 
-  async filter(content: string): Promise<boolean> {
+  private async isExplicit(content: string): Promise<boolean> {
     const chain = filterPrompt.pipe(this.model).pipe(outputParser);
     return await chain.invoke({ content: content });
+  }
+
+  async filter(content: string, url: string, userId: bigint) {
+    // check if the given URL has already been blacklisted
+    let hasExplicitContent =
+      (await this.prismaService.blackList.count({
+        where: { url: url, userId: userId },
+      })) > 0;
+
+    if (!hasExplicitContent) {
+      // invoke the LLM if the URL has not been blacklisted yet
+      if (await this.isExplicit(content)) {
+        // blacklist the URL
+        await this.prismaService.blackList.create({
+          data: { userId: userId, url: url },
+        });
+        hasExplicitContent = true;
+      }
+    }
+
+    if (hasExplicitContent)
+      throw new HttpException(
+        'Content contains explicit material',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
   }
 }
