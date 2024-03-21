@@ -17,7 +17,7 @@ export class Pagination {
    * Gets the total number of pages.
    * @returns {number} - The total number of pages.
    */
-  getTotalPages () {
+  getTotalPages() {
     return Math.ceil(this.totalItems / this.itemsPerPage);
   }
 
@@ -25,14 +25,14 @@ export class Pagination {
    * Gets the current page.
    * @returns {number} - The number of the current page.
    */
-  getCurrentPage () {
+  getCurrentPage() {
     return this.currentPage;
   }
 
   /**
    * Go to the next page if possible.
    */
-  nextPage () {
+  nextPage() {
     if (this.currentPage < this.getTotalPages()) {
       this.currentPage++;
     }
@@ -41,7 +41,7 @@ export class Pagination {
   /**
    * Go back to the previous page if possible.
    */
-  prevPage () {
+  prevPage() {
     if (this.currentPage > 1) {
       this.currentPage--;
     }
@@ -51,7 +51,7 @@ export class Pagination {
    * Gets the starting index of the first element on the current page.
    * @returns {number} - The starting index of the first element on the current page.
    */
-  getStartIndex () {
+  getStartIndex() {
     return (this.currentPage - 1) * this.itemsPerPage;
   }
 }
