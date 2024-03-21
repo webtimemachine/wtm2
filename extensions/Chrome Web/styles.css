@@ -163,10 +163,14 @@ button {
   position: absolute;
 }
 
-#logout-button {
+.title-icon {
   width: 20px;
   height: 20px;
   cursor: pointer;
+}
+
+#logout-button {
+  padding-left: 8px;
 }
 
 .title-container {
