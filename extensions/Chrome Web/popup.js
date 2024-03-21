@@ -11,6 +11,31 @@ const handleLogoutUser = async () => {
 // -- Config / Setting button -- //
 const configButton = document.getElementById('config-button');
 
+document.querySelectorAll('.tab-title').forEach(button => {
+    button.onclick = (event) => {
+        // Remove 'tab-active' class from all tab titles
+        document.querySelectorAll('.tab-title').forEach(tab => {
+            tab.classList.remove('tab-active');
+        });
+        // Add 'tab-active' class to the clicked tab title
+        event.target.classList.add('tab-active');
+
+
+        // Remove 'visible' class from tab containers
+        document.querySelectorAll('.list-container').forEach(container => {
+            if (container.classList.contains('visible')) {
+                container.classList.remove('visible');
+            }
+            else {
+                container.classList.add('visible');
+            }
+        });
+        // Add 'tab-active' class to the clicked tab title
+        event.target.classList.add('tab-active');
+    }
+})
+
+
 configButton.addEventListener('click', function () {
   window.location.replace('./settings/settings.html');
 })
