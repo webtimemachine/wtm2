@@ -27,12 +27,18 @@
     </label>
     <button id="search-button">Search</button>
   </div>
-  <h4 class='tab-title'>History</h4>
+  <div id="tab-container">
+    <button class='tab-title tab-active'>History</button><button class='tab-title'>Queries</button>
+  </div>
   <div id='loader-container'>
     <div class='loader'></div>
   </div>
-  <div id="sites-list">
+  <div id="sites-list" class="list-container visible">
     <!-- Sites will be listed here -->
+  </div>
+  <div id="queries-list" class="list-container hidden">
+    <!-- Queries will be listed here -->
+    <p>TEST CONTENT</p>
   </div>
   <div class='pagination-container'>
     <button id='left-arrow'>&larr;</button>
