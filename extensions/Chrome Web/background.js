@@ -139,4 +139,9 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     return true;
   }
 
+  if (request.type === "getSettingInfo") {
+    is_user_signed_in(chrome).then((data) => sendResponse(data))
+    return true;
+  }
+
 });
