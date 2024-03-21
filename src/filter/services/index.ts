@@ -46,11 +46,11 @@ export class ExplicitFilterService {
     return await chain.invoke({ content: content });
   }
 
-  async filter(content: string, url: string, userId: bigint) {
+  async filter(content: string, url: string) {
     // check if the given URL has already been blacklisted
     let hasExplicitContent =
       (await this.prismaService.blackList.count({
-        where: { url: url, userId: userId },
+        where: { url: url },
       })) > 0;
 
     if (!hasExplicitContent) {
@@ -58,7 +58,7 @@ export class ExplicitFilterService {
       if (await this.isExplicit(content)) {
         // blacklist the URL
         await this.prismaService.blackList.create({
-          data: { userId: userId, url: url },
+          data: { url: url },
         });
         hasExplicitContent = true;
       }

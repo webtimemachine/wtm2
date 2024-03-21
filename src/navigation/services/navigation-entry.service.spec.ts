@@ -229,11 +229,7 @@ describe('NavigationEntryService', () => {
       expect(result).toBeDefined();
       expect(result).toEqual(createdNavigationEntry);
       expect(mockIndex).toHaveBeenCalledWith('Test content', 'example.com', 1n);
-      expect(mockFilter).toHaveBeenCalledWith(
-        'Test content',
-        'example.com',
-        1n,
-      );
+      expect(mockFilter).toHaveBeenCalledWith('Test content', 'example.com');
     });
 
     it('should create a new navigation entry successfully on repetitive entry', async () => {
@@ -259,11 +255,7 @@ describe('NavigationEntryService', () => {
       expect(result).toBeDefined();
       expect(result).toEqual(createdNavigationEntry);
       expect(mockIndex).toHaveBeenCalledWith('Test content', 'example.com', 1n);
-      expect(mockFilter).toHaveBeenCalledWith(
-        'Test content',
-        'example.com',
-        1n,
-      );
+      expect(mockFilter).toHaveBeenCalledWith('Test content', 'example.com');
     });
   });
 

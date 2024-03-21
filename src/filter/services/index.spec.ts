@@ -42,7 +42,7 @@ describe('ExplicitFilterService', () => {
     it('should throw HTTP exception based on DB result', async () => {
       prismaService.blackList.count = jest.fn().mockResolvedValue(1);
       await expect(
-        explicitFilterService.filter('Test content', 'example.com', 1n),
+        explicitFilterService.filter('Test content', 'example.com'),
       ).rejects.toThrow(HttpException);
     });
 
@@ -51,10 +51,10 @@ describe('ExplicitFilterService', () => {
       prismaService.blackList.count = jest.fn().mockResolvedValue(0);
       prismaService.blackList.create = mockCreate;
       await expect(
-        explicitFilterService.filter('Test content', 'example.com', 1n),
+        explicitFilterService.filter('Test content', 'example.com'),
       ).rejects.toThrow(HttpException);
       expect(mockCreate).toHaveBeenCalledWith({
-        data: { userId: 1n, url: 'example.com' },
+        data: { url: 'example.com' },
       });
     });
   });

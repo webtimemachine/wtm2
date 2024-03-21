@@ -106,7 +106,6 @@ export class NavigationEntryService {
     await this.explicitFilter.filter(
       createNavigationEntryInputDto.content!,
       createNavigationEntryInputDto.url,
-      jwtContext.user.id,
     );
     const lastEntry = await this.prismaService.navigationEntry.findFirst({
       where: {
