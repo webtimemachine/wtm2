@@ -1,3 +1,8 @@
+import { API_URL } from './consts';
+
+const baseUrlInupt = document.querySelector('#baseURL');
+baseUrlInupt.value = API_URL;
+
 document.querySelector('form').addEventListener('submit', async (event) => {
   event.preventDefault();
 

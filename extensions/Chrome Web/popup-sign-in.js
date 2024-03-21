@@ -1,4 +1,8 @@
 import { isUserSignedIn } from './auth.js';
+import { API_URL } from './consts.js';
+
+const baseUrlInupt = document.querySelector('#baseURL');
+baseUrlInupt.value = API_URL;
 
 const signUpLink = document.querySelector('#sign-up-link');
 signUpLink.addEventListener('click', () => {
