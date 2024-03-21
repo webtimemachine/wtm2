@@ -27,6 +27,7 @@ const envSchemas = {
   OPENAI_ACCESS_TOKEN: z.string(),
   WEAVIATE_HOST: z.string().default('localhost:8084'),
   WEAVIATE_SCHEME: z.string().default('http'),
+  WEAVIATE_API_KEY: z.string().default('api-key'),
 };
 
 const envSchema = z.object({
