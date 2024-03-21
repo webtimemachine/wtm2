@@ -15,6 +15,9 @@ const textSplitter = new RecursiveCharacterTextSplitter({
 const client = weaviate.client({
   scheme: appEnv.WEAVIATE_SCHEME,
   host: appEnv.WEAVIATE_HOST,
+  apiKey: appEnv.WEAVIATE_HOST.includes('localhost')
+    ? undefined
+    : new weaviate.ApiKey(appEnv.WEAVIATE_API_KEY),
 });
 
 @Injectable()
