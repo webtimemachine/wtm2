@@ -1,10 +1,9 @@
 import { Pagination } from './pagination.js'
-import { API_URL } from './consts.js'
 
 let paginationData = undefined
 const ITEMS_PER_PAGE = 10;
 
-
+// -- Logout button -- //
 function handleLogoutUser () {
     chrome.runtime.sendMessage({ type: "logout" }, function (response) {
         window.location.replace('./popup-sign-in.html');
@@ -17,6 +16,14 @@ logoutButton.addEventListener('click', function () {
     handleLogoutUser()
 })
 
+// -- Config / Setting button -- //
+const configButton = document.getElementById('config-button');
+
+configButton.addEventListener('click', function () {
+    window.location.replace('./settings.html');
+})
+
+// -- Input and Search button -- //
 const input = document.getElementById('input');
 const searchButton = document.getElementById('search-button');
 
@@ -126,14 +133,6 @@ document.addEventListener('DOMContentLoaded', function () {
         if (response.error) {
             handleLogoutUser()
             return
-        }
-
-        if (response.user) { //Display user email connected & backend information
-            const userDiv = document.getElementById('user-connected');
-            userDiv.innerHTML = `User: ${response.user}`
-
-            const apiDiv = document.getElementById('backend-connected');
-            apiDiv.innerHTML = `Backend API: ${API_URL}`
         }
 
         loaderContainer.style.display = 'none';
