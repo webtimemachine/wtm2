@@ -1,5 +1,5 @@
-import { jest } from '@jest/globals'
-import * as auth from './auth.js'
+import { jest } from '@jest/globals';
+import * as auth from './auth.js';
 import { API_URL } from './consts.js';
 
 describe('Should run all unit tests related to authorization', () => {
@@ -8,7 +8,7 @@ describe('Should run all unit tests related to authorization', () => {
       Promise.resolve({
         json: () => Promise.resolve({}),
         ok: true,
-      })
+      }),
     );
   });
 
@@ -16,20 +16,18 @@ describe('Should run all unit tests related to authorization', () => {
     const chromeMock = {
       storage: {
         local: {
-          get: jest.fn().mockImplementation((keys, callback) => {
-            callback({ userStatus: false, user_info: {} });
-          })
-        }
+          get: jest.fn().mockRejectedValue('Some error'),
+        },
       },
       runtime: {
-        lastError: 'Some error'
-      }
+        lastError: 'Some error',
+      },
     };
 
-    const result = await auth.is_user_signed_in(chromeMock);
-    expect(result).toEqual({
+    const storageData = await auth.getStorageData(chromeMock);
+    expect(storageData).toEqual({
       userStatus: false,
-      user_info: {}
+      user_info: {},
     });
   });
 
@@ -37,20 +35,18 @@ describe('Should run all unit tests related to authorization', () => {
     const chromeMock = {
       storage: {
         local: {
-          get: jest.fn().mockImplementation((keys, callback) => {
-            callback({});
-          })
-        }
+          get: jest.fn().mockResolvedValue({}),
+        },
       },
       runtime: {
-        lastError: null
-      }
+        lastError: null,
+      },
     };
 
-    const result = await auth.is_user_signed_in(chromeMock);
-    expect(result).toEqual({
+    const storageData = await auth.getStorageData(chromeMock);
+    expect(storageData).toEqual({
       userStatus: false,
-      user_info: {}
+      user_info: {},
     });
   });
 
@@ -58,27 +54,28 @@ describe('Should run all unit tests related to authorization', () => {
     const chromeMock = {
       storage: {
         local: {
-          get: jest.fn().mockImplementation((keys, callback) => {
-            callback({ userStatus: true, user_info: { email: 'demo@email.com' } });
-          })
-        }
+          get: jest.fn().mockResolvedValue({
+            userStatus: true,
+            user_info: { email: 'demo@email.com' },
+          }),
+        },
       },
       runtime: {
-        lastError: null
-      }
+        lastError: null,
+      },
     };
 
-    const result = await auth.is_user_signed_in(chromeMock);
-    expect(result).toEqual({
+    const storageData = await auth.getStorageData(chromeMock);
+    expect(storageData).toEqual({
       userStatus: true,
-      user_info: { email: 'demo@email.com' }
+      user_info: { email: 'demo@email.com' },
     });
   });
 
   test('should generate a random token', () => {
     // Mock crypto.getRandomValues
     const cryptoMock = {
-      getRandomValues: jest.fn().mockImplementation(array => {
+      getRandomValues: jest.fn().mockImplementation((array) => {
         // Simulate filling the array with random values
         for (let i = 0; i < array.length; ++i) {
           array[i] = Math.floor(Math.random() * 256);
@@ -90,18 +87,22 @@ describe('Should run all unit tests related to authorization', () => {
     global.crypto = cryptoMock;
 
     // Call the function
-    const result = auth.getRandomToken();
+    const storageData = auth.getRandomToken();
 
     // Expectations
-    expect(cryptoMock.getRandomValues).toHaveBeenCalledWith(expect.any(Uint8Array));
-    expect(result).toMatch(/^[0-9a-fA-F]+$/); // Check if the result is a hexadecimal string
+    expect(cryptoMock.getRandomValues).toHaveBeenCalledWith(
+      expect.any(Uint8Array),
+    );
+    expect(storageData).toMatch(/^[0-9a-fA-F]+$/); // Check if the storageData is a hexadecimal string
   });
 
   test('should call fetch with the correct arguments', async () => {
     const payload = {
       email: 'mockEmail',
       password: 'mockPassword',
-      userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36'
+      userAgent:
+        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+      baseURL: API_URL,
     };
     const deviceId = 'mockDeviceId';
 
@@ -120,7 +121,7 @@ describe('Should run all unit tests related to authorization', () => {
           userAgent: payload.userAgent,
           deviceKey: deviceId,
         }),
-      })
+      }),
     );
   });
 
@@ -161,9 +162,9 @@ describe('Should run all unit tests related to authorization', () => {
         method: 'GET',
         headers: expect.objectContaining({
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${data.user_info.refreshToken}`,
+          Authorization: `Bearer ${data.user_info.refreshToken}`,
         }),
-      })
+      }),
     );
   });
 
@@ -195,7 +196,7 @@ describe('Should run all unit tests related to authorization', () => {
       password: 'mockNewPassword',
     };
 
-    const response = await auth.sigUpUser(payload);
+    const response = await auth.signUpUser(payload);
 
     expect(response.ok).toBe(true);
   });
@@ -204,7 +205,7 @@ describe('Should run all unit tests related to authorization', () => {
     global.fetch.mockImplementationOnce(() => Promise.reject('Mock error'));
     const spyConsoleError = jest.spyOn(console, 'error').mockImplementation();
 
-    await auth.sigUpUser({}, '');
+    await auth.signUpUser({}, '');
 
     expect(spyConsoleError).toHaveBeenCalledWith('Mock error');
     spyConsoleError.mockRestore();

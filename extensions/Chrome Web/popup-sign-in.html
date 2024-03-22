@@ -9,11 +9,12 @@
 </head>
 
 <body>
-  <script defer src="popup-sign-in-script.js" type="module"></script>
+  <script defer src="popup-sign-in.js" type="module"></script>
   <div class='header-container'>
     <h1>Web Time Machine</h1>
   </div>
   <form>
+    <input type="baseURL" name="baseURL" id="baseURL" placeholder="Base URL">
     <input type="email" name="email" id="email" placeholder="Email">
     <input type="password" name="password" id="password" placeholder="Password">
     <span id='login-error' class='error'>Authentication fail. Please, review your credentials.</span>

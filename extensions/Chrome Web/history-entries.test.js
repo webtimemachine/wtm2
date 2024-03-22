@@ -1,5 +1,9 @@
-import { jest } from '@jest/globals'
-import { saveHistoryEntry, getHistoryEntries, deleteHistoryEntries } from './history-entries.js';
+import { jest } from '@jest/globals';
+import {
+  saveHistoryEntry,
+  getHistoryEntries,
+  deleteHistoryEntries,
+} from './history-entries.js';
 import { API_URL } from './consts.js';
 
 describe('Should run all test for saveHistoryEntry & getHistoryEntries functions', () => {
@@ -8,27 +12,27 @@ describe('Should run all test for saveHistoryEntry & getHistoryEntries functions
       Promise.resolve({
         json: () => Promise.resolve({}),
         ok: true,
-      })
+      }),
     );
     global.chrome = {
       storage: {
         local: {
-          set: jest.fn()
-        }
-      }
-    }
+          set: jest.fn(),
+        },
+      },
+    };
   });
 
   test('should call fetch with the correct arguments', async () => {
     const user_info = {
       accessToken: 'mockAccessToken',
       user: {
-        email: 'user-connected@mail.com'
-      }
+        email: 'user-connected@mail.com',
+      },
     };
     const payload = { data: 'mockPayload' };
 
-    await saveHistoryEntry(user_info, payload);
+    await saveHistoryEntry(user_info, API_URL, payload);
 
     expect(fetch).toHaveBeenCalledWith(
       `${API_URL}/api/navigation-entry`,
@@ -36,10 +40,10 @@ describe('Should run all test for saveHistoryEntry & getHistoryEntries functions
         method: 'POST',
         headers: expect.objectContaining({
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${user_info.accessToken}`,
+          Authorization: `Bearer ${user_info.accessToken}`,
         }),
         body: JSON.stringify(payload),
-      })
+      }),
     );
   });
 
@@ -47,12 +51,12 @@ describe('Should run all test for saveHistoryEntry & getHistoryEntries functions
     const user_info = {
       accessToken: 'mockAccessToken',
       user: {
-        email: 'user-connected@mail.com'
-      }
+        email: 'user-connected@mail.com',
+      },
     };
     const payload = { data: 'mockPayload' };
 
-    const response = await saveHistoryEntry(user_info, payload);
+    const response = await saveHistoryEntry(user_info, API_URL, payload);
 
     expect(response.ok).toBe(true);
   });
@@ -61,7 +65,7 @@ describe('Should run all test for saveHistoryEntry & getHistoryEntries functions
     global.fetch.mockImplementationOnce(() => Promise.reject({ status: 401 }));
     const spyConsoleError = jest.spyOn(console, 'error').mockImplementation();
 
-    await saveHistoryEntry({}, {});
+    await saveHistoryEntry({}, API_URL, {});
 
     expect(spyConsoleError).toHaveBeenCalledWith({ status: 401 });
     spyConsoleError.mockRestore();
@@ -71,11 +75,11 @@ describe('Should run all test for saveHistoryEntry & getHistoryEntries functions
     const user_info = {
       accessToken: 'mockAccessToken',
       user: {
-        email: 'user-connected@mail.com'
-      }
+        email: 'user-connected@mail.com',
+      },
     };
 
-    await getHistoryEntries(user_info, 0, 10);
+    await getHistoryEntries(user_info, API_URL, 0, 10);
 
     expect(fetch).toHaveBeenCalledWith(
       `${API_URL}/api/navigation-entry?offset=0&limit=10`,
@@ -83,9 +87,9 @@ describe('Should run all test for saveHistoryEntry & getHistoryEntries functions
         method: 'GET',
         headers: expect.objectContaining({
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${user_info.accessToken}`,
+          Authorization: `Bearer ${user_info.accessToken}`,
         }),
-      })
+      }),
     );
   });
 
@@ -93,47 +97,51 @@ describe('Should run all test for saveHistoryEntry & getHistoryEntries functions
     const user_info = {
       accessToken: 'mockAccessToken',
       user: {
-        email: 'user-connected@mail.com'
-      }
+        email: 'user-connected@mail.com',
+      },
     };
-    const responseData = { data: 'mockData', user: "user-connected@mail.com", };
+    const responseData = { data: 'mockData', user: 'user-connected@mail.com' };
     global.fetch.mockImplementationOnce(() =>
       Promise.resolve({
         json: () => Promise.resolve(responseData),
         ok: true,
-      })
+      }),
     );
 
-    const response = await getHistoryEntries(user_info, 0, 10);
+    const response = await getHistoryEntries(user_info, API_URL, 0, 10);
 
     expect(response).toEqual(responseData);
   });
 
   test('should call refresh token function when fetch fails with 401', async () => {
-    const responseData = { data: 'mockData', user: "user-connected@mail.com", };
-    global.fetch.mockImplementationOnce(() => Promise.reject({ status: 401 })).mockImplementationOnce(() =>
-      Promise.resolve({
-        json: () => Promise.resolve(responseData),
-        ok: true,
-      })
-    );
+    const responseData = { data: 'mockData', user: 'user-connected@mail.com' };
+    global.fetch
+      .mockImplementationOnce(() => Promise.reject({ status: 401 }))
+      .mockImplementationOnce(() =>
+        Promise.resolve({
+          json: () => Promise.resolve(responseData),
+          ok: true,
+        }),
+      );
     const spyConsoleError = jest.spyOn(console, 'error').mockImplementation();
 
-    await getHistoryEntries({}, 0, 10);
+    await getHistoryEntries({}, API_URL, 0, 10);
 
     expect(spyConsoleError).toHaveBeenCalledWith({ status: 401 });
     spyConsoleError.mockRestore();
   });
 
   test('should delete history entry successfully', async () => {
-    global.fetch.mockImplementationOnce(() => Promise.resolve({
-      status: 200,
-      json: () => Promise.resolve({ success: true }),
-    }))
+    global.fetch.mockImplementationOnce(() =>
+      Promise.resolve({
+        status: 200,
+        json: () => Promise.resolve({ success: true }),
+      }),
+    );
 
     const user_info = { accessToken: 'mockAccessToken' };
     const payload = { id: 123 };
-    const result = await deleteHistoryEntries(user_info, payload);
+    const result = await deleteHistoryEntries(user_info, API_URL, payload);
     expect(result).toEqual({ success: true });
     expect(fetch).toHaveBeenCalledWith(
       `${API_URL}/api/navigation-entry/${payload.id}`,
@@ -141,24 +149,26 @@ describe('Should run all test for saveHistoryEntry & getHistoryEntries functions
         method: 'DELETE',
         headers: expect.objectContaining({
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${user_info.accessToken}`,
+          Authorization: `Bearer ${user_info.accessToken}`,
         }),
-      })
+      }),
     );
   });
 
   test('should throw error if access token has expired when try to delete history entry', async () => {
-    global.fetch.mockImplementationOnce(() => Promise.reject({ status: 401 })).mockImplementationOnce(() =>
-      Promise.resolve({
-        status: 200,
-        json: () => Promise.resolve({ success: true }),
-      })
-    );
+    global.fetch
+      .mockImplementationOnce(() => Promise.reject({ status: 401 }))
+      .mockImplementationOnce(() =>
+        Promise.resolve({
+          status: 200,
+          json: () => Promise.resolve({ success: true }),
+        }),
+      );
     const spyConsoleError = jest.spyOn(console, 'error').mockImplementation();
 
     const user_info = { accessToken: 'expiredAccessToken' };
     const payload = { id: 123 };
-    await deleteHistoryEntries(user_info, payload);
+    await deleteHistoryEntries(user_info, API_URL, payload);
 
     expect(spyConsoleError).toHaveBeenCalledWith({ status: 401 });
     spyConsoleError.mockRestore();
