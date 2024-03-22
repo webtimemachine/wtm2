@@ -140,6 +140,7 @@ const completeNavigationEntriesDtos =
 const expectedResponse: PaginationResponse<CompleteNavigationEntryDto> = {
   offset: 0,
   limit: 10,
+  query: 'example',
   count: mockedEntries.length,
   items: completeNavigationEntriesDtos,
 };
