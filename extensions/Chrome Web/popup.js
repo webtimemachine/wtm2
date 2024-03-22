@@ -20,7 +20,7 @@ logoutButton.addEventListener('click', function () {
 const configButton = document.getElementById('config-button');
 
 configButton.addEventListener('click', function () {
-    window.location.replace('./settings.html');
+    window.location.replace('./settings/settings.html');
 })
 
 // -- Input and Search button -- //

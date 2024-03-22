@@ -1,4 +1,4 @@
-import { API_URL } from './consts.js'
+import { API_URL } from '../consts.js'
 
 // -- Close Config / Setting button -- //
 const closeSettingButton = document.getElementById('close-settings-button');
@@ -18,3 +18,9 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 });
+
+const expDateOption = document.getElementById('exp-date-button');
+
+expDateOption.addEventListener('click', function () {
+    window.location.replace('./expiration-date.html');
+})
