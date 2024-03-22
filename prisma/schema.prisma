@@ -113,8 +113,29 @@ model NavigationEntry {
   userDeviceId BigInt
   userDevice   UserDevice @relation(fields: [userDeviceId], references: [id])
 
-  createdAt DateTime  @default(now()) @db.Timestamptz(0)
-  updateAt  DateTime? @updatedAt @db.Timestamptz(0)
+  createdAt DateTime               @default(now()) @db.Timestamptz(0)
+  updateAt  DateTime?              @updatedAt @db.Timestamptz(0)
+  queries   NavigationEntryQuery[]
 
   @@map("navigation_entry")
+}
+
+model NavigationEntryQuery {
+  id                BigInt          @id @default(autoincrement())
+  navigationEntryId BigInt
+  queryId           BigInt
+  navigationEntry   NavigationEntry @relation(fields: [navigationEntryId], references: [id])
+  query             Query           @relation(fields: [queryId], references: [id])
+
+  @@map("navigation_entry_query")
+}
+
+model Query {
+  id                BigInt                 @id @default(autoincrement())
+  query             String                 @db.VarChar()
+  semantic          Boolean
+  createdAt         DateTime               @default(now()) @db.Timestamptz(0)
+  navigationEntries NavigationEntryQuery[]
+
+  @@map("query")
 }
