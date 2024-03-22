@@ -17,6 +17,10 @@ export class PaginationResponse<T> {
   count: number;
 
   @Expose()
+  @ApiProperty({ required: false })
+  query?: string;
+
+  @Expose()
   @ApiProperty()
   items: T[];
 }
