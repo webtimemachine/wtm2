@@ -229,10 +229,9 @@ export class NavigationEntryService {
         completeNavigationEntries,
       );
 
-    if (query && count > 0)
+    if (query && count > 0 && isSemantic)
       await this.queryService.newEntry(
         query,
-        isSemantic,
         completeNavigationEntries.map((entry) => entry.id),
       );
 
