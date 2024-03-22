@@ -132,8 +132,7 @@ model NavigationEntryQuery {
 
 model Query {
   id                BigInt                 @id @default(autoincrement())
-  query             String                 @db.VarChar()
-  semantic          Boolean
+  query             String                 @unique @db.VarChar()
   createdAt         DateTime               @default(now()) @db.Timestamptz(0)
   navigationEntries NavigationEntryQuery[]
 
