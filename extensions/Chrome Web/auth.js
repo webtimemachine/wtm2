@@ -26,12 +26,13 @@ export const getRandomToken = () => {
  * @returns {Promise<object>} A Promise that resolves to an object containing user status and information.
  *                           The object structure: { userStatus: boolean, user_info: object }
  */
-export const isUserSignedIn = async (chrome) => {
+export const getStorageData = async (chrome) => {
   try {
     const response = await chrome.storage.local.get([
       'userStatus',
       'user_info',
       'device_id',
+      'baseURL',
     ]);
 
     return response.userStatus === undefined
@@ -73,7 +74,7 @@ export const loginUser = async (payload, deviceId) => {
     });
 
     // Send a POST request to the login endpoint with the provided body
-    return await fetch(`${API_URL}/api/auth/login`, {
+    return await fetch(`${payload.baseURL}/api/auth/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -141,7 +142,7 @@ export const signUpUser = async (payload) => {
     });
 
     // Send a POST request to the sign up endpoint with the provided body
-    return await fetch(`${API_URL}/api/auth/signup`, {
+    return await fetch(`${payload.baseURL}/api/auth/signup`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
