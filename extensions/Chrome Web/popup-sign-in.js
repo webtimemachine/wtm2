@@ -1,4 +1,10 @@
-import { isUserSignedIn } from './auth.js';
+import { API_URL } from './consts.js';
+import { getStorageData } from './auth.js';
+
+getStorageData(chrome).then((storageData) => {
+  const baseUrlInput = document.querySelector('#baseURL');
+  baseUrlInput.value = storageData?.baseURL || API_URL;
+});
 
 const signUpLink = document.querySelector('#sign-up-link');
 signUpLink.addEventListener('click', () => {
@@ -10,12 +16,13 @@ document.querySelector('form').addEventListener('submit', async (event) => {
 
   const email = document.querySelector('#email').value;
   const password = document.querySelector('#password').value;
+  const baseURL = document.querySelector('#baseURL').value;
 
   if (email && password) {
     try {
       const response = await chrome.runtime.sendMessage({
         type: 'login',
-        payload: { email, password, userAgent: navigator.userAgent },
+        payload: { email, password, baseURL, userAgent: navigator.userAgent },
       });
 
       if (response.error) {
@@ -41,8 +48,8 @@ document.querySelector('form').addEventListener('submit', async (event) => {
 // When popup is ready, check if the user is already logged in
 document.addEventListener('DOMContentLoaded', async () => {
   try {
-    const res = await isUserSignedIn(chrome);
-    if (res.userStatus) window.location.replace('./popup.html');
+    const storageData = await getStorageData(chrome);
+    if (storageData.userStatus) window.location.replace('./popup.html');
   } catch (error) {
     console.error('Error occurred:', error);
   }

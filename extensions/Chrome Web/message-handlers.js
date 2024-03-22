@@ -1,7 +1,7 @@
 import {
   loginUser,
   logoutUser,
-  isUserSignedIn,
+  getStorageData,
   getDeviceId,
   signUpUser,
 } from './auth.js';
@@ -18,12 +18,15 @@ import { getHistoryEntries, deleteHistoryEntries } from './history-entries.js';
  */
 export const handleGetHistory = async (chrome, request, sendResponse) => {
   // Check if the user is signed in
-  const userData = await isUserSignedIn(chrome);
-  if (userData.userStatus) {
+  const storageData = await getStorageData(chrome);
+  if (storageData.userStatus) {
     try {
+      const baseURL = storageData.baseURL || API_URL;
+
       // Fetch browsing history entries
       const res = await getHistoryEntries(
-        userData.user_info,
+        storageData.user_info,
+        baseURL,
         request.offset,
         request.limit,
         request.search,
@@ -63,7 +66,9 @@ export const handleLogin = async (chrome, request, sendResponse) => {
       userStatus: true,
       user_info: loginRes,
       device_id: deviceId,
+      baseURL: request.payload.baseURL,
     });
+
     // Send login response back to the caller
     sendResponse(loginRes);
   } catch (error) {
@@ -104,18 +109,21 @@ export const handleDeleteHistoryEntry = async (
   sendResponse,
 ) => {
   // Check if the user is signed in
-  const userData = await isUserSignedIn(chrome);
-  if (userData.userStatus) {
+  const storageData = await getStorageData(chrome);
+  if (storageData.userStatus) {
+    const baseURL = storageData.baseURL || API_URL;
+
     const payload = {
       id: request.item.id,
     };
 
     try {
       // Delete the history entry
-      await deleteHistoryEntries(userData.user_info, payload);
+      await deleteHistoryEntries(storageData.user_info, baseURL, payload);
       // Fetch new history entries after deletion
       const res = await getHistoryEntries(
-        userData.user_info,
+        storageData.user_info,
+        baseURL,
         request.offset,
         request.limit,
         request.search,

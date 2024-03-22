@@ -1,6 +1,15 @@
+import { API_URL } from './consts.js';
+import { getStorageData } from './auth.js';
+
+getStorageData(chrome).then((storageData) => {
+  const baseUrlInput = document.querySelector('#baseURL');
+  baseUrlInput.value = storageData?.baseURL || API_URL;
+});
+
 document.querySelector('form').addEventListener('submit', async (event) => {
   event.preventDefault();
 
+  const baseURL = document.querySelector('#baseURL').value;
   const email = document.querySelector('#email').value;
   const password = document.querySelector('#password').value;
   const confirmPassword = document.querySelector('#confirm-password').value;
@@ -14,7 +23,7 @@ document.querySelector('form').addEventListener('submit', async (event) => {
     // send message to background script with email and password
     const response = await chrome.runtime.sendMessage({
       type: 'signUp',
-      payload: { email, password },
+      payload: { email, password, baseURL },
     });
 
     if (response?.error) {
