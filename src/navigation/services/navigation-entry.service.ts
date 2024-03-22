@@ -20,6 +20,7 @@ import { MessageResponse, PaginationResponse } from '../../common/dtos';
 import { CompleteUser } from '../../user/types';
 import { UserService } from '../../user/services';
 import { SemanticProcessor } from '../../semanticSearch/services/';
+import { QueryService } from '../../query/services';
 
 @Injectable()
 export class NavigationEntryService {
@@ -28,6 +29,7 @@ export class NavigationEntryService {
   constructor(
     private readonly prismaService: PrismaService,
     private readonly semanticProcessor: SemanticProcessor,
+    private readonly queryService: QueryService,
   ) {}
 
   static getExpitationDate(
@@ -225,6 +227,13 @@ export class NavigationEntryService {
       NavigationEntryService.completeNavigationEntriesToDtos(
         jwtContext,
         completeNavigationEntries,
+      );
+
+    if (query && count > 0)
+      await this.queryService.newEntry(
+        query,
+        isSemantic,
+        completeNavigationEntries.map((entry) => entry.id),
       );
 
     return plainToInstance(PaginationResponse<CompleteNavigationEntryDto>, {
