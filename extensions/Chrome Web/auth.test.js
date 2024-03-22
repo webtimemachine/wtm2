@@ -24,8 +24,8 @@ describe('Should run all unit tests related to authorization', () => {
       },
     };
 
-    const result = await auth.isUserSignedIn(chromeMock);
-    expect(result).toEqual({
+    const storageData = await auth.getStorageData(chromeMock);
+    expect(storageData).toEqual({
       userStatus: false,
       user_info: {},
     });
@@ -43,8 +43,8 @@ describe('Should run all unit tests related to authorization', () => {
       },
     };
 
-    const result = await auth.isUserSignedIn(chromeMock);
-    expect(result).toEqual({
+    const storageData = await auth.getStorageData(chromeMock);
+    expect(storageData).toEqual({
       userStatus: false,
       user_info: {},
     });
@@ -65,8 +65,8 @@ describe('Should run all unit tests related to authorization', () => {
       },
     };
 
-    const result = await auth.isUserSignedIn(chromeMock);
-    expect(result).toEqual({
+    const storageData = await auth.getStorageData(chromeMock);
+    expect(storageData).toEqual({
       userStatus: true,
       user_info: { email: 'demo@email.com' },
     });
@@ -87,13 +87,13 @@ describe('Should run all unit tests related to authorization', () => {
     global.crypto = cryptoMock;
 
     // Call the function
-    const result = auth.getRandomToken();
+    const storageData = auth.getRandomToken();
 
     // Expectations
     expect(cryptoMock.getRandomValues).toHaveBeenCalledWith(
       expect.any(Uint8Array),
     );
-    expect(result).toMatch(/^[0-9a-fA-F]+$/); // Check if the result is a hexadecimal string
+    expect(storageData).toMatch(/^[0-9a-fA-F]+$/); // Check if the storageData is a hexadecimal string
   });
 
   test('should call fetch with the correct arguments', async () => {
@@ -102,6 +102,7 @@ describe('Should run all unit tests related to authorization', () => {
       password: 'mockPassword',
       userAgent:
         'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+      baseURL: API_URL,
     };
     const deviceId = 'mockDeviceId';
 

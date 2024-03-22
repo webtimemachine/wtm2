@@ -32,7 +32,7 @@ describe('Should run all test for saveHistoryEntry & getHistoryEntries functions
     };
     const payload = { data: 'mockPayload' };
 
-    await saveHistoryEntry(user_info, payload);
+    await saveHistoryEntry(user_info, API_URL, payload);
 
     expect(fetch).toHaveBeenCalledWith(
       `${API_URL}/api/navigation-entry`,
@@ -56,7 +56,7 @@ describe('Should run all test for saveHistoryEntry & getHistoryEntries functions
     };
     const payload = { data: 'mockPayload' };
 
-    const response = await saveHistoryEntry(user_info, payload);
+    const response = await saveHistoryEntry(user_info, API_URL, payload);
 
     expect(response.ok).toBe(true);
   });
@@ -65,7 +65,7 @@ describe('Should run all test for saveHistoryEntry & getHistoryEntries functions
     global.fetch.mockImplementationOnce(() => Promise.reject({ status: 401 }));
     const spyConsoleError = jest.spyOn(console, 'error').mockImplementation();
 
-    await saveHistoryEntry({}, {});
+    await saveHistoryEntry({}, API_URL, {});
 
     expect(spyConsoleError).toHaveBeenCalledWith({ status: 401 });
     spyConsoleError.mockRestore();
@@ -79,7 +79,7 @@ describe('Should run all test for saveHistoryEntry & getHistoryEntries functions
       },
     };
 
-    await getHistoryEntries(user_info, 0, 10);
+    await getHistoryEntries(user_info, API_URL, 0, 10);
 
     expect(fetch).toHaveBeenCalledWith(
       `${API_URL}/api/navigation-entry?offset=0&limit=10`,
@@ -108,7 +108,7 @@ describe('Should run all test for saveHistoryEntry & getHistoryEntries functions
       }),
     );
 
-    const response = await getHistoryEntries(user_info, 0, 10);
+    const response = await getHistoryEntries(user_info, API_URL, 0, 10);
 
     expect(response).toEqual(responseData);
   });
@@ -125,7 +125,7 @@ describe('Should run all test for saveHistoryEntry & getHistoryEntries functions
       );
     const spyConsoleError = jest.spyOn(console, 'error').mockImplementation();
 
-    await getHistoryEntries({}, 0, 10);
+    await getHistoryEntries({}, API_URL, 0, 10);
 
     expect(spyConsoleError).toHaveBeenCalledWith({ status: 401 });
     spyConsoleError.mockRestore();
@@ -141,7 +141,7 @@ describe('Should run all test for saveHistoryEntry & getHistoryEntries functions
 
     const user_info = { accessToken: 'mockAccessToken' };
     const payload = { id: 123 };
-    const result = await deleteHistoryEntries(user_info, payload);
+    const result = await deleteHistoryEntries(user_info, API_URL, payload);
     expect(result).toEqual({ success: true });
     expect(fetch).toHaveBeenCalledWith(
       `${API_URL}/api/navigation-entry/${payload.id}`,
@@ -168,7 +168,7 @@ describe('Should run all test for saveHistoryEntry & getHistoryEntries functions
 
     const user_info = { accessToken: 'expiredAccessToken' };
     const payload = { id: 123 };
-    await deleteHistoryEntries(user_info, payload);
+    await deleteHistoryEntries(user_info, API_URL, payload);
 
     expect(spyConsoleError).toHaveBeenCalledWith({ status: 401 });
     spyConsoleError.mockRestore();

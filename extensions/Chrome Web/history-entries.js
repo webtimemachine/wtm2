@@ -1,5 +1,4 @@
 import { refreshTokenData } from './auth.js';
-import { API_URL } from './consts.js';
 
 /**
  * Asynchronous function to save a navigation history entry for a user by sending a request to the server.
@@ -9,13 +8,18 @@ import { API_URL } from './consts.js';
  * @param {boolean} [reexecuted=false] - An optional flag indicating whether the function is being re-executed after refreshing the access token.
  * @returns {Promise<Response>} A Promise that resolves to the response from the history entry save request.
  */
-export async function saveHistoryEntry(user_info, payload, reexecuted = false) {
+export async function saveHistoryEntry(
+  user_info,
+  baseURL,
+  payload,
+  reexecuted = false,
+) {
   try {
     // Convert payload to JSON for the request body
     const body = JSON.stringify(payload);
 
     // Send a POST request to the endpoint for saving navigation history
-    const resp = await fetch(`${API_URL}/api/navigation-entry`, {
+    const resp = await fetch(`${baseURL}/api/navigation-entry`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -36,7 +40,12 @@ export async function saveHistoryEntry(user_info, payload, reexecuted = false) {
     // Refresh the access token and re-execute saveHistoryEntry
     return await refreshTokenData({ user_info }).then(
       async (res) =>
-        await saveHistoryEntry({ ...user_info, ...res }, payload, true),
+        await saveHistoryEntry(
+          { ...user_info, ...res },
+          baseURL,
+          payload,
+          true,
+        ),
     );
   }
 }
@@ -53,6 +62,7 @@ export async function saveHistoryEntry(user_info, payload, reexecuted = false) {
  */
 export async function getHistoryEntries(
   user_info,
+  baseURL,
   offset,
   limit,
   query,
@@ -61,7 +71,7 @@ export async function getHistoryEntries(
   try {
     // Send a GET request to the endpoint for retrieving navigation history with pagination parameters
     const resp = await fetch(
-      `${API_URL}/api/navigation-entry?offset=${offset}&limit=${limit}${query ? `&query=${query}` : ''}`,
+      `${baseURL}/api/navigation-entry?offset=${offset}&limit=${limit}${query ? `&query=${query}` : ''}`,
       {
         method: 'GET',
         headers: {
@@ -87,6 +97,7 @@ export async function getHistoryEntries(
       async (res) =>
         await getHistoryEntries(
           { ...user_info, ...res },
+          baseURL,
           offset,
           limit,
           query,
@@ -106,12 +117,13 @@ export async function getHistoryEntries(
  */
 export async function deleteHistoryEntries(
   user_info,
+  baseURL,
   payload,
   reexecuted = false,
 ) {
   try {
     // Send a GET request to the endpoint for retrieving navigation history with pagination parameters
-    const resp = await fetch(`${API_URL}/api/navigation-entry/${payload.id}`, {
+    const resp = await fetch(`${baseURL}/api/navigation-entry/${payload.id}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -133,7 +145,12 @@ export async function deleteHistoryEntries(
     // Refresh the access token and re-execute deleteHistoryEntries
     return await refreshTokenData({ user_info }).then(
       async (res) =>
-        await deleteHistoryEntries({ ...user_info, ...res }, payload, true),
+        await deleteHistoryEntries(
+          { ...user_info, ...res },
+          baseURL,
+          payload,
+          true,
+        ),
     );
   }
 }

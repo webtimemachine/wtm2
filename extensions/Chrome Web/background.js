@@ -1,4 +1,5 @@
-import { isUserSignedIn, refreshTokenData } from './auth.js';
+import { getStorageData, refreshTokenData } from './auth.js';
+import { API_URL } from './consts.js';
 import { saveHistoryEntry } from './history-entries.js';
 
 import {
@@ -12,9 +13,9 @@ import {
 const handleStartup = async () => {
   // Here is where we have to refresh the user authentication
   try {
-    const userData = await isUserSignedIn(chrome);
-    if (userData.userStatus) {
-      const tokensResponse = await refreshTokenData(userData);
+    const storageData = await getStorageData(chrome);
+    if (storageData.userStatus) {
+      const tokensResponse = await refreshTokenData(storageData);
 
       if (!tokensResponse.accessToken || !tokensResponse.refreshToken) {
         throw Error('fail');
@@ -22,7 +23,7 @@ const handleStartup = async () => {
 
       await chrome.storage.local.set({
         userStatus: true,
-        user_info: { ...userData.user_info, ...tokensResponse },
+        user_info: { ...storageData.user_info, ...tokensResponse },
       });
     }
   } catch (error) {
@@ -69,17 +70,19 @@ const handleUpdated = async (tabId, changeInfo, tab) => {
         content: htmlContent.replace(/<[^>]*>/g, '').replace(/\s+/g, ' '),
       };
 
-      const userData = await isUserSignedIn(chrome);
-      if (userData.userStatus) {
-        saveHistoryEntry(userData.user_info, record);
+      const storageData = await getStorageData(chrome);
+
+      const baseURL = storageData.baseURL || API_URL;
+      if (storageData.userStatus) {
+        saveHistoryEntry(storageData.user_info, baseURL, record);
       }
     }
   }
 };
 
 const handleGetSettingInfo = async (chrome, sendResponse) => {
-  const userData = await isUserSignedIn(chrome);
-  sendResponse(userData);
+  const storageData = await getStorageData(chrome);
+  sendResponse(storageData);
 };
 
 chrome.runtime.onStartup.addListener(() => {
