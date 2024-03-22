@@ -4,7 +4,7 @@ import { API_URL } from '../consts.js'
 const closeSettingButton = document.getElementById('close-settings-button');
 
 closeSettingButton.addEventListener('click', function () {
-    window.location.replace('./settings.html');
+  window.location.replace('./settings.html');
 })
 
 // document.addEventListener('DOMContentLoaded', function () {
@@ -18,3 +18,19 @@ closeSettingButton.addEventListener('click', function () {
 //         }
 //     });
 // });
+
+
+const expirationDaysToggle = document.getElementById('expiration-days-toggle');
+const expirationDaysInput = document.getElementById('expiration-days');
+
+expirationDaysToggle.addEventListener('change', function () {
+
+  if (this.checked) {
+    expirationDaysInput.removeAttribute('disabled')
+    console.log("Checkbox is checked..");
+  } else {
+    expirationDaysInput.setAttribute('disabled', true)
+    console.log("Checkbox is not checked..");
+  }
+
+})

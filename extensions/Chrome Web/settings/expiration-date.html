@@ -22,9 +22,20 @@
     <div style='display: flex; align-items: center; padding: 0px 8px; justify-content: space-between;'>
       <p>Enable expirantion date on History entries</p>
       <label class="switch">
-        <input type="checkbox">
+        <input type="checkbox" id='expiration-days-toggle'>
         <span class="slider round"></span>
       </label>
+    </div>
+    <div
+      style='padding: 0px 8px; display: flex; flex-direction: column; height: 300px; justify-content: space-between;'>
+      <div style='display: flex; justify-content: space-between; align-items: center; padding-top: 8px;'>
+        <label>Expiration time in days:</label>
+        <input type="number" name="expiration-days" id="expiration-days" disabled='disabled' min='0' step='1'
+          style='width: 25%;'>
+      </div>
+      <div style='display: flex; justify-content: center;'>
+        <button type="submit" id="submit" style='cursor: pointer;'>Save</button>
+      </div>
     </div>
 
   </div>
