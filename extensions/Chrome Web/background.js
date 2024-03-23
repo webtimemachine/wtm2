@@ -1,13 +1,14 @@
 import { getStorageData, refreshTokenData } from './auth.js';
 import { API_URL } from './consts.js';
 import { saveHistoryEntry } from './history-entries.js';
-
 import {
   handleDeleteHistoryEntry,
   handleGetHistory,
+  handleGetPreferences,
   handleLogin,
   handleLogout,
   handleSignUp,
+  handleUpdatePreferences,
 } from './message-handlers.js';
 
 const handleStartup = async () => {
@@ -37,7 +38,7 @@ const handleStartup = async () => {
  * @param {string} selector
  * @returns {string}
  */
-function DOMtoString(selector) {
+function DOMtoString (selector) {
   if (selector) {
     selector = document.querySelector(selector);
     if (!selector) return 'ERROR: querySelector failed to find node';
@@ -113,7 +114,12 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     case 'getSettingInfo':
       handleGetSettingInfo(chrome, sendResponse);
       return true;
-
+    case 'getPreferences':
+      handleGetPreferences(chrome, sendResponse);
+      return true;
+    case 'setPreferences':
+      handleUpdatePreferences(chrome, request, sendResponse);
+      return true;
     default:
       return false;
   }
