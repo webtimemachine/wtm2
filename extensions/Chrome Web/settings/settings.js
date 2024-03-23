@@ -4,7 +4,7 @@ import { API_URL } from '../consts.js'
 const closeSettingButton = document.getElementById('close-settings-button');
 
 closeSettingButton.addEventListener('click', function () {
-    window.location.replace('./popup.html');
+    window.location.replace('../popup.html');
 });
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -21,8 +21,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
-const expDateOption = document.getElementById('exp-date-button');
+const expDateOption = document.getElementById('preferences-button');
 
 expDateOption.addEventListener('click', function () {
-    window.location.replace('./expiration-date.html');
+    window.location.replace('./preferences.html');
 })
