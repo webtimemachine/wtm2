@@ -7,12 +7,13 @@ closeSettingButton.addEventListener('click', function () {
   window.location.replace('./settings.html');
 })
 
-// document.addEventListener('DOMContentLoaded', async () => {
-//   const getPreferencesRes = await chrome.runtime.sendMessage({ type: "getPreferences" });
+deleteButton.addEventListener('click', async () => {
+  const sendMessageResponse = await chrome.runtime.sendMessage({
+    type: "deleteUserAccount"
+  });
 
-//   if (getPreferencesRes.enableNavigationEntryExpiration) {
-//     expirationDaysToggle.setAttribute('checked', true)
-//     expirationDaysInput.removeAttribute('disabled')
-//     expirationDaysInput.value = getPreferencesRes.navigationEntryExpirationInDays
-//   }
-// });
+  if (sendMessageResponse.status == 200) {
+    await chrome.runtime.sendMessage({ type: 'logout' });
+    window.location.replace('../popup-sign-in.html');
+  }
+})

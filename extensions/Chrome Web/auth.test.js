@@ -210,4 +210,28 @@ describe('Should run all unit tests related to authorization', () => {
     expect(spyConsoleError).toHaveBeenCalledWith('Mock error');
     spyConsoleError.mockRestore();
   });
+
+  test('should return a successful response when delete a user account', async () => {
+    const user_info = {
+      accessToken: 'mockAccessToken',
+    }
+
+    const response = await auth.deleteUserAccount(user_info, API_URL);
+
+    expect(response.ok).toBe(true);
+  });
+
+  test('should log error when fetch delete user account function fails', async () => {
+    const user_info = {
+      accessToken: 'mockAccessToken',
+    }
+
+    global.fetch.mockImplementationOnce(() => Promise.reject('Mock error'));
+    const spyConsoleError = jest.spyOn(console, 'error').mockImplementation();
+
+    await auth.deleteUserAccount(user_info, API_URL);
+
+    expect(spyConsoleError).toHaveBeenCalledWith('Mock error');
+    spyConsoleError.mockRestore();
+  });
 });
