@@ -7,6 +7,13 @@ closeSettingButton.addEventListener('click', function () {
     window.location.replace('../popup.html');
 });
 
+const logoutButton = document.getElementById('logout-button');
+
+logoutButton.addEventListener('click', async () => {
+    await chrome.runtime.sendMessage({ type: 'logout' });
+    window.location.replace('../popup-sign-in.html');
+});
+
 document.addEventListener('DOMContentLoaded', async () => {
     const storageData = await chrome.runtime.sendMessage({
         type: 'getSettingInfo',
