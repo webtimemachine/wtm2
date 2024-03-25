@@ -8,25 +8,18 @@ const handleLogoutUser = async () => {
   window.location.replace('./popup-sign-in.html');
 };
 
-const logoutButton = document.getElementById('logout-button');
-logoutButton.addEventListener('click', () => {
-  handleLogoutUser();
-});
-
 // -- Config / Setting button -- //
 const configButton = document.getElementById('config-button');
 
 configButton.addEventListener('click', function () {
-  window.location.replace('./settings.html');
-});
+  window.location.replace('./settings/settings.html');
+})
 
 // -- Input and Search button -- //
 const searchInput = document.getElementById('input');
 const searchButton = document.getElementById('search-button');
 
 const refreshNavigationHistoryList = (getHistoryRes) => {
-  console.log('getHistoryRes', { getHistoryRes });
-
   loaderContainer.style.display = 'none';
   if (getHistoryRes && getHistoryRes.items?.length) {
     paginationData = new Pagination(getHistoryRes.count, ITEMS_PER_PAGE);
@@ -42,7 +35,7 @@ const refreshNavigationHistoryList = (getHistoryRes) => {
       const rightButton = document.getElementById('right-arrow');
       rightButton.setAttribute('disabled', true);
     } else {
-      rightButton.removeAttribute('disabled');
+      emptyHistoryList();
     }
 
     const paginationInfo = document.getElementById('pagination-info');
@@ -147,19 +140,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     search: '',
   });
 
-  if (getHistoryRes.error) {
+  if (getHistoryRes && getHistoryRes.error) {
     handleLogoutUser();
     return;
   }
-
-  // if (response.user) {
-  //   //Display user email connected & backend information
-  //   const userDiv = document.getElementById('user-connected');
-  //   userDiv.innerHTML = `User: ${response.user}`;
-
-  //   const apiDiv = document.getElementById('backend-connected');
-  //   apiDiv.innerHTML = `Backend API: ${API_URL}`;
-  // }
 
   loaderContainer.style.display = 'none';
   if (getHistoryRes && getHistoryRes.items?.length) {
@@ -168,10 +152,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     getHistoryRes.items.forEach((record) => {
       appendHistoryItem(record);
     });
-
-    //When popup is open, left arrow always is going to be disable
-    const leftButton = document.getElementById('left-arrow');
-    leftButton.setAttribute('disabled', true);
 
     if (getHistoryRes.count <= getHistoryRes.limit) {
       const rightButton = document.getElementById('right-arrow');
@@ -211,17 +191,29 @@ leftButton.addEventListener('click', async () => {
       appendHistoryItem(record);
     });
 
-    if (response.offset == 0) {
-      const leftButton = document.getElementById('left-arrow');
-      leftButton.setAttribute('disabled', true);
+    if (response.error) {
+      handleLogoutUser();
+      return;
     }
 
-    //When user move to the previous page, right arrow always is going to be enable
-    const rightButton = document.getElementById('right-arrow');
-    rightButton.removeAttribute('disabled');
+    loaderContainer.style.display = 'none';
+    if (response && response.items?.length) {
+      response.items.forEach((record) => {
+        appendHistoryItem(record);
+      });
 
-    const paginationInfo = document.getElementById('pagination-info');
-    paginationInfo.innerHTML = `${paginationData.getCurrentPage()} / ${paginationData.getTotalPages()}`;
+      if (response.offset == 0) {
+        const leftButton = document.getElementById('left-arrow');
+        leftButton.setAttribute('disabled', true);
+      }
+
+      //When user move to the previous page, right arrow always is going to be enable
+      const rightButton = document.getElementById('right-arrow');
+      rightButton.removeAttribute('disabled');
+
+      const paginationInfo = document.getElementById('pagination-info');
+      paginationInfo.innerHTML = `${paginationData.getCurrentPage()} / ${paginationData.getTotalPages()}`;
+    }
   }
 });
 
@@ -251,16 +243,28 @@ rightButton.addEventListener('click', async () => {
       appendHistoryItem(record);
     });
 
-    //When user move to the next page, left arrow always is going to be enable
-    const leftButton = document.getElementById('left-arrow');
-    leftButton.removeAttribute('disabled');
-
-    if (response.limit + response.offset >= response.count) {
-      const rightButton = document.getElementById('right-arrow');
-      rightButton.setAttribute('disabled', true);
+    if (response.error) {
+      handleLogoutUser();
+      return;
     }
 
-    const paginationInfo = document.getElementById('pagination-info');
-    paginationInfo.innerHTML = `${paginationData.getCurrentPage()} / ${paginationData.getTotalPages()}`;
+    loaderContainer.style.display = 'none';
+    if (response && response.items?.length) {
+      response.items.forEach((record) => {
+        appendHistoryItem(record);
+      });
+
+      //When user move to the next page, left arrow always is going to be enable
+      const leftButton = document.getElementById('left-arrow');
+      leftButton.removeAttribute('disabled');
+
+      if (response.limit + response.offset >= response.count) {
+        const rightButton = document.getElementById('right-arrow');
+        rightButton.setAttribute('disabled', true);
+      }
+
+      const paginationInfo = document.getElementById('pagination-info');
+      paginationInfo.innerHTML = `${paginationData.getCurrentPage()} / ${paginationData.getTotalPages()}`;
+    }
   }
 });

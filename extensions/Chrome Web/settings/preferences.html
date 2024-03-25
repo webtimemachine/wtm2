@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Web Time Machine</title>
+  <link rel="stylesheet" type="text/css" href="../styles.css">
+</head>
+
+<body>
+  <script defer src="preferences.js" type="module"></script>
+  <div class='title-container'>
+    <h1>Preferences</h1>
+    <div id='close-settings-button' class='title-icon'>
+      <svg xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 384 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+        <path
+          d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" />
+      </svg>
+    </div>
+  </div>
+  <div style='display: flex; flex-direction: column; min-height: 350px; padding-top: 8px; border-top: 1px solid #333'>
+    <div style='display: flex; align-items: center; padding: 0px 8px; justify-content: space-between;'>
+      <p>Enable expirantion date on History entries</p>
+      <label class="switch">
+        <input type="checkbox" id='expiration-days-toggle'>
+        <span class="slider round"></span>
+      </label>
+    </div>
+    <div
+      style='padding: 0px 8px; display: flex; flex-direction: column; height: 275px; justify-content: space-between;'>
+      <div style='display: flex; justify-content: space-between; align-items: center; padding-top: 8px;'>
+        <label>Expiration time in days:</label>
+        <input type="number" name="expiration-days" id="expiration-days" disabled='disabled' min='0' step='1'
+          style='width: 25%;'>
+      </div>
+      <div style='display: flex; justify-content: center;'>
+        <button type="submit" id="submit" style='cursor: pointer;'>Save</button>
+      </div>
+    </div>
+
+  </div>
+  <div>
+  </div>
+</body>
+
+</html>

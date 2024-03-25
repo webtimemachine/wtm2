@@ -3,7 +3,7 @@
 
 <head>
   <title>Web Time Machine</title>
-  <link rel="stylesheet" type="text/css" href="styles.css">
+  <link rel="stylesheet" type="text/css" href="../styles.css">
 </head>
 
 <body>
@@ -19,8 +19,13 @@
     </div>
   </div>
   <div style='display: flex; flex-direction: column; min-height: 350px; padding-top: 8px; border-top: 1px solid #333'>
-    <div style='display: flex; cursor: pointer; border-bottom: 1px solid #CCC; padding: 0px 8px;'>
-      <p>Expiration date</p>
+    <div style='display: flex; cursor: pointer; border-bottom: 1px solid #CCC; padding: 0px 8px;'
+      id='preferences-button'>
+      <p>Preferences</p>
+    </div>
+    <div style='display: flex; cursor: pointer; border-bottom: 1px solid #CCC; padding: 0px 8px; align-items: center;'
+      id='logout-button'>
+      <p>Logout</p>
     </div>
   </div>
   <div id='user-connected'></div>
