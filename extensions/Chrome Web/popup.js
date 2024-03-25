@@ -1,5 +1,4 @@
 import { Pagination } from './pagination.js';
-import { API_URL } from './consts.js';
 
 let paginationData = undefined;
 const ITEMS_PER_PAGE = 10;
@@ -22,22 +21,24 @@ configButton.addEventListener('click', function () {
 });
 
 // -- Input and Search button -- //
-const input = document.getElementById('input');
+const searchInput = document.getElementById('input');
 const searchButton = document.getElementById('search-button');
 
-const refreshNavigationHistoryList = (response) => {
-  loaderContainer.style.display = 'none';
-  if (response && response.items?.length) {
-    paginationData = new Pagination(response.count, ITEMS_PER_PAGE);
+const refreshNavigationHistoryList = (getHistoryRes) => {
+  console.log('getHistoryRes', { getHistoryRes });
 
-    response.items.forEach((record) => {
+  loaderContainer.style.display = 'none';
+  if (getHistoryRes && getHistoryRes.items?.length) {
+    paginationData = new Pagination(getHistoryRes.count, ITEMS_PER_PAGE);
+
+    getHistoryRes.items.forEach((record) => {
       appendHistoryItem(record);
     });
     //When popup is open, left arrow always is going to be disable
     const leftButton = document.getElementById('left-arrow');
     leftButton.setAttribute('disabled', true);
 
-    if (response.count <= response.limit) {
+    if (getHistoryRes.count <= getHistoryRes.limit) {
       const rightButton = document.getElementById('right-arrow');
       rightButton.setAttribute('disabled', true);
     } else {
@@ -47,28 +48,28 @@ const refreshNavigationHistoryList = (response) => {
     const paginationInfo = document.getElementById('pagination-info');
     paginationInfo.innerHTML = `${paginationData.getCurrentPage()} / ${paginationData.getTotalPages()}`;
   } else {
-    emptyHistoryList();
+    emptyHistoryList(getHistoryRes?.query);
   }
 };
 
 searchButton.addEventListener('click', async () => {
-  const searchText = input.value;
+  const searchText = searchInput.value;
   sitesList.innerHTML = '';
   loaderContainer.style.display = 'block';
 
-  const response = await chrome.runtime.sendMessage({
+  const getHistoryRes = await chrome.runtime.sendMessage({
     type: 'getHistory',
     offset: 0,
     limit: ITEMS_PER_PAGE,
     search: searchText,
   });
 
-  if (response.error) {
+  if (getHistoryRes.error) {
     handleLogoutUser();
     return;
   }
 
-  refreshNavigationHistoryList(response);
+  refreshNavigationHistoryList(getHistoryRes);
 });
 
 const sitesList = document.getElementById('sites-list');
@@ -98,12 +99,14 @@ const appendHistoryItem = (item) => {
   sitesList.appendChild(listItem);
 };
 
-const emptyHistoryList = () => {
+const emptyHistoryList = (query) => {
   //Display text
   const paragraph = document.createElement('p');
   paragraph.classList.add('no-records');
 
-  paragraph.textContent = 'There are no records saved. Start browsing!';
+  paragraph.textContent = query
+    ? 'No results found. Try different search terms!'
+    : 'Start browsing to populate your history!';
 
   sitesList.appendChild(paragraph);
 
@@ -116,11 +119,11 @@ const emptyHistoryList = () => {
 };
 
 const deleteItem = async (item) => {
-  const searchText = input.value;
+  const searchText = searchInput.value;
   sitesList.innerHTML = '';
   loaderContainer.style.display = 'block';
 
-  const response = await chrome.runtime.sendMessage({
+  const getHistoryRes = await chrome.runtime.sendMessage({
     type: 'deleteHistoryEntry',
     item,
     offset: 0,
@@ -128,23 +131,23 @@ const deleteItem = async (item) => {
     search: searchText,
   });
 
-  if (response.error) {
+  if (getHistoryRes.error) {
     handleLogoutUser();
     return;
   }
 
-  refreshNavigationHistoryList(response);
+  refreshNavigationHistoryList(getHistoryRes);
 };
 
 document.addEventListener('DOMContentLoaded', async () => {
-  const response = await chrome.runtime.sendMessage({
+  const getHistoryRes = await chrome.runtime.sendMessage({
     type: 'getHistory',
     offset: 0,
     limit: ITEMS_PER_PAGE,
     search: '',
   });
 
-  if (response.error) {
+  if (getHistoryRes.error) {
     handleLogoutUser();
     return;
   }
@@ -159,10 +162,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   // }
 
   loaderContainer.style.display = 'none';
-  if (response && response.items?.length) {
-    paginationData = new Pagination(response.count, ITEMS_PER_PAGE);
+  if (getHistoryRes && getHistoryRes.items?.length) {
+    paginationData = new Pagination(getHistoryRes.count, ITEMS_PER_PAGE);
 
-    response.items.forEach((record) => {
+    getHistoryRes.items.forEach((record) => {
       appendHistoryItem(record);
     });
 
@@ -170,14 +173,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     const leftButton = document.getElementById('left-arrow');
     leftButton.setAttribute('disabled', true);
 
-    if (response.count <= response.limit) {
+    if (getHistoryRes.count <= getHistoryRes.limit) {
       const rightButton = document.getElementById('right-arrow');
       rightButton.setAttribute('disabled', true);
     }
     const paginationInfo = document.getElementById('pagination-info');
     paginationInfo.innerHTML = `${paginationData.getCurrentPage()} / ${paginationData.getTotalPages()}`;
   } else {
-    emptyHistoryList();
+    emptyHistoryList(getHistoryRes?.query);
   }
 });
 
@@ -188,7 +191,7 @@ leftButton.addEventListener('click', async () => {
   paginationData.prevPage();
   sitesList.innerHTML = '';
   loaderContainer.style.display = 'block';
-  const searchText = input.value;
+  const searchText = searchInput.value;
 
   const response = await chrome.runtime.sendMessage({
     type: 'getHistory',
@@ -228,7 +231,7 @@ rightButton.addEventListener('click', async () => {
   paginationData.nextPage();
   sitesList.innerHTML = '';
   loaderContainer.style.display = 'block';
-  const searchText = input.value;
+  const searchText = searchInput.value;
 
   const response = await chrome.runtime.sendMessage({
     type: 'getHistory',
