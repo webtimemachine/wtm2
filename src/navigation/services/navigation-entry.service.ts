@@ -206,6 +206,7 @@ export class NavigationEntryService {
       offset,
       limit,
       count,
+      query,
       items: completeNavigationEntryDtos,
     });
   }
