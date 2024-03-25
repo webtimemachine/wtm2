@@ -32,6 +32,7 @@ export const handleGetHistory = async (chrome, request, sendResponse) => {
         request.offset,
         request.limit,
         request.search,
+        request.isSemantic
       );
       // Send the fetched history entries back as a response
       sendResponse(res);

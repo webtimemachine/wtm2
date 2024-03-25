@@ -67,7 +67,7 @@ export async function getHistoryEntries(
   offset,
   limit,
   query,
-  isSemantic
+  isSemantic,
   reexecuted = false,
 ) {
   try {
