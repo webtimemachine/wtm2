@@ -120,6 +120,9 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     case 'setPreferences':
       handleUpdatePreferences(chrome, request, sendResponse);
       return true;
+    case 'deleteUserAccount':
+      handleDeleteHistoryEntry(chrome, sendResponse);
+      return true;
     default:
       return false;
   }

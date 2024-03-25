@@ -4,6 +4,7 @@ import {
   getStorageData,
   getDeviceId,
   signUpUser,
+  deleteUserAccount,
 } from './auth.js';
 
 import { getHistoryEntries, deleteHistoryEntries } from './history-entries.js';
@@ -207,6 +208,33 @@ export const handleUpdatePreferences = async (chrome, request, sendResponse) => 
       );
       // Send the fetched history entries back as a response
       sendResponse(res);
+    } catch (error) {
+      // If an error occurs during fetching, send an error response
+      sendResponse({ error: true });
+    }
+  }
+};
+
+/**
+ * Function to handle user delete account and send the response.
+ * @param {Object} chrome - Chrome API or Chrome-specific functionality.
+ * @param {Function} sendResponse - Function to send the response back to the caller.
+ * @returns {Promise<void>}
+ */
+export const handleDeleteUserAccount = async (chrome, sendResponse) => {
+  // Check if the user is signed in
+  const storageData = await getStorageData(chrome);
+  if (storageData.userStatus) {
+    try {
+      const baseURL = storageData.baseURL || API_URL;
+
+      // Fetch to delete user account
+      const deleteUserAccountRes = await deleteUserAccount(
+        storageData.user_info,
+        baseURL
+      );
+      // Send the response to background js
+      sendResponse(deleteUserAccountRes);
     } catch (error) {
       // If an error occurs during fetching, send an error response
       sendResponse({ error: true });
