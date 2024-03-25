@@ -127,6 +127,7 @@ model NavigationEntryQuery {
   navigationEntry   NavigationEntry @relation(fields: [navigationEntryId], references: [id])
   query             Query           @relation(fields: [queryId], references: [id])
 
+  @@unique([navigationEntryId, queryId], name: "unique_navigation_query")
   @@map("navigation_entry_query")
 }
 
