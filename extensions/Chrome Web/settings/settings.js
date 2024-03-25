@@ -33,3 +33,9 @@ const expDateOption = document.getElementById('preferences-button');
 expDateOption.addEventListener('click', function () {
     window.location.replace('./preferences.html');
 })
+
+const deleteAccount = document.getElementById('delete-account-button');
+
+deleteAccount.addEventListener('click', function () {
+    window.location.replace('./delete-account.html');
+})
