@@ -7,6 +7,7 @@ import {
 } from './auth.js';
 
 import { getHistoryEntries, deleteHistoryEntries } from './history-entries.js';
+import { getUserPreferencies, updatePreferences } from './services/settings.js';
 
 /**
  * Handles the request to fetch browsing history entries.
@@ -153,5 +154,62 @@ export const handleSignUp = async (request, sendResponse) => {
   } catch (err) {
     // If an error occurs during sign up, send error response
     sendResponse({ error: true });
+  }
+};
+
+/**
+ * Retrive the user's preferences and send the response.
+ * @param {Object} chrome - Chrome API or Chrome-specific functionality.
+ * @param {Object} request - Object containing the request details.
+ * @param {Function} sendResponse - Function to send the response back to the caller.
+ * @returns {Promise<void>}
+ */
+export const handleGetPreferences = async (chrome, sendResponse) => {
+  // Check if the user is signed in
+  const storageData = await getStorageData(chrome);
+  if (storageData.userStatus) {
+    try {
+      const baseURL = storageData.baseURL || API_URL;
+
+      // Fetch browsing history entries
+      const res = await getUserPreferencies(
+        storageData.user_info,
+        baseURL
+      );
+      // Send the fetched history entries back as a response
+      sendResponse(res);
+    } catch (error) {
+      // If an error occurs during fetching, send an error response
+      sendResponse({ error: true });
+    }
+  }
+};
+
+/**
+ * Update the user's preferences and send the response.
+ * @param {Object} chrome - Chrome API or Chrome-specific functionality.
+ * @param {Object} request - Object containing the request details.
+ * @param {Function} sendResponse - Function to send the response back to the caller.
+ * @returns {Promise<void>}
+ */
+export const handleUpdatePreferences = async (chrome, request, sendResponse) => {
+  // Check if the user is signed in
+  const storageData = await getStorageData(chrome);
+  if (storageData.userStatus) {
+    try {
+      const baseURL = storageData.baseURL || API_URL;
+
+      // Fetch browsing history entries
+      const res = await updatePreferences(
+        storageData.user_info,
+        baseURL,
+        request.payload
+      );
+      // Send the fetched history entries back as a response
+      sendResponse(res);
+    } catch (error) {
+      // If an error occurs during fetching, send an error response
+      sendResponse({ error: true });
+    }
   }
 };
