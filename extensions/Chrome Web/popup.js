@@ -1,5 +1,4 @@
 import { Pagination } from './pagination.js';
-import { API_URL } from './consts.js';
 
 let paginationData = undefined;
 const ITEMS_PER_PAGE = 10;
@@ -8,11 +7,6 @@ const handleLogoutUser = async () => {
     await chrome.runtime.sendMessage({ type: 'logout' });
     window.location.replace('./popup-sign-in.html');
 };
-
-const logoutButton = document.getElementById('logout-button');
-logoutButton.addEventListener('click', () => {
-    handleLogoutUser();
-});
 
 // -- Config / Setting button -- //
 const configButton = document.getElementById('config-button');
