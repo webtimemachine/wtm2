@@ -1,5 +1,3 @@
-import { API_URL } from '../consts.js'
-
 const expirationDaysToggle = document.getElementById('expiration-days-toggle');
 const expirationDaysInput = document.getElementById('expiration-days');
 const closeSettingButton = document.getElementById('close-settings-button');
