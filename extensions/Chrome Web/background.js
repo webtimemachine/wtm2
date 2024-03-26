@@ -3,6 +3,7 @@ import { API_URL } from './consts.js';
 import { saveHistoryEntry } from './history-entries.js';
 import {
   handleDeleteHistoryEntry,
+  handleDeleteUserAccount,
   handleGetHistory,
   handleGetPreferences,
   handleLogin,
@@ -121,7 +122,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       handleUpdatePreferences(chrome, request, sendResponse);
       return true;
     case 'deleteUserAccount':
-      handleDeleteHistoryEntry(chrome, sendResponse);
+      handleDeleteUserAccount(chrome, sendResponse);
       return true;
     default:
       return false;
