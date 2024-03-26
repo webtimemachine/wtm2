@@ -7,9 +7,9 @@
 </head>
 
 <body>
-  <script defer src="settings.js" type="module"></script>
+  <script defer src="delete-account.js" type="module"></script>
   <div class='title-container'>
-    <h1>Settings</h1>
+    <h1>Delete Account</h1>
     <div id='close-settings-button' class='title-icon'>
       <svg xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 384 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
@@ -19,22 +19,19 @@
     </div>
   </div>
   <div style='display: flex; flex-direction: column; min-height: 350px; padding-top: 8px; border-top: 1px solid #333'>
-    <div style='display: flex; cursor: pointer; border-bottom: 1px solid #CCC; padding: 0px 8px;'
-      id='preferences-button'>
-      <p>Preferences</p>
+    <div
+      style='padding: 0px 8px; display: flex; flex-direction: column; height: 275px; justify-content: space-between;'>
+      <div style='display: flex; justify-content: space-between; align-items: center; padding-top: 8px;'>
+        <p>Do you confirm that you want to delete your account data? Once this information is deleted, it cannot be
+          recovered again.</p>
+
+      </div>
+      <div style='display: flex; justify-content: center;'>
+        <button type="submit" id="delete" style='cursor: pointer;'>Confirm Delete Account</button>
+      </div>
     </div>
-    <div style='display: flex; cursor: pointer; border-bottom: 1px solid #CCC; padding: 0px 8px; align-items: center;'
-      id='logout-button'>
-      <p>Logout</p>
-    </div>
+
   </div>
-  <div
-    style='display: flex; cursor: pointer; border-bottom: 1px solid #CCC; border-top: 1px solid #CCC; padding: 0px 8px; align-items: center; color: red;'
-    id='delete-account-button'>
-    <p>Delete Account</p>
-  </div>
-  <div id='user-connected'></div>
-  <div id='backend-connected'></div>
   <div>
   </div>
 </body>
