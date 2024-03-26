@@ -66,16 +66,19 @@ h4 {
   background-color: rgba(72, 72, 72, 0.027);
 }
 
-#sites-list div {
-  flex-grow: 1;
-  display: flex;
+.list-container div {
   justify-content: space-between;
   align-items: center;
   background-color: white;
-  box-shadow: 0px 0px 100px rgba(0, 0, 0, 0.23);
   border-radius: 6px;
   margin-bottom: 8px;
   padding: 8px;
+}
+
+#sites-list div {
+  flex-grow: 1;
+  display: flex;
+  box-shadow: 0px 0px 100px rgba(0, 0, 0, 0.23);
 }
 
 input[type="text"],
@@ -136,13 +139,13 @@ label {
   cursor: pointer;
 }
 
-#sites-list .truncate {
+.list-container .truncate {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
 
-#sites-list .date {
+.list-container .date {
   font-size: 0.8em;
   color: #0000007c;
   /* Bootstrap primary color for example */
@@ -174,7 +177,7 @@ label {
 }
 
 .pagination-container {
-  display: flex;
+  display: none;
   width: 100%;
   justify-content: space-around;
   padding-top: 8px;
@@ -325,4 +328,23 @@ input:checked+.slider:before {
 
 .visible {
   display: block;
+}
+
+.visible-flex {
+  display: flex;
+}
+
+#queries-list > div > p {
+  padding: 5px;
+  margin-bottom: 10px;
+}
+
+#queries-list>div {
+  margin-bottom: 20px;
+  margin-top: 20px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.23);
+}
+
+#queries-list div div {
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.23);
 }
