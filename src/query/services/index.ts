@@ -52,8 +52,12 @@ export class QueryService {
     queryParams: GetPaginationsParamsDto,
   ): Promise<PaginationResponse<QueryResultDto>> {
     const { limit, offset } = queryParams;
-    const count = await this.prismaService.navigationEntryQuery.count({
-      where: { navigationEntry: { userId: jwtContext.user.id } },
+    const count = await this.prismaService.query.count({
+      where: {
+        navigationEntries: {
+          some: { navigationEntry: { userId: jwtContext.user.id } },
+        },
+      },
     });
     const results: QueryResult[] = await this.prismaService.query.findMany({
       where: {
