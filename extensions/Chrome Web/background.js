@@ -6,6 +6,7 @@ import {
   handleDeleteUserAccount,
   handleGetHistory,
   handleGetPreferences,
+  handleGetQueries,
   handleLogin,
   handleLogout,
   handleSignUp,
@@ -137,6 +138,9 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   switch (request.type) {
     case 'getHistory':
       handleGetHistory(chrome, request, sendResponse);
+      return true;
+    case 'getQueries':
+      handleGetQueries(chrome, request, sendResponse);
       return true;
     case 'login':
       handleLogin(chrome, request, sendResponse);
