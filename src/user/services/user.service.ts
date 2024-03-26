@@ -1,8 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { User } from '@prisma/client';
 
-import { PrismaService } from '../../common/services';
 import { JwtContext } from '../../auth/interfaces';
+import { PrismaService } from '../../common/services';
 
 import {
   UpdateUserDeviceInput,
@@ -11,10 +11,11 @@ import {
   UserPreferencesDto,
 } from '../dtos';
 
-import { plainToInstance } from 'class-transformer';
-import { CompleteUserDevice, completeUserDeviceInclude } from '../types';
-import { UserDeviceDto } from '../dtos/user-device.dto';
+import { plainToClassFromExist, plainToInstance } from 'class-transformer';
+import { MessageResponse } from '../../common/dtos';
 import { DeviceDto } from '../dtos/device.dto';
+import { UserDeviceDto } from '../dtos/user-device.dto';
+import { CompleteUserDevice, completeUserDeviceInclude } from '../types';
 
 @Injectable()
 export class UserService {
@@ -136,5 +137,59 @@ export class UserService {
       });
 
     return UserService.userDeviceToDto(jwtContext, userDevice);
+  }
+
+  async delete(jwtContext: JwtContext): Promise<MessageResponse> {
+    await this.prismaService.$transaction(async (prismaClient) => {
+      await prismaClient.userPreferences.deleteMany({
+        where: {
+          userId: jwtContext.user.id,
+        },
+      });
+
+      await prismaClient.navigationEntry.deleteMany({
+        where: {
+          userId: jwtContext.user.id,
+        },
+      });
+
+      await prismaClient.session.deleteMany({
+        where: {
+          userDevice: { userId: jwtContext.user.id },
+        },
+      });
+
+      await prismaClient.userDevice.deleteMany({
+        where: {
+          userId: jwtContext.user.id,
+        },
+      });
+
+      await prismaClient.user.deleteMany({
+        where: {
+          id: jwtContext.user.id,
+        },
+      });
+
+      const orphanDevices = await prismaClient.device.findMany({
+        where: {
+          userDevices: {
+            none: {},
+          },
+        },
+      });
+
+      const deviceIdsToDelete = orphanDevices.map((device) => device.id);
+
+      await prismaClient.device.deleteMany({
+        where: {
+          id: { in: deviceIdsToDelete },
+        },
+      });
+    });
+
+    return plainToClassFromExist(new MessageResponse(), {
+      message: 'User deleted',
+    });
   }
 }

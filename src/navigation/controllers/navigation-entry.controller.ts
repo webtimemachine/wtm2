@@ -4,30 +4,32 @@ import {
   Delete,
   Get,
   HttpCode,
+  Logger,
   Param,
   ParseIntPipe,
   Post,
   Query,
 } from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
-import { NavigationEntryService } from '../services';
+import { JwtAccessToken, JwtRequestContext } from 'src/auth/decorators';
+import { JwtContext } from 'src/auth/interfaces';
+import {
+  ApiBadRequestMessageResponse,
+  ApiInternalServerErrorMessageResponse,
+  ApiPaginationResponse,
+} from 'src/common/decorators';
+import { MessageResponse, PaginationResponse } from 'src/common/dtos';
 import {
   CompleteNavigationEntryDto,
   CreateNavigationEntryInputDto,
 } from '../dtos';
-import {
-  ApiBadRequestMessageResponse,
-  ApiInternalServerErrorMessageResponse,
-} from 'src/common/decorators';
-import { JwtAccessToken, JwtRequestContext } from 'src/auth/decorators';
-import { JwtContext } from 'src/auth/interfaces';
 import { GetNavigationEntryDto } from '../dtos/get-navigation-entry.dto';
-import { MessageResponse, PaginationResponse } from 'src/common/dtos';
-import { ApiPaginationResponse } from 'src/common/decorators';
+import { NavigationEntryService } from '../services';
 
 @ApiTags('Navigation Entry')
 @Controller('navigation-entry')
 export class NavigationEntryController {
+  private readonly logger = new Logger(NavigationEntryController.name);
   constructor(private readonly navigationService: NavigationEntryService) {}
 
   @ApiInternalServerErrorMessageResponse()
