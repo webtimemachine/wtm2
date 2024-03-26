@@ -8,12 +8,10 @@ closeSettingButton.addEventListener('click', function () {
 })
 
 deleteButton.addEventListener('click', async () => {
-  const sendMessageResponse = await chrome.runtime.sendMessage({
+  await chrome.runtime.sendMessage({
     type: "deleteUserAccount"
   });
 
-  if (sendMessageResponse.status == 200) {
-    await chrome.runtime.sendMessage({ type: 'logout' });
-    window.location.replace('../popup-sign-in.html');
-  }
+  await chrome.runtime.sendMessage({ type: 'logout' });
+  window.location.replace('../popup-sign-in.html');
 })
