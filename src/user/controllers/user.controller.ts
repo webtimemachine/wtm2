@@ -1,15 +1,19 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
+  HttpCode,
+  Logger,
   Param,
   ParseIntPipe,
   Put,
 } from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
-import { UserService } from '../services';
 import { JwtAccessToken, JwtRequestContext } from 'src/auth/decorators';
 import { JwtContext } from 'src/auth/interfaces';
+import { ApiInternalServerErrorMessageResponse } from '../../common/decorators';
+import { MessageResponse } from '../../common/dtos';
 import {
   UpdateUserDeviceInput,
   UpdateUserPreferencesInput,
@@ -17,10 +21,12 @@ import {
   UserPreferencesDto,
 } from '../dtos';
 import { UserDeviceDto } from '../dtos/user-device.dto';
+import { UserService } from '../services';
 
 @ApiTags('User')
 @Controller('user')
 export class UserController {
+  private readonly logger = new Logger(UserController.name);
   constructor(private readonly userService: UserService) {}
 
   @ApiOkResponse({
@@ -102,5 +108,16 @@ export class UserController {
       userDeviceId,
       updateUserDeviceInput,
     );
+  }
+
+  @ApiInternalServerErrorMessageResponse()
+  @ApiOkResponse({
+    type: MessageResponse,
+  })
+  @JwtAccessToken([])
+  @HttpCode(200)
+  @Delete('')
+  delete(@JwtRequestContext() context: JwtContext): Promise<MessageResponse> {
+    return this.userService.delete(context);
   }
 }

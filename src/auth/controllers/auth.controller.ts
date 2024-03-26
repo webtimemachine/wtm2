@@ -3,32 +3,34 @@ import {
   Controller,
   Get,
   HttpCode,
+  Logger,
   Post,
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { AuthService } from '../services';
-import { ApiTags, ApiOkResponse, ApiBody } from '@nestjs/swagger';
+import { ApiBody, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import {
   ApiBadRequestMessageResponse,
   ApiConflictMessageResponse,
   ApiInternalServerErrorMessageResponse,
   ApiUnauthorizedMessageResponse,
 } from '../../common/decorators';
+import { JwtRefreshToken, JwtRequestContext } from '../decorators';
 import {
   LoginRequestDto,
   LoginResponseDto,
+  RefreshResponseDto,
   SignUpRequestDto,
   SignUpResponseDto,
 } from '../dtos';
 import { LocalAuthGuard } from '../guards';
-import { JwtRefreshToken, JwtRequestContext } from '../decorators';
 import { JwtRefreshContext } from '../interfaces';
-import { RefreshResponseDto } from '../dtos';
+import { AuthService } from '../services';
 
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
+  private readonly logger = new Logger(AuthController.name);
   constructor(private readonly authService: AuthService) {}
 
   @ApiInternalServerErrorMessageResponse()
