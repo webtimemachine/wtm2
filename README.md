@@ -24,6 +24,7 @@ Also you can run the ngrok to get a public access to your API. That's so useful 
 1. Visit the [Ngrok website](https://ngrok.com/) and sign up for an account.
 2. After signing up, navigate to the dashboard to obtain your authentication token and domain
 3. Run the following command:
+
 ```
 docker run --net=host -it -e NGROK_AUTHTOKEN=2L3OvbfDz... ngrok/ngrok:latest http --domain=youronwdomain.ngrok-free.app API_PORT
 ```
@@ -54,7 +55,7 @@ If you want to use Web Time Machine app saving and managing your own navigation 
   - [Running the app](#running-the-app)
   - [Open API Docs](#open-api-docs)
 - [How to deploy your own Backend of WTM](#how-to-deploy-your-own-backend-of-wtm)
-    - [Deploy WTM on Vercel](#deploy-wtm-on-vercel)
+  - [Deploy WTM on Vercel](#deploy-wtm-on-vercel)
   - [Create a Vercel Postgres Serverless SQL](#create-a-vercel-postgres-serverless-sql)
   - [Set the environment variables](#set-the-environment-variables)
 - [Chrome Extension](#chrome-extension)
@@ -83,10 +84,10 @@ To run the project in a local environment create a .env file on the root of the 
    - Example: **`BASE_URL='http://localhost:5000'`**
    - Usage: Defines the base URL of the application. This can be useful for generating absolute URLs within the application or for configuring external services to communicate with the application.
 3. **DATABASE_URL**:
-   - Example: **`DATABASE_URL='postgres://myuser:mypassword@localhost:5433/web-time-machine'`\*\*
+   - Example: \*\*`DATABASE_URL='postgres://myuser:mypassword@localhost:5433/web-time-machine'`\*\*
    - Usage: Contains the connection URL for the PostgreSQL database used by the application. It typically includes the username, password (hidden here), host, port, and database name.
 4. **DATABASE_URL_NON_POOLING**:
-   - Example: **`DATABASE_URL_NON_POOLING='postgres://myuser:mypassword@localhost:5433/web-time-machine'`\*\*
+   - Example: \*\*`DATABASE_URL_NON_POOLING='postgres://myuser:mypassword@localhost:5433/web-time-machine'`\*\*
    - Usage: Contains the connection URL for the PostgreSQL database used by the migrations. It typically includes the username, password (hidden here), host, port, and database name.
 5. **BCRYPT_SALT**:
    - Example: **`BCRYPT_SALT=10`**
@@ -112,6 +113,9 @@ To run the project in a local environment create a .env file on the root of the 
 12. **JWT_PARTIAL_SECRET**:
     - Example: **`JWT_PARTIAL_SECRET=0f0d7c71-f0a0-421f-a0c4-9152072281b5`**
     - Usage: It seems to be another secret key related to JWT, but its specific usage is not clear from the provided context.
+13. **EMAIL_URI**:
+    - Example: **`EMAIL_URI='smtps://mail@gmail.com:password@smtp.gmail.com'`**
+    - Usage: SMTP mailer.
 
 You will also need to set this env variables as secrets on your GitHub repository for the db migrations GitHub action to work properly.
 
