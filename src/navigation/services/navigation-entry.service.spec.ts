@@ -1,16 +1,16 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { PrismaClient, UserType } from '@prisma/client';
+import { JWTPayload, JwtContext } from 'src/auth/interfaces';
+import { PaginationResponse } from 'src/common/dtos';
 import { CommonTestingModule } from '../../common/common.testing.module';
 import { PrismaService } from '../../common/services';
-import { PrismaClient, UserType } from '@prisma/client';
-import { NavigationEntryService } from './navigation-entry.service';
-import { JWTPayload, JwtContext } from 'src/auth/interfaces';
 import {
   CompleteNavigationEntryDto,
   CreateNavigationEntryInputDto,
 } from '../dtos';
-import { PaginationResponse } from 'src/common/dtos';
 import { GetNavigationEntryDto } from '../dtos/get-navigation-entry.dto';
 import { CompleteNavigationEntry } from '../types';
+import { NavigationEntryService } from './navigation-entry.service';
 
 jest.mock('../../common/services/prisma.service');
 
@@ -29,6 +29,7 @@ const existingUser = {
   createdAt: new Date(),
   updateAt: new Date(),
   deletedAt: null,
+  recoveryCode: null,
   userPreferences: {
     id: BigInt(1),
     userId: BigInt(1),

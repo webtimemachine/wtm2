@@ -1,6 +1,10 @@
-export { SignUpResponseDto } from './signup-response.dto';
-export { SignUpRequestDto } from './signup-request.dto';
+export { InitiatePasswordRecoveryDto } from './initiate-password-recovery.dto';
 export { LoginRequestDto } from './login-request.dto';
 export { LoginResponseDto } from './login-response.dto';
-export { UserResponseDto } from './user-response.dto';
+export { PasswordRecoveryCheckDto } from './password-recovery-check.dto';
+export { RecoverNewPasswordDto } from './recover-new-password.dto';
+export { RecoveryResponseDto } from './recovery-response.dto';
 export { RefreshResponseDto } from './refresh-response.dto';
+export { SignUpRequestDto } from './signup-request.dto';
+export { SignUpResponseDto } from './signup-response.dto';
+export { UserResponseDto } from './user-response.dto';

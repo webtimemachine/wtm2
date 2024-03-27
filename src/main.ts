@@ -1,14 +1,14 @@
-import { NestFactory } from '@nestjs/core';
 import { Logger, ValidationPipe } from '@nestjs/common';
+import { NestFactory } from '@nestjs/core';
 
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { SecuritySchemeObject } from '@nestjs/swagger/dist/interfaces/open-api-spec.interface';
 
+import * as bodyParser from 'body-parser';
 import { AppModule } from './app.module';
 import { appEnv } from './config';
-import { options } from './swagger-options';
-import * as bodyParser from 'body-parser';
 import { getVersion } from './getVersion';
+import { options } from './swagger-options';
 
 async function bootstrap() {
   const logger = new Logger('bootstrap');
@@ -40,6 +40,7 @@ async function bootstrap() {
     .setVersion(version)
     .addBearerAuth(bearerAuthJWT, 'accessToken')
     .addBearerAuth(bearerAuthJWT, 'refreshToken')
+    .addBearerAuth(bearerAuthJWT, 'recoveryToken')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

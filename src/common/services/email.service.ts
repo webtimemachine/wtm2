@@ -10,7 +10,6 @@ export class EmailService {
   async sendPasswordResetEmail(
     to: string,
     randomPassword: string,
-    firstName: string,
   ): Promise<void> {
     try {
       await this.mailerService.sendMail({
@@ -20,7 +19,7 @@ export class EmailService {
         context: {
           to,
           randomPassword,
-          firstName,
+          firstName: 'user',
         },
       });
       this.logger.log(`Password reset email sent to ${to}`);
