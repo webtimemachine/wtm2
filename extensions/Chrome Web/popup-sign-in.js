@@ -11,6 +11,11 @@ signUpLink.addEventListener('click', () => {
   window.location.replace('./popup-sign-up.html');
 });
 
+const recoveryPassLink = document.querySelector('#recovery-pass-link');
+recoveryPassLink.addEventListener('click', () => {
+  window.location.replace('./recovery-pass/recovery-email.html');
+});
+
 document.querySelector('form').addEventListener('submit', async (event) => {
   event.preventDefault();
 
