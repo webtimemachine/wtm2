@@ -1,11 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { Query } from '@prisma/client';
+import { Query, Prisma } from '@prisma/client';
 import { PrismaService } from '../../common/services';
 import { JwtContext } from 'src/auth/interfaces';
 import { PaginationResponse } from '../../common/dtos';
-import { QueryResultDto } from '../dtos/queryResult.dto';
+import { QueryResultDto, GetQueriesDto } from '../dtos';
 import { SimpleNavigationEntryDto } from '../../navigation/dtos/simple-navigation-entry.dto';
-import { GetPaginationsParamsDto } from '../../common/dtos';
 import { plainToInstance } from 'class-transformer';
 import { QueryResult, queryResultInclude } from '../types';
 
@@ -49,14 +48,19 @@ export class QueryService {
 
   async getQueries(
     jwtContext: JwtContext,
-    queryParams: GetPaginationsParamsDto,
+    queryParams: GetQueriesDto,
   ): Promise<PaginationResponse<QueryResultDto>> {
+    const queryFilter: Prisma.StringFilter<'Query'> = {
+      contains: queryParams.query,
+      mode: 'insensitive',
+    };
     const { limit, offset } = queryParams;
     const count = await this.prismaService.query.count({
       where: {
         navigationEntries: {
           some: { navigationEntry: { userId: jwtContext.user.id } },
         },
+        query: queryParams.query ? queryFilter : undefined,
       },
     });
     const results: QueryResult[] = await this.prismaService.query.findMany({
@@ -64,6 +68,7 @@ export class QueryService {
         navigationEntries: {
           some: { navigationEntry: { userId: jwtContext.user.id } },
         },
+        query: queryParams.query ? queryFilter : undefined,
       },
       include: queryResultInclude,
       skip: offset,
