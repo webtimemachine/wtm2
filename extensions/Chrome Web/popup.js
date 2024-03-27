@@ -175,15 +175,70 @@ const deleteItem = async (item) => {
 };
 
 
+const openQueryResults = (openIcon, closeIcon, container) => {
+  document.querySelectorAll('.results').forEach(element => {
+    element.classList.add('hidden');
+  })
+  document.querySelectorAll('.close-results-icon').forEach(element => {
+    element.classList.add('hidden');
+    element.classList.remove('visible-flex');
+  })
+
+  document.querySelectorAll('.open-results-icon').forEach(element => {
+    element.classList.add('visible-flex');
+    element.classList.remove('hidden');
+  })
+  container.classList.toggle('hidden');
+  
+  closeIcon.classList.toggle('hidden');
+  closeIcon.classList.toggle('visible-flex');
+  openIcon.classList.toggle('hidden');
+  openIcon.classList.toggle('visible-flex');}
+
+const closeQueryResults = (icon1, icon2, container) => {
+    icon1.classList.toggle('hidden');
+    icon1.classList.toggle('visible-flex');
+    icon2.classList.toggle('hidden');
+    icon2.classList.toggle('visible-flex');
+    container.classList.toggle('hidden');
+}
+
 // Function to create and append query item to list
 const appendQueryItem = (item) => {
   const queryItem = document.createElement('div');
+  const queryHeader = document.createElement('div');
+  const resultsContainer = document.createElement('div');
   const query = document.createElement('p');
+  const openIcon = document.createElement('img');
+  const closeIcon = document.createElement('img');
+
+  resultsContainer.classList.add('results', 'hidden')
+
+  openIcon.src = './icons/chevron-down.svg';
+  openIcon.alt = 'Open results';
+  openIcon.classList.add('visible-flex', 'open-results-icon')
+  closeIcon.src = './icons/chevron-up.svg';
+  closeIcon.alt = 'Close results';
+  closeIcon.classList.add('hidden', 'close-results-icon')
+
+  openIcon.addEventListener('click', (evt) => {
+    openQueryResults(evt.target, closeIcon, resultsContainer)
+  });
+  
+  closeIcon.addEventListener('click', (evt) => {
+    closeQueryResults(evt.target, openIcon, resultsContainer);
+  });
+
   query.textContent = item.query;
 
-  queryItem.appendChild(query);
+  queryHeader.classList.add('query-header')
+  queryHeader.appendChild(query);
+  queryHeader.appendChild(closeIcon);
+  queryHeader.appendChild(openIcon);
+  queryItem.appendChild(queryHeader)
+
   item.results.forEach(result => {
-    const resultsContainer = document.createElement('div');
+    const resultContainer = document.createElement('div');
     const anchor = document.createElement('a');
     const urlResult = document.createElement('p');
     urlResult.classList.add('truncate');
@@ -191,7 +246,8 @@ const appendQueryItem = (item) => {
     anchor.href = result.url;
     anchor.target = '_blank';
     anchor.appendChild(urlResult);
-    resultsContainer.appendChild(anchor)
+    resultContainer.appendChild(anchor)
+    resultsContainer.appendChild(resultContainer);
     queryItem.appendChild(resultsContainer);
   })
   queriesList.appendChild(queryItem);

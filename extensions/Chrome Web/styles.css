@@ -35,11 +35,14 @@ h4 {
 }
 
 .list-container img {
-  display: flex;
   width: 16px;
   height: 16px;
   padding-left: 8px;
   cursor: pointer;
+}
+
+#sites-list img{
+  display: flex;
 }
 
 .list-container p {
@@ -330,6 +333,10 @@ input:checked+.slider:before {
   display: block;
 }
 
+.hidden{
+  display: none;
+}
+
 .visible-flex {
   display: flex;
 }
@@ -345,6 +352,11 @@ input:checked+.slider:before {
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.23);
 }
 
-#queries-list div div {
+#queries-list div div:not(.query-header,.results) {
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.23);
+}
+
+.query-header{
+  flex-grow: 1;
+  display: flex;
 }
