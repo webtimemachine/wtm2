@@ -57,6 +57,10 @@ const searchInput = document.getElementById('input');
 const searchButton = document.getElementById('search-button');
 const semanticCheckbox = document.getElementById('semantic-toggle');
 
+// Queries tab
+const searchQueryButton = document.getElementById('search-button-query-filter');
+const searchQueryInput = document.getElementById('input-query-filter');
+
 const refreshNavigationHistoryList = (getHistoryRes) => {
   loaderContainer.style.display = 'none';
   if (getHistoryRes && getHistoryRes.items?.length) {
@@ -83,6 +87,31 @@ const refreshNavigationHistoryList = (getHistoryRes) => {
   }
 };
 
+
+const refreshNavigationQueryList = (getQueryRes) => {
+  loaderContainer.style.display = 'none';
+  console.log(getQueryRes);
+  if (getQueryRes && getQueryRes.items?.length) {
+    paginationDataQueries = new Pagination(getQueryRes.count, ITEMS_PER_PAGE);
+    getQueryRes.items.forEach(appendQueryItem)
+    //When popup is open, left arrow always is going to be disable
+    const leftButton = document.getElementById('left-arrow-query');
+    const rightButton = document.getElementById('right-arrow-query');
+    leftButton.setAttribute('disabled', true);
+
+    if (getQueryRes.count <= getQueryRes.limit) {
+      rightButton.setAttribute('disabled', true);
+    }
+    else{
+      rightButton.removeAttribute('disabled')
+    }
+    const paginationInfo = document.getElementById('pagination-info-query');
+    paginationInfo.innerHTML = `${paginationDataQueries.getCurrentPage()} / ${paginationDataQueries.getTotalPages()}`;
+  } else {
+    emptyQueriesResult()
+  }
+};
+
 searchButton.addEventListener('click', async () => {
   const searchText = searchInput.value;
   sitesList.innerHTML = '';
@@ -103,6 +132,28 @@ searchButton.addEventListener('click', async () => {
 
   refreshNavigationHistoryList(getHistoryRes);
 });
+
+
+searchQueryButton.addEventListener('click', async () => {
+  const searchText = searchQueryInput.value;
+  queriesList.innerHTML = '';
+  loaderContainer.style.display = 'block';
+
+  const getQueriesRes = await chrome.runtime.sendMessage({
+    type: 'getQueries',
+    offset: 0,
+    limit: ITEMS_PER_PAGE,
+    query: searchText,
+  });
+
+  if (getQueriesRes.error) {
+    handleLogoutUser();
+    return;
+  }
+
+  refreshNavigationQueryList(getQueriesRes);
+});
+
 
 const sitesList = document.getElementById('sites-list');
 const queriesList = document.getElementById('queries-list');
@@ -135,6 +186,7 @@ const appendHistoryItem = (item) => {
 
 const emptyHistoryList = (query) => {
   //Display text
+  const paginationInfo = document.getElementById('pagination-info');
   const paragraph = document.createElement('p');
   paragraph.classList.add('no-records');
 
@@ -150,6 +202,7 @@ const emptyHistoryList = (query) => {
 
   const rightButton = document.getElementById('right-arrow');
   rightButton.setAttribute('disabled', true);
+  paginationInfo.innerHTML = 'Empty'
 };
 
 const deleteItem = async (item) => {
@@ -257,10 +310,11 @@ const appendQueryItem = (item) => {
 
 const emptyQueriesResult = () => {
   //Display text
+  const paginationInfo = document.getElementById('pagination-info-query');
   const paragraph = document.createElement('p');
   paragraph.classList.add('no-records');
 
-  paragraph.textContent = 'No results found. Try using the semantic search feature!'
+  paragraph.textContent = 'No results found.\nStart using the semantic search feature or refine the search term'
 
   queriesList.appendChild(paragraph);
 
@@ -270,6 +324,7 @@ const emptyQueriesResult = () => {
 
   const rightButton = document.getElementById('right-arrow-query');
   rightButton.setAttribute('disabled', true);
+  paginationInfo.innerHTML = 'Empty'
 };
 
 
