@@ -337,13 +337,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     isSemantic: false
   });
 
+
+  if (getHistoryRes && getHistoryRes.error) {
+    handleLogoutUser();
+    return;
+  }
+
   const getQueriesRes = await chrome.runtime.sendMessage({
     type: 'getQueries',
     offset: 0,
     limit: ITEMS_PER_PAGE,
   });
-
-  if ((getHistoryRes && getHistoryRes.error) || (getQueriesRes && getQueriesRes.error)) {
+  
+  if (getQueriesRes && getQueriesRes.error) {
     handleLogoutUser();
     return;
   }
