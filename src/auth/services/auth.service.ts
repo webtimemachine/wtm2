@@ -416,7 +416,7 @@ export class AuthService {
     const hashedPassword = bcrypt.hashSync(password, appEnv.BCRYPT_SALT);
     const updatedUser = await this.prismaService.$transaction(
       async (prismaClient) => {
-        const updatedUserData = await prismaClient.user.update({
+        await prismaClient.user.update({
           where: {
             id: user.id,
           },
