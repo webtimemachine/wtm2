@@ -1,19 +1,21 @@
 import {
   ConflictException,
+  ForbiddenException,
   Injectable,
   Logger,
   UnauthorizedException,
 } from '@nestjs/common';
 
 import { JwtService } from '@nestjs/jwt';
-import { JWTPayload, JwtRefreshContext } from '../interfaces';
+import { JWTPayload, JwtContext, JwtRefreshContext } from '../interfaces';
 
-import { plainToInstance } from 'class-transformer';
-import { createHash } from 'crypto';
 import * as bcrypt from 'bcrypt';
+import { plainToClassFromExist, plainToInstance } from 'class-transformer';
+import { createHash } from 'crypto';
 
 import { Device, UserDevice, UserType } from '@prisma/client';
 
+import { UserService } from '../../user/services';
 import {
   CompleteSession,
   CompleteUser,
@@ -21,20 +23,25 @@ import {
   completeUserDeviceInclude,
   completeUserInclude,
 } from '../../user/types';
-import { UserService } from '../../user/services';
 
 import {
+  InitiatePasswordRecoveryDto,
   LoginRequestDto,
   LoginResponseDto,
+  PasswordRecoveryCheckDto,
+  RecoverNewPasswordDto,
+  RecoveryResponseDto,
   SignUpRequestDto,
   SignUpResponseDto,
 } from '../dtos';
 
 import { RefreshResponseDto } from '../dtos';
 
-import { PrismaService } from '../../common/services';
 import { hashValue } from '../../common/helpers/bcryptjs.helper';
+import { EmailService, PrismaService } from '../../common/services';
 
+import { DataResponse, MessageResponse } from '../../common/dtos';
+import { generateNumericCode } from '../../common/helpers';
 import { appEnv } from '../../config';
 
 @Injectable()
@@ -44,6 +51,7 @@ export class AuthService {
   constructor(
     private readonly prismaService: PrismaService,
     private readonly jwtService: JwtService,
+    private readonly emailService: EmailService,
   ) {}
 
   async signup(requestSignupDto: SignUpRequestDto): Promise<SignUpResponseDto> {
@@ -308,6 +316,143 @@ export class AuthService {
     return user;
   }
 
+  async initiatePasswordRecovery(
+    initiatePasswordRecoveryDto: InitiatePasswordRecoveryDto,
+  ): Promise<MessageResponse> {
+    const { email } = initiatePasswordRecoveryDto;
+    const user = await this.prismaService.user.findFirstOrThrow({
+      where: { email },
+    });
+
+    const recoveryCode = generateNumericCode(6);
+    const hashedRecoveryCode = bcrypt.hashSync(
+      recoveryCode,
+      appEnv.BCRYPT_SALT,
+    );
+
+    await this.prismaService.$transaction(async (prismaClient) => {
+      await prismaClient.user.update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          recoveryCode: hashedRecoveryCode,
+        },
+      });
+
+      await prismaClient.session.deleteMany({
+        where: {
+          userDevice: {
+            userId: user.id,
+          },
+        },
+      });
+    });
+
+    this.emailService.sendPasswordResetEmail(user.email, recoveryCode);
+
+    return plainToClassFromExist(new MessageResponse(), {
+      message: 'Password reset initialized',
+    });
+  }
+
+  async validatePasswordRecovery(
+    passwordRecoveryCheckDto: PasswordRecoveryCheckDto,
+  ): Promise<DataResponse<RecoveryResponseDto>> {
+    const { email, recoveryCode } = passwordRecoveryCheckDto;
+    const user = await this.prismaService.user.findFirstOrThrow({
+      where: { email, deletedAt: null },
+    });
+
+    if (
+      !user.recoveryCode ||
+      !bcrypt.compareSync(recoveryCode, user.recoveryCode)
+    ) {
+      throw new ForbiddenException();
+    }
+    await this.prismaService.$transaction(async (prismaClient) => {
+      await prismaClient.user.update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          recoveryCode: null,
+        },
+      });
+
+      await prismaClient.session.deleteMany({
+        where: {
+          userDevice: {
+            userId: user.id,
+          },
+        },
+      });
+    });
+
+    const recoveryPayload: JWTPayload = {
+      sub: user.email,
+      userType: user.userType,
+      userId: Number(user.id),
+    };
+
+    const recoveryToken = this.buildRecoveryToken(recoveryPayload);
+
+    return plainToClassFromExist(
+      new DataResponse<RecoveryResponseDto>(RecoveryResponseDto),
+      {
+        data: { recoveryToken },
+      },
+    );
+  }
+
+  async completePasswordRecovery(
+    context: JwtContext,
+    recoverNewPasswordDto: RecoverNewPasswordDto,
+  ): Promise<DataResponse<LoginResponseDto>> {
+    const { password, verificationPassword, deviceKey, userAgent } =
+      recoverNewPasswordDto;
+    const { user } = context;
+    if (password !== verificationPassword) throw new ForbiddenException();
+    const hashedPassword = bcrypt.hashSync(password, appEnv.BCRYPT_SALT);
+    const updatedUser = await this.prismaService.$transaction(
+      async (prismaClient) => {
+        const updatedUserData = await prismaClient.user.update({
+          where: {
+            id: user.id,
+          },
+          data: {
+            recoveryCode: null,
+            password: hashedPassword,
+          },
+        });
+
+        await prismaClient.session.deleteMany({
+          where: {
+            userDevice: {
+              userId: user.id,
+            },
+          },
+        });
+      },
+    );
+    const { accessToken, refreshToken } = await this.performLoginTransaction(
+      deviceKey,
+      userAgent,
+      user,
+    );
+
+    return plainToClassFromExist(
+      new DataResponse<LoginResponseDto>(LoginResponseDto),
+      {
+        data: {
+          accessToken,
+          refreshToken,
+          user: updatedUser,
+        },
+      },
+    );
+  }
+
   private hashIt(payload: string): string {
     return createHash('sha256').update(payload).digest('hex');
   }
@@ -323,6 +468,129 @@ export class AuthService {
     return this.jwtService.sign(payload, {
       secret: appEnv.JWT_ACCESS_SECRET,
       expiresIn: appEnv.JWT_ACCESS_EXPIRATION,
+    });
+  }
+
+  private buildRecoveryToken(payload: JWTPayload): string {
+    return this.jwtService.sign(payload, {
+      secret: appEnv.JWT_RECOVERY_TOKEN_SECRET,
+      expiresIn: appEnv.JWT_RECOVERY_TOKEN_EXPIRATION,
+    });
+  }
+
+  private async performLoginTransaction(
+    deviceKey: string,
+    userAgent: string | undefined,
+    user: CompleteUser,
+  ): Promise<{
+    accessToken: string;
+    refreshToken: string;
+    session: CompleteSession;
+    payload: JWTPayload;
+  }> {
+    return await this.prismaService.$transaction(async (prismaClient) => {
+      let device: Device | null = await prismaClient.device.findUnique({
+        where: {
+          deviceKey,
+        },
+      });
+
+      if (!device) {
+        device = await prismaClient.device.create({
+          data: {
+            deviceKey,
+            userAgent,
+          },
+        });
+      } else {
+        if (userAgent && userAgent !== '') {
+          device = await prismaClient.device.update({
+            where: {
+              deviceKey,
+            },
+            data: {
+              userAgent,
+            },
+          });
+        }
+      }
+
+      let userDevice: UserDevice | null =
+        await prismaClient.userDevice.findUnique({
+          where: {
+            userId_deviceId: {
+              userId: user.id,
+              deviceId: device.id,
+            },
+          },
+        });
+
+      if (!userDevice) {
+        userDevice = await prismaClient.userDevice.create({
+          data: {
+            userId: user.id,
+            deviceId: device.id,
+          },
+        });
+      }
+
+      await prismaClient.session.deleteMany({
+        where: {
+          userDevice: {
+            device: {
+              deviceKey: deviceKey,
+            },
+          },
+        },
+      });
+
+      let session: CompleteSession = await prismaClient.session.create({
+        data: {
+          refreshToken: '',
+          userDevice: {
+            connect: {
+              id: userDevice.id,
+            },
+          },
+        },
+        include: {
+          userDevice: {
+            include: completeUserDeviceInclude,
+          },
+        },
+      });
+
+      const payload: JWTPayload = {
+        sub: user.email,
+        userId: Number(user.id),
+        userType: user.userType,
+        sessionId: Number(session.id),
+      };
+
+      const accessToken = this.buildAccessToken(payload);
+      const refreshToken = this.buildRefreshToken(payload);
+
+      const { exp: expiration } = this.jwtService.decode(refreshToken) as {
+        exp: number;
+      };
+
+      session = await prismaClient.session.update({
+        where: {
+          id: session.id,
+        },
+        data: {
+          expiration: new Date(expiration * 1000),
+          refreshToken: this.hashIt(refreshToken),
+          updateAt: new Date(),
+        },
+        include: {
+          userDevice: {
+            include: completeUserDeviceInclude,
+          },
+        },
+      });
+
+      return { accessToken, refreshToken, payload, session };
     });
   }
 }
