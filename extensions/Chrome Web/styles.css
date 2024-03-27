@@ -292,7 +292,8 @@ input:focus {
   color: white;
 }
 
-#password-error {
+#password-error,
+#login-error {
   display: none;
 }
 
