@@ -20,21 +20,24 @@
       </div>
     </div>
   </div>
-  <div class='search-container'>
-    <input id="input" type="text" placeholder="Search through time...">
-    <label>
-      <input type="checkbox" title="Activate semantic search" id="semantic-toggle">
-    </label>
-    <button id="search-button">Search</button>
-  </div>
   <div id="tab-container">
     <button class='tab-title tab-active'>History</button><button class='tab-title'>Queries</button>
   </div>
   <div id='loader-container'>
     <div class='loader'></div>
   </div>
-  <div id="sites-list" class="list-container visible">
-    <!-- Sites will be listed here -->
+  <div class="list-container visible">
+    <div class='search-container'>
+      <input id="input" type="text" placeholder="Search through time...">
+      <label>
+        <input type="checkbox" title="Activate semantic search" id="semantic-toggle">
+      </label>
+      <button id="search-button">Search</button>
+    </div>
+    <div id="sites-list">
+
+      <!-- Sites will be listed here -->
+    </div>
   </div>
   <div id="queries-list" class="list-container">
     <!-- Queries will be listed here -->
