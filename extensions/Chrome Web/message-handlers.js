@@ -63,7 +63,8 @@ export const handleGetQueries = async (chrome, request, sendResponse) => {
         storageData.user_info,
         baseURL,
         request.offset,
-        request.limit
+        request.limit,
+        request.query
       );
       // Send the fetched history entries back as a response
       sendResponse(res);

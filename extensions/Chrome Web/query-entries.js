@@ -7,13 +7,14 @@ import { refreshTokenData } from './auth.js';
  * @param {string} baseURL - Base server URL.
  * @param {number} offset - The offset for pagination, specifying the starting index of the entries to retrieve.
  * @param {number} limit - The limit for pagination, specifying the maximum number of entries to retrieve.
+ * @param {string} [query] - An optional query string for filtering history entries.
  * @param {boolean} [reexecuted=false] - An optional flag indicating whether the function is being re-executed after refreshing the access token.
  * @returns {Promise<object>} A Promise that resolves to an object containing the queries and their corresponding navigation entries.
  */
-export async function getQueryEntries(user_info, baseURL, offset, limit, reexecuted = false) {
+export async function getQueryEntries(user_info, baseURL, offset, limit, query, reexecuted = false) {
   try {
     // Send a GET request to the endpoint for retrieving navigation history with pagination parameters
-    const resp = await fetch(`${baseURL}/api/queries?offset=${offset}&limit=${limit}`, {
+    const resp = await fetch(`${baseURL}/api/queries?offset=${offset}&limit=${limit}${query ? `&query=${query}` : ''}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
