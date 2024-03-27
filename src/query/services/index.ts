@@ -8,10 +8,10 @@ import { SimpleNavigationEntryDto } from '../../navigation/dtos/simple-navigatio
 import { plainToInstance } from 'class-transformer';
 import { QueryResult, queryResultInclude } from '../types';
 
-const toDtos = (queryResults: QueryResult[]): QueryResultDto[] => {
+export const toDtos = (queryResults: QueryResult[]): QueryResultDto[] => {
   return queryResults.map((queryResult): QueryResultDto => {
     return plainToInstance(QueryResultDto, {
-      id: queryResult.id,
+      id: Number(queryResult.id),
       query: queryResult.query,
       results: queryResult.navigationEntries.map(
         (entry): SimpleNavigationEntryDto =>
