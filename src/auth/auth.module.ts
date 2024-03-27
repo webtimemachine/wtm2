@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { CommonModule } from 'src/common/common.module';
+import { EmailService } from '../common/services';
 import { AuthController } from './controllers/auth.controller';
 import { AuthService } from './services';
 import {
@@ -15,6 +16,7 @@ import {
   imports: [CommonModule, PassportModule, JwtModule.register({})],
   providers: [
     AuthService,
+    EmailService,
     JwtService,
     LocalStrategy,
     JWTAccessStrategy,

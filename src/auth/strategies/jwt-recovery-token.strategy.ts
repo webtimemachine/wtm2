@@ -1,8 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { PrismaService } from 'src/common/services';
-import { appEnv } from 'src/config';
+import { PrismaService } from '../../common/services';
+import { appEnv } from '../../config';
 import { completeUserInclude } from '../../user/types';
 import { JWTPayload } from '../interfaces';
 import { RecoveryJwtContext } from '../interfaces/jwt-context.interface';
