@@ -3,7 +3,6 @@ import { Pagination } from './pagination.js';
 let paginationData = undefined;
 let paginationDataQueries = undefined;
 const ITEMS_PER_PAGE = 10;
-const ITEMS_PER_QUERY_PAGE = 5;
 
 const handleLogoutUser = async () => {
   await chrome.runtime.sendMessage({ type: 'logout' });
@@ -217,9 +216,12 @@ const appendQueryItem = (item) => {
   openIcon.src = './icons/chevron-down.svg';
   openIcon.alt = 'Open results';
   openIcon.classList.add('visible-flex', 'open-results-icon')
+  openIcon.title = "Show query results"
   closeIcon.src = './icons/chevron-up.svg';
   closeIcon.alt = 'Close results';
   closeIcon.classList.add('hidden', 'close-results-icon')
+  closeIcon.title = "Hide query results"
+
 
   openIcon.addEventListener('click', (evt) => {
     openQueryResults(evt.target, closeIcon, resultsContainer)
@@ -283,7 +285,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const getQueriesRes = await chrome.runtime.sendMessage({
     type: 'getQueries',
     offset: 0,
-    limit: ITEMS_PER_QUERY_PAGE,
+    limit: ITEMS_PER_PAGE,
   });
 
   if ((getHistoryRes && getHistoryRes.error) || (getQueriesRes && getQueriesRes.error)) {
@@ -309,7 +311,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     emptyHistoryList(getHistoryRes?.query);
   }
   if (getQueriesRes && getQueriesRes.items?.length) {
-    paginationDataQueries = new Pagination(getQueriesRes.count, ITEMS_PER_QUERY_PAGE);
+    paginationDataQueries = new Pagination(getQueriesRes.count, ITEMS_PER_PAGE);
 
     getQueriesRes.items.forEach(appendQueryItem)
     const leftButton = document.getElementById('left-arrow-query');
@@ -349,20 +351,7 @@ leftButton.addEventListener('click', async () => {
 
   loaderContainer.style.display = 'none';
   if (response && response.items?.length) {
-    response.items.forEach((record) => {
-      appendHistoryItem(record);
-    });
-
-    if (response.error) {
-      handleLogoutUser();
-      return;
-    }
-
-    loaderContainer.style.display = 'none';
-    if (response && response.items?.length) {
-      response.items.forEach((record) => {
-        appendHistoryItem(record);
-      });
+    response.items.forEach(appendHistoryItem)
 
       if (response.offset == 0) {
         const leftButton = document.getElementById('left-arrow');
@@ -376,7 +365,6 @@ leftButton.addEventListener('click', async () => {
       const paginationInfo = document.getElementById('pagination-info');
       paginationInfo.innerHTML = `${paginationData.getCurrentPage()} / ${paginationData.getTotalPages()}`;
     }
-  }
 });
 
 const rightButton = document.getElementById('right-arrow');
@@ -403,20 +391,7 @@ rightButton.addEventListener('click', async () => {
 
   loaderContainer.style.display = 'none';
   if (response && response.items?.length) {
-    response.items.forEach((record) => {
-      appendHistoryItem(record);
-    });
-
-    if (response.error) {
-      handleLogoutUser();
-      return;
-    }
-
-    loaderContainer.style.display = 'none';
-    if (response && response.items?.length) {
-      response.items.forEach((record) => {
-        appendHistoryItem(record);
-      });
+    response.items.forEach(appendHistoryItem)
 
       //When user move to the next page, left arrow always is going to be enable
       const leftButton = document.getElementById('left-arrow');
@@ -430,7 +405,6 @@ rightButton.addEventListener('click', async () => {
       const paginationInfo = document.getElementById('pagination-info');
       paginationInfo.innerHTML = `${paginationData.getCurrentPage()} / ${paginationData.getTotalPages()}`;
     }
-  }
 });
 
 
@@ -446,7 +420,7 @@ leftButtonQueries.addEventListener('click', async () => {
   const response = await chrome.runtime.sendMessage({
     type: 'getQueries',
     offset: paginationDataQueries.getStartIndex(),
-    limit: ITEMS_PER_QUERY_PAGE
+    limit: ITEMS_PER_PAGE
   });
 
   if (response.error) {
@@ -485,7 +459,7 @@ rightButtonQueries.addEventListener('click', async () => {
   const response = await chrome.runtime.sendMessage({
     type: 'getQueries',
     offset: paginationDataQueries.getStartIndex(),
-    limit: ITEMS_PER_QUERY_PAGE
+    limit: ITEMS_PER_PAGE
   });
   
   if (response.error) {
