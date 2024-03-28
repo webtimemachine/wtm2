@@ -124,8 +124,8 @@ model NavigationEntryQuery {
   id                BigInt          @id @default(autoincrement())
   navigationEntryId BigInt
   queryId           BigInt
-  navigationEntry   NavigationEntry @relation(fields: [navigationEntryId], references: [id])
-  query             Query           @relation(fields: [queryId], references: [id])
+  navigationEntry   NavigationEntry @relation(fields: [navigationEntryId], references: [id], onDelete: Cascade)
+  query             Query           @relation(fields: [queryId], references: [id], onDelete: Cascade)
 
   @@unique([navigationEntryId, queryId], name: "unique_navigation_query")
   @@map("navigation_entry_query")
