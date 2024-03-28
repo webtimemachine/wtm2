@@ -25,12 +25,16 @@ import {
 } from '../dtos';
 import { GetNavigationEntryDto } from '../dtos/get-navigation-entry.dto';
 import { NavigationEntryService } from '../services';
+import { ExplicitFilterService } from '../../filter/services';
 
 @ApiTags('Navigation Entry')
 @Controller('navigation-entry')
 export class NavigationEntryController {
   private readonly logger = new Logger(NavigationEntryController.name);
-  constructor(private readonly navigationService: NavigationEntryService) {}
+  constructor(
+    private readonly navigationService: NavigationEntryService,
+    private readonly explicitFilter: ExplicitFilterService,
+  ) {}
 
   @ApiInternalServerErrorMessageResponse()
   @ApiBadRequestMessageResponse()
@@ -41,7 +45,7 @@ export class NavigationEntryController {
   @JwtAccessToken([])
   @HttpCode(200)
   @Post('/')
-  createNavigationEntry(
+  async createNavigationEntry(
     @Body() createNavigationEntryInputDto: CreateNavigationEntryInputDto,
     @JwtRequestContext() context: JwtContext,
   ): Promise<CompleteNavigationEntryDto> {

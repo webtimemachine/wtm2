@@ -118,3 +118,12 @@ model NavigationEntry {
 
   @@map("navigation_entry")
 }
+
+
+model BlackList {
+  id      BigInt  @id @default(autoincrement())
+  url     String  @db.VarChar()
+  flaggedAt DateTime @default(now()) @db.Timestamptz(0)
+
+  @@map("black_list")
+}
