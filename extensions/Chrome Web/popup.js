@@ -106,6 +106,22 @@ const refreshNavigationQueryList = (getQueryRes) => {
   }
 };
 
+
+const refreshQueries = async (searchText = '') => {
+  const getQueriesRes = await chrome.runtime.sendMessage({
+    type: 'getQueries',
+    offset: 0,
+    limit: ITEMS_PER_PAGE,
+    query: searchText,
+  });
+
+  if (getQueriesRes.error) {
+    handleLogoutUser();
+    return;
+  }
+  refreshNavigationQueryList(getQueriesRes);
+}
+
 searchButton.addEventListener('click', async () => {
   const searchText = searchInput.value;
   sitesList.innerHTML = '';
@@ -125,26 +141,18 @@ searchButton.addEventListener('click', async () => {
   }
 
   refreshNavigationHistoryList(getHistoryRes);
+  // refresh the query tab only if the search is semantic
+  if (semanticCheckbox.checked) {
+    queriesList.innerHTML = '';
+    await refreshQueries()
+  }
 });
 
 searchQueryButton.addEventListener('click', async () => {
   const searchText = searchQueryInput.value;
   queriesList.innerHTML = '';
   loaderContainer.style.display = 'block';
-
-  const getQueriesRes = await chrome.runtime.sendMessage({
-    type: 'getQueries',
-    offset: 0,
-    limit: ITEMS_PER_PAGE,
-    query: searchText,
-  });
-
-  if (getQueriesRes.error) {
-    handleLogoutUser();
-    return;
-  }
-
-  refreshNavigationQueryList(getQueriesRes);
+  await refreshQueries(searchText)
 });
 
 const sitesList = document.getElementById('sites-list');
