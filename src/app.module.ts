@@ -8,6 +8,7 @@ import { NavigationModule } from './navigation/navigation.module';
 import { HealthModule } from './health/health.module';
 import { SemanticSearchModule } from './semanticSearch/semanticSearch.module';
 import { QueryModule } from './query/query.module';
+import { ExplicitFilterModule } from './filter/filter.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { QueryModule } from './query/query.module';
     HealthModule,
     SemanticSearchModule,
     QueryModule,
+    ExplicitFilterModule,
   ],
   controllers: [AppController],
   providers: [AppService],

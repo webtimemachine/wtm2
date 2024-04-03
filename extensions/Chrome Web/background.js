@@ -17,10 +17,16 @@ const handleStartup = async () => {
   // Here is where we have to refresh the user authentication
   try {
     const storageData = await getStorageData(chrome);
+    const baseURL = storageData.baseURL || API_URL;
     if (storageData.userStatus) {
-      const tokensResponse = await refreshTokenData(storageData);
+      const tokensResponse = await refreshTokenData(storageData, baseURL);
 
       if (!tokensResponse.accessToken || !tokensResponse.refreshToken) {
+        await chrome.storage.local.set({
+          userStatus: false,
+          user_info: {},
+        });
+
         throw Error('fail');
       }
 
@@ -40,10 +46,10 @@ const handleStartup = async () => {
  * @param {string} selector
  * @returns {string}
  */
-function DOMtoString(selector) {
+function DOMtoString (selector) {
   if (selector) {
     // this function was added because the regex replacement is inconsistent if any of the properties in the tags contains these chars: ["<", ">"]
-    function removeAllAttributes(node) {
+    function removeAllAttributes (node) {
       // Remove attributes from the current node
       while (node.attributes.length > 0) {
         node.removeAttribute(node.attributes[0].name);

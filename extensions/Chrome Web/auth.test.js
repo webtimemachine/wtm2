@@ -154,7 +154,7 @@ describe('Should run all unit tests related to authorization', () => {
       },
     };
 
-    await auth.refreshUser(data);
+    await auth.refreshUser(data, API_URL);
 
     expect(fetch).toHaveBeenCalledWith(
       `${API_URL}/api/auth/refresh`,
