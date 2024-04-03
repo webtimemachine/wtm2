@@ -1,9 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, Length } from 'class-validator';
+import { Transform } from 'class-transformer';
+import { IsNotEmpty } from 'class-validator';
 
 export class InitiatePasswordRecoveryDto {
   @ApiProperty()
-  @IsEmail()
-  @Length(5, 60)
+  @IsNotEmpty()
+  @Transform(({ value }) => value?.toString().trim().toLowerCase())
   email: string;
 }
