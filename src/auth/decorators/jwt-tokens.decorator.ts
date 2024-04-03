@@ -6,15 +6,15 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { UserType } from '@prisma/client';
-import { UserTypesGuard } from '../guards';
 import {
   ApiBearerAuth,
   ApiOperation,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { ApiDocsDescriptions } from '../../common/enums';
+import { UserType } from '@prisma/client';
 import { MessageResponse } from '../../common/dtos';
+import { ApiDocsDescriptions } from '../../common/enums';
+import { UserTypesGuard } from '../guards';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/explicit-module-boundary-types
 export function JwtAccessToken(
@@ -38,6 +38,15 @@ export function JwtRefreshToken(guards: Type<CanActivate>[] = []) {
   return applyDecorators(
     UseGuards(AuthGuard('jwt-refresh-token'), ...guards),
     ApiBearerAuth('refreshToken'),
+    ApiUnauthorizedResponse({ description: ApiDocsDescriptions.UNAUTHORIZED }),
+  );
+}
+
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/explicit-module-boundary-types
+export function JwtRecoveryToken(guards: Type<CanActivate>[] = []) {
+  return applyDecorators(
+    UseGuards(AuthGuard('jwt-recovery-token'), ...guards),
+    ApiBearerAuth('recoveryToken'),
     ApiUnauthorizedResponse({ description: ApiDocsDescriptions.UNAUTHORIZED }),
   );
 }
