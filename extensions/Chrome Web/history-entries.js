@@ -8,7 +8,7 @@ import { refreshTokenData } from './auth.js';
  * @param {boolean} [reexecuted=false] - An optional flag indicating whether the function is being re-executed after refreshing the access token.
  * @returns {Promise<Response>} A Promise that resolves to the response from the history entry save request.
  */
-export async function saveHistoryEntry(
+export async function saveHistoryEntry (
   user_info,
   baseURL,
   payload,
@@ -38,7 +38,7 @@ export async function saveHistoryEntry(
     // If the function is being re-executed after refreshing the access token, return without re-executing refreshTokenData to prevent an infinite loop
     if (reexecuted) throw Error('refreshToken expired!');
     // Refresh the access token and re-execute saveHistoryEntry
-    return await refreshTokenData({ user_info }).then(
+    return await refreshTokenData({ user_info }, baseURL).then(
       async (res) =>
         await saveHistoryEntry(
           { ...user_info, ...res },
@@ -57,21 +57,23 @@ export async function saveHistoryEntry(
  * @param {number} offset - The offset for pagination, specifying the starting index of the entries to retrieve.
  * @param {number} limit - The limit for pagination, specifying the maximum number of entries to retrieve.
  * @param {string} [query] - An optional query string for filtering history entries.
+ * @param {boolean} isSemantic - Indicates whether the query should be treated as a semantic query
  * @param {boolean} [reexecuted=false] - An optional flag indicating whether the function is being re-executed after refreshing the access token.
  * @returns {Promise<object>} A Promise that resolves to an object containing the navigation history entries.
  */
-export async function getHistoryEntries(
+export async function getHistoryEntries (
   user_info,
   baseURL,
   offset,
   limit,
   query,
+  isSemantic,
   reexecuted = false,
 ) {
   try {
     // Send a GET request to the endpoint for retrieving navigation history with pagination parameters
     const resp = await fetch(
-      `${baseURL}/api/navigation-entry?offset=${offset}&limit=${limit}${query ? `&query=${query}` : ''}`,
+      `${baseURL}/api/navigation-entry?offset=${offset}&limit=${limit}${query ? `&query=${query}` : ''}&isSemantic=${isSemantic}`,
       {
         method: 'GET',
         headers: {
@@ -93,7 +95,7 @@ export async function getHistoryEntries(
     // If the function is being re-executed after refreshing the access token, return without re-executing refreshTokenData to prevent an infinite loop
     if (reexecuted) throw Error('refreshToken expired!');
     // Refresh the access token and re-execute getHistoryEntries
-    return await refreshTokenData({ user_info }).then(
+    return await refreshTokenData({ user_info }, baseURL).then(
       async (res) =>
         await getHistoryEntries(
           { ...user_info, ...res },
@@ -101,6 +103,7 @@ export async function getHistoryEntries(
           offset,
           limit,
           query,
+          isSemantic,
           true,
         ),
     );
@@ -115,7 +118,7 @@ export async function getHistoryEntries(
  * @param {boolean} [reexecuted=false] - An optional flag indicating whether the function is being re-executed after refreshing the access token.
  * @returns {Promise<Response>} A Promise that resolves to the response from the delete history entry request.
  */
-export async function deleteHistoryEntries(
+export async function deleteHistoryEntries (
   user_info,
   baseURL,
   payload,
@@ -143,7 +146,7 @@ export async function deleteHistoryEntries(
     // If the function is being re-executed after refreshing the access token, return without re-executing refreshTokenData to prevent an infinite loop
     if (reexecuted) throw Error('refreshToken expired!');
     // Refresh the access token and re-execute deleteHistoryEntries
-    return await refreshTokenData({ user_info }).then(
+    return await refreshTokenData({ user_info }, baseURL).then(
       async (res) =>
         await deleteHistoryEntries(
           { ...user_info, ...res },

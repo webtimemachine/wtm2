@@ -15,7 +15,6 @@ import {
   ApiConflictMessageResponse,
   ApiInternalServerErrorMessageResponse,
   ApiNotFoundMessageResponse,
-  ApiOkMessageResponse,
   ApiUnauthorizedMessageResponse,
 } from '../../common/decorators';
 import { DataResponse, MessageResponse } from '../../common/dtos';
@@ -91,7 +90,10 @@ export class AuthController {
     return this.authService.refreshToken(context);
   }
 
-  @ApiOkMessageResponse()
+  @ApiOkResponse({
+    type: MessageResponse,
+  })
+  @HttpCode(200)
   @ApiBadRequestMessageResponse()
   @ApiInternalServerErrorMessageResponse()
   @Patch('password-recovery/initiate')

@@ -10,7 +10,7 @@ import { EmailService, PrismaService } from './services';
     MailerModule.forRoot({
       transport: appEnv.EMAIL_URI,
       defaults: {
-        from: '"No Reply" <intranet.intermediait@gmail.com>',
+        from: '"No Reply" <webtimemachinedev@gmail.com>',
       },
       template: {
         dir: join(__dirname, '../../', 'src/assets/email-templates'),
