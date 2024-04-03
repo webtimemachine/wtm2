@@ -23,20 +23,13 @@ document.querySelector('#submit').addEventListener('click', async (event) => {
       payload: { email, baseURL },
     });
 
-    console.log('initiateRecoveryPasswordResponse', initiateRecoveryPasswordResponse);
+    await chrome.storage.local.set({
+      recovery_flow: true,
+      recovery_email: email,
+      baseURL: baseURL
+    });
 
-    if (initiateRecoveryPasswordResponse?.error) {
-      // document.querySelector('#login-error').style.display = 'block'
-    }
-
-    // if (initiateRecoveryPasswordResponse.success) {
-    //   await chrome.storage.local.set({
-    //     recovery_flow: true,
-    //     recovery_email: email,
-    //     baseURL: baseURL
-    //   });
-    //   window.location.replace('./recovery-code.html');
-    // }
+    window.location.replace('./recovery-code.html');
   } else {
     document.querySelector('#email').placeholder = 'Enter an email.';
     document.querySelector('#email').style.backgroundColor = 'red';
