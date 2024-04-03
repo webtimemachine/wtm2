@@ -31,7 +31,7 @@ export async function getUserPreferencies (user_info, baseURL, reexecuted = fals
     // If the function is being re-executed after refreshing the access token, return without re-executing refreshTokenData to prevent an infinite loop
     if (reexecuted) throw Error('refreshToken expired!')
     // Refresh the access token and re-execute getUserPreferencies
-    return await refreshTokenData({ user_info }).then(async (res) => await getUserPreferencies({ ...user_info, ...res }, baseURL, true))
+    return await refreshTokenData({ user_info }, baseURL).then(async (res) => await getUserPreferencies({ ...user_info, ...res }, baseURL, true))
   }
 }
 
@@ -74,7 +74,7 @@ export async function updatePreferences (
     // If the function is being re-executed after refreshing the access token, return without re-executing refreshTokenData to prevent an infinite loop
     if (reexecuted) throw Error('refreshToken expired!');
     // Refresh the access token and re-execute updatePreferences
-    return await refreshTokenData({ user_info }).then(
+    return await refreshTokenData({ user_info }, baseURL).then(
       async (res) =>
         await updatePreferences(
           { ...user_info, ...res },
