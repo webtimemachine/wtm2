@@ -45,20 +45,59 @@ const handleStartup = async () => {
  * @param {string} selector
  * @returns {string}
  */
-function DOMtoString (selector) {
+function DOMtoString(selector) {
   if (selector) {
-    selector = document.querySelector(selector);
-    if (!selector) return 'ERROR: querySelector failed to find node';
+    // this function was added because the regex replacement is inconsistent if any of the properties in the tags contains these chars: ["<", ">"]
+    function removeAllAttributes(node) {
+      // Remove attributes from the current node
+      while (node.attributes.length > 0) {
+        node.removeAttribute(node.attributes[0].name);
+      }
+
+      // Recursively remove attributes from child nodes
+      for (let i = 0; i < node.childNodes.length; i++) {
+        const childNode = node.childNodes[i];
+        if (childNode.nodeType === Node.ELEMENT_NODE) {
+          removeAllAttributes(childNode);
+        }
+      }
+    }
+
+    selector = document.querySelector(selector).cloneNode(true);
+
+    if (!selector) {
+      return "ERROR: querySelector failed to find node"
+    }
+
+    const styleNodes = selector.querySelectorAll('style');
+    const scriptNodes = selector.querySelectorAll('script');
+    const linkNodes = selector.querySelectorAll('link');
+
+    // Remove each style element from the cloned body
+    styleNodes.forEach(styleNode => {
+      styleNode.parentNode.removeChild(styleNode);
+    });
+    scriptNodes.forEach(scriptNode => {
+      scriptNode.parentNode.removeChild(scriptNode);
+    });
+    linkNodes.forEach(linkNode => {
+      linkNode.parentNode.removeChild(linkNode);
+    });
+
   } else {
     selector = document.documentElement.outerHTML;
   }
 
+  removeAllAttributes(selector)
+
   return selector.outerHTML;
 }
 
+
+
 const handleUpdated = async (tabId, changeInfo, tab) => {
   if (changeInfo.status === 'complete') {
-    if (tab.url && !tab.url?.startsWith('chrome://')) {
+    if (tab.url && !tab.url?.startsWith('chrome://') && !tab.url.startsWith("https://www.google.com/search?q")) {
       let htmlContent = '';
 
       const results = await chrome.scripting.executeScript({
@@ -75,7 +114,8 @@ const handleUpdated = async (tabId, changeInfo, tab) => {
         url: tab.url,
         navigationDate: new Date().toISOString(),
         title: tab.title,
-        content: htmlContent.replace(/<[^>]*>/g, '').replace(/\s+/g, ' '),
+        // removes remaining html tags, more that 2 contiguous spaces, more that 2 contiguous line breaks and html entities
+        content: htmlContent.replace(/(<[^>]*>)|(\s{2,})|(\n{2,})||(&\w+;)/g, ''),
       };
 
       const storageData = await getStorageData(chrome);

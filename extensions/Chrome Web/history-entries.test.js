@@ -79,10 +79,10 @@ describe('Should run all test for saveHistoryEntry & getHistoryEntries functions
       },
     };
 
-    await getHistoryEntries(user_info, API_URL, 0, 10);
+    await getHistoryEntries(user_info, API_URL, 0, 10, null, true);
 
     expect(fetch).toHaveBeenCalledWith(
-      `${API_URL}/api/navigation-entry?offset=0&limit=10`,
+      `${API_URL}/api/navigation-entry?offset=0&limit=10&isSemantic=true`,
       expect.objectContaining({
         method: 'GET',
         headers: expect.objectContaining({
