@@ -53,6 +53,17 @@ document.querySelector('form').addEventListener('submit', async (event) => {
 // When popup is ready, check if the user is already logged in
 document.addEventListener('DOMContentLoaded', async () => {
   try {
+    const response = await chrome.storage.local.get([
+      'recovery_flow',
+      'recovery_email',
+    ]);
+
+    if (response.recovery_flow) window.location.replace('./recovery-pass/recovery-code.html');
+  } catch (error) {
+    console.error('Error occurred:', error);
+  }
+
+  try {
     const storageData = await getStorageData(chrome);
     if (storageData.userStatus) window.location.replace('./popup.html');
   } catch (error) {

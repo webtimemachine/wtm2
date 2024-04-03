@@ -10,6 +10,7 @@ import {
 import { getHistoryEntries, deleteHistoryEntries } from './history-entries.js';
 import { getUserPreferencies, updatePreferences } from './services/settings.js';
 import { getQueryEntries } from './query-entries.js'
+import { initiateRecoveryPassword } from './services/recovery-pass.js';
 
 /**
  * Handles the request to fetch browsing history entries.
@@ -273,5 +274,20 @@ export const handleDeleteUserAccount = async (chrome, sendResponse) => {
       // If an error occurs during fetching, send an error response
       sendResponse({ error: true });
     }
+  }
+};
+
+export const handleInitiateRecoveryPassword = async (request, sendResponse) => {
+  try {
+    // Fetch browsing history entries
+    const res = await initiateRecoveryPassword(
+      request.payload.baseURL,
+      { email: request.payload.email }
+    );
+    // Send the fetched history entries back as a response
+    sendResponse(res);
+  } catch (error) {
+    // If an error occurs during fetching, send an error response
+    sendResponse({ error: true });
   }
 };

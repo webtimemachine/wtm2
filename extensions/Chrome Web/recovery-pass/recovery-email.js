@@ -1,32 +1,42 @@
 import { API_URL } from '../consts.js';
 import { getStorageData } from '../auth.js';
 
+const baseUrlInput = document.querySelector('#baseURL');
 getStorageData(chrome).then((storageData) => {
-  const baseUrlInput = document.querySelector('#baseURL');
   baseUrlInput.value = storageData?.baseURL || API_URL;
 });
 
-document.querySelector('form').addEventListener('submit', async (event) => {
+document.querySelector('#submit').addEventListener('click', async (event) => {
   event.preventDefault();
 
-  const baseURL = document.querySelector('#baseURL').value;
+  const baseURL = baseUrlInput.value;
   const email = document.querySelector('#email').value;
 
+  console.log(baseURL);
+  console.log(email);
+
   if (email && baseURL) {
+    console.log('hola');
+    // send message to background script with email and baseURL
+    const initiateRecoveryPasswordResponse = await chrome.runtime.sendMessage({
+      type: 'initiateRecoveryPassword',
+      payload: { email, baseURL },
+    });
 
-    // send message to background script with email and password
-    // const response = await chrome.runtime.sendMessage({
-    //   type: 'signUp',
-    //   payload: { email, password, baseURL },
-    // });
+    console.log('initiateRecoveryPasswordResponse', initiateRecoveryPasswordResponse);
 
-    if (response?.error) {
+    if (initiateRecoveryPasswordResponse?.error) {
       // document.querySelector('#login-error').style.display = 'block'
     }
 
-    if (response.success) {
-      // window.location.replace('./popup-sign-in.html');
-    }
+    // if (initiateRecoveryPasswordResponse.success) {
+    //   await chrome.storage.local.set({
+    //     recovery_flow: true,
+    //     recovery_email: email,
+    //     baseURL: baseURL
+    //   });
+    //   window.location.replace('./recovery-code.html');
+    // }
   } else {
     document.querySelector('#email').placeholder = 'Enter an email.';
     document.querySelector('#email').style.backgroundColor = 'red';

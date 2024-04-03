@@ -7,6 +7,7 @@ import {
   handleGetHistory,
   handleGetPreferences,
   handleGetQueries,
+  handleInitiateRecoveryPassword,
   handleLogin,
   handleLogout,
   handleSignUp,
@@ -171,6 +172,9 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       return true;
     case 'deleteUserAccount':
       handleDeleteUserAccount(chrome, sendResponse);
+      return true;
+    case 'initiateRecoveryPassword':
+      handleInitiateRecoveryPassword(request, sendResponse);
       return true;
     default:
       return false;
