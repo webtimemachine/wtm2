@@ -6,6 +6,7 @@ import {
   handleDeleteUserAccount,
   handleGetHistory,
   handleGetPreferences,
+  handleGetQueries,
   handleLogin,
   handleLogout,
   handleSignUp,
@@ -45,10 +46,10 @@ const handleStartup = async () => {
  * @param {string} selector
  * @returns {string}
  */
-function DOMtoString(selector) {
+function DOMtoString (selector) {
   if (selector) {
     // this function was added because the regex replacement is inconsistent if any of the properties in the tags contains these chars: ["<", ">"]
-    function removeAllAttributes(node) {
+    function removeAllAttributes (node) {
       // Remove attributes from the current node
       while (node.attributes.length > 0) {
         node.removeAttribute(node.attributes[0].name);
@@ -92,7 +93,6 @@ function DOMtoString(selector) {
 
   return selector.outerHTML;
 }
-
 
 const handleUpdated = async (tabId, changeInfo, tab) => {
   if (changeInfo.status === 'complete') {
@@ -144,6 +144,9 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   switch (request.type) {
     case 'getHistory':
       handleGetHistory(chrome, request, sendResponse);
+      return true;
+    case 'getQueries':
+      handleGetQueries(chrome, request, sendResponse);
       return true;
     case 'login':
       handleLogin(chrome, request, sendResponse);

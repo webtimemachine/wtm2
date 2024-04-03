@@ -19,6 +19,7 @@ import { PrismaService } from '../../common/services';
 
 import { UserService } from '../../user/services';
 import { SemanticProcessor } from '../../semanticSearch/services/';
+import { QueryService } from '../../query/services';
 import { ExplicitFilterService } from '../../filter/services';
 import { CompleteUser } from '../../user/types';
 
@@ -29,6 +30,7 @@ export class NavigationEntryService {
   constructor(
     private readonly prismaService: PrismaService,
     private readonly semanticProcessor: SemanticProcessor,
+    private readonly queryService: QueryService,
     private readonly explicitFilter: ExplicitFilterService,
   ) {}
 
@@ -231,6 +233,12 @@ export class NavigationEntryService {
       NavigationEntryService.completeNavigationEntriesToDtos(
         jwtContext,
         completeNavigationEntries,
+      );
+
+    if (query && count > 0 && isSemantic)
+      await this.queryService.newEntry(
+        query,
+        completeNavigationEntries.map((entry) => entry.id),
       );
 
     return plainToInstance(PaginationResponse<CompleteNavigationEntryDto>, {

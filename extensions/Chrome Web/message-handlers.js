@@ -9,6 +9,7 @@ import {
 
 import { getHistoryEntries, deleteHistoryEntries } from './history-entries.js';
 import { getUserPreferencies, updatePreferences } from './services/settings.js';
+import { getQueryEntries } from './query-entries.js'
 
 /**
  * Handles the request to fetch browsing history entries.
@@ -42,6 +43,38 @@ export const handleGetHistory = async (chrome, request, sendResponse) => {
     }
   }
 };
+
+/**
+ * Handles the request to fetch queries that has been made by the user.
+ *
+ * @param {Object} chrome - Chrome API or Chrome-specific functionality.
+ * @param {Object} request - Object containing parameters for fetching queries.
+ * @param {Function} sendResponse - Function to send the response back to the caller.
+ * @returns {Promise<void>} - A Promise that resolves once the queries are fetched and sent.
+ */
+export const handleGetQueries = async (chrome, request, sendResponse) => {
+  // Check if the user is signed in
+  const storageData = await getStorageData(chrome);
+  if (storageData.userStatus) {
+    try {
+      const baseURL = storageData.baseURL || API_URL;
+
+      const res = await getQueryEntries(
+        storageData.user_info,
+        baseURL,
+        request.offset,
+        request.limit,
+        request.query
+      );
+      // Send the fetched history entries back as a response
+      sendResponse(res);
+    } catch (error) {
+      // If an error occurs during fetching, send an error response
+      sendResponse({ error: true });
+    }
+  }
+};
+
 
 /**
  * Handles the user login request.
