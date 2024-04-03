@@ -26,6 +26,10 @@ const envSchemas = {
   JWT_RECOVERY_TOKEN_SECRET: z.string(),
   JWT_RECOVERY_TOKEN_EXPIRATION: z.string(),
   EMAIL_URI: z.string(),
+  OPENAI_ACCESS_TOKEN: z.string(),
+  WEAVIATE_HOST: z.string().default('localhost:8084'),
+  WEAVIATE_SCHEME: z.string().default('http'),
+  WEAVIATE_API_KEY: z.string().default('api-key'),
 };
 
 const envSchema = z.object({

@@ -19,6 +19,8 @@ configButton.addEventListener('click', function () {
 const searchInput = document.getElementById('input');
 const searchButton = document.getElementById('search-button');
 
+const semanticCheckbox = document.getElementById('semantic-toggle');
+
 const refreshNavigationHistoryList = (getHistoryRes) => {
   loaderContainer.style.display = 'none';
   if (getHistoryRes && getHistoryRes.items?.length) {
@@ -55,6 +57,7 @@ searchButton.addEventListener('click', async () => {
     offset: 0,
     limit: ITEMS_PER_PAGE,
     search: searchText,
+    isSemantic: semanticCheckbox.checked
   });
 
   if (getHistoryRes.error) {
@@ -138,6 +141,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     offset: 0,
     limit: ITEMS_PER_PAGE,
     search: '',
+    isSemantic: false
   });
 
   if (getHistoryRes && getHistoryRes.error) {
@@ -178,6 +182,7 @@ leftButton.addEventListener('click', async () => {
     offset: paginationData.getStartIndex(),
     limit: ITEMS_PER_PAGE,
     search: searchText,
+    isSemantic: semanticCheckbox.checked
   });
 
   if (response.error) {
@@ -230,6 +235,8 @@ rightButton.addEventListener('click', async () => {
     offset: paginationData.getStartIndex(),
     limit: ITEMS_PER_PAGE,
     search: searchText,
+    isSemantic: semanticCheckbox.checked
+
   });
 
   if (response.error) {
