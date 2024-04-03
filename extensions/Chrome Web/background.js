@@ -16,10 +16,16 @@ const handleStartup = async () => {
   // Here is where we have to refresh the user authentication
   try {
     const storageData = await getStorageData(chrome);
+    const baseURL = storageData.baseURL || API_URL;
     if (storageData.userStatus) {
-      const tokensResponse = await refreshTokenData(storageData);
+      const tokensResponse = await refreshTokenData(storageData, baseURL);
 
       if (!tokensResponse.accessToken || !tokensResponse.refreshToken) {
+        await chrome.storage.local.set({
+          userStatus: false,
+          user_info: {},
+        });
+
         throw Error('fail');
       }
 
