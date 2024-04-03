@@ -4,6 +4,7 @@ import {
   Get,
   HttpCode,
   Logger,
+  Patch,
   Post,
   Req,
   UseGuards,
@@ -13,18 +14,28 @@ import {
   ApiBadRequestMessageResponse,
   ApiConflictMessageResponse,
   ApiInternalServerErrorMessageResponse,
+  ApiNotFoundMessageResponse,
   ApiUnauthorizedMessageResponse,
 } from '../../common/decorators';
-import { JwtRefreshToken, JwtRequestContext } from '../decorators';
+import { DataResponse, MessageResponse } from '../../common/dtos';
 import {
+  JwtRecoveryToken,
+  JwtRefreshToken,
+  JwtRequestContext,
+} from '../decorators';
+import {
+  InitiatePasswordRecoveryDto,
   LoginRequestDto,
   LoginResponseDto,
+  PasswordRecoveryCheckDto,
+  RecoverNewPasswordDto,
+  RecoveryResponseDto,
   RefreshResponseDto,
   SignUpRequestDto,
   SignUpResponseDto,
 } from '../dtos';
 import { LocalAuthGuard } from '../guards';
-import { JwtRefreshContext } from '../interfaces';
+import { JwtContext, JwtRefreshContext } from '../interfaces';
 import { AuthService } from '../services';
 
 @ApiTags('Auth')
@@ -77,5 +88,49 @@ export class AuthController {
     @JwtRequestContext() context: JwtRefreshContext,
   ): Promise<RefreshResponseDto> {
     return this.authService.refreshToken(context);
+  }
+
+  @ApiOkResponse({
+    type: MessageResponse,
+  })
+  @HttpCode(200)
+  @ApiBadRequestMessageResponse()
+  @ApiInternalServerErrorMessageResponse()
+  @Patch('password-recovery/initiate')
+  async initiatePasswordRecovery(
+    @Body() initiatePasswordRecoveryDto: InitiatePasswordRecoveryDto,
+  ): Promise<MessageResponse> {
+    return this.authService.initiatePasswordRecovery(
+      initiatePasswordRecoveryDto,
+    );
+  }
+
+  @ApiOkResponse({
+    status: 200,
+    type: RecoveryResponseDto,
+  })
+  @ApiNotFoundMessageResponse()
+  @Patch('password-recovery/validate')
+  async validatePasswordRecovery(
+    @Body() passwordRecoveryDto: PasswordRecoveryCheckDto,
+  ): Promise<DataResponse<RecoveryResponseDto>> {
+    return this.authService.validatePasswordRecovery(passwordRecoveryDto);
+  }
+
+  @ApiOkResponse({
+    status: 200,
+    type: LoginResponseDto,
+  })
+  @ApiNotFoundMessageResponse()
+  @JwtRecoveryToken()
+  @Patch('password-recovery/complete')
+  async completePasswordRecovery(
+    @JwtRequestContext() context: JwtContext,
+    @Body() recoverNewPasswordDto: RecoverNewPasswordDto,
+  ): Promise<DataResponse<LoginResponseDto>> {
+    return this.authService.completePasswordRecovery(
+      context,
+      recoverNewPasswordDto,
+    );
   }
 }
