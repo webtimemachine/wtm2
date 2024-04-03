@@ -1,18 +1,15 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { AuthService } from './auth.service';
+import { ConflictException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { LocalStrategy } from '../strategies';
+import { Test, TestingModule } from '@nestjs/testing';
+import { PrismaClient, UserType } from '@prisma/client';
 import { CommonTestingModule } from '../../common/common.testing.module';
 import { PrismaService } from '../../common/services';
-import { PrismaClient, UserType } from '@prisma/client';
-import { ConflictException } from '@nestjs/common';
-
-jest.mock('../../common/services/prisma.service');
+import { LocalStrategy } from '../strategies';
+import { AuthService } from './auth.service';
 
 describe('AuthService', () => {
   let authService: AuthService;
   let prismaService: PrismaService;
-
   const prismaClient = new PrismaClient();
 
   const mockConflictException = new ConflictException();
@@ -28,6 +25,7 @@ describe('AuthService', () => {
     createdAt: new Date(),
     updateAt: new Date(),
     deletedAt: null,
+    recoveryCode: null,
     userPreferences: {
       id: BigInt(1),
       userId: BigInt(1),
