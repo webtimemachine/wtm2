@@ -7,6 +7,7 @@ import { UserModule } from './user/user.module';
 import { NavigationModule } from './navigation/navigation.module';
 import { HealthModule } from './health/health.module';
 import { SemanticSearchModule } from './semanticSearch/semanticSearch.module';
+import { ExplicitFilterModule } from './filter/filter.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { SemanticSearchModule } from './semanticSearch/semanticSearch.module';
     NavigationModule,
     HealthModule,
     SemanticSearchModule,
+    ExplicitFilterModule,
   ],
   controllers: [AppController],
   providers: [AppService],

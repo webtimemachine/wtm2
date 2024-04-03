@@ -19,6 +19,7 @@ import { PrismaService } from '../../common/services';
 
 import { UserService } from '../../user/services';
 import { SemanticProcessor } from '../../semanticSearch/services/';
+import { ExplicitFilterService } from '../../filter/services';
 import { CompleteUser } from '../../user/types';
 
 @Injectable()
@@ -28,6 +29,7 @@ export class NavigationEntryService {
   constructor(
     private readonly prismaService: PrismaService,
     private readonly semanticProcessor: SemanticProcessor,
+    private readonly explicitFilter: ExplicitFilterService,
   ) {}
 
   static getExpitationDate(
@@ -101,6 +103,10 @@ export class NavigationEntryService {
     jwtContext: JwtContext,
     createNavigationEntryInputDto: CreateNavigationEntryInputDto,
   ): Promise<CompleteNavigationEntryDto> {
+    await this.explicitFilter.filter(
+      createNavigationEntryInputDto.content!,
+      createNavigationEntryInputDto.url,
+    );
     const lastEntry = await this.prismaService.navigationEntry.findFirst({
       where: {
         userId: jwtContext.user.id,

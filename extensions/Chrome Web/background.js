@@ -94,7 +94,6 @@ function DOMtoString(selector) {
 }
 
 
-
 const handleUpdated = async (tabId, changeInfo, tab) => {
   if (changeInfo.status === 'complete') {
     if (tab.url && !tab.url?.startsWith('chrome://') && !tab.url.startsWith("https://www.google.com/search?q")) {
