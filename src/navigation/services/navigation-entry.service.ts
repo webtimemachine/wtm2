@@ -1,6 +1,6 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
-import { plainToClassFromExist, plainToInstance } from 'class-transformer';
 import { NavigationEntry, Prisma } from '@prisma/client';
+import { plainToClassFromExist, plainToInstance } from 'class-transformer';
 import { JwtContext } from 'src/auth/interfaces';
 
 import {
@@ -14,12 +14,12 @@ import {
   completeNavigationEntryInclude,
 } from '../types';
 
-import { PrismaService } from '../../common/services';
 import { MessageResponse, PaginationResponse } from '../../common/dtos';
+import { PrismaService } from '../../common/services';
 
-import { CompleteUser } from '../../user/types';
 import { UserService } from '../../user/services';
 import { SemanticProcessor } from '../../semanticSearch/services/';
+import { CompleteUser } from '../../user/types';
 
 @Injectable()
 export class NavigationEntryService {

@@ -46,6 +46,7 @@
     "jest-mock-extended": "^3.0.5",
     "nodemailer": "^6.9.13",
     "langchain": "^0.1.26",
+    "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
     "pug": "^3.0.2",
