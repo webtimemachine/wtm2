@@ -8,17 +8,21 @@
 </head>
 
 <body>
-  <!-- <script defer src="popup-sign-up.js" type="module"></script> -->
+  <script defer src="recovery-code.js" type="module"></script>
   <div class='header-container'>
-    <h1>Verify Email & Code</h1>
+    <h1>Verify email & code</h1>
   </div>
   <form>
-    <p id='baseURL'></p>
-    <p id='email'></p>
+    <div style='display: flex; flex-direction: column; width: 100%; align-items: flex-start; padding: 8px;'>
+      <span id='baseURL'></span>
+      <span id='email' style='padding-top: 8px;'></span>
+    </div>
 
     <input type="text" name="code" id="code" placeholder="Code">
     <button type="submit" id="submit">Verify Code</button>
   </form>
+  <span style='padding: 16px 8px; cursor: pointer;' id='back-to-login'>
+    &lt; Clear data & go to login</span>
 </body>
 
 </html>
