@@ -23,6 +23,8 @@ const envSchemas = {
   JWT_ACCESS_EXPIRATION: z.string(),
   JWT_REFRESH_SECRET: z.string(),
   JWT_REFRESH_EXPIRATION: z.string(),
+  JWT_RECOVERY_TOKEN_SECRET: z.string(),
+  JWT_RECOVERY_TOKEN_EXPIRATION: z.string(),
   EMAIL_URI: z.string(),
   OPENAI_ACCESS_TOKEN: z.string(),
   WEAVIATE_HOST: z.string().default('localhost:8084'),
