@@ -92,10 +92,10 @@ export const loginUser = async (payload, deviceId) => {
  * @param {object} data - An object containing user information, including the refresh token.
  * @returns {Promise<Response>} A Promise that resolves to the response from the token refresh request.
  */
-export const refreshUser = async (data) => {
+export const refreshUser = async (data, baseURL) => {
   try {
     // Send a GET request to the refresh endpoint with the user's refresh token in the Authorization header
-    return await fetch(`${API_URL}/api/auth/refresh`, {
+    return await fetch(`${baseURL}/api/auth/refresh`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -111,9 +111,9 @@ export const logoutUser = async () => {
   return await chrome.storage.local.set({ userStatus: false, user_info: {} });
 };
 
-export const refreshTokenData = async (res) => {
+export const refreshTokenData = async (res, baseURL) => {
   try {
-    const response = await refreshUser(res);
+    const response = await refreshUser(res, baseURL);
     const data = await response.json();
 
     await chrome.storage.local.set({
@@ -184,7 +184,7 @@ export async function deleteUserAccount (
     // If the function is being re-executed after refreshing the access token, return without re-executing refreshTokenData to prevent an infinite loop
     if (reexecuted) throw Error('refreshToken expired!');
     // Refresh the access token and re-execute deleteUserAccount
-    return await refreshTokenData({ user_info }).then(
+    return await refreshTokenData({ user_info }, baseURL).then(
       async (res) =>
         await deleteUserAccount(
           { ...user_info, ...res },
