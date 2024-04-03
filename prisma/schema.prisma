@@ -114,13 +114,32 @@ model NavigationEntry {
   userDeviceId BigInt
   userDevice   UserDevice @relation(fields: [userDeviceId], references: [id])
 
-  createdAt DateTime  @default(now()) @db.Timestamptz(0)
-  updateAt  DateTime? @updatedAt @db.Timestamptz(0)
+  createdAt DateTime               @default(now()) @db.Timestamptz(0)
+  updateAt  DateTime?              @updatedAt @db.Timestamptz(0)
+  queries   NavigationEntryQuery[]
 
   @@map("navigation_entry")
 }
 
+model NavigationEntryQuery {
+  id                BigInt          @id @default(autoincrement())
+  navigationEntryId BigInt
+  queryId           BigInt
+  navigationEntry   NavigationEntry @relation(fields: [navigationEntryId], references: [id], onDelete: Cascade)
+  query             Query           @relation(fields: [queryId], references: [id], onDelete: Cascade)
 
+  @@unique([navigationEntryId, queryId], name: "unique_navigation_query")
+  @@map("navigation_entry_query")
+}
+
+model Query {
+  id                BigInt                 @id @default(autoincrement())
+  query             String                 @unique @db.VarChar()
+  createdAt         DateTime               @default(now()) @db.Timestamptz(0)
+  navigationEntries NavigationEntryQuery[]
+
+  @@map("query")
+}
 model BlackList {
   id      BigInt  @id @default(autoincrement())
   url     String  @db.VarChar()

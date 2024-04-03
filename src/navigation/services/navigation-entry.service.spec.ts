@@ -13,6 +13,8 @@ import { CompleteNavigationEntry } from '../types';
 import { ExplicitFilterService } from '../../filter/services';
 import { SemanticProcessor } from '../../semanticSearch/services';
 import { SemanticSearchTestingModule } from '../../semanticSearch/semanticSearch.testing.module';
+import { QueryService } from '../../query/services';
+import { QueryTestingModule } from '../../query/query.testing.module';
 import { ExplicitFilterTestingModule } from '../../filter/filter.testing.module';
 import { NavigationEntryService } from './navigation-entry.service';
 
@@ -133,8 +135,8 @@ const mockedEntry = {
 
 const mockedEntries: CompleteNavigationEntry[] = [
   mockedEntry,
-  mockedEntry,
-  mockedEntry,
+  { ...mockedEntry, id: BigInt(2) },
+  { ...mockedEntry, id: BigInt(3) },
 ];
 
 const completeNavigationEntriesDtos =
@@ -162,6 +164,7 @@ describe('NavigationEntryService', () => {
   let navigationEntryService: NavigationEntryService;
   let prismaService: PrismaService;
   let semanticProcessor: SemanticProcessor;
+  let queryService: QueryService;
   let explicitFilterService: ExplicitFilterService;
 
   const prismaClient = new PrismaClient();
@@ -172,6 +175,7 @@ describe('NavigationEntryService', () => {
       imports: [
         commonTestModule,
         SemanticSearchTestingModule.forTest(commonTestModule),
+        QueryTestingModule.forTest(commonTestModule),
         ExplicitFilterTestingModule.forTest(commonTestModule),
       ],
       providers: [NavigationEntryService],
@@ -182,6 +186,7 @@ describe('NavigationEntryService', () => {
     );
     prismaService = module.get<PrismaService>(PrismaService);
     semanticProcessor = module.get<SemanticProcessor>(SemanticProcessor);
+    queryService = module.get<QueryService>(QueryService);
     explicitFilterService = module.get<ExplicitFilterService>(
       ExplicitFilterService,
     );
@@ -199,6 +204,9 @@ describe('NavigationEntryService', () => {
     expect(semanticProcessor).toBeDefined();
   });
 
+  it('queryService should be defined', () => {
+    expect(queryService).toBeDefined();
+  });
   it('explicitFilterService should be defined', () => {
     expect(explicitFilterService).toBeDefined();
   });
@@ -269,6 +277,9 @@ describe('NavigationEntryService', () => {
           new Promise((resolve) => resolve(new Set(['example1', 'example2']))),
         );
 
+      const mockNewEntry = jest.fn();
+      queryService.newEntry = mockNewEntry;
+
       prismaService.navigationEntry.count = jest
         .fn()
         .mockReturnValue(mockedEntries.length);
@@ -286,6 +297,11 @@ describe('NavigationEntryService', () => {
       expect(mockSearch).toHaveReturnedWith(
         new Promise((resolve) => resolve(new Set(['example1', 'example2']))),
       );
+      expect(mockNewEntry).toHaveBeenCalledWith(queryParams.query!, [
+        1n,
+        2n,
+        3n,
+      ]);
     });
   });
 });
