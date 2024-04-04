@@ -2,6 +2,7 @@ import { getStorageData, refreshTokenData } from './auth.js';
 import { API_URL } from './consts.js';
 import { saveHistoryEntry } from './history-entries.js';
 import {
+  handleCompleteRecoveryPassword,
   handleDeleteHistoryEntry,
   handleDeleteUserAccount,
   handleGetHistory,
@@ -179,6 +180,9 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       return true;
     case 'validateRecoveryEmailAndCode':
       handleValidateRecoveryEmailWithCode(request, sendResponse);
+      return true;
+    case 'completeRecoveryPassword':
+      handleCompleteRecoveryPassword(request, sendResponse);
       return true;
     default:
       return false;
