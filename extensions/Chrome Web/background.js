@@ -12,6 +12,7 @@ import {
   handleLogout,
   handleSignUp,
   handleUpdatePreferences,
+  handleValidateRecoveryEmailWithCode,
 } from './message-handlers.js';
 
 const handleStartup = async () => {
@@ -175,6 +176,9 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       return true;
     case 'initiateRecoveryPassword':
       handleInitiateRecoveryPassword(request, sendResponse);
+      return true;
+    case 'validateRecoveryEmailAndCode':
+      handleValidateRecoveryEmailWithCode(request, sendResponse);
       return true;
     default:
       return false;

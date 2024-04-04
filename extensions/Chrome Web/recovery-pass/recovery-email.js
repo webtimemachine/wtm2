@@ -6,19 +6,17 @@ getStorageData(chrome).then((storageData) => {
   baseUrlInput.value = storageData?.baseURL || API_URL;
 });
 
-document.querySelector('#submit').addEventListener('click', async (event) => {
+const submitButton = document.querySelector('#submit');
+
+submitButton.addEventListener('click', async (event) => {
   event.preventDefault();
 
   const baseURL = baseUrlInput.value;
   const email = document.querySelector('#email').value;
 
-  console.log(baseURL);
-  console.log(email);
-
   if (email && baseURL) {
-    console.log('hola');
     // send message to background script with email and baseURL
-    const initiateRecoveryPasswordResponse = await chrome.runtime.sendMessage({
+    await chrome.runtime.sendMessage({
       type: 'initiateRecoveryPassword',
       payload: { email, baseURL },
     });
