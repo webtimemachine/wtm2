@@ -21,7 +21,7 @@ submitButton.addEventListener('click', async (event) => {
   const password = document.querySelector('#password').value;
   const confirmPassword = document.querySelector('#confirm-password').value;
 
-  if (password && confirmPassword) {
+  if (password && confirmPassword && password === confirmPassword) {
     // send message to background script with email and baseURL
     await chrome.runtime.sendMessage({
       type: 'completeRecoveryPassword',
