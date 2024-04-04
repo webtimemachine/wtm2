@@ -36,13 +36,13 @@ submitButton.addEventListener('click', async (event) => {
     // send message to background script with email and baseURL
     const validateRecoveryEmailAndCodeResponse = await chrome.runtime.sendMessage({
       type: 'validateRecoveryEmailAndCode',
-      payload: { email, baseURL, code },
+      payload: { email: storageData.recovery_email, baseURL: storageData.baseURL, code: code },
     });
 
     await chrome.storage.local.set({
       recovery_flow: true,
-      recovery_email: email,
-      baseURL: baseURL,
+      recovery_email: storageData.recovery_email,
+      baseURL: storageData.baseURL,
       recovery_code: code,
       recovery_token: validateRecoveryEmailAndCodeResponse.recoveryToken
     });
