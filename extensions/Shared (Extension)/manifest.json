@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Web Time Machine",
+  "name": "WebTM",
   "version": "1.0",
-  "description": "Web Time Machine",
+  "description": "WebTM",
   "permissions": [
     "tabs",
     "activeTab",
