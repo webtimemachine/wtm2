@@ -73,6 +73,10 @@
 		ED47451B2B91F9740061FBAB /* icons in Resources */ = {isa = PBXBuildFile; fileRef = ED4745192B91F9740061FBAB /* icons */; };
 		ED47451C2B91F9740061FBAB /* icons in Resources */ = {isa = PBXBuildFile; fileRef = ED4745192B91F9740061FBAB /* icons */; };
 		ED47451D2B91F9740061FBAB /* icons in Resources */ = {isa = PBXBuildFile; fileRef = ED4745192B91F9740061FBAB /* icons */; };
+		ED6186B62BBEDC6000450A8B /* query-entries.js in Resources */ = {isa = PBXBuildFile; fileRef = ED6186B52BBEDC6000450A8B /* query-entries.js */; };
+		ED6186B72BBEDC6000450A8B /* query-entries.js in Resources */ = {isa = PBXBuildFile; fileRef = ED6186B52BBEDC6000450A8B /* query-entries.js */; };
+		ED6186B82BBEDC6000450A8B /* query-entries.js in Resources */ = {isa = PBXBuildFile; fileRef = ED6186B52BBEDC6000450A8B /* query-entries.js */; };
+		ED6186B92BBEDC6000450A8B /* query-entries.js in Resources */ = {isa = PBXBuildFile; fileRef = ED6186B52BBEDC6000450A8B /* query-entries.js */; };
 		ED7A92512BB48E60001F6121 /* recovery-pass in Resources */ = {isa = PBXBuildFile; fileRef = ED7A92502BB48E60001F6121 /* recovery-pass */; };
 		ED7A92522BB48E60001F6121 /* recovery-pass in Resources */ = {isa = PBXBuildFile; fileRef = ED7A92502BB48E60001F6121 /* recovery-pass */; };
 		ED7A92532BB48E60001F6121 /* recovery-pass in Resources */ = {isa = PBXBuildFile; fileRef = ED7A92502BB48E60001F6121 /* recovery-pass */; };
@@ -180,6 +184,7 @@
 		ED4324B12B6D378E00F3521C /* consts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = consts.js; sourceTree = "<group>"; };
 		ED4324B22B6D378E00F3521C /* history-entries.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "history-entries.js"; sourceTree = "<group>"; };
 		ED4745192B91F9740061FBAB /* icons */ = {isa = PBXFileReference; lastKnownFileType = folder; path = icons; sourceTree = "<group>"; };
+		ED6186B52BBEDC6000450A8B /* query-entries.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "query-entries.js"; sourceTree = "<group>"; };
 		ED7A92502BB48E60001F6121 /* recovery-pass */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "recovery-pass"; sourceTree = "<group>"; };
 		ED964EC12BA1C59D00925F5B /* popup-sign-up.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = "popup-sign-up.html"; sourceTree = "<group>"; };
 		ED964EC22BA1C59D00925F5B /* popup-sign-up.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "popup-sign-up.js"; sourceTree = "<group>"; };
@@ -344,6 +349,7 @@
 		5414C8EE2B640F0A0075471F /* CommonFiles */ = {
 			isa = PBXGroup;
 			children = (
+				ED6186B52BBEDC6000450A8B /* query-entries.js */,
 				ED7A92502BB48E60001F6121 /* recovery-pass */,
 				ED3741872BB19B9800251E51 /* services */,
 				ED3741862BB19B9800251E51 /* settings */,
@@ -529,6 +535,7 @@
 				137F0D8C2AF9C7F700277A9C /* Main.html in Resources */,
 				137F0D922AF9C7F700277A9C /* Script.js in Resources */,
 				ED964EC42BA1C59D00925F5B /* popup-sign-up.html in Resources */,
+				ED6186B62BBEDC6000450A8B /* query-entries.js in Resources */,
 				137F0D962AF9C7F700277A9C /* Assets.xcassets in Resources */,
 				137F0D682AF9C7F700277A9C /* Main.storyboard in Resources */,
 				137F0D902AF9C7F700277A9C /* Style.css in Resources */,
@@ -556,6 +563,7 @@
 				ED37413B2BB1944B00251E51 /* popup-sign-in.js in Resources */,
 				ED3741892BB19B9800251E51 /* settings in Resources */,
 				ED47451B2B91F9740061FBAB /* icons in Resources */,
+				ED6186B72BBEDC6000450A8B /* query-entries.js in Resources */,
 				137F0D8D2AF9C7F700277A9C /* Main.html in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -572,6 +580,7 @@
 				ED3741402BB1944B00251E51 /* message-handlers.js in Resources */,
 				548A88AE2B640D94009C7C21 /* styles.css in Resources */,
 				ED964EC62BA1C59D00925F5B /* popup-sign-up.html in Resources */,
+				ED6186B82BBEDC6000450A8B /* query-entries.js in Resources */,
 				ED47451C2B91F9740061FBAB /* icons in Resources */,
 				ED37418A2BB19B9800251E51 /* settings in Resources */,
 				13564CCA2B0BEF25007E905E /* manifest.json in Resources */,
@@ -598,6 +607,7 @@
 				ED3741412BB1944B00251E51 /* message-handlers.js in Resources */,
 				548A88AF2B640D94009C7C21 /* styles.css in Resources */,
 				ED964EC72BA1C59D00925F5B /* popup-sign-up.html in Resources */,
+				ED6186B92BBEDC6000450A8B /* query-entries.js in Resources */,
 				ED47451D2B91F9740061FBAB /* icons in Resources */,
 				ED37418B2BB19B9800251E51 /* settings in Resources */,
 				13564CCB2B0BEF25007E905E /* manifest.json in Resources */,
