@@ -349,7 +349,7 @@ export class AuthService {
       });
     });
 
-    this.emailService.sendPasswordResetEmail(user.email, recoveryCode);
+    await this.emailService.sendPasswordResetEmail(user.email, recoveryCode);
 
     return plainToClassFromExist(new MessageResponse(), {
       message: 'Password reset initialized',

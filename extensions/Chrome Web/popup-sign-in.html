@@ -4,7 +4,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" type="text/css" href="sign-in-styles.css">
   <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 
@@ -18,7 +17,8 @@
     <input type="email" name="email" id="email" placeholder="Email">
     <input type="password" name="password" id="password" placeholder="Password">
     <span id='login-error' class='error'>Authentication fail. Please, review your credentials.</span>
-    <div style='display: flex; justify-content: end; width: 100%; margin-bottom: 8px;'>
+    <div style='display: flex; justify-content: space-between; width: 100%; margin-bottom: 8px;'>
+      <span id='recovery-pass-link' style='padding-left: 32px; cursor: pointer;'>Recovery password</span>
       <span id='sign-up-link' style='padding-right: 32px; cursor: pointer;'>Sign up</span>
     </div>
     <button type="submit" id="submit">Sign In</button>

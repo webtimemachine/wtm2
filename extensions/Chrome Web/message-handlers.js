@@ -10,6 +10,7 @@ import {
 import { getHistoryEntries, deleteHistoryEntries } from './history-entries.js';
 import { getUserPreferencies, updatePreferences } from './services/settings.js';
 import { getQueryEntries } from './query-entries.js'
+import { completeRecoveryPassword, initiateRecoveryPassword, validateRecoveryEmailWithCode } from './services/recovery-pass.js';
 
 /**
  * Handles the request to fetch browsing history entries.
@@ -273,5 +274,59 @@ export const handleDeleteUserAccount = async (chrome, sendResponse) => {
       // If an error occurs during fetching, send an error response
       sendResponse({ error: true });
     }
+  }
+};
+
+export const handleInitiateRecoveryPassword = async (request, sendResponse) => {
+  try {
+    // Init recovery process
+    const res = await initiateRecoveryPassword(
+      request.payload.baseURL,
+      { email: request.payload.email }
+    );
+    // Send the fetched history entries back as a response
+    sendResponse(res);
+  } catch (error) {
+    // If an error occurs during fetching, send an error response
+    sendResponse({ error: true });
+  }
+};
+
+export const handleValidateRecoveryEmailWithCode = async (request, sendResponse) => {
+  try {
+    // Validate email and code
+    const res = await validateRecoveryEmailWithCode(
+      request.payload.baseURL,
+      { email: request.payload.email, recoveryCode: request.payload.code }
+    );
+    const data = await res.json();
+    // Send the response back
+    sendResponse(data.data);
+  } catch (error) {
+    // If an error occurs during fetching, send an error response
+    sendResponse({ error: true });
+  }
+};
+
+export const handleCompleteRecoveryPassword = async (request, sendResponse) => {
+  try {
+    const deviceId = await getDeviceId();
+
+    // Complete recovery password flow
+    const res = await completeRecoveryPassword(
+      request.payload.recoveryToken,
+      request.payload.baseURL,
+      {
+        password: request.payload.password,
+        verificationPassword: request.payload.confirmPassword,
+        deviceKey: deviceId,
+        userAgent: request.payload.userAgent
+      }
+    );
+    // Send the response back
+    sendResponse(res);
+  } catch (error) {
+    // If an error occurs during fetching, send an error response
+    sendResponse({ error: true });
   }
 };
