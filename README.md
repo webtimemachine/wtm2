@@ -1,6 +1,6 @@
-# Web Time Machine
+# WebTM
 
-Web Time Machine is a cross-platform solution to integrate the navigation history between desktop and mobile web browsers. Focusing on providing a solution for an integration between Google Chrome, Safari, Firefox, Android and iOS. This repository implements the backend solution with a NestJS application that provides a REST API and a PostgreSQL database used through PrismaORM.
+WebTM is a cross-platform solution to integrate the navigation history between desktop and mobile web browsers. Focusing on providing a solution for an integration between Google Chrome, Safari, Firefox, Android and iOS. This repository implements the backend solution with a NestJS application that provides a REST API and a PostgreSQL database used through PrismaORM.
 
 ## Installation
 
@@ -48,18 +48,19 @@ To see the Open API Specification navigate to / of your API running on the port 
 
 # How to deploy your own Backend of WTM
 
-If you want to use Web Time Machine app saving and managing your own navigation data the best way to do it is to deploy your own backend and connect it to the extension. Next we detail the steps to do achieve this.
+If you want to use WebTM app saving and managing your own navigation data the best way to do it is to deploy your own backend and connect it to the extension. Next we detail the steps to do achieve this.
 
-- [Web Time Machine](#web-time-machine)
+- [WebTM](#webtm)
   - [Installation](#installation)
+  - [Running with Docker](#running-with-docker)
   - [Running the app](#running-the-app)
   - [Open API Docs](#open-api-docs)
 - [How to deploy your own Backend of WTM](#how-to-deploy-your-own-backend-of-wtm)
-  - [Deploy WTM on Vercel](#deploy-wtm-on-vercel)
+    - [Deploy WTM on Vercel](#deploy-wtm-on-vercel)
   - [Create a Vercel Postgres Serverless SQL](#create-a-vercel-postgres-serverless-sql)
   - [Set the environment variables](#set-the-environment-variables)
 - [Chrome Extension](#chrome-extension)
-  - [How to run it locally](#how-to-run-it-locally)
+  - [Install the extension in Chrome (using the .zip file or the extension folder)](#install-the-extension-in-chrome-using-the-zip-file-or-the-extension-folder)
 
 ### Deploy WTM on Vercel
 
