@@ -29,12 +29,23 @@
   </div>
   <div id="history-container" class="list-container visible">
     <div class="search-container">
-      <input id="input" type="text" placeholder="Search through time..." />
-      <label>
-        <input type="checkbox" title="Activate advanced search" id="semantic-toggle"
-          style='width: 28px; height: 28px;' />
+      <input id="input" type="text" placeholder="Search through time..." style='width: 70%;' />
+      <div style='display: flex;' id='search-container-actions'>
+        <!-- <label>
+          <input type="checkbox" title="Activate advanced search" id="semantic-toggle"
+            style='width: 28px; height: 28px;' />
+        </label> -->
+        <button id="search-button">Search</button>
+      </div>
+    </div>
+    <div style='display: flex; justify-content: flex-start; padding-top: 0px; margin-top: 0px;'>
+      <input type="checkbox" title="Activate advanced search" id="semantic-toggle" name='semantic-toggle'
+        style='width: 16px; height: 16px;' />
+      <label style='padding-left: 8px;' for='semantic-toggle'>
+        Use semantic search
       </label>
-      <button id="search-button">Search</button>
+
+      <!-- <p style='padding-left: 8px;'>Use semantic search</p> -->
     </div>
     <div id="sites-list">
       <!-- Sites will be listed here -->
