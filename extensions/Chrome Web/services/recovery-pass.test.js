@@ -1,7 +1,11 @@
 import { jest } from '@jest/globals';
-import { completeRecoveryPassword, initiateRecoveryPassword, validateRecoveryEmailWithCode } from './recovery-pass';
+import {
+  restorePassword,
+  recoverPassword,
+  validateRecoveryCode,
+} from './recovery-pass';
 
-describe('initiateRecoveryPassword function', () => {
+describe('recoverPassword function', () => {
   // Mocking fetch function
   global.fetch = jest.fn();
 
@@ -15,7 +19,9 @@ describe('initiateRecoveryPassword function', () => {
 
   test('should return response when fetch succeeds', async () => {
     // Mock successful fetch response
-    const mockResponse = { message: 'Password recovery initiated successfully' };
+    const mockResponse = {
+      message: 'Recovery code sent to your email',
+    };
     fetch.mockResolvedValueOnce({
       status: 200,
       json: async () => mockResponse,
@@ -23,12 +29,12 @@ describe('initiateRecoveryPassword function', () => {
 
     const baseURL = 'mockedBaseURL';
     const payload = { email: 'test@example.com' };
-    const result = await initiateRecoveryPassword(baseURL, payload);
+    const result = await recoverPassword(baseURL, payload);
 
-    const data = await result.json()
+    const data = await result.json();
     expect(data).toEqual(mockResponse); // Expect the result to be the same as the mocked response
-    expect(fetch).toHaveBeenCalledWith(`${baseURL}/api/auth/password-recovery/initiate`, {
-      method: 'PATCH',
+    expect(fetch).toHaveBeenCalledWith(`${baseURL}/api/auth/password/recover`, {
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -45,12 +51,12 @@ describe('initiateRecoveryPassword function', () => {
     const baseURL = 'mockedBaseURL';
     const payload = { email: 'test@example.com' };
 
-    await initiateRecoveryPassword(baseURL, payload)
+    await recoverPassword(baseURL, payload);
     expect(console.error).toHaveBeenCalled();
   });
 });
 
-describe('validateRecoveryEmailWithCode function', () => {
+describe('validateRecoveryCode function', () => {
   // Mocking fetch function
   global.fetch = jest.fn();
 
@@ -72,17 +78,20 @@ describe('validateRecoveryEmailWithCode function', () => {
 
     const baseURL = 'mockedBaseURL';
     const payload = { email: 'test@example.com', code: '123456' };
-    const result = await validateRecoveryEmailWithCode(baseURL, payload);
+    const result = await validateRecoveryCode(baseURL, payload);
 
-    const data = await result.json()
-    expect(data).toEqual(mockResponse);  // Expect the result to be the same as the mocked response
-    expect(fetch).toHaveBeenCalledWith(`${baseURL}/api/auth/password-recovery/validate`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
+    const data = await result.json();
+    expect(data).toEqual(mockResponse); // Expect the result to be the same as the mocked response
+    expect(fetch).toHaveBeenCalledWith(
+      `${baseURL}/api/auth/password/validate-recovery-code`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
       },
-      body: JSON.stringify(payload),
-    }); // Expect fetch to be called with the correct arguments
+    ); // Expect fetch to be called with the correct arguments
   });
 
   test('should throw error and log to console when fetch fails', async () => {
@@ -94,12 +103,12 @@ describe('validateRecoveryEmailWithCode function', () => {
     const baseURL = 'mockedBaseURL';
     const payload = { email: 'test@example.com', code: '123456' };
 
-    await validateRecoveryEmailWithCode(baseURL, payload);
+    await validateRecoveryCode(baseURL, payload);
     expect(console.error).toHaveBeenCalledWith(expect.any(Error)); // Expect console.error to be called with an error message
   });
 });
 
-describe('completeRecoveryPassword function', () => {
+describe('restorePassword function', () => {
   // Mocking fetch function
   global.fetch = jest.fn();
 
@@ -113,7 +122,9 @@ describe('completeRecoveryPassword function', () => {
 
   test('should return response when fetch succeeds', async () => {
     // Mock successful fetch response
-    const mockResponse = { message: 'Password recovery completed successfully' };
+    const mockResponse = {
+      message: 'Password recovery completed successfully',
+    };
     fetch.mockResolvedValueOnce({
       status: 200,
       json: async () => mockResponse,
@@ -122,12 +133,12 @@ describe('completeRecoveryPassword function', () => {
     const recoveryToken = 'mockedRecoveryToken';
     const baseURL = 'mockedBaseURL';
     const payload = { newPassword: 'newPassword123' };
-    const result = await completeRecoveryPassword(recoveryToken, baseURL, payload);
+    const result = await restorePassword(recoveryToken, baseURL, payload);
 
-    const data = await result.json()
+    const data = await result.json();
     expect(data).toEqual(mockResponse); // Expect the result to be the same as the mocked response
-    expect(fetch).toHaveBeenCalledWith(`${baseURL}/api/auth/password-recovery/complete`, {
-      method: 'PATCH',
+    expect(fetch).toHaveBeenCalledWith(`${baseURL}/api/auth/password/restore`, {
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${recoveryToken}`,
@@ -146,7 +157,7 @@ describe('completeRecoveryPassword function', () => {
     const baseURL = 'mockedBaseURL';
     const payload = { newPassword: 'newPassword123' };
 
-    await completeRecoveryPassword(recoveryToken, baseURL, payload);
+    await restorePassword(recoveryToken, baseURL, payload);
     expect(console.error).toHaveBeenCalledWith(expect.any(Error)); // Expect console.error to be called with an error message
   });
 });

@@ -5,17 +5,14 @@
  * @param {object} payload - An object containing the user email.
  * @returns {Promise<Response>} A Promise that resolves to the response from the update user's preferences request.
  */
-export async function initiateRecoveryPassword (
-  baseURL,
-  payload,
-) {
+export async function recoverPassword(baseURL, payload) {
   try {
     // Convert payload to JSON for the request body
     const body = JSON.stringify(payload);
 
     // Send a POST request to the endpoint for saving navigation history
-    const resp = await fetch(`${baseURL}/api/auth/password-recovery/initiate`, {
-      method: 'PATCH',
+    const resp = await fetch(`${baseURL}/api/auth/password/recover`, {
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -39,22 +36,22 @@ export async function initiateRecoveryPassword (
  * @param {object} payload - An object containing the data to be verify (email & code).
  * @returns {Promise<Response>} A Promise that resolves to the response from the update user's preferences request.
  */
-export async function validateRecoveryEmailWithCode (
-  baseURL,
-  payload,
-) {
+export async function validateRecoveryCode(baseURL, payload) {
   try {
     // Convert payload to JSON for the request body
     const body = JSON.stringify(payload);
 
     // Send a POST request to the endpoint for saving navigation history
-    const resp = await fetch(`${baseURL}/api/auth/password-recovery/validate`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
+    const resp = await fetch(
+      `${baseURL}/api/auth/password/validate-recovery-code`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: body,
       },
-      body: body,
-    });
+    );
     // Check if the access token has expired (HTTP status code 401)
     if (resp.status !== 200) {
       throw Error('Error!');
@@ -74,18 +71,14 @@ export async function validateRecoveryEmailWithCode (
  * @param {object} payload - An object containing the data to finish the process.
  * @returns {Promise<Response>} A Promise that resolves to the response from the update user's preferences request.
  */
-export async function completeRecoveryPassword (
-  recoveryToken,
-  baseURL,
-  payload,
-) {
+export async function restorePassword(recoveryToken, baseURL, payload) {
   try {
     // Convert payload to JSON for the request body
     const body = JSON.stringify(payload);
 
     // Send a POST request to the endpoint for saving navigation history
-    const resp = await fetch(`${baseURL}/api/auth/password-recovery/complete`, {
-      method: 'PATCH',
+    const resp = await fetch(`${baseURL}/api/auth/password/restore`, {
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${recoveryToken}`,

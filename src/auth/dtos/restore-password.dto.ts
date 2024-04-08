@@ -3,7 +3,7 @@ import { Transform } from 'class-transformer';
 import { IsNotEmpty, IsOptional, Matches } from 'class-validator';
 import { SignUpRequestDto } from './signup-request.dto';
 
-export class RecoverNewPasswordDto {
+export class RestorePasswordDto {
   @ApiProperty()
   @IsNotEmpty()
   @Matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[^\s]{8,20}$/, {
