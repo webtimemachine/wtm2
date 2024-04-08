@@ -33,6 +33,14 @@ export function JwtAccessToken(
   );
 }
 
+export function JwtPartialToken(guards: Type<CanActivate>[] = []) {
+  return applyDecorators(
+    UseGuards(AuthGuard('jwt-partial-token'), ...guards),
+    ApiBearerAuth('partialToken'),
+    ApiUnauthorizedResponse({ description: ApiDocsDescriptions.UNAUTHORIZED }),
+  );
+}
+
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/explicit-module-boundary-types
 export function JwtRefreshToken(guards: Type<CanActivate>[] = []) {
   return applyDecorators(

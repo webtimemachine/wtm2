@@ -1,5 +1,5 @@
-const baseURL = document.getElementById('baseURL')
-const email = document.getElementById('email')
+const baseURL = document.getElementById('baseURL');
+const email = document.getElementById('email');
 
 const storageData = await chrome.storage.local.get([
   'recovery_flow',
@@ -8,22 +8,20 @@ const storageData = await chrome.storage.local.get([
 ]);
 
 if (storageData.recovery_flow) {
-  baseURL.innerText = `Base URL: ${storageData.baseURL}`
-  email.innerText = `Recovery email: ${storageData.recovery_email}`
+  baseURL.innerText = `Base URL: ${storageData.baseURL}`;
+  email.innerText = `Recovery email: ${storageData.recovery_email}`;
 }
 
-
-const backToLogin = document.getElementById('back-to-login')
+const backToLogin = document.getElementById('back-to-login');
 
 backToLogin.addEventListener('click', async () => {
   await chrome.storage.local.set({
     recovery_flow: false,
     recovery_email: null,
-    baseURL: null
   });
 
   window.location.replace('../popup-sign-in.html');
-})
+});
 
 const submitButton = document.querySelector('#submit');
 
@@ -34,9 +32,13 @@ submitButton.addEventListener('click', async (event) => {
 
   if (email && baseURL && code) {
     // send message to background script with email and baseURL
-    const validateRecoveryEmailAndCodeResponse = await chrome.runtime.sendMessage({
-      type: 'validateRecoveryEmailAndCode',
-      payload: { email: storageData.recovery_email, baseURL: storageData.baseURL, code: code },
+    const validateRecoveryCodeResponse = await chrome.runtime.sendMessage({
+      type: 'validateRecoveryCode',
+      payload: {
+        email: storageData.recovery_email,
+        baseURL: storageData.baseURL,
+        code: code,
+      },
     });
 
     await chrome.storage.local.set({
@@ -44,7 +46,7 @@ submitButton.addEventListener('click', async (event) => {
       recovery_email: storageData.recovery_email,
       baseURL: storageData.baseURL,
       recovery_code: code,
-      recovery_token: validateRecoveryEmailAndCodeResponse.recoveryToken
+      recovery_token: validateRecoveryCodeResponse.recoveryToken,
     });
 
     window.location.replace('./change-password.html');
