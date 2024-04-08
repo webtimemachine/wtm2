@@ -488,7 +488,7 @@ export class AuthService {
     jwtContext: PartialJwtContext,
     verifyEmailDto: VerifyAccountDto,
   ): Promise<LoginResponseDto> {
-    const { user } = jwtContext;
+    let { user } = jwtContext;
     if (user.verified) {
       throw new BadRequestException('Email already verified');
     }
@@ -499,7 +499,7 @@ export class AuthService {
       throw new BadRequestException('Invalid verification code');
     }
 
-    await this.prismaService.user.update({
+    user = await this.prismaService.user.update({
       where: {
         id: user.id,
       },
@@ -507,6 +507,7 @@ export class AuthService {
         verified: true,
         verificationCode: null,
       },
+      include: completeUserInclude,
     });
 
     const loginResponse: LoginResponseDto = (await this.login(
@@ -538,7 +539,7 @@ export class AuthService {
       verificationCode,
     );
     return plainToInstance(MessageResponse, {
-      message: 'Email verification code succesfully sent',
+      message: 'Verification code email succesfully sent',
     });
   }
 
