@@ -6,6 +6,7 @@ import {
   signUpUser,
   deleteUserAccount,
   verifyEmail,
+  resendEmail,
 } from './auth.js';
 
 import { getHistoryEntries, deleteHistoryEntries } from './history-entries.js';
@@ -369,6 +370,23 @@ export const handleVerifyEmail = async (chrome, request, sendResponse) => {
 
     // Send verify response back to the caller
     sendResponse(verifyEmailRes);
+  } catch (error) {
+    // If an error occurs during verify email, send an error response
+    sendResponse({ error: true });
+  }
+};
+
+export const handleResendCode = async (chrome, request, sendResponse) => {
+  // Obtain the device ID
+  const deviceId = await getDeviceId();
+
+  try {
+    // Send resend request with payload and device ID
+    const response = await resendEmail(request.payload);
+    // Parse resend response as JSON
+    const resendEmailRes = await response.json();
+    // Send resend response back to the caller
+    sendResponse(resendEmailRes);
   } catch (error) {
     // If an error occurs during verify email, send an error response
     sendResponse({ error: true });

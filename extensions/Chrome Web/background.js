@@ -15,6 +15,7 @@ import {
   handleUpdatePreferences,
   handleValidateRecoveryCode,
   handleVerifyEmail,
+  handleResendCode,
 } from './message-handlers.js';
 
 const handleStartup = async () => {
@@ -193,6 +194,9 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       return true;
     case 'verifyEmail':
       handleVerifyEmail(chrome, request, sendResponse);
+      return true;
+    case 'resendCode':
+      handleResendCode(chrome, request, sendResponse);
       return true;
     default:
       return false;

@@ -159,7 +159,7 @@ export const signUpUser = async (payload) => {
  *
  * @returns {Promise<Response>} A Promise that resolves to the response from the sign up request.
  */
-export async function deleteUserAccount (
+export async function deleteUserAccount(
   user_info,
   baseURL,
   reexecuted = false,
@@ -171,7 +171,7 @@ export async function deleteUserAccount (
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${user_info.accessToken}`,
-      }
+      },
     });
     // Check if the access token has expired (HTTP status code 401)
     if (resp.status === 401) {
@@ -186,11 +186,7 @@ export async function deleteUserAccount (
     // Refresh the access token and re-execute deleteUserAccount
     return await refreshTokenData({ user_info }, baseURL).then(
       async (res) =>
-        await deleteUserAccount(
-          { ...user_info, ...res },
-          baseURL,
-          true,
-        ),
+        await deleteUserAccount({ ...user_info, ...res }, baseURL, true),
     );
   }
 }
@@ -201,7 +197,7 @@ export const verifyEmail = async (payload, deviceId) => {
     const body = JSON.stringify({
       verificationCode: payload.code,
       deviceKey: deviceId,
-      userAgent: payload.userAgent
+      userAgent: payload.userAgent,
     });
 
     // Send a POST request to the verify endpoint with the provided body using partialToken
@@ -212,6 +208,21 @@ export const verifyEmail = async (payload, deviceId) => {
         Authorization: `Bearer ${payload.partialToken}`,
       },
       body,
+    });
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+export const resendEmail = async (payload) => {
+  try {
+    // Send a POST request to the resend endpoint with the provided body using partialToken
+    return await fetch(`${payload.baseURL}/api/auth/verify/resend`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${payload.partialToken}`,
+      },
     });
   } catch (err) {
     console.error(err);

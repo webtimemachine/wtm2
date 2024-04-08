@@ -18,8 +18,13 @@
       <span id='email' style='padding-top: 8px;'></span>
     </div>
 
-    <input type="text" name="code" id="code" placeholder="Code">
-    <span id='verify-error' class='error'>Invalid verification code, please try again.</span>
+    <input type="text" name="code" id="code" placeholder="Code" style="width: 80%; margin-right: 12px;">
+
+    <div style="display: flex; flex-direction: column; width: 100%; align-items: flex-start; ">
+      <span id='verify-error' class='error'>Invalid verification code, please try again.</span>
+      <span id='email-sent-message' class='success hidden'>Verification code sent to your email</span>
+      <span id='resend-code' style='cursor: pointer; padding-bottom: 8px;'>Resend verification code</span>
+    </div>
     <button type="submit" id="submit">Verify Code</button>
   </form>
   <span style='padding: 16px 8px; cursor: pointer;' id='back-to-login'>

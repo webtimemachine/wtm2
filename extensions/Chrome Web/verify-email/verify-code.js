@@ -13,7 +13,6 @@ if (storageData.verify_email) {
 }
 
 const backToLogin = document.getElementById('back-to-login');
-
 backToLogin.addEventListener('click', async () => {
   await chrome.storage.local.set({
     partialToken: null,
@@ -23,8 +22,28 @@ backToLogin.addEventListener('click', async () => {
   window.location.replace('../popup-sign-in.html');
 });
 
-const submitButton = document.querySelector('#submit');
+const emailSentMessage = document.getElementById('email-sent-message');
+const resendCode = document.getElementById('resend-code');
 
+resendCode.addEventListener('click', async () => {
+  const resendCodeResponse = await chrome.runtime.sendMessage({
+    type: 'resendCode',
+    payload: {
+      partialToken: storageData.partialToken,
+      baseURL: storageData.baseURL,
+    },
+  });
+  if (
+    resendCodeResponse &&
+    !resendCodeResponse?.error &&
+    resendCodeResponse.message
+  ) {
+    emailSentMessage.classList.remove('hidden');
+  }
+  console.log({ resendCodeResponse });
+});
+
+const submitButton = document.querySelector('#submit');
 submitButton.addEventListener('click', async (event) => {
   event.preventDefault();
 
