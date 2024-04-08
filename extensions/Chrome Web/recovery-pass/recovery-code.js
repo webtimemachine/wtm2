@@ -18,7 +18,6 @@ backToLogin.addEventListener('click', async () => {
   await chrome.storage.local.set({
     recovery_flow: false,
     recovery_email: null,
-    baseURL: null,
   });
 
   window.location.replace('../popup-sign-in.html');
