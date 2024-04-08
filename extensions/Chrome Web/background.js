@@ -2,18 +2,18 @@ import { getStorageData, refreshTokenData } from './auth.js';
 import { API_URL } from './consts.js';
 import { saveHistoryEntry } from './history-entries.js';
 import {
-  handleCompleteRecoveryPassword,
+  handleRestorePassword,
   handleDeleteHistoryEntry,
   handleDeleteUserAccount,
   handleGetHistory,
   handleGetPreferences,
   handleGetQueries,
-  handleInitiateRecoveryPassword,
+  handleRecoverPassword,
   handleLogin,
   handleLogout,
   handleSignUp,
   handleUpdatePreferences,
-  handleValidateRecoveryEmailWithCode,
+  handleValidateRecoveryCode,
 } from './message-handlers.js';
 
 const handleStartup = async () => {
@@ -49,10 +49,10 @@ const handleStartup = async () => {
  * @param {string} selector
  * @returns {string}
  */
-function DOMtoString (selector) {
+function DOMtoString(selector) {
   if (selector) {
     // this function was added because the regex replacement is inconsistent if any of the properties in the tags contains these chars: ["<", ">"]
-    function removeAllAttributes (node) {
+    function removeAllAttributes(node) {
       // Remove attributes from the current node
       while (node.attributes.length > 0) {
         node.removeAttribute(node.attributes[0].name);
@@ -70,7 +70,7 @@ function DOMtoString (selector) {
     selector = document.querySelector(selector).cloneNode(true);
 
     if (!selector) {
-      return "ERROR: querySelector failed to find node"
+      return 'ERROR: querySelector failed to find node';
     }
 
     const styleNodes = selector.querySelectorAll('style');
@@ -78,28 +78,31 @@ function DOMtoString (selector) {
     const linkNodes = selector.querySelectorAll('link');
 
     // Remove each style element from the cloned body
-    styleNodes.forEach(styleNode => {
+    styleNodes.forEach((styleNode) => {
       styleNode.parentNode.removeChild(styleNode);
     });
-    scriptNodes.forEach(scriptNode => {
+    scriptNodes.forEach((scriptNode) => {
       scriptNode.parentNode.removeChild(scriptNode);
     });
-    linkNodes.forEach(linkNode => {
+    linkNodes.forEach((linkNode) => {
       linkNode.parentNode.removeChild(linkNode);
     });
-
   } else {
     selector = document.documentElement.outerHTML;
   }
 
-  removeAllAttributes(selector)
+  removeAllAttributes(selector);
 
   return selector.outerHTML;
 }
 
 const handleUpdated = async (tabId, changeInfo, tab) => {
   if (changeInfo.status === 'complete') {
-    if (tab.url && !tab.url?.startsWith('chrome://') && !tab.url.startsWith("https://www.google.com/search?q")) {
+    if (
+      tab.url &&
+      !tab.url?.startsWith('chrome://') &&
+      !tab.url.startsWith('https://www.google.com/search?q')
+    ) {
       let htmlContent = '';
 
       const results = await chrome.scripting.executeScript({
@@ -117,7 +120,10 @@ const handleUpdated = async (tabId, changeInfo, tab) => {
         navigationDate: new Date().toISOString(),
         title: tab.title,
         // removes remaining html tags, more that 2 contiguous spaces, more that 2 contiguous line breaks and html entities
-        content: htmlContent.replace(/(<[^>]*>)|(\s{2,})|(\n{2,})||(&\w+;)/g, ''),
+        content: htmlContent.replace(
+          /(<[^>]*>)|(\s{2,})|(\n{2,})||(&\w+;)/g,
+          '',
+        ),
       };
 
       const storageData = await getStorageData(chrome);
@@ -175,14 +181,14 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     case 'deleteUserAccount':
       handleDeleteUserAccount(chrome, sendResponse);
       return true;
-    case 'initiateRecoveryPassword':
-      handleInitiateRecoveryPassword(request, sendResponse);
+    case 'recoverPassword':
+      handleRecoverPassword(request, sendResponse);
       return true;
     case 'validateRecoveryEmailAndCode':
-      handleValidateRecoveryEmailWithCode(request, sendResponse);
+      handleValidateRecoveryCode(request, sendResponse);
       return true;
-    case 'completeRecoveryPassword':
-      handleCompleteRecoveryPassword(request, sendResponse);
+    case 'restorePassword':
+      handleRestorePassword(request, sendResponse);
       return true;
     default:
       return false;

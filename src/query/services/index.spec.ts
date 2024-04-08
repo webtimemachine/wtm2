@@ -32,6 +32,8 @@ const existingUser = {
   updateAt: new Date(),
   deletedAt: null,
   recoveryCode: null,
+  verified: true,
+  verificationCode: null,
   userPreferences: {
     id: BigInt(1),
     userId: BigInt(1),
