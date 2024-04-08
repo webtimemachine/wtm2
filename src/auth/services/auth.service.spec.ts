@@ -1,7 +1,8 @@
 import { ConflictException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
-import { PrismaClient, UserType } from '@prisma/client';
+import { UserType } from '@prisma/client';
+
 import { EmailService, PrismaService } from '../../common/services';
 import { LocalStrategy } from '../strategies';
 import { AuthService } from './auth.service';
@@ -11,8 +12,7 @@ import { MailerService } from '@nestjs-modules/mailer';
 describe('AuthService', () => {
   let authService: AuthService;
   let prismaService: PrismaService;
-  const prismaClient = new PrismaClient();
-  let emailService: EmailService;
+  let jwtService: JwtService;
 
   const mockConflictException = new ConflictException();
 
@@ -104,7 +104,12 @@ describe('AuthService', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         AuthService,
-        JwtService,
+        {
+          provide: JwtService,
+          useValue: {
+            sign: jest.fn(),
+          },
+        },
         LocalStrategy,
         EmailService,
         {
@@ -119,7 +124,7 @@ describe('AuthService', () => {
 
     authService = module.get<AuthService>(AuthService);
     prismaService = module.get<PrismaService>(PrismaService);
-    emailService = module.get<EmailService>(EmailService);
+    jwtService = module.get<JwtService>(JwtService);
   });
 
   it('authService should be defined', () => {
@@ -175,17 +180,16 @@ describe('AuthService', () => {
     });
 
     it('should return SignUpResponseDto when user is not verified', async () => {
-      // Mock para devolver un SignUpResponseDto
       prismaService.$transaction = jest.fn().mockReturnValue(signUpResult);
 
       const { deviceKey, userAgent } = loginRequestDto;
+      (jwtService.sign as jest.Mock).mockReturnValue('mockedToken');
       const result = await authService.login(
         deviceKey,
         userAgent,
         nonVerifiedUser,
       );
 
-      // Verifica que el resultado es una instancia de SignUpResponseDto
       if (result instanceof SignUpResponseDto) {
         expect(result.id).toBeDefined();
         expect(result.email).toEqual(loginRequestDto.email);
