@@ -21,6 +21,8 @@ const envSchemas = {
   CRYPTO_KEY: z.string(),
   JWT_ACCESS_SECRET: z.string(),
   JWT_ACCESS_EXPIRATION: z.string(),
+  JWT_PARTIAL_SECRET: z.string(),
+  JWT_PARTIAL_EXPIRATION: z.string().default('60m'),
   JWT_REFRESH_SECRET: z.string(),
   JWT_REFRESH_EXPIRATION: z.string(),
   JWT_RECOVERY_TOKEN_SECRET: z.string(),

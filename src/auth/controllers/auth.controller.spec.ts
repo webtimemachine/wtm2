@@ -1,9 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { JwtService } from '@nestjs/jwt';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, UserType } from '@prisma/client';
 
 import { AuthController } from './auth.controller';
 import { AuthService } from '../services';
+import { VerifyAccountDto } from '../dtos';
+import { PartialJwtContext } from '../interfaces';
 import { CommonTestingModule } from '../../common/common.testing.module';
 
 describe('AuthController', () => {
@@ -14,11 +16,13 @@ describe('AuthController', () => {
 
   const mockAuthService = {
     login: jest.fn(),
+    verifyAccount: jest.fn(),
     signup: jest.fn(),
   };
 
   const accessToken = 'accessToken';
   const refreshToken = 'refreshToken';
+  const partialToken = 'partialToken';
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -55,6 +59,7 @@ describe('AuthController', () => {
       const signUpResult = {
         id: 1,
         email: 'example@email.com',
+        partialToken,
       };
 
       mockAuthService.signup.mockResolvedValue(signUpResult);
@@ -101,6 +106,79 @@ describe('AuthController', () => {
         loginRequestDto.userAgent,
         req.user,
       );
+      expect(result).toEqual(loginResponseDto);
+    });
+  });
+
+  /**
+   * VERIFY ACCOUNT
+   */
+  describe('verify', () => {
+    it('should call authController.verify and return the result', async () => {
+      const loginRequestDto: VerifyAccountDto = {
+        verificationCode: '123456',
+        deviceKey: '123456',
+      };
+
+      const loginResponseDto = {
+        id: 1,
+        email: 'email@email.com',
+        accessToken,
+        refreshToken,
+      };
+
+      const req: PartialJwtContext = {
+        payload: {
+          userId: 1,
+          sub: 'email@email.com',
+          userType: UserType.MEMBER,
+        },
+        verificationToken: '123456',
+        user: {
+          id: BigInt(1),
+          email: 'email@email.com',
+          userType: UserType.MEMBER,
+          password: '123456',
+          recoveryCode: 'recoveryCode',
+          verified: false,
+          verificationCode: '123456',
+          createdAt: new Date(),
+          updateAt: new Date(),
+          deletedAt: null,
+        },
+      };
+
+      mockAuthService.verifyAccount.mockResolvedValue(loginResponseDto);
+
+      const result = await authController.verifyAccount(req, loginRequestDto);
+
+      expect(mockAuthService.verifyAccount).toHaveBeenCalledWith(
+        expect.objectContaining({
+          payload: {
+            userId: 1,
+            sub: 'email@email.com',
+            userType: UserType.MEMBER,
+          },
+          verificationToken: '123456',
+          user: {
+            id: BigInt(1),
+            email: 'email@email.com',
+            userType: UserType.MEMBER,
+            password: '123456',
+            recoveryCode: 'recoveryCode',
+            verified: false,
+            verificationCode: '123456',
+            createdAt: expect.any(Date),
+            updateAt: expect.any(Date),
+            deletedAt: null,
+          },
+        }),
+        expect.objectContaining({
+          verificationCode: '123456',
+          deviceKey: '123456',
+        }),
+      );
+
       expect(result).toEqual(loginResponseDto);
     });
   });

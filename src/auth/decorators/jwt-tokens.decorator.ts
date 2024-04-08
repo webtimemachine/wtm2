@@ -8,6 +8,7 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import {
   ApiBearerAuth,
+  ApiInternalServerErrorResponse,
   ApiOperation,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
@@ -30,6 +31,14 @@ export function JwtAccessToken(
       description: ApiDocsDescriptions.UNAUTHORIZED,
       type: MessageResponse,
     }),
+  );
+}
+
+export function JwtPartialToken(guards: Type<CanActivate>[] = []) {
+  return applyDecorators(
+    UseGuards(AuthGuard('jwt-partial-token'), ...guards),
+    ApiBearerAuth('partialToken'),
+    ApiUnauthorizedResponse({ description: ApiDocsDescriptions.UNAUTHORIZED }),
   );
 }
 
