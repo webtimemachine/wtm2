@@ -26,6 +26,8 @@ describe('AuthService', () => {
     updateAt: new Date(),
     deletedAt: null,
     recoveryCode: null,
+    verified: true,
+    verificationCode: null,
     userPreferences: {
       id: BigInt(1),
       userId: BigInt(1),
@@ -50,6 +52,7 @@ describe('AuthService', () => {
     email: existingUser.email,
     password: 'password123',
     deviceKey: '1234',
+    userAgent: undefined,
   };
 
   const loginResult = {
@@ -120,7 +123,13 @@ describe('AuthService', () => {
     it('should login successfully and return tokens', async () => {
       prismaService.$transaction = jest.fn().mockReturnValue(loginResult);
 
-      const result = await authService.login(loginRequestDto, existingUser);
+      const { deviceKey, userAgent } = loginRequestDto;
+
+      const result = await authService.login(
+        deviceKey,
+        userAgent,
+        existingUser,
+      );
 
       expect(result).toBeDefined();
       expect(result.accessToken).toBeDefined();

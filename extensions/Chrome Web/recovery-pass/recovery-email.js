@@ -17,14 +17,14 @@ submitButton.addEventListener('click', async (event) => {
   if (email && baseURL) {
     // send message to background script with email and baseURL
     await chrome.runtime.sendMessage({
-      type: 'initiateRecoveryPassword',
+      type: 'recoverPassword',
       payload: { email, baseURL },
     });
 
     await chrome.storage.local.set({
       recovery_flow: true,
       recovery_email: email,
-      baseURL: baseURL
+      baseURL: baseURL,
     });
 
     window.location.replace('./recovery-code.html');

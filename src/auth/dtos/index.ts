@@ -1,9 +1,9 @@
-export { InitiatePasswordRecoveryDto } from './initiate-password-recovery.dto';
+export { RecoverPasswordDto } from './recover-password.dto';
 export { LoginRequestDto } from './login-request.dto';
 export { LoginResponseDto } from './login-response.dto';
-export { PasswordRecoveryCheckDto } from './password-recovery-check.dto';
-export { RecoverNewPasswordDto } from './recover-new-password.dto';
-export { RecoveryResponseDto } from './recovery-response.dto';
+export { ValidateRecoveryCodeDto } from './validate-recovery-code.dto';
+export { RestorePasswordDto } from './restore-password.dto';
+export { RecoveryValidationResponseDto } from './recovery-validation-response.dto';
 export { RefreshResponseDto } from './refresh-response.dto';
 export { SignUpRequestDto } from './signup-request.dto';
 export { SignUpResponseDto } from './signup-response.dto';
