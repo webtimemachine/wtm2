@@ -3,6 +3,7 @@ import {
   ForbiddenException,
   Injectable,
   Logger,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 
@@ -10,7 +11,7 @@ import { JwtService } from '@nestjs/jwt';
 import { JWTPayload, JwtContext, JwtRefreshContext } from '../interfaces';
 
 import * as bcrypt from 'bcrypt';
-import { plainToClassFromExist, plainToInstance } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 import { createHash } from 'crypto';
 
 import { Device, UserDevice, UserType } from '@prisma/client';
@@ -25,14 +26,13 @@ import {
 } from '../../user/types';
 
 import {
-  InitiatePasswordRecoveryDto,
-  LoginRequestDto,
   LoginResponseDto,
-  PasswordRecoveryCheckDto,
-  RecoverNewPasswordDto,
-  RecoveryResponseDto,
+  RecoverPasswordDto,
+  RecoveryValidationResponseDto,
+  RestorePasswordDto,
   SignUpRequestDto,
   SignUpResponseDto,
+  ValidateRecoveryCodeDto,
 } from '../dtos';
 
 import { RefreshResponseDto } from '../dtos';
@@ -40,7 +40,7 @@ import { RefreshResponseDto } from '../dtos';
 import { hashValue } from '../../common/helpers/bcryptjs.helper';
 import { EmailService, PrismaService } from '../../common/services';
 
-import { DataResponse, MessageResponse } from '../../common/dtos';
+import { MessageResponse } from '../../common/dtos';
 import { generateNumericCode } from '../../common/helpers';
 import { appEnv } from '../../config';
 
@@ -93,7 +93,8 @@ export class AuthService {
   }
 
   async login(
-    body: LoginRequestDto,
+    deviceKey: string,
+    userAgent: string | undefined,
     user: CompleteUser,
   ): Promise<LoginResponseDto> {
     const { accessToken, refreshToken, session, payload } =
@@ -102,25 +103,25 @@ export class AuthService {
 
         let device: Device | null = await prismaClient.device.findUnique({
           where: {
-            deviceKey: body.deviceKey,
+            deviceKey,
           },
         });
 
         if (!device) {
           device = await prismaClient.device.create({
             data: {
-              deviceKey: body.deviceKey,
-              userAgent: body.userAgent,
+              deviceKey,
+              userAgent: userAgent,
             },
           });
         } else {
-          if (body.userAgent && body.userAgent !== '') {
+          if (userAgent && userAgent !== '') {
             device = await prismaClient.device.update({
               where: {
-                deviceKey: body.deviceKey,
+                deviceKey,
               },
               data: {
-                userAgent: body.userAgent,
+                userAgent,
               },
             });
           }
@@ -149,7 +150,7 @@ export class AuthService {
           where: {
             userDevice: {
               device: {
-                deviceKey: body.deviceKey,
+                deviceKey,
               },
             },
           },
@@ -316,13 +317,17 @@ export class AuthService {
     return user;
   }
 
-  async initiatePasswordRecovery(
-    initiatePasswordRecoveryDto: InitiatePasswordRecoveryDto,
+  async recoverPassword(
+    recoverPasswordDto: RecoverPasswordDto,
   ): Promise<MessageResponse> {
-    const { email } = initiatePasswordRecoveryDto;
-    const user = await this.prismaService.user.findFirstOrThrow({
+    const { email } = recoverPasswordDto;
+    const user = await this.prismaService.user.findUnique({
       where: { email },
     });
+
+    if (!user) {
+      throw new NotFoundException();
+    }
 
     const recoveryCode = generateNumericCode(6);
     const hashedRecoveryCode = bcrypt.hashSync(
@@ -351,20 +356,21 @@ export class AuthService {
 
     await this.emailService.sendPasswordResetEmail(user.email, recoveryCode);
 
-    return plainToClassFromExist(new MessageResponse(), {
-      message: 'Password reset initialized',
+    return plainToInstance(MessageResponse, {
+      message: 'Recovery code sent to your email',
     });
   }
 
-  async validatePasswordRecovery(
-    passwordRecoveryCheckDto: PasswordRecoveryCheckDto,
-  ): Promise<DataResponse<RecoveryResponseDto>> {
-    const { email, recoveryCode } = passwordRecoveryCheckDto;
-    const user = await this.prismaService.user.findFirstOrThrow({
+  async validateRecoveryCode(
+    validateRecoveryCodeDto: ValidateRecoveryCodeDto,
+  ): Promise<RecoveryValidationResponseDto> {
+    const { email, recoveryCode } = validateRecoveryCodeDto;
+    const user = await this.prismaService.user.findUnique({
       where: { email, deletedAt: null },
     });
 
     if (
+      !user ||
       !user.recoveryCode ||
       !bcrypt.compareSync(recoveryCode, user.recoveryCode)
     ) {
@@ -397,35 +403,23 @@ export class AuthService {
 
     const recoveryToken = this.buildRecoveryToken(recoveryPayload);
 
-    return plainToClassFromExist(
-      new DataResponse<RecoveryResponseDto>(RecoveryResponseDto),
-      {
-        data: { recoveryToken },
-      },
-    );
+    return plainToInstance(RecoveryValidationResponseDto, {
+      recoveryToken,
+    });
   }
 
-  async completePasswordRecovery(
+  async restorePassword(
     context: JwtContext,
-    recoverNewPasswordDto: RecoverNewPasswordDto,
-  ): Promise<DataResponse<LoginResponseDto>> {
-    const { password, verificationPassword, deviceKey, userAgent } =
-      recoverNewPasswordDto;
+    restorePasswordDto: RestorePasswordDto,
+  ): Promise<LoginResponseDto> {
     const { user } = context;
+    const { password, verificationPassword, deviceKey, userAgent } =
+      restorePasswordDto;
+
     if (password !== verificationPassword) throw new ForbiddenException();
     const hashedPassword = bcrypt.hashSync(password, appEnv.BCRYPT_SALT);
-    const updatedUser = await this.prismaService.$transaction(
+    const { updatedUser } = await this.prismaService.$transaction(
       async (prismaClient) => {
-        await prismaClient.user.update({
-          where: {
-            id: user.id,
-          },
-          data: {
-            recoveryCode: null,
-            password: hashedPassword,
-          },
-        });
-
         await prismaClient.session.deleteMany({
           where: {
             userDevice: {
@@ -433,24 +427,23 @@ export class AuthService {
             },
           },
         });
+
+        const updatedUser: CompleteUser = await prismaClient.user.update({
+          where: {
+            id: user.id,
+          },
+          data: {
+            recoveryCode: null,
+            password: hashedPassword,
+          },
+          include: completeUserInclude,
+        });
+
+        return { updatedUser };
       },
-    );
-    const { accessToken, refreshToken } = await this.performLoginTransaction(
-      deviceKey,
-      userAgent,
-      user,
     );
 
-    return plainToClassFromExist(
-      new DataResponse<LoginResponseDto>(LoginResponseDto),
-      {
-        data: {
-          accessToken,
-          refreshToken,
-          user: updatedUser,
-        },
-      },
-    );
+    return await this.login(deviceKey, userAgent, updatedUser);
   }
 
   private hashIt(payload: string): string {
@@ -475,122 +468,6 @@ export class AuthService {
     return this.jwtService.sign(payload, {
       secret: appEnv.JWT_RECOVERY_TOKEN_SECRET,
       expiresIn: appEnv.JWT_RECOVERY_TOKEN_EXPIRATION,
-    });
-  }
-
-  private async performLoginTransaction(
-    deviceKey: string,
-    userAgent: string | undefined,
-    user: CompleteUser,
-  ): Promise<{
-    accessToken: string;
-    refreshToken: string;
-    session: CompleteSession;
-    payload: JWTPayload;
-  }> {
-    return await this.prismaService.$transaction(async (prismaClient) => {
-      let device: Device | null = await prismaClient.device.findUnique({
-        where: {
-          deviceKey,
-        },
-      });
-
-      if (!device) {
-        device = await prismaClient.device.create({
-          data: {
-            deviceKey,
-            userAgent,
-          },
-        });
-      } else {
-        if (userAgent && userAgent !== '') {
-          device = await prismaClient.device.update({
-            where: {
-              deviceKey,
-            },
-            data: {
-              userAgent,
-            },
-          });
-        }
-      }
-
-      let userDevice: UserDevice | null =
-        await prismaClient.userDevice.findUnique({
-          where: {
-            userId_deviceId: {
-              userId: user.id,
-              deviceId: device.id,
-            },
-          },
-        });
-
-      if (!userDevice) {
-        userDevice = await prismaClient.userDevice.create({
-          data: {
-            userId: user.id,
-            deviceId: device.id,
-          },
-        });
-      }
-
-      await prismaClient.session.deleteMany({
-        where: {
-          userDevice: {
-            device: {
-              deviceKey: deviceKey,
-            },
-          },
-        },
-      });
-
-      let session: CompleteSession = await prismaClient.session.create({
-        data: {
-          refreshToken: '',
-          userDevice: {
-            connect: {
-              id: userDevice.id,
-            },
-          },
-        },
-        include: {
-          userDevice: {
-            include: completeUserDeviceInclude,
-          },
-        },
-      });
-
-      const payload: JWTPayload = {
-        sub: user.email,
-        userId: Number(user.id),
-        userType: user.userType,
-        sessionId: Number(session.id),
-      };
-
-      const accessToken = this.buildAccessToken(payload);
-      const refreshToken = this.buildRefreshToken(payload);
-
-      const { exp: expiration } = this.jwtService.decode(refreshToken) as {
-        exp: number;
-      };
-
-      session = await prismaClient.session.update({
-        where: {
-          id: session.id,
-        },
-        data: {
-          expiration: new Date(expiration * 1000),
-          refreshToken: this.hashIt(refreshToken),
-          updateAt: new Date(),
-        },
-        include: {
-          userDevice: {
-            include: completeUserDeviceInclude,
-          },
-        },
-      });
-
-      return { accessToken, refreshToken, payload, session };
     });
   }
 }

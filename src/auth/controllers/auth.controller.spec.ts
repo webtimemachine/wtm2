@@ -1,9 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { JwtService } from '@nestjs/jwt';
+import { PrismaClient } from '@prisma/client';
+
 import { AuthController } from './auth.controller';
 import { AuthService } from '../services';
-import { PrismaClient } from '@prisma/client';
 import { CommonTestingModule } from '../../common/common.testing.module';
-import { JwtService } from '@nestjs/jwt';
 
 describe('AuthController', () => {
   let authService: AuthService;
@@ -74,6 +75,7 @@ describe('AuthController', () => {
         email: 'email@email.com',
         password: '123456',
         deviceKey: '123456',
+        userAgent: undefined,
       };
 
       const loginResponseDto = {
@@ -95,7 +97,8 @@ describe('AuthController', () => {
       const result = await authController.login(req, loginRequestDto);
 
       expect(mockAuthService.login).toHaveBeenCalledWith(
-        loginRequestDto,
+        loginRequestDto.deviceKey,
+        loginRequestDto.userAgent,
         req.user,
       );
       expect(result).toEqual(loginResponseDto);
