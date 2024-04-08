@@ -34,6 +34,11 @@ document.querySelector('form').addEventListener('submit', async (event) => {
         document.querySelector('#login-error').style.display = 'block';
       }
 
+
+      if (response.partialToken) {
+        window.location.replace('./verify-email/verify-code.html');
+      }
+
       if (response.user) {
         window.location.replace('./popup.html');
       }
@@ -56,9 +61,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     const response = await chrome.storage.local.get([
       'recovery_flow',
       'recovery_email',
+      'verify_email',
+      'partialToken'
     ]);
 
     if (response.recovery_flow) window.location.replace('./recovery-pass/recovery-code.html');
+
+    if (response.partialToken && response.verify_email) window.location.replace('./verify-email/verify-code.html');
   } catch (error) {
     console.error('Error occurred:', error);
   }
