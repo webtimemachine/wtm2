@@ -44,12 +44,16 @@ submitButton.addEventListener('click', async (event) => {
       },
     });
 
-    await chrome.storage.local.set({
-      partialToken: null,
-      verify_email: null,
-    });
+    if (verifyEmailResponse.error) {
+      document.querySelector('#verify-error').style.display = 'block';
+    }
 
     if (verifyEmailResponse.user) {
+      await chrome.storage.local.set({
+        partialToken: null,
+        verify_email: null,
+      });
+
       window.location.replace('../popup.html');
     }
   } else {

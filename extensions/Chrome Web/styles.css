@@ -329,7 +329,8 @@ input:focus {
 }
 
 #password-error,
-#login-error {
+#login-error,
+#verify-error {
   display: none;
 }
 
