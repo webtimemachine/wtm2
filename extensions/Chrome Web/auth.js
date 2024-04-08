@@ -194,3 +194,26 @@ export async function deleteUserAccount (
     );
   }
 }
+
+export const verifyEmail = async (payload, deviceId) => {
+  try {
+    // Create the request body by converting payload to JSON
+    const body = JSON.stringify({
+      verificationCode: payload.code,
+      deviceKey: deviceId,
+      userAgent: payload.userAgent
+    });
+
+    // Send a POST request to the verify endpoint with the provided body using partialToken
+    return await fetch(`${payload.baseURL}/api/auth/verify`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${payload.partialToken}`,
+      },
+      body,
+    });
+  } catch (err) {
+    console.error(err);
+  }
+};
