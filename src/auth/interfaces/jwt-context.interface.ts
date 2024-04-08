@@ -1,5 +1,6 @@
 import { CompleteSession, CompleteUser } from 'src/user/types';
 import { JWTPayload } from './jwt.interface';
+import { User } from '@prisma/client';
 
 export interface JwtContext {
   payload: JWTPayload;
@@ -9,6 +10,12 @@ export interface JwtContext {
   recoveryToken?: string;
   user: CompleteUser;
   session: CompleteSession;
+}
+
+export interface PartialJwtContext {
+  payload: JWTPayload;
+  verificationToken?: string;
+  user: CompleteUser;
 }
 
 export interface RecoveryJwtContext {

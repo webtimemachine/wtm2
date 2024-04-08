@@ -2,15 +2,17 @@ import { ConflictException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaClient, UserType } from '@prisma/client';
-import { CommonTestingModule } from '../../common/common.testing.module';
-import { PrismaService } from '../../common/services';
+import { EmailService, PrismaService } from '../../common/services';
 import { LocalStrategy } from '../strategies';
 import { AuthService } from './auth.service';
+import { LoginResponseDto, SignUpResponseDto } from '../dtos';
+import { MailerService } from '@nestjs-modules/mailer';
 
 describe('AuthService', () => {
   let authService: AuthService;
   let prismaService: PrismaService;
   const prismaClient = new PrismaClient();
+  let emailService: EmailService;
 
   const mockConflictException = new ConflictException();
 
@@ -27,7 +29,28 @@ describe('AuthService', () => {
     deletedAt: null,
     recoveryCode: null,
     verified: true,
-    verificationCode: null,
+    verificationCode: '1234',
+    userPreferences: {
+      id: BigInt(1),
+      userId: BigInt(1),
+      enableNavigationEntryExpiration: true,
+      navigationEntryExpirationInDays: 120,
+      createdAt: new Date(),
+      updateAt: new Date(),
+    },
+  };
+
+  const nonVerifiedUser = {
+    id: BigInt(1),
+    email: 'test@example.com',
+    password: 'hashedPassword',
+    userType: UserType.MEMBER,
+    createdAt: new Date(),
+    updateAt: new Date(),
+    deletedAt: null,
+    recoveryCode: null,
+    verified: false,
+    verificationCode: '1234',
     userPreferences: {
       id: BigInt(1),
       userId: BigInt(1),
@@ -79,12 +102,24 @@ describe('AuthService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [CommonTestingModule.forTest(prismaClient)],
-      providers: [AuthService, JwtService, LocalStrategy],
+      providers: [
+        AuthService,
+        JwtService,
+        LocalStrategy,
+        EmailService,
+        {
+          provide: MailerService,
+          useValue: {
+            sendMail: jest.fn(),
+          },
+        },
+        PrismaService,
+      ],
     }).compile();
 
     authService = module.get<AuthService>(AuthService);
     prismaService = module.get<PrismaService>(PrismaService);
+    emailService = module.get<EmailService>(EmailService);
   });
 
   it('authService should be defined', () => {
@@ -131,9 +166,33 @@ describe('AuthService', () => {
         existingUser,
       );
 
-      expect(result).toBeDefined();
-      expect(result.accessToken).toBeDefined();
-      expect(result.refreshToken).toBeDefined();
+      if (result instanceof LoginResponseDto) {
+        expect(result.accessToken).toBeDefined();
+        expect(result.refreshToken).toBeDefined();
+      } else {
+        fail('Expected result to be an instance of LoginResponseDto');
+      }
+    });
+
+    it('should return SignUpResponseDto when user is not verified', async () => {
+      // Mock para devolver un SignUpResponseDto
+      prismaService.$transaction = jest.fn().mockReturnValue(signUpResult);
+
+      const { deviceKey, userAgent } = loginRequestDto;
+      const result = await authService.login(
+        deviceKey,
+        userAgent,
+        nonVerifiedUser,
+      );
+
+      // Verifica que el resultado es una instancia de SignUpResponseDto
+      if (result instanceof SignUpResponseDto) {
+        expect(result.id).toBeDefined();
+        expect(result.email).toEqual(loginRequestDto.email);
+        expect(result.partialToken).toBeDefined();
+      } else {
+        fail('Expected result to be an instance of SignUpResponseDto');
+      }
     });
   });
 });

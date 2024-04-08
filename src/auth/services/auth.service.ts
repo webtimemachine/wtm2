@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ConflictException,
   ForbiddenException,
   Injectable,
@@ -8,7 +9,12 @@ import {
 } from '@nestjs/common';
 
 import { JwtService } from '@nestjs/jwt';
-import { JWTPayload, JwtContext, JwtRefreshContext } from '../interfaces';
+import {
+  JWTPayload,
+  JwtContext,
+  JwtRefreshContext,
+  PartialJwtContext,
+} from '../interfaces';
 
 import * as bcrypt from 'bcrypt';
 import { plainToInstance } from 'class-transformer';
@@ -33,6 +39,7 @@ import {
   SignUpRequestDto,
   SignUpResponseDto,
   ValidateRecoveryCodeDto,
+  VerifyAccountDto,
 } from '../dtos';
 
 import { RefreshResponseDto } from '../dtos';
@@ -56,8 +63,8 @@ export class AuthService {
 
   async signup(requestSignupDto: SignUpRequestDto): Promise<SignUpResponseDto> {
     const { password, email } = requestSignupDto;
-
     const hashedPassword = hashValue(password);
+    const verificationCode = generateNumericCode(6);
 
     try {
       const { responseDto } = await this.prismaService.$transaction(
@@ -65,6 +72,8 @@ export class AuthService {
           const createdUser = await prismaClient.user.create({
             data: {
               email,
+              verificationCode: hashValue(verificationCode),
+              verified: false,
               password: hashedPassword,
               userType: UserType.MEMBER,
               userPreferences: {
@@ -73,13 +82,29 @@ export class AuthService {
             },
           });
 
+          const verificationPayload: JWTPayload = {
+            userId: Number(createdUser.id),
+            sub: createdUser.email,
+            userType: 'MEMBER',
+          };
+          const partialToken = this.getPartialToken(verificationPayload);
+
           const responseDto: SignUpResponseDto = plainToInstance(
             SignUpResponseDto,
-            createdUser,
+            {
+              id: Number(createdUser.id),
+              email: createdUser.email,
+              partialToken,
+            },
           );
 
           return { responseDto };
         },
+      );
+
+      await this.emailService.sendVerificationCodeEmail(
+        email,
+        verificationCode,
       );
 
       return responseDto;
@@ -96,11 +121,24 @@ export class AuthService {
     deviceKey: string,
     userAgent: string | undefined,
     user: CompleteUser,
-  ): Promise<LoginResponseDto> {
+  ): Promise<LoginResponseDto | SignUpResponseDto> {
+    if (!user.verified) {
+      const verificationPayload: JWTPayload = {
+        userId: Number(user.id),
+        sub: user.email,
+        userType: user.userType,
+      };
+      const partialToken = this.getPartialToken(verificationPayload);
+      return plainToInstance(SignUpResponseDto, {
+        id: Number(user.id),
+        email: user.email,
+        partialToken,
+      });
+    }
+
     const { accessToken, refreshToken, session, payload } =
       await this.prismaService.$transaction(async (prismaClient) => {
         //
-
         let device: Device | null = await prismaClient.device.findUnique({
           where: {
             deviceKey,
@@ -411,7 +449,7 @@ export class AuthService {
   async restorePassword(
     context: JwtContext,
     restorePasswordDto: RestorePasswordDto,
-  ): Promise<LoginResponseDto> {
+  ): Promise<LoginResponseDto | SignUpResponseDto> {
     const { user } = context;
     const { password, verificationPassword, deviceKey, userAgent } =
       restorePasswordDto;
@@ -446,6 +484,64 @@ export class AuthService {
     return await this.login(deviceKey, userAgent, updatedUser);
   }
 
+  async verifyAccount(
+    jwtContext: PartialJwtContext,
+    verifyEmailDto: VerifyAccountDto,
+  ): Promise<LoginResponseDto> {
+    const { user } = jwtContext;
+    if (user.verified) {
+      throw new BadRequestException('Email already verified');
+    }
+    const { verificationCode: bodyCode, deviceKey, userAgent } = verifyEmailDto;
+    const databaseCode = user.verificationCode || '';
+
+    if (!bcrypt.compareSync(bodyCode, databaseCode)) {
+      throw new BadRequestException('Invalid verification code');
+    }
+
+    await this.prismaService.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        verified: true,
+        verificationCode: null,
+      },
+    });
+
+    const loginResponse: LoginResponseDto = (await this.login(
+      deviceKey,
+      userAgent,
+      user,
+    )) as LoginResponseDto;
+    return loginResponse;
+  }
+
+  async resendVerificationEmail(
+    context: PartialJwtContext,
+  ): Promise<MessageResponse> {
+    const { user } = context;
+    if (user.verified) throw new ConflictException('Account already verified');
+    const verificationCode = generateNumericCode(6);
+    const verificationCodeHash = bcrypt.hashSync(
+      verificationCode,
+      appEnv.BCRYPT_SALT,
+    );
+    await this.prismaService.user.update({
+      where: { id: user.id },
+      data: {
+        verificationCode: verificationCodeHash,
+      },
+    });
+    await this.emailService.sendVerificationCodeEmail(
+      user.email,
+      verificationCode,
+    );
+    return plainToInstance(MessageResponse, {
+      message: 'Email verification code succesfully sent',
+    });
+  }
+
   private hashIt(payload: string): string {
     return createHash('sha256').update(payload).digest('hex');
   }
@@ -461,6 +557,13 @@ export class AuthService {
     return this.jwtService.sign(payload, {
       secret: appEnv.JWT_ACCESS_SECRET,
       expiresIn: appEnv.JWT_ACCESS_EXPIRATION,
+    });
+  }
+
+  private getPartialToken(payload: JWTPayload) {
+    return this.jwtService.sign(payload, {
+      secret: appEnv.JWT_PARTIAL_SECRET,
+      expiresIn: appEnv.JWT_PARTIAL_EXPIRATION,
     });
   }
 

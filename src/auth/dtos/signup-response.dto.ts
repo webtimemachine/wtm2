@@ -11,4 +11,8 @@ export class SignUpResponseDto {
   @Expose()
   @ApiProperty()
   email: string;
+
+  @Expose()
+  @ApiProperty()
+  partialToken: string;
 }

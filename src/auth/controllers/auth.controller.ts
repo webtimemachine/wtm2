@@ -18,6 +18,7 @@ import {
 } from '../../common/decorators';
 import { MessageResponse } from '../../common/dtos';
 import {
+  JwtPartialToken,
   JwtRecoveryToken,
   JwtRefreshToken,
   JwtRequestContext,
@@ -32,9 +33,14 @@ import {
   SignUpRequestDto,
   SignUpResponseDto,
   ValidateRecoveryCodeDto,
+  VerifyAccountDto,
 } from '../dtos';
 import { LocalAuthGuard } from '../guards';
-import { JwtContext, JwtRefreshContext } from '../interfaces';
+import {
+  JwtContext,
+  JwtRefreshContext,
+  PartialJwtContext,
+} from '../interfaces';
 import { AuthService } from '../services';
 
 @ApiTags('Auth')
@@ -72,10 +78,41 @@ export class AuthController {
   async login(
     @Req() req: any,
     @Body() body: LoginRequestDto,
-  ): Promise<LoginResponseDto> {
+  ): Promise<LoginResponseDto | SignUpResponseDto> {
     const user = req.user;
     const { deviceKey, userAgent } = body;
     return await this.authService.login(deviceKey, userAgent, user);
+  }
+
+  @ApiOkResponse({
+    status: 200,
+    type: LoginResponseDto,
+  })
+  @ApiUnauthorizedMessageResponse()
+  @ApiInternalServerErrorMessageResponse()
+  @ApiBadRequestMessageResponse()
+  @HttpCode(200)
+  @JwtPartialToken()
+  @Post('/verify')
+  async verifyAccount(
+    @JwtRequestContext() context: PartialJwtContext,
+    @Body() verifyEmailDto: VerifyAccountDto,
+  ): Promise<LoginResponseDto> {
+    return this.authService.verifyAccount(context, verifyEmailDto);
+  }
+
+  @ApiOkResponse({
+    type: MessageResponse,
+    status: 200,
+  })
+  @ApiInternalServerErrorMessageResponse()
+  @HttpCode(200)
+  @JwtPartialToken()
+  @Post('verify/resend')
+  async resendVerificationEmail(
+    @JwtRequestContext() context: PartialJwtContext,
+  ): Promise<MessageResponse> {
+    return this.authService.resendVerificationEmail(context);
   }
 
   @ApiOkResponse({
@@ -118,7 +155,7 @@ export class AuthController {
 
   @ApiOkResponse({
     status: 200,
-    type: LoginResponseDto,
+    type: LoginResponseDto || SignUpResponseDto,
   })
   @ApiNotFoundMessageResponse()
   @JwtRecoveryToken()
@@ -127,7 +164,7 @@ export class AuthController {
   async restorePassword(
     @JwtRequestContext() context: JwtContext,
     @Body() restorePasswordDto: RestorePasswordDto,
-  ): Promise<LoginResponseDto> {
+  ): Promise<LoginResponseDto | SignUpResponseDto> {
     return this.authService.restorePassword(context, restorePasswordDto);
   }
 }
