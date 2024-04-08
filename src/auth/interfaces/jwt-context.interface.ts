@@ -11,6 +11,12 @@ export interface JwtContext {
   session: CompleteSession;
 }
 
+export interface PartialJwtContext {
+  payload: JWTPayload;
+  verificationToken?: string;
+  user: CompleteUser;
+}
+
 export interface RecoveryJwtContext {
   payload: JWTPayload;
   accessToken?: string;

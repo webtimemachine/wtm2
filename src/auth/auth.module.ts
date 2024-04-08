@@ -9,6 +9,7 @@ import {
   JWTAccessStrategy,
   JWTRefreshStrategy,
   JwtRecoveryTokenStrategy,
+  JwtVerificationTokenStrategy,
   LocalStrategy,
 } from './strategies';
 
@@ -22,6 +23,7 @@ import {
     JWTAccessStrategy,
     JWTRefreshStrategy,
     JwtRecoveryTokenStrategy,
+    JwtVerificationTokenStrategy,
   ],
   controllers: [AuthController],
   exports: [AuthService],

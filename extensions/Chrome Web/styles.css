@@ -76,7 +76,14 @@ h4 {
   border-radius: 6px;
 }
 
-.list-container div:not(.query-header, .results, #sites-list, .search-container, #search-container-actions) {
+.list-container
+  div:not(
+    .query-header,
+    .results,
+    #sites-list,
+    .search-container,
+    #search-container-actions
+  ) {
   margin-top: 8px;
   padding: 8px;
 }
@@ -265,15 +272,15 @@ label {
   transition: 0.4s;
 }
 
-input:checked+.slider {
+input:checked + .slider {
   background-color: #2196f3;
 }
 
-input:focus+.slider {
+input:focus + .slider {
   box-shadow: 0 0 1px #2196f3;
 }
 
-input:checked+.slider:before {
+input:checked + .slider:before {
   -webkit-transform: translateX(13px);
   -ms-transform: translateX(13px);
   transform: translateX(13px);
@@ -329,12 +336,18 @@ input:focus {
 }
 
 #password-error,
-#login-error {
+#login-error,
+#verify-error {
   display: none;
 }
 
 .error {
   color: red;
+  padding-bottom: 8px;
+}
+
+.success {
+  color: green;
   padding-bottom: 8px;
 }
 
@@ -366,12 +379,12 @@ input:focus {
   display: flex;
 }
 
-#queries-list>div>p {
+#queries-list > div > p {
   padding: 5px;
   margin-bottom: 10px;
 }
 
-#queries-list>div {
+#queries-list > div {
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.23);
 }
 

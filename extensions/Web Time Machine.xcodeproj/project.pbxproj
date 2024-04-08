@@ -89,6 +89,8 @@
 		ED964EC92BA1C59D00925F5B /* popup-sign-up.js in Resources */ = {isa = PBXBuildFile; fileRef = ED964EC22BA1C59D00925F5B /* popup-sign-up.js */; };
 		ED964ECA2BA1C59D00925F5B /* popup-sign-up.js in Resources */ = {isa = PBXBuildFile; fileRef = ED964EC22BA1C59D00925F5B /* popup-sign-up.js */; };
 		ED964ECB2BA1C59D00925F5B /* popup-sign-up.js in Resources */ = {isa = PBXBuildFile; fileRef = ED964EC22BA1C59D00925F5B /* popup-sign-up.js */; };
+		EDE860DF2BC44C5900F8EC2C /* verify-email in Resources */ = {isa = PBXBuildFile; fileRef = EDE860DE2BC44C5900F8EC2C /* verify-email */; };
+		EDE860E02BC44C5900F8EC2C /* verify-email in Resources */ = {isa = PBXBuildFile; fileRef = EDE860DE2BC44C5900F8EC2C /* verify-email */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -188,6 +190,7 @@
 		ED7A92502BB48E60001F6121 /* recovery-pass */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "recovery-pass"; sourceTree = "<group>"; };
 		ED964EC12BA1C59D00925F5B /* popup-sign-up.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = "popup-sign-up.html"; sourceTree = "<group>"; };
 		ED964EC22BA1C59D00925F5B /* popup-sign-up.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "popup-sign-up.js"; sourceTree = "<group>"; };
+		EDE860DE2BC44C5900F8EC2C /* verify-email */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "verify-email"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -349,6 +352,7 @@
 		5414C8EE2B640F0A0075471F /* CommonFiles */ = {
 			isa = PBXGroup;
 			children = (
+				EDE860DE2BC44C5900F8EC2C /* verify-email */,
 				ED6186B52BBEDC6000450A8B /* query-entries.js */,
 				ED7A92502BB48E60001F6121 /* recovery-pass */,
 				ED3741872BB19B9800251E51 /* services */,
@@ -574,6 +578,7 @@
 			files = (
 				548A88A82B640D94009C7C21 /* background.js in Resources */,
 				ED37413C2BB1944B00251E51 /* popup-sign-in.js in Resources */,
+				EDE860DF2BC44C5900F8EC2C /* verify-email in Resources */,
 				540C0DC92B6937630049CE6A /* popup-sign-in.html in Resources */,
 				ED4324B52B6D378E00F3521C /* history-entries.js in Resources */,
 				ED37418E2BB19B9800251E51 /* services in Resources */,
@@ -601,6 +606,7 @@
 			files = (
 				548A88A92B640D94009C7C21 /* background.js in Resources */,
 				ED37413D2BB1944B00251E51 /* popup-sign-in.js in Resources */,
+				EDE860E02BC44C5900F8EC2C /* verify-email in Resources */,
 				540C0DCA2B6937630049CE6A /* popup-sign-in.html in Resources */,
 				ED4324B62B6D378E00F3521C /* history-entries.js in Resources */,
 				ED37418F2BB19B9800251E51 /* services in Resources */,

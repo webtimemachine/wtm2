@@ -4,7 +4,7 @@ import {
 } from '@langchain/core/output_parsers';
 import { ChatOpenAI } from '@langchain/openai';
 import { ChatPromptTemplate } from '@langchain/core/prompts';
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus, Logger } from '@nestjs/common';
 import { PrismaService } from '../../common/services';
 import { appEnv } from '../../config';
 
@@ -35,7 +35,10 @@ const filterPrompt = ChatPromptTemplate.fromMessages([
 
 @Injectable()
 export class ExplicitFilterService {
+  private readonly logger: Logger = new Logger(ExplicitFilterService.name);
+
   constructor(private readonly prismaService: PrismaService) {}
+
   private readonly model = new ChatOpenAI({
     temperature: 0,
     openAIApiKey: appEnv.OPENAI_ACCESS_TOKEN,
@@ -53,15 +56,20 @@ export class ExplicitFilterService {
         where: { url: url },
       })) > 0;
 
-    if (!hasExplicitContent) {
-      // invoke the LLM if the URL has not been blacklisted yet
-      if (await this.isExplicit(content)) {
-        // blacklist the URL
-        await this.prismaService.blackList.create({
-          data: { url: url },
-        });
-        hasExplicitContent = true;
+    try {
+      if (!hasExplicitContent) {
+        // invoke the LLM if the URL has not been blacklisted yet
+        if (await this.isExplicit(content)) {
+          // blacklist the URL
+          await this.prismaService.blackList.create({
+            data: { url: url },
+          });
+          hasExplicitContent = true;
+        }
       }
+    } catch (error) {
+      this.logger.error('Error while cheacking explicit content', error);
+      return;
     }
 
     if (hasExplicitContent)

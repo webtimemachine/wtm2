@@ -5,6 +5,8 @@ import {
   getDeviceId,
   signUpUser,
   deleteUserAccount,
+  verifyEmail,
+  resendEmail,
 } from './auth.js';
 
 import { getHistoryEntries, deleteHistoryEntries } from './history-entries.js';
@@ -97,6 +99,17 @@ export const handleLogin = async (chrome, request, sendResponse) => {
     const response = await loginUser(request.payload, deviceId);
     // Parse login response as JSON
     const loginRes = await response.json();
+
+    if (loginRes.partialToken) {
+      await chrome.storage.local.set({
+        device_id: deviceId,
+        baseURL: request.payload.baseURL,
+        verify_email: loginRes.email,
+        partialToken: loginRes.partialToken,
+      });
+
+      return sendResponse(loginRes);
+    }
 
     // If login response doesn't contain user information, throw an error
     if (!loginRes.user) throw Error('login error');
@@ -330,6 +343,52 @@ export const handleRestorePassword = async (request, sendResponse) => {
     sendResponse(res);
   } catch (error) {
     // If an error occurs during fetching, send an error response
+    sendResponse({ error: true });
+  }
+};
+
+export const handleVerifyEmail = async (chrome, request, sendResponse) => {
+  // Obtain the device ID
+  const deviceId = await getDeviceId();
+
+  try {
+    // Send verify request with payload and device ID
+    const response = await verifyEmail(request.payload, deviceId);
+    // Parse verify response as JSON
+    const verifyEmailRes = await response.json();
+
+    // If verify response doesn't contain user information, throw an error
+    if (!verifyEmailRes.user) throw Error('verifyEmail error');
+
+    // Store user status, user information, and device ID in local storage
+    await chrome.storage.local.set({
+      userStatus: true,
+      user_info: verifyEmailRes,
+      device_id: deviceId,
+      baseURL: request.payload.baseURL,
+    });
+
+    // Send verify response back to the caller
+    sendResponse(verifyEmailRes);
+  } catch (error) {
+    // If an error occurs during verify email, send an error response
+    sendResponse({ error: true });
+  }
+};
+
+export const handleResendCode = async (chrome, request, sendResponse) => {
+  // Obtain the device ID
+  const deviceId = await getDeviceId();
+
+  try {
+    // Send resend request with payload and device ID
+    const response = await resendEmail(request.payload);
+    // Parse resend response as JSON
+    const resendEmailRes = await response.json();
+    // Send resend response back to the caller
+    sendResponse(resendEmailRes);
+  } catch (error) {
+    // If an error occurs during verify email, send an error response
     sendResponse({ error: true });
   }
 };

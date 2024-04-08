@@ -17,6 +17,7 @@ jobs:
       CRYPTO_SALT: ${{ secrets.CRYPTO_SALT }}
       CRYPTO_KEY: ${{ secrets.CRYPTO_KEY }}
       JWT_ACCESS_SECRET: ${{ secrets.JWT_ACCESS_SECRET }}
+      JWT_PARTIAL_SECRET: ${{ secrets.JWT_PARTIAL_SECRET }}
       JWT_ACCESS_EXPIRATION: ${{ secrets.JWT_ACCESS_EXPIRATION }}
       JWT_REFRESH_SECRET: ${{ secrets.JWT_REFRESH_SECRET }}
       JWT_REFRESH_EXPIRATION: ${{ secrets.JWT_REFRESH_EXPIRATION }}
