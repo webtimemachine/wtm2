@@ -8,7 +8,6 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import {
   ApiBearerAuth,
-  ApiInternalServerErrorResponse,
   ApiOperation,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';

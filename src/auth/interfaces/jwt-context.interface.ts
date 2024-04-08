@@ -1,6 +1,5 @@
 import { CompleteSession, CompleteUser } from 'src/user/types';
 import { JWTPayload } from './jwt.interface';
-import { User } from '@prisma/client';
 
 export interface JwtContext {
   payload: JWTPayload;
