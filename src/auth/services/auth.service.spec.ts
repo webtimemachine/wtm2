@@ -8,6 +8,10 @@ import { LocalStrategy } from '../strategies';
 import { AuthService } from './auth.service';
 import { LoginResponseDto, SignUpResponseDto } from '../dtos';
 import { MailerService } from '@nestjs-modules/mailer';
+import { CompleteSession } from 'src/user/types';
+import { CompleteSessionDto } from '../dtos/complete-session.dto';
+import { plainToInstance } from 'class-transformer';
+import { JwtContext } from '../interfaces';
 
 describe('AuthService', () => {
   let authService: AuthService;
@@ -197,6 +201,124 @@ describe('AuthService', () => {
       } else {
         fail('Expected result to be an instance of SignUpResponseDto');
       }
+    });
+
+    it('should return active sessions', async () => {
+      const jwtContext: JwtContext = {
+        payload: {
+          sub: 'test@test.com',
+          userId: 1,
+          userType: 'MEMBER',
+          sessionId: 1,
+          iat: 1712672751,
+          exp: 1712701551,
+        },
+        user: {
+          id: BigInt(1),
+          userType: 'MEMBER',
+          email: 'test@test.com',
+          password: '****',
+          recoveryCode: null,
+          verified: true,
+          verificationCode: null,
+          createdAt: new Date('2024-04-08T16:58:29.000Z'),
+          updateAt: new Date('2024-04-08T19:50:40.000Z'),
+          deletedAt: null,
+          userPreferences: {
+            id: BigInt(1),
+            userId: BigInt(1),
+            enableNavigationEntryExpiration: false,
+            navigationEntryExpirationInDays: null,
+            createdAt: new Date('2024-04-08T16:58:29.000Z'),
+            updateAt: new Date('2024-04-08T16:58:29.000Z'),
+          },
+        },
+        session: {
+          id: BigInt(1),
+          refreshToken: 'refreshToken',
+          userDeviceId: BigInt(1),
+          expiration: new Date('2024-05-09T14:25:51.000Z'),
+          createdAt: new Date('2024-04-09T14:25:20.000Z'),
+          updateAt: new Date('2024-04-09T14:25:52.000Z'),
+          userDevice: {
+            id: BigInt(1),
+            deviceAlias: null,
+            userId: BigInt(1),
+            deviceId: BigInt(1),
+            createdAt: new Date('2024-04-09T14:25:20.000Z'),
+            updateAt: new Date('2024-04-09T14:25:20.000Z'),
+            device: {
+              id: BigInt(1),
+              deviceKey: 'local',
+              userAgent:
+                'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+              createdAt: new Date('2024-04-09T14:25:20.000Z'),
+              updateAt: new Date('2024-04-09T14:25:20.000Z'),
+            },
+          },
+        },
+      };
+
+      const completeSession: CompleteSession = {
+        id: BigInt(1),
+        refreshToken: 'refreshToken',
+        userDeviceId: BigInt(1),
+        expiration: new Date('2024-05-09T14:23:46.000Z'),
+        createdAt: new Date('2024-04-09T14:23:46.000Z'),
+        updateAt: new Date('2024-04-09T14:23:46.000Z'),
+        userDevice: {
+          id: BigInt(1),
+          deviceAlias: null,
+          userId: BigInt(1),
+          deviceId: BigInt(1),
+          createdAt: new Date('2024-04-08T16:58:34.000Z'),
+          updateAt: new Date('2024-04-08T16:58:34.000Z'),
+          device: {
+            id: BigInt(1),
+            deviceKey: 'local',
+            userAgent:
+              'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+            createdAt: new Date('2024-04-08T16:58:34.000Z'),
+            updateAt: new Date('2024-04-09T14:23:46.000Z'),
+          },
+        },
+      };
+
+      const expectedDto: CompleteSessionDto = plainToInstance(
+        CompleteSessionDto,
+        {
+          id: 1,
+          userDeviceId: 1,
+          expiration: new Date('2024-05-09T14:23:46.000Z'),
+          createdAt: new Date('2024-04-09T14:23:46.000Z'),
+          updateAt: new Date('2024-04-09T14:23:46.000Z'),
+          userDevice: {
+            id: 1,
+            userId: 1,
+            deviceId: 1,
+            isCurrentDevice: true,
+            deviceAlias: null,
+            device: {
+              id: 1,
+              deviceKey: 'local',
+              userAgent:
+                'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+            },
+          },
+        },
+      );
+
+      prismaService.session.findMany = jest
+        .fn()
+        .mockResolvedValueOnce([completeSession]);
+
+      const result = await authService.getActiveSessions(jwtContext);
+
+      expect(result).toEqual([expectedDto]);
+      expect(prismaService.session.findMany).toHaveBeenCalledWith({
+        where: { userDevice: { userId: jwtContext.user.id } },
+        include: expect.any(Object),
+      });
     });
   });
 });
