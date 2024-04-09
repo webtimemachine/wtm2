@@ -318,6 +318,22 @@ export class AuthService {
     });
   }
 
+  async logout(jwtContext: JwtContext): Promise<MessageResponse> {
+    const deletedSession = await this.prismaService.session.delete({
+      where: {
+        id: jwtContext.session.id,
+      },
+    });
+
+    if (deletedSession) {
+      return plainToInstance(MessageResponse, {
+        message: 'Logout successfully',
+      });
+    } else {
+      throw new NotFoundException();
+    }
+  }
+
   async refreshToken(context: JwtRefreshContext): Promise<RefreshResponseDto> {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { iat, exp, ...rest } = context.payload;
