@@ -44,6 +44,7 @@ import {
 } from '../interfaces';
 import { AuthService } from '../services';
 import { CompleteSessionDto } from '../dtos/complete-session.dto';
+import { LogoutSessionInputDto } from '../dtos/logout-session.input.dto';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -195,5 +196,18 @@ export class AuthController {
     @JwtRequestContext() context: JwtContext,
   ): Promise<CompleteSessionDto[]> {
     return this.authService.getActiveSessions(context);
+  }
+
+  @ApiOkResponse({
+    status: 200,
+    type: MessageResponse,
+  })
+  @JwtAccessToken()
+  @HttpCode(200)
+  @Post('session/logout')
+  async logoutSession(
+    @Body() logoutSessionInputDto: LogoutSessionInputDto,
+  ): Promise<MessageResponse> {
+    return this.authService.logoutSession(logoutSessionInputDto);
   }
 }
