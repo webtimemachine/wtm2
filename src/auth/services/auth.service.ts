@@ -51,6 +51,7 @@ import { MessageResponse } from '../../common/dtos';
 import { generateNumericCode } from '../../common/helpers';
 import { appEnv } from '../../config';
 import { CompleteSessionDto } from '../dtos/complete-session.dto';
+import { LogoutSessionInputDto } from '../dtos/logout-session.input.dto';
 
 @Injectable()
 export class AuthService {
@@ -632,5 +633,25 @@ export class AuthService {
         include: completeSessionInclude,
       });
     return AuthService.completeSessionsToDtos(jwtContext, completeSessions);
+  }
+
+  async logoutSession(
+    logoutSessionInputDto: LogoutSessionInputDto,
+  ): Promise<MessageResponse> {
+    const { sessionId } = logoutSessionInputDto;
+
+    const deletedSession = await this.prismaService.session.delete({
+      where: {
+        id: sessionId,
+      },
+    });
+
+    if (deletedSession) {
+      return plainToInstance(MessageResponse, {
+        message: 'Logout successfully',
+      });
+    } else {
+      throw new NotFoundException();
+    }
   }
 }
