@@ -50,6 +50,7 @@ import { EmailService, PrismaService } from '../../common/services';
 import { MessageResponse } from '../../common/dtos';
 import { generateNumericCode } from '../../common/helpers';
 import { appEnv } from '../../config';
+import { CompleteSessionDto } from '../dtos/complete-session.dto';
 
 @Injectable()
 export class AuthService {
@@ -60,6 +61,65 @@ export class AuthService {
     private readonly jwtService: JwtService,
     private readonly emailService: EmailService,
   ) {}
+
+  static completeSessionToDto(
+    jwtContext: JwtContext,
+    completeSession: CompleteSession,
+  ): CompleteSessionDto {
+    const userDeviceDto = UserService.userDeviceToDto(
+      jwtContext,
+      completeSession.userDevice,
+    );
+
+    const completeSessionDto = plainToInstance(CompleteSessionDto, {
+      ...completeSession,
+      id: Number(completeSession.id),
+      userDeviceId: Number(completeSession.userDeviceId),
+    });
+    completeSessionDto.userDevice = userDeviceDto;
+    return completeSessionDto;
+  }
+
+  static completeSessionsToDtos(
+    jwtContext: JwtContext,
+    completeSession: CompleteSession[],
+  ): CompleteSessionDto[] {
+    return completeSession.map((completeSession) =>
+      AuthService.completeSessionToDto(jwtContext, completeSession),
+    );
+  }
+
+  private hashIt(payload: string): string {
+    return createHash('sha256').update(payload).digest('hex');
+  }
+
+  private buildRefreshToken(payload: JWTPayload): string {
+    return this.jwtService.sign(payload, {
+      secret: appEnv.JWT_REFRESH_SECRET,
+      expiresIn: appEnv.JWT_REFRESH_EXPIRATION,
+    });
+  }
+
+  private buildAccessToken(payload: JWTPayload): string {
+    return this.jwtService.sign(payload, {
+      secret: appEnv.JWT_ACCESS_SECRET,
+      expiresIn: appEnv.JWT_ACCESS_EXPIRATION,
+    });
+  }
+
+  private getPartialToken(payload: JWTPayload) {
+    return this.jwtService.sign(payload, {
+      secret: appEnv.JWT_PARTIAL_SECRET,
+      expiresIn: appEnv.JWT_PARTIAL_EXPIRATION,
+    });
+  }
+
+  private buildRecoveryToken(payload: JWTPayload): string {
+    return this.jwtService.sign(payload, {
+      secret: appEnv.JWT_RECOVERY_TOKEN_SECRET,
+      expiresIn: appEnv.JWT_RECOVERY_TOKEN_EXPIRATION,
+    });
+  }
 
   async signup(requestSignupDto: SignUpRequestDto): Promise<SignUpResponseDto> {
     const { password, email } = requestSignupDto;
@@ -447,10 +507,10 @@ export class AuthService {
   }
 
   async restorePassword(
-    context: JwtContext,
+    jwtContext: JwtContext,
     restorePasswordDto: RestorePasswordDto,
   ): Promise<LoginResponseDto | SignUpResponseDto> {
-    const { user } = context;
+    const { user } = jwtContext;
     const { password, verificationPassword, deviceKey, userAgent } =
       restorePasswordDto;
 
@@ -519,9 +579,9 @@ export class AuthService {
   }
 
   async resendVerificationEmail(
-    context: PartialJwtContext,
+    jwtContext: PartialJwtContext,
   ): Promise<MessageResponse> {
-    const { user } = context;
+    const { user } = jwtContext;
     if (user.verified) throw new ConflictException('Account already verified');
     const verificationCode = generateNumericCode(6);
     const verificationCodeHash = bcrypt.hashSync(
@@ -543,35 +603,18 @@ export class AuthService {
     });
   }
 
-  private hashIt(payload: string): string {
-    return createHash('sha256').update(payload).digest('hex');
-  }
-
-  private buildRefreshToken(payload: JWTPayload): string {
-    return this.jwtService.sign(payload, {
-      secret: appEnv.JWT_REFRESH_SECRET,
-      expiresIn: appEnv.JWT_REFRESH_EXPIRATION,
-    });
-  }
-
-  private buildAccessToken(payload: JWTPayload): string {
-    return this.jwtService.sign(payload, {
-      secret: appEnv.JWT_ACCESS_SECRET,
-      expiresIn: appEnv.JWT_ACCESS_EXPIRATION,
-    });
-  }
-
-  private getPartialToken(payload: JWTPayload) {
-    return this.jwtService.sign(payload, {
-      secret: appEnv.JWT_PARTIAL_SECRET,
-      expiresIn: appEnv.JWT_PARTIAL_EXPIRATION,
-    });
-  }
-
-  private buildRecoveryToken(payload: JWTPayload): string {
-    return this.jwtService.sign(payload, {
-      secret: appEnv.JWT_RECOVERY_TOKEN_SECRET,
-      expiresIn: appEnv.JWT_RECOVERY_TOKEN_EXPIRATION,
-    });
+  async getActiveSessions(
+    jwtContext: JwtContext,
+  ): Promise<CompleteSessionDto[]> {
+    const completeSessions: CompleteSession[] =
+      await this.prismaService.session.findMany({
+        where: {
+          userDevice: {
+            userId: jwtContext.user.id,
+          },
+        },
+        include: completeSessionInclude,
+      });
+    return AuthService.completeSessionsToDtos(jwtContext, completeSessions);
   }
 }

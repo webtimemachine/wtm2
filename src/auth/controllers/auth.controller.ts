@@ -18,6 +18,7 @@ import {
 } from '../../common/decorators';
 import { MessageResponse } from '../../common/dtos';
 import {
+  JwtAccessToken,
   JwtPartialToken,
   JwtRecoveryToken,
   JwtRefreshToken,
@@ -42,6 +43,7 @@ import {
   PartialJwtContext,
 } from '../interfaces';
 import { AuthService } from '../services';
+import { CompleteSessionDto } from '../dtos/complete-session.dto';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -166,5 +168,19 @@ export class AuthController {
     @Body() restorePasswordDto: RestorePasswordDto,
   ): Promise<LoginResponseDto | SignUpResponseDto> {
     return this.authService.restorePassword(context, restorePasswordDto);
+  }
+
+  @ApiOkResponse({
+    status: 200,
+    type: CompleteSessionDto,
+    isArray: true,
+  })
+  @JwtAccessToken()
+  @HttpCode(200)
+  @Get('session')
+  async getActiveSessions(
+    @JwtRequestContext() context: JwtContext,
+  ): Promise<CompleteSessionDto[]> {
+    return this.authService.getActiveSessions(context);
   }
 }
