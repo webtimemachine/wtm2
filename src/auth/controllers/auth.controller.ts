@@ -88,6 +88,19 @@ export class AuthController {
 
   @ApiOkResponse({
     status: 200,
+    type: MessageResponse,
+  })
+  @JwtAccessToken()
+  @HttpCode(200)
+  @Post('logout')
+  async logout(
+    @JwtRequestContext() context: JwtContext,
+  ): Promise<MessageResponse> {
+    return this.authService.logout(context);
+  }
+
+  @ApiOkResponse({
+    status: 200,
     type: LoginResponseDto,
   })
   @ApiUnauthorizedMessageResponse()
