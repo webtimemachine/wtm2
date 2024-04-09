@@ -20,7 +20,7 @@ import * as bcrypt from 'bcrypt';
 import { plainToInstance } from 'class-transformer';
 import { createHash } from 'crypto';
 
-import { Device, UserDevice, UserType } from '@prisma/client';
+import { Device, Session, UserDevice, UserType } from '@prisma/client';
 
 import { UserService } from '../../user/services';
 import {
@@ -638,15 +638,24 @@ export class AuthService {
   async logoutSession(
     logoutSessionInputDto: LogoutSessionInputDto,
   ): Promise<MessageResponse> {
-    const { sessionId } = logoutSessionInputDto;
+    const { sessionIds } = logoutSessionInputDto;
 
-    const deletedSession = await this.prismaService.session.delete({
-      where: {
-        id: sessionId,
+    const { deletedSessions } = await this.prismaService.$transaction(
+      async (prismaClient) => {
+        const deletedSessions: Session[] = [];
+        for (const sessionId of sessionIds) {
+          const deletedSession = await prismaClient.session.delete({
+            where: {
+              id: sessionId,
+            },
+          });
+          deletedSessions.push(deletedSession);
+        }
+        return { deletedSessions };
       },
-    });
+    );
 
-    if (deletedSession) {
+    if (deletedSessions?.length > 0) {
       return plainToInstance(MessageResponse, {
         message: 'Logout successfully',
       });
