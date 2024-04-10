@@ -10,17 +10,20 @@ import {
   Put,
 } from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
-import { JwtAccessToken, JwtRequestContext } from 'src/auth/decorators';
-import { JwtContext } from 'src/auth/interfaces';
-import { ApiInternalServerErrorMessageResponse } from '../../common/decorators';
+
+import { JwtContext } from '../../auth/interfaces';
+import { JwtAccessToken, JwtRequestContext } from '../../auth/decorators';
+
 import { MessageResponse } from '../../common/dtos';
+import { ApiInternalServerErrorMessageResponse } from '../../common/decorators';
+
 import {
   UpdateUserDeviceInput,
   UpdateUserPreferencesInput,
   UserDto,
   UserPreferencesDto,
+  UserDeviceDto,
 } from '../dtos';
-import { UserDeviceDto } from '../dtos/user-device.dto';
 import { UserService } from '../services';
 
 @ApiTags('User')

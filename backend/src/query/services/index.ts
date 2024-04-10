@@ -1,11 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { Query, Prisma } from '@prisma/client';
-import { PrismaService } from '../../common/services';
-import { JwtContext } from 'src/auth/interfaces';
-import { PaginationResponse } from '../../common/dtos';
-import { QueryResultDto, GetQueriesDto } from '../dtos';
-import { SimpleNavigationEntryDto } from '../../navigation/dtos/simple-navigation-entry.dto';
 import { plainToInstance } from 'class-transformer';
+
+import { JwtContext } from '../../auth/interfaces';
+
+import { PrismaService } from '../../common/services';
+import { PaginationResponse } from '../../common/dtos';
+
+import { SimpleNavigationEntryDto } from '../../navigation/dtos';
+
+import { QueryResultDto, GetQueriesDto } from '../dtos';
 import { QueryResult, queryResultInclude } from '../types';
 
 export const toDtos = (queryResults: QueryResult[]): QueryResultDto[] => {

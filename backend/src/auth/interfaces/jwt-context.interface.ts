@@ -1,5 +1,5 @@
-import { CompleteSession, CompleteUser } from 'src/user/types';
 import { JWTPayload } from './jwt.interface';
+import { CompleteSession, CompleteUser } from '../../user/types';
 
 export interface JwtContext {
   payload: JWTPayload;

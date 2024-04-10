@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { QueryService } from './services/';
 import { QueyController } from './controllers';
-import { CommonModule } from 'src/common/common.module';
+import { CommonModule } from '../common/common.module';
 
 @Module({
   imports: [CommonModule],

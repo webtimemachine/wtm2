@@ -1,12 +1,17 @@
 import { Controller, Get, HttpCode, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+
 import { QueryService } from '../services';
 import { QueryResultDto, GetQueriesDto } from '../dtos/';
-import { ApiInternalServerErrorMessageResponse } from 'src/common/decorators';
-import { JwtAccessToken, JwtRequestContext } from 'src/auth/decorators';
-import { JwtContext } from 'src/auth/interfaces';
-import { PaginationResponse } from 'src/common/dtos';
-import { ApiPaginationResponse } from 'src/common/decorators';
+
+import {
+  ApiInternalServerErrorMessageResponse,
+  ApiPaginationResponse,
+} from '../../common/decorators';
+import { PaginationResponse } from '../../common/dtos';
+
+import { JwtAccessToken, JwtRequestContext } from '../../auth/decorators';
+import { JwtContext } from '../../auth/interfaces';
 
 @ApiTags('Query')
 @Controller('queries')

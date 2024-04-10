@@ -2,14 +2,27 @@
 const fs = require('fs');
 
 const readJsonFile = async (filename) => {
-  return new Promise((resolve) => {
-    fs.readFile(filename, 'utf8', (error, data) => {
-      resolve(JSON.parse(data));
-    });
-  });
+  try {
+    const data = fs.readFileSync(filename, 'utf8');
+    return JSON.parse(data);
+  } catch (error) {
+    throw error;
+  }
 };
 
 export const getVersion = async () => {
-  const packageJson: any = await readJsonFile('package.json');
+  let packageJson: any;
+
+  const paths = ['backend/package.json', './package.json', '../package.json'];
+
+  for (const path of paths) {
+    try {
+      packageJson = await readJsonFile(path);
+      break;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   return packageJson?.version || '0.0.1';
 };
