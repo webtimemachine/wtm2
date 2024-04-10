@@ -20,7 +20,7 @@ import * as bcrypt from 'bcrypt';
 import { plainToInstance } from 'class-transformer';
 import { createHash } from 'crypto';
 
-import { Device, UserDevice, UserType } from '@prisma/client';
+import { Device, Session, UserDevice, UserType } from '@prisma/client';
 
 import { UserService } from '../../user/services';
 import {
@@ -51,6 +51,7 @@ import { MessageResponse } from '../../common/dtos';
 import { generateNumericCode } from '../../common/helpers';
 import { appEnv } from '../../config';
 import { CompleteSessionDto } from '../dtos/complete-session.dto';
+import { LogoutSessionInputDto } from '../dtos/logout-session.input.dto';
 
 @Injectable()
 export class AuthService {
@@ -316,6 +317,22 @@ export class AuthService {
         session.userDevice,
       ),
     });
+  }
+
+  async logout(jwtContext: JwtContext): Promise<MessageResponse> {
+    const deletedSession = await this.prismaService.session.delete({
+      where: {
+        id: jwtContext.session.id,
+      },
+    });
+
+    if (deletedSession) {
+      return plainToInstance(MessageResponse, {
+        message: 'Logout successfully',
+      });
+    } else {
+      throw new NotFoundException();
+    }
   }
 
   async refreshToken(context: JwtRefreshContext): Promise<RefreshResponseDto> {
@@ -616,5 +633,34 @@ export class AuthService {
         include: completeSessionInclude,
       });
     return AuthService.completeSessionsToDtos(jwtContext, completeSessions);
+  }
+
+  async logoutSession(
+    logoutSessionInputDto: LogoutSessionInputDto,
+  ): Promise<MessageResponse> {
+    const { sessionIds } = logoutSessionInputDto;
+
+    const { deletedSessions } = await this.prismaService.$transaction(
+      async (prismaClient) => {
+        const deletedSessions: Session[] = [];
+        for (const sessionId of sessionIds) {
+          const deletedSession = await prismaClient.session.delete({
+            where: {
+              id: sessionId,
+            },
+          });
+          deletedSessions.push(deletedSession);
+        }
+        return { deletedSessions };
+      },
+    );
+
+    if (deletedSessions?.length > 0) {
+      return plainToInstance(MessageResponse, {
+        message: 'Logout successfully',
+      });
+    } else {
+      throw new NotFoundException();
+    }
   }
 }
