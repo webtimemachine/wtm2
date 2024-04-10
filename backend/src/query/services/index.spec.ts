@@ -1,12 +1,15 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { CommonTestingModule } from '../../common/common.testing.module';
-import { PaginationResponse } from '../../common/dtos';
-import { PrismaService } from '../../common/services';
 import { PrismaClient, UserType } from '@prisma/client';
+
 import { QueryService, toDtos } from '../services';
 import { QueryResultDto } from '../dtos';
 import { QueryResult } from '../types';
-import { JWTPayload, JwtContext } from 'src/auth/interfaces';
+import { Test, TestingModule } from '@nestjs/testing';
+
+import { CommonTestingModule } from '../../common/common.testing.module';
+import { PaginationResponse } from '../../common/dtos';
+import { PrismaService } from '../../common/services';
+
+import { JWTPayload, JwtContext } from '../../auth/interfaces';
 
 jest.mock('../../common/services/prisma.service');
 

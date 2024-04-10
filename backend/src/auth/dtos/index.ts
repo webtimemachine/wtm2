@@ -9,3 +9,4 @@ export { SignUpRequestDto } from './signup-request.dto';
 export { SignUpResponseDto } from './signup-response.dto';
 export { UserResponseDto } from './user-response.dto';
 export { VerifyAccountDto } from './verify-account.dto';
+export { CompleteSessionDto } from './complete-session.dto';

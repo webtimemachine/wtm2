@@ -1,22 +1,28 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaClient, UserType } from '@prisma/client';
-import { JWTPayload, JwtContext } from 'src/auth/interfaces';
-import { PaginationResponse } from 'src/common/dtos';
+
+import { PaginationResponse } from '../../common/dtos';
 import { CommonTestingModule } from '../../common/common.testing.module';
 import { PrismaService } from '../../common/services';
+
+import { ExplicitFilterService } from '../../filter/services';
+import { ExplicitFilterTestingModule } from '../../filter/filter.testing.module';
+
 import {
   CompleteNavigationEntryDto,
   CreateNavigationEntryInputDto,
+  GetNavigationEntryDto,
 } from '../dtos';
-import { GetNavigationEntryDto } from '../dtos/get-navigation-entry.dto';
 import { CompleteNavigationEntry } from '../types';
-import { ExplicitFilterService } from '../../filter/services';
-import { SemanticProcessor } from '../../semanticSearch/services';
-import { SemanticSearchTestingModule } from '../../semanticSearch/semanticSearch.testing.module';
+import { NavigationEntryService } from './navigation-entry.service';
+
 import { QueryService } from '../../query/services';
 import { QueryTestingModule } from '../../query/query.testing.module';
-import { ExplicitFilterTestingModule } from '../../filter/filter.testing.module';
-import { NavigationEntryService } from './navigation-entry.service';
+
+import { SemanticProcessor } from '../../semanticSearch/services';
+import { SemanticSearchTestingModule } from '../../semanticSearch/semanticSearch.testing.module';
+
+import { JWTPayload, JwtContext } from '../../auth/interfaces';
 
 jest.mock('../../common/services/prisma.service');
 

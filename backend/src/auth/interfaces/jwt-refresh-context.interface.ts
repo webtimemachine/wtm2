@@ -1,5 +1,5 @@
 import { JWTPayload } from './jwt.interface';
-import { CompleteUser } from 'src/user/types';
+import { CompleteUser } from '../../user/types';
 
 export interface JwtRefreshContext {
   payload: JWTPayload;

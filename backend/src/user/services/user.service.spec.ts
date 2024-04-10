@@ -1,8 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaClient, UserType } from '@prisma/client';
-import { JWTPayload, JwtContext } from 'src/auth/interfaces';
-import { CommonTestingModule } from '../../common/common.testing.module';
+
+import { JWTPayload, JwtContext } from '../../auth/interfaces';
+
 import { PrismaService } from '../../common/services';
+import { CommonTestingModule } from '../../common/common.testing.module';
+
 import { UserService } from './user.service';
 
 jest.mock('../../common/services/prisma.service');

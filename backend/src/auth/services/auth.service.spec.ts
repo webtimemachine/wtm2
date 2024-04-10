@@ -2,16 +2,20 @@ import { ConflictException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserType } from '@prisma/client';
-
-import { EmailService, PrismaService } from '../../common/services';
-import { LocalStrategy } from '../strategies';
-import { AuthService } from './auth.service';
-import { LoginResponseDto, SignUpResponseDto } from '../dtos';
 import { MailerService } from '@nestjs-modules/mailer';
-import { CompleteSession } from 'src/user/types';
-import { CompleteSessionDto } from '../dtos/complete-session.dto';
 import { plainToInstance } from 'class-transformer';
+
+import { AuthService } from './auth.service';
+import {
+  LoginResponseDto,
+  SignUpResponseDto,
+  CompleteSessionDto,
+} from '../dtos';
+
 import { JwtContext } from '../interfaces';
+import { LocalStrategy } from '../strategies';
+import { EmailService, PrismaService } from '../../common/services';
+import { CompleteSession } from '../../user/types';
 
 describe('AuthService', () => {
   let authService: AuthService;

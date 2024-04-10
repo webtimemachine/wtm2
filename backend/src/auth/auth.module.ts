@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
-import { CommonModule } from 'src/common/common.module';
+import { CommonModule } from '../common/common.module';
 import { EmailService } from '../common/services';
-import { AuthController } from './controllers/auth.controller';
+import { AuthController } from './controllers';
 import { AuthService } from './services';
 import {
   JWTAccessStrategy,
