@@ -26,17 +26,4 @@ jobs:
       - name: Run Jest tests
         working-directory: extensions/Chrome Web
         run: npm run test:cov
-
-      - name: Create ZIP file for Chrome extension
-        working-directory: extensions
-        run: |
-          zip -r chrome-extension.zip ./Chrome\ Web
-      - name: 'Publish to Chrome Store'
-        uses: cardinalby/webext-buildtools-chrome-webstore-publish-action@v1
-        with:
-          action: 'upload' 
-          apiClientId: ${{ secrets.CHROME_CLIENT_ID }}
-          apiClientSecret: ${{ secrets.CHROME_SECRET }}
-          apiRefreshToken: ${{ secrets.CHROME_REFRESH_TOKEN }}
-          extensionId: ${{ secrets.CHROME_EXTENSION_ID }}
-          zip_file: 'extensions/chrome-extension.zip'
+      
