@@ -19,9 +19,9 @@ jobs:
           node-version: 18.16.0
 
       - name: Install dependencies
-        working-directory: extensions/backend
+        working-directory: backend
         run: npm install
 
       - name: Run ESLint
-        working-directory: extensions/backend
+        working-directory: backend
         run: npm run lint
