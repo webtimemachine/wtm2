@@ -32,6 +32,7 @@ jobs:
         run: |
           zip -r chrome-extension.zip ./Chrome\ Web
       - name: 'Build extension'
+        working-directory: extensions/Chrome Web
         run: npm run build
       - name: 'Publish to Chrome Store'
         uses: mobilefirstllc/cws-publish@latest
