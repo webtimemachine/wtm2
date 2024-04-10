@@ -5,17 +5,19 @@ WebTM is a cross-platform solution to integrate the navigation history between d
 ## Installation
 
 ```bash
+$ cd backend
 $ npm install
 ```
 
-Copy the `sample.env` to `.env` and edit the values if necessary. Please watch the [Set the environment variables](#set-the-environment-variables).
+Copy the `sample.env` to `.env` on the backend folder and edit the values if necessary. Please watch the [Set the environment variables](#set-the-environment-variables).
 
 ## Running with Docker
 
-If you are pointing to your local database, you can use Docker Compose to run the application. Before running the command, ensure that you have Docker and Docker compose installed on your system. You can download and install Docker Desktop from [here](https://www.docker.com/products/docker-desktop/).
+If you are pointing to your local database, you can use Docker Compose inside the backend folder to run the application. Before running the command, ensure that you have Docker and Docker compose installed on your system. You can download and install Docker Desktop from [here](https://www.docker.com/products/docker-desktop/).
 Execute the following command in your terminal:
 
 ```bash
+cd backend
 docker compose up
 ```
 
@@ -32,6 +34,8 @@ docker run --net=host -it -e NGROK_AUTHTOKEN=2L3OvbfDz... ngrok/ngrok:latest htt
 ## Running the app
 
 ```bash
+$ cd backend
+
 # development
 $ npm run start
 
@@ -56,7 +60,7 @@ If you want to use WebTM app saving and managing your own navigation data the be
   - [Running the app](#running-the-app)
   - [Open API Docs](#open-api-docs)
 - [How to deploy your own Backend of WTM](#how-to-deploy-your-own-backend-of-wtm)
-    - [Deploy WTM on Vercel](#deploy-wtm-on-vercel)
+  - [Deploy WTM on Vercel](#deploy-wtm-on-vercel)
   - [Create a Vercel Postgres Serverless SQL](#create-a-vercel-postgres-serverless-sql)
   - [Set the environment variables](#set-the-environment-variables)
 - [Chrome Extension](#chrome-extension)
@@ -64,7 +68,7 @@ If you want to use WebTM app saving and managing your own navigation data the be
 
 ### Deploy WTM on Vercel
 
-Deploy [this repository](https://github.com/webtimemachine/wtm2) into your vercel account using the following button.
+Deploy [this repository](https://github.com/webtimemachine/wtm2) into your vercel account using the following button. After the deploy is complete you will need to go to the project settings and change the root folder to `backend` and also set the env variables.
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fwebtimemachine%2Fwtm2)
 
