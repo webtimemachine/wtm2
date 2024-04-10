@@ -1,7 +1,7 @@
 on:
   push:
     tags:
-    - 'v*'
+      - 'v*'
 
 name: Create Release and Upload Release Assets
 
@@ -19,6 +19,7 @@ jobs:
           zip -r chrome-extension.zip ./Chrome\ Web
 
       - name: Install dependencies & build backend project
+        working-directory: backend
         run: |
           npm install
           npm run build
@@ -34,7 +35,7 @@ jobs:
           echo "${{ secrets.ENCODED_CERTIFICATE }}" | base64 --decode --output cert.p12
           echo "${{ secrets.ENCODED_PROVISIONING_PROFILE_APP }}" | base64 --decode --output app.mobileprovision
           echo "${{ secrets.ENCODED_PROVISIONING_PROFILE_EXTENSION }}" | base64 --decode --output extension.mobileprovision
-      
+
           KEYCHAIN_PATH=$RUNNER_TEMP/my_temporary.keychain
           security create-keychain -p "${{ secrets.KEYCHAIN_PASSWORD }}" $KEYCHAIN_PATH
           security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
@@ -43,7 +44,7 @@ jobs:
           security list-keychains -d user -s $KEYCHAIN_PATH
           security default-keychain -s $KEYCHAIN_PATH
           security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "${{ secrets.KEYCHAIN_PASSWORD }}" $KEYCHAIN_PATH
-      
+
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp app.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
           cp extension.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
@@ -65,15 +66,15 @@ jobs:
       - name: Test Safari Extension
         working-directory: 'extensions'
         run: |
-            if [ "`ls -A | grep -i \\.xcworkspace\$`" ]; then
-              filetype_parameter="workspace"
-              file_to_build="`ls -A | grep -i \\.xcworkspace\$`"
-            else
-              filetype_parameter="project"
-              file_to_build="`ls -A | grep -i \\.xcodeproj\$`"
-            fi
-            file_to_build=`echo $file_to_build | awk '{$1=$1;print}'`
-            xcodebuild test-without-building -scheme "Web Time Machine (iOS)" -"$filetype_parameter" "$file_to_build" -destination 'platform=iOS Simulator,name=iPhone 14,OS=16.2' -derivedDataPath './build'
+          if [ "`ls -A | grep -i \\.xcworkspace\$`" ]; then
+            filetype_parameter="workspace"
+            file_to_build="`ls -A | grep -i \\.xcworkspace\$`"
+          else
+            filetype_parameter="project"
+            file_to_build="`ls -A | grep -i \\.xcodeproj\$`"
+          fi
+          file_to_build=`echo $file_to_build | awk '{$1=$1;print}'`
+          xcodebuild test-without-building -scheme "Web Time Machine (iOS)" -"$filetype_parameter" "$file_to_build" -destination 'platform=iOS Simulator,name=iPhone 14,OS=16.2' -derivedDataPath './build'
 
       - name: Archive the iOS App
         working-directory: 'extensions'
@@ -97,7 +98,7 @@ jobs:
           prerelease: false
 
       - name: Upload Release Chrome extension Asset
-        id: upload-release-asset 
+        id: upload-release-asset
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -114,10 +115,10 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: backend.zip
+          asset_path: backend/backend.zip
           asset_name: backend.zip
           asset_content_type: application/zip
-          
+
       - name: Upload .ipa to Release
         id: upload-release-asset-ipa
         uses: actions/upload-release-asset@v1
@@ -125,6 +126,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: "extensions/build/Web Time Machine.ipa"
+          asset_path: 'extensions/build/Web Time Machine.ipa'
           asset_name: Web Time Machine.ipa
           asset_content_type: application/octet-stream
