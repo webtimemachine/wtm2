@@ -31,9 +31,9 @@ jobs:
         working-directory: extensions
         run: |
           zip -r chrome-extension.zip ./Chrome\ Web
-
-      - name: 'Publish to Chrome Store'
+      - name: 'Build extension'
         run: npm run build
+      - name: 'Publish to Chrome Store'
         uses: mobilefirstllc/cws-publish@latest
         with:
           action: 'upload' 
