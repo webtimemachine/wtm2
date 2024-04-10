@@ -19,7 +19,7 @@ jobs:
           zip -r chrome-extension.zip ./Chrome\ Web
 
       - name: Install dependencies & build backend project
-        working-directory: extensions/backend
+        working-directory: backend
         run: |
           npm install
           npm run build

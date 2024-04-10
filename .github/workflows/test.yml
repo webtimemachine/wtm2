@@ -36,9 +36,9 @@ jobs:
           node-version: 18.16
 
       - name: Install dependencies
-        working-directory: backend.zip
+        working-directory: backend
         run: npm install
 
       - name: Run Jest tests
-        working-directory: backend.zip
+        working-directory: backend
         run: npm run test
