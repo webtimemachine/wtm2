@@ -32,11 +32,11 @@ jobs:
         run: |
           zip -r chrome-extension.zip ./Chrome\ Web
       - name: 'Publish to Chrome Store'
-        uses: mobilefirstllc/cws-publish@latest
+        uses: cardinalby/webext-buildtools-chrome-webstore-publish-action@v1
         with:
           action: 'upload' 
-          client_id: ${{ secrets.CHROME_CLIENT_ID }}
-          client_secret: ${{ secrets.CHROME_SECRET }}
-          refresh_token: ${{ secrets.CHROME_REFRESH_TOKEN }}
-          extension_id: ${{ secrets.CHROME_EXTENSION_ID }}
+          apiClientId: ${{ secrets.CHROME_CLIENT_ID }}
+          apiClientSecret: ${{ secrets.CHROME_SECRET }}
+          apiRefreshToken: ${{ secrets.CHROME_REFRESH_TOKEN }}
+          extensionId: ${{ secrets.CHROME_EXTENSION_ID }}
           zip_file: 'extensions/chrome-extension.zip'
