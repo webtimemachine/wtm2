@@ -17,6 +17,8 @@ import { DeviceDto } from '../dtos/device.dto';
 import { UserDeviceDto } from '../dtos/user-device.dto';
 import { CompleteUserDevice, completeUserDeviceInclude } from '../types';
 
+import * as UAParser from 'ua-parser-js';
+
 @Injectable()
 export class UserService {
   private readonly logger = new Logger(UserService.name);
@@ -32,10 +34,25 @@ export class UserService {
     jwtContext: JwtContext,
     userDevice: CompleteUserDevice,
   ): UserDeviceDto {
-    const deviceDto = plainToInstance(DeviceDto, {
+    const userAgent = userDevice.device.userAgent;
+
+    let deviceDto = plainToInstance(DeviceDto, {
       ...userDevice.device,
       id: Number(userDevice.device.id),
+      userAgent:
+        userDevice.device.userAgent !== null
+          ? userDevice.device.userAgent
+          : undefined,
     });
+
+    if (userAgent) {
+      const uaParser = new UAParser(userAgent);
+      const uaResult: UAParser.IResult = uaParser.getResult();
+      deviceDto = {
+        ...deviceDto,
+        uaResult,
+      };
+    }
 
     const userDeviceDto = plainToInstance(UserDeviceDto, {
       ...userDevice,
