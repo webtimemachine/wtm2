@@ -48,6 +48,8 @@ export const handleGetHistory = async (chrome, request, sendResponse) => {
       // If an error occurs during fetching, send an error response
       sendResponse({ error: true });
     }
+  } else {
+    sendResponse({ error: true });
   }
 };
 
@@ -79,6 +81,8 @@ export const handleGetQueries = async (chrome, request, sendResponse) => {
       // If an error occurs during fetching, send an error response
       sendResponse({ error: true });
     }
+  } else {
+    sendResponse({ error: true });
   }
 };
 
@@ -187,6 +191,8 @@ export const handleDeleteHistoryEntry = async (
       // If an error occurs during deletion or fetching, send an error response
       sendResponse({ error: true });
     }
+  } else {
+    sendResponse({ error: true });
   }
 };
 
@@ -231,6 +237,8 @@ export const handleGetPreferences = async (chrome, sendResponse) => {
       // If an error occurs during fetching, send an error response
       sendResponse({ error: true });
     }
+  } else {
+    sendResponse({ error: true });
   }
 };
 
@@ -264,6 +272,8 @@ export const handleUpdatePreferences = async (
       // If an error occurs during fetching, send an error response
       sendResponse({ error: true });
     }
+  } else {
+    sendResponse({ error: true });
   }
 };
 
@@ -291,6 +301,8 @@ export const handleDeleteUserAccount = async (chrome, sendResponse) => {
       // If an error occurs during fetching, send an error response
       sendResponse({ error: true });
     }
+  } else {
+    sendResponse({ error: true });
   }
 };
 
