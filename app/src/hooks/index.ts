@@ -1,1 +1,1 @@
-export { useSendLala } from './use-send-lala.hook';
+export { useSayHello } from './use-say-hello.hook';
