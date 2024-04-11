@@ -26,3 +26,4 @@ jobs:
       - name: Run Jest tests
         working-directory: extensions/Chrome Web
         run: npm run test:cov
+      
