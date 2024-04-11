@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "WebTM - Vite",
+  "version": "1.0",
+  "description": "WebTM - Vite",
+  "permissions": ["tabs", "activeTab", "storage", "scripting"],
+  "action": {
+    "default_popup": "index.html"
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "host_permissions": ["<all_urls>"],
+  "icons": {
+    "32": "./app-icon.png",
+    "128": "./app-icon.png"
+  }
+}
