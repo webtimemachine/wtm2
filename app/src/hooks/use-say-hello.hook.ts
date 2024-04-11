@@ -2,26 +2,26 @@ import { useToast } from '@chakra-ui/react';
 
 import { useMutation } from '@tanstack/react-query';
 
-export const useSendLala = () => {
-  const sendLala = async () => {
+export const useSayHello = () => {
+  const sayHello = async () => {
     try {
       const res = await chrome.runtime.sendMessage({
-        type: 'lala',
+        type: 'sayHello',
         payload: { sayHello: 'Hello world 🌎' },
       });
       return res;
     } catch (error) {
-      console.error('Error while sending lala');
+      console.error("Error while sending 'Hello world'");
       console.error(error);
       throw error;
     }
   };
   const toast = useToast();
 
-  const sendLalaMutation = useMutation({
-    mutationFn: sendLala,
+  const sayHelloMutation = useMutation({
+    mutationFn: sayHello,
     onSuccess: (res) => {
-      console.log('sendLalaMutation res', { res });
+      console.log('sendHelloWorldMutation res', { res });
       toast({
         title: 'Message',
         description: res?.message,
@@ -34,5 +34,5 @@ export const useSendLala = () => {
       console.error(error);
     },
   });
-  return { sendLalaMutation };
+  return { sayHelloMutation };
 };

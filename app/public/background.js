@@ -1,14 +1,15 @@
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-export const handleLala = async (chrome, request, sendResponse) => {
+export const handleSayHello = async (request, sendResponse) => {
   await sleep(3000);
-  sendResponse({ message: 'Hi lalalala' });
+  console.log('background.js', { payload: request.payload });
+  sendResponse({ message: 'Hello from background.js 👋' });
 };
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   switch (request.type) {
-    case 'lala':
-      handleLala(chrome, request, sendResponse);
+    case 'sayHello':
+      handleSayHello(request, sendResponse);
       return true;
 
     default:
