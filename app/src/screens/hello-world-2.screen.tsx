@@ -16,12 +16,13 @@ export const  getRandomEmoji = () => {
       '🥺', '😢', '😭', '😤', '😠', '😡', '🤬', '🤯', '😳', '🥵',
       '🥶', '😱', '😨', '😰', '😥', '😓', '😩', '😧', '😦', '😲',
       '😵', '😳', '🤯', '🤠', '🥳', '😎', '🤓', '😏'
+
   ];
   const randomIndex = Math.floor(Math.random() * emojis.length);
   return emojis[randomIndex];
 }
 
-export const HelloWorldScreen: React.FC<{}> = () => {
+export const HelloWorld2Screen: React.FC<{}> = () => {
   const { currentScreen, setCurrentScreen } = useCurrentScreen();
 
   const { sayHelloMutation } = useSayHello();
@@ -36,20 +37,19 @@ export const HelloWorldScreen: React.FC<{}> = () => {
         <div className="flex flex-col items-center">
           <div className="flex flex-col items-center p-10 bg-white rounded-2xl shadow-lg">
             <div className="flex gap-2 items-center">
-              <a href="https://vitejs.dev" target="_blank">
-                <img
-                  src={viteLogo}
-                  className="w-[120px] h-[120px]"
-                  alt="Vite logo"
-                />
-              </a>
-              <h1 className="text-6xl">+ </h1>
-
               <a href="https://react.dev" target="_blank">
                 <img
                   src={reactLogo}
                   className="w-[120px] h-[120px]"
                   alt="React logo"
+                />
+              </a>
+              <h1 className="text-6xl">+ </h1>
+              <a href="https://vitejs.dev" target="_blank">
+                <img
+                  src={viteLogo}
+                  className="w-[120px] h-[120px]"
+                  alt="Vite logo"
                 />
               </a>
             </div>
@@ -61,7 +61,7 @@ export const HelloWorldScreen: React.FC<{}> = () => {
           <Button
             colorScheme="blue"
             onClick={() => {
-              setCurrentScreen(`HelloWorld2`);
+              setCurrentScreen(`HelloWorld`);
             }}
           >
             Update Screen
