@@ -1,0 +1,11 @@
+{
+  "name": "wtm-vite",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "app:build": "cd app && npm run build",
+    "app:watch": "cd app && npm run nodemon"
+  },
+  "author": "",
+  "license": "ISC"
+}
