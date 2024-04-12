@@ -40,7 +40,6 @@ resendCode.addEventListener('click', async () => {
   ) {
     emailSentMessage.classList.remove('hidden');
   }
-  console.log({ resendCodeResponse });
 });
 
 const submitButton = document.querySelector('#submit');
