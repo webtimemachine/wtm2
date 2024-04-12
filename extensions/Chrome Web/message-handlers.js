@@ -17,6 +17,7 @@ import {
   recoverPassword,
   validateRecoveryCode,
 } from './services/recovery-pass.js';
+import { getUserActiveSessions } from './services/active-sessions.js';
 
 /**
  * Handles the request to fetch browsing history entries.
@@ -48,6 +49,8 @@ export const handleGetHistory = async (chrome, request, sendResponse) => {
       // If an error occurs during fetching, send an error response
       sendResponse({ error: true });
     }
+  } else {
+    sendResponse({ error: true });
   }
 };
 
@@ -79,6 +82,8 @@ export const handleGetQueries = async (chrome, request, sendResponse) => {
       // If an error occurs during fetching, send an error response
       sendResponse({ error: true });
     }
+  } else {
+    sendResponse({ error: true });
   }
 };
 
@@ -187,6 +192,8 @@ export const handleDeleteHistoryEntry = async (
       // If an error occurs during deletion or fetching, send an error response
       sendResponse({ error: true });
     }
+  } else {
+    sendResponse({ error: true });
   }
 };
 
@@ -231,6 +238,8 @@ export const handleGetPreferences = async (chrome, sendResponse) => {
       // If an error occurs during fetching, send an error response
       sendResponse({ error: true });
     }
+  } else {
+    sendResponse({ error: true });
   }
 };
 
@@ -264,6 +273,8 @@ export const handleUpdatePreferences = async (
       // If an error occurs during fetching, send an error response
       sendResponse({ error: true });
     }
+  } else {
+    sendResponse({ error: true });
   }
 };
 
@@ -291,6 +302,8 @@ export const handleDeleteUserAccount = async (chrome, sendResponse) => {
       // If an error occurs during fetching, send an error response
       sendResponse({ error: true });
     }
+  } else {
+    sendResponse({ error: true });
   }
 };
 
@@ -389,6 +402,29 @@ export const handleResendCode = async (chrome, request, sendResponse) => {
     sendResponse(resendEmailRes);
   } catch (error) {
     // If an error occurs during verify email, send an error response
+    sendResponse({ error: true });
+  }
+};
+
+export const handleGetActiveSessions = async (chrome, request, sendResponse) => {
+  // Check if the user is signed in
+  const storageData = await getStorageData(chrome);
+  if (storageData.userStatus) {
+    try {
+      const baseURL = storageData.baseURL || API_URL;
+
+      // Fetch user active sessions
+      const res = await getUserActiveSessions(
+        storageData.user_info,
+        baseURL
+      );
+      // Send the fetched history entries back as a response
+      sendResponse(res);
+    } catch (error) {
+      // If an error occurs during fetching, send an error response
+      sendResponse({ error: true });
+    }
+  } else {
     sendResponse({ error: true });
   }
 };

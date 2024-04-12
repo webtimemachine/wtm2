@@ -4,6 +4,10 @@ let paginationData = undefined;
 let paginationDataQueries = undefined;
 const ITEMS_PER_PAGE = 10;
 
+const sitesList = document.getElementById('sites-list');
+const queriesList = document.getElementById('queries-list');
+const loaderContainer = document.getElementById('loader-container');
+
 const handleLogoutUser = async () => {
   await chrome.runtime.sendMessage({ type: 'logout' });
   window.location.replace('./popup-sign-in.html');
@@ -154,10 +158,6 @@ searchQueryButton.addEventListener('click', async () => {
   loaderContainer.style.display = 'block';
   await refreshQueries(searchText)
 });
-
-const sitesList = document.getElementById('sites-list');
-const queriesList = document.getElementById('queries-list');
-const loaderContainer = document.getElementById('loader-container');
 
 // Function to create and append history item to list
 const appendHistoryItem = (item) => {
