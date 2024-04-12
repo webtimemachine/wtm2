@@ -16,6 +16,7 @@ import {
   handleValidateRecoveryCode,
   handleVerifyEmail,
   handleResendCode,
+  handleGetActiveSessions,
 } from './message-handlers.js';
 
 const handleStartup = async () => {
@@ -51,10 +52,10 @@ const handleStartup = async () => {
  * @param {string} selector
  * @returns {string}
  */
-function DOMtoString(selector) {
+function DOMtoString (selector) {
   if (selector) {
     // this function was added because the regex replacement is inconsistent if any of the properties in the tags contains these chars: ["<", ">"]
-    function removeAllAttributes(node) {
+    function removeAllAttributes (node) {
       // Remove attributes from the current node
       while (node.attributes.length > 0) {
         node.removeAttribute(node.attributes[0].name);
@@ -197,6 +198,9 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       return true;
     case 'resendCode':
       handleResendCode(chrome, request, sendResponse);
+      return true;
+    case 'getActiveSessions':
+      handleGetActiveSessions(chrome, request, sendResponse);
       return true;
     default:
       return false;

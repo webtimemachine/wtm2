@@ -16,10 +16,6 @@ export class CompleteNavigationEntryDto {
   @Expose()
   title: string;
 
-  @ApiProperty({ required: false })
-  @Expose()
-  content?: string;
-
   @ApiProperty()
   @Expose()
   navigationDate: Date;
