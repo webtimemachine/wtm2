@@ -39,3 +39,9 @@ const deleteAccount = document.getElementById('delete-account-button');
 deleteAccount.addEventListener('click', function () {
     window.location.replace('./delete-account.html');
 })
+
+const activeSessionsOption = document.getElementById('active-sessions-button');
+
+activeSessionsOption.addEventListener('click', function () {
+    window.location.replace('./active-sessions.html');
+})
