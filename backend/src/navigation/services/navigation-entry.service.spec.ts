@@ -108,7 +108,28 @@ const createdNavigationEntry: CompleteNavigationEntryDto = {
     device: {
       id: 1,
       deviceKey: '123',
-      userAgent: 'Chrome/121.0.6167.161',
+      userAgent:
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+      uaResult: {
+        ua: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+        browser: {
+          name: 'Chrome',
+          version: '121.0.0.0',
+          major: '121',
+        },
+        engine: {
+          name: 'Blink',
+          version: '121.0.0.0',
+        },
+        os: {
+          name: 'Windows',
+          version: '10',
+        },
+        device: {},
+        cpu: {
+          architecture: 'amd64',
+        },
+      },
     },
   },
   navigationDate,

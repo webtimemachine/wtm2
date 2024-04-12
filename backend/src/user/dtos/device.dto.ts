@@ -45,5 +45,5 @@ export class DeviceDto {
     },
   })
   @Expose()
-  uaResult?: UAParser.IResult;
+  uaResult?: UAResult;
 }
