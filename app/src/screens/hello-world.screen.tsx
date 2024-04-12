@@ -4,9 +4,27 @@ import viteLogo from '/vite.svg';
 import reactLogo from '/react.svg';
 
 import { Button } from '@chakra-ui/react';
-import { useSayHello } from '../hooks';
+import { useCurrentScreen, useSayHello } from '../hooks';
+
+// prettier-ignore
+function getRandomEmoji() {
+  const emojis = [
+      '😀', '😁', '😂', '🤣', '😃', '😄', '😅', '😆', '😉', '😊', 
+      '😋', '😎', '😍', '😘', '🥰', '😗', '😙', '😚', '☺️', '🙂',
+      '🙃', '😉', '😇', '😜', '😝', '😛', '🤑', '🤠', '😏', '😒',
+      '😞', '😔', '😟', '😕', '🙁', '☹️', '😣', '😖', '😫', '😩',
+      '🥺', '😢', '😭', '😤', '😠', '😡', '🤬', '🤯', '😳', '🥵',
+      '🥶', '😱', '😨', '😰', '😥', '😓', '😩', '😧', '😦', '😲',
+      '😵', '😳', '🤯', '🤠', '🥳', '😎', '🤓', '😏'
+
+  ];
+  const randomIndex = Math.floor(Math.random() * emojis.length);
+  return emojis[randomIndex];
+}
 
 export const HelloWorldScreen: React.FC<{}> = () => {
+  const { currentScreen, setCurrentScreen } = useCurrentScreen();
+
   const { sayHelloMutation } = useSayHello();
 
   const onHelloWorldClick = () => {
@@ -37,6 +55,18 @@ export const HelloWorldScreen: React.FC<{}> = () => {
               </a>
             </div>
           </div>
+          <span className="text-lg pt-2">Current Screen: {currentScreen}</span>
+        </div>
+
+        <div className="p-2 pt-5 flex justify-center items-center">
+          <Button
+            colorScheme="blue"
+            onClick={() => {
+              setCurrentScreen(`HelloWorld ${getRandomEmoji()}`);
+            }}
+          >
+            Update Screen
+          </Button>
         </div>
 
         <div className="p-2 pt-5 flex justify-center items-center">
