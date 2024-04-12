@@ -6,5 +6,5 @@ export const handleSayHello = async (
 ) => {
   await sleep(3000);
   console.log('background.js', { payload: request.payload });
-  sendResponse({ message: 'Hello from background.js 👋' });
+  sendResponse({ message: 'Hello from background.ts 👋' });
 };

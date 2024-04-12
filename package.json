@@ -4,9 +4,7 @@
   "description": "",
   "scripts": {
     "app:build": "cd app && npm run build",
-    "app:watch": "cd app && npm run nodemon",
-    "app2:build": "cd app2 && npm run build",
-    "app2:watch": "cd app2 && npm run nodemon"
+    "app:watch": "cd app && npm run nodemon"
   },
   "author": "",
   "license": "ISC"

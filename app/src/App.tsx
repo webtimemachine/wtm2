@@ -1,10 +1,10 @@
 import React from 'react';
-import { HelloWorldScreen } from './screens/hello-world.screen';
-import { HelloWorld2Screen } from './screens/hello-world-2.screen';
-import { useCurrentScreen } from './hooks';
+import {HelloWorldScreen} from './screens/hello-world.screen';
+import {HelloWorld2Screen} from './screens/hello-world-2.screen';
+import {useCurrentScreen} from './hooks';
 
 const App: React.FC<{}> = () => {
-  const { currentScreen } = useCurrentScreen();
+  const {currentScreen} = useCurrentScreen();
 
   return (
     <>
