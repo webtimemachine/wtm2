@@ -19,9 +19,7 @@ export const getVersion = async () => {
     try {
       packageJson = await readJsonFile(path);
       break;
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   }
 
   return packageJson?.version || '0.0.1';

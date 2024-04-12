@@ -1,1 +1,1 @@
-export { GetHelloReseponse } from './get-hello.response';
+export { GetVersionReseponse } from './get-version.response';

@@ -2,8 +2,8 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Exclude, Expose } from 'class-transformer';
 
 @Exclude()
-export class GetHelloReseponse {
-  @ApiProperty()
+export class GetVersionReseponse {
+  @ApiProperty({ example: '0.0.1' })
   @Expose()
-  message: string;
+  version: string;
 }
