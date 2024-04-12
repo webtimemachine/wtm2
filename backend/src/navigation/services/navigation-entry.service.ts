@@ -106,8 +106,10 @@ export class NavigationEntryService {
     jwtContext: JwtContext,
     createNavigationEntryInputDto: CreateNavigationEntryInputDto,
   ): Promise<CompleteNavigationEntryDto> {
+    const { content, ...entryData } = createNavigationEntryInputDto;
+
     await this.explicitFilter.filter(
-      createNavigationEntryInputDto.content!,
+      content!,
       createNavigationEntryInputDto.url,
     );
     const lastEntry = await this.prismaService.navigationEntry.findFirst({
@@ -121,7 +123,7 @@ export class NavigationEntryService {
     });
     try {
       await this.semanticProcessor.index(
-        createNavigationEntryInputDto.content!,
+        content!,
         createNavigationEntryInputDto.url,
         jwtContext.user.id,
       );
@@ -139,8 +141,8 @@ export class NavigationEntryService {
             id: lastEntry.id,
           },
           data: {
-            ...createNavigationEntryInputDto,
             userDeviceId: jwtContext.session.userDeviceId,
+            ...entryData,
           },
           include: completeNavigationEntryInclude,
         },
@@ -150,8 +152,8 @@ export class NavigationEntryService {
         {
           data: {
             userId: jwtContext.user.id,
-            ...createNavigationEntryInputDto,
             userDeviceId: jwtContext.session.userDeviceId,
+            ...entryData,
           },
           include: completeNavigationEntryInclude,
         },
