@@ -131,6 +131,7 @@ export class NavigationEntryService {
       );
     }
 
+    const { content, ...entryData } = createNavigationEntryInputDto;
     let completeNavigationEntry: CompleteNavigationEntry;
     if (lastEntry?.url === createNavigationEntryInputDto.url) {
       completeNavigationEntry = await this.prismaService.navigationEntry.update(
@@ -139,8 +140,8 @@ export class NavigationEntryService {
             id: lastEntry.id,
           },
           data: {
-            ...createNavigationEntryInputDto,
             userDeviceId: jwtContext.session.userDeviceId,
+            ...entryData,
           },
           include: completeNavigationEntryInclude,
         },
@@ -150,8 +151,8 @@ export class NavigationEntryService {
         {
           data: {
             userId: jwtContext.user.id,
-            ...createNavigationEntryInputDto,
             userDeviceId: jwtContext.session.userDeviceId,
+            ...entryData,
           },
           include: completeNavigationEntryInclude,
         },
