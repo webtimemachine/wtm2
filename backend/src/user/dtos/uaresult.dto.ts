@@ -1,68 +1,67 @@
 import { Expose, Exclude } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
-import UAParser from 'ua-parser-js';
 
 @Exclude()
-class UABrowser implements UAParser.IBrowser {
+class UABrowser {
   @ApiProperty({ required: false, type: 'string' })
   @Expose()
-  name: string | undefined;
+  name?: string;
 
   @ApiProperty({ required: false, type: 'string' })
   @Expose()
-  version: string | undefined;
+  version?: string;
 
   @ApiProperty({ required: false, type: 'string' })
   @Expose()
-  major: string | undefined;
+  major?: string;
 }
 
 @Exclude()
-class UADevice implements UAParser.IDevice {
+class UADevice {
   @ApiProperty({ required: false, type: 'string' })
   @Expose()
-  model: string | undefined;
+  model?: string;
 
   @ApiProperty({ required: false, type: 'string' })
   @Expose()
-  type: string | undefined;
+  type?: string;
 
   @ApiProperty({ required: false, type: 'string' })
   @Expose()
-  vendor: string | undefined;
+  vendor?: string;
 }
 
 @Exclude()
-class UAEngine implements UAParser.IEngine {
+class UAEngine {
   @ApiProperty({ required: false, type: 'string' })
   @Expose()
-  name: string | undefined;
+  name?: string;
 
   @ApiProperty({ required: false, type: 'string' })
   @Expose()
-  version: string | undefined;
+  version?: string;
 }
 
 @Exclude()
-class UAOS implements UAParser.IOS {
+class UAOS {
   @ApiProperty({ required: false, type: 'string' })
   @Expose()
-  name: string | undefined;
+  name?: string;
 
   @ApiProperty({ required: false, type: 'string' })
   @Expose()
-  version: string | undefined;
+  version?: string;
 }
 
 @Exclude()
-class UACPU implements UAParser.ICPU {
+class UACPU {
   @ApiProperty({ required: false, type: 'string' })
   @Expose()
-  architecture: string | undefined;
+  architecture?: string;
 }
 
 @Exclude()
-export class UAResult implements UAParser.IResult {
+export class UAResult {
   @ApiProperty()
   @Expose()
   ua: string;
