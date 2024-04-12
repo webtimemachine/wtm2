@@ -17,7 +17,7 @@ import { DeviceDto } from '../dtos/device.dto';
 import { UserDeviceDto } from '../dtos/user-device.dto';
 import { CompleteUserDevice, completeUserDeviceInclude } from '../types';
 
-import * as UAParser from 'ua-parser-js';
+import { UAParser } from 'ua-parser-js';
 
 @Injectable()
 export class UserService {
