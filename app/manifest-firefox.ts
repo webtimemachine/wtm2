@@ -1,10 +1,10 @@
 import { ManifestV3Export } from '@crxjs/vite-plugin';
 
-export const manifest: ManifestV3Export = {
+export const manifestFirefox: ManifestV3Export = {
   manifest_version: 3,
-  name: 'WebTM - Vite 2',
+  name: 'WebTM - Vite',
   version: '1.0',
-  description: 'WebTM - Vite 2',
+  description: 'WebTM - Vite',
   permissions: ['tabs', 'activeTab', 'storage', 'scripting'],
   action: {
     default_popup: 'index.html',
@@ -16,6 +16,6 @@ export const manifest: ManifestV3Export = {
     '128': 'app-icon.png',
   },
   background: {
-    service_worker: 'src/background/background.ts',
+    scripts: ['src/background/background.ts'],
   },
 };

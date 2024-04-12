@@ -1,5 +1,4 @@
 {
   "watch": ["src", "public"],
-  "ext": "js,jsx,ts,tsx,html,css",
-  "exec": "npm run build"
+  "ext": "js,jsx,ts,tsx,html,css"
 }

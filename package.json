@@ -4,7 +4,11 @@
   "description": "",
   "scripts": {
     "app:build": "cd app && npm run build",
-    "app:watch": "cd app && npm run nodemon"
+    "app:build:chrome": "cd app && npm run build:chrome",
+    "app:build:firefox": "cd app && npm run build:firefox",
+    "app:watch": "cd app && npm run nodemon",
+    "app:watch:chrome": "cd app && npm run nodemon:chrome",
+    "app:watch:firefox": "cd app && npm run nodemon:firefox"
   },
   "author": "",
   "license": "ISC"
