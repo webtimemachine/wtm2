@@ -1,7 +1,7 @@
 import { Controller, Get, Logger } from '@nestjs/common';
-import { ApiProperty, ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { AppService } from './app.service';
-import { JwtAccessToken } from './auth/decorators';
+import { GetVersionReseponse } from './dtos';
 
 @ApiTags('Root')
 @Controller()
@@ -10,10 +10,13 @@ export class AppController {
 
   constructor(private readonly appService: AppService) {}
 
-  @Get('/hello')
-  @ApiProperty()
-  @JwtAccessToken([])
-  getHello() {
-    return this.appService.getHello();
+  @Get('/version')
+  @ApiOkResponse({
+    status: 200,
+    type: GetVersionReseponse,
+    isArray: true,
+  })
+  getVersion() {
+    return this.appService.getVersion();
   }
 }
