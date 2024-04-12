@@ -1,3 +1,4 @@
+import { refreshTokenData } from '../auth.js';
 
 export async function getUserActiveSessions (user_info, baseURL, reexecuted = false) {
   try {
