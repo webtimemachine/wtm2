@@ -8,7 +8,8 @@
     "app:build:firefox": "cd app && npm run build:firefox",
     "app:watch": "cd app && npm run nodemon",
     "app:watch:chrome": "cd app && npm run nodemon:chrome",
-    "app:watch:firefox": "cd app && npm run nodemon:firefox"
+    "app:watch:firefox": "cd app && npm run nodemon:firefox",
+    "app:build:ios": "xcrun safari-web-extension-converter ./app_chrome"
   },
   "author": "",
   "license": "ISC"
