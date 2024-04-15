@@ -17,6 +17,7 @@ import {
   handleVerifyEmail,
   handleResendCode,
   handleGetActiveSessions,
+  handleLogoutSessionBySessionId,
 } from './message-handlers.js';
 
 const handleStartup = async () => {
@@ -201,6 +202,9 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       return true;
     case 'getActiveSessions':
       handleGetActiveSessions(chrome, request, sendResponse);
+      return true;
+    case 'logoutSessionBySessionId':
+      handleLogoutSessionBySessionId(chrome, request, sendResponse);
       return true;
     default:
       return false;
