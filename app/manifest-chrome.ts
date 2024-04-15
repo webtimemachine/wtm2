@@ -2,9 +2,9 @@ import { ManifestV3Export } from '@crxjs/vite-plugin';
 
 export const manifestChrome: ManifestV3Export = {
   manifest_version: 3,
-  name: 'WebTM - Vite',
-  version: '1.0',
-  description: 'WebTM - Vite',
+  name: 'WebTM - pocReact',
+  version: '1.2',
+  description: 'WebTM - pocReact',
   permissions: ['tabs', 'activeTab', 'storage', 'scripting'],
   action: {
     default_popup: 'index.html',
