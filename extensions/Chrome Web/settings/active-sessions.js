@@ -36,6 +36,12 @@ const appendActiveSessionItem = (session, deleteFunction) => {
   activeSessionsList.appendChild(listItem);
 };
 
+const logoutSession = async (sessionId) => {
+
+  await chrome.runtime.sendMessage({ type: "logoutSessionBySessionId", sessionIds: [sessionId] });
+  window.location.reload();
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
   const getActiveSessionsRes = await chrome.runtime.sendMessage({ type: "getActiveSessions" });
 
@@ -43,7 +49,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     for (let i = 0; i < getActiveSessionsRes.length; i++) {
       const session = getActiveSessionsRes[i]
 
-      appendActiveSessionItem(session, () => console.log(`Deleting...`))
+      appendActiveSessionItem(session, () => logoutSession(session.id))
     }
   }
 });
