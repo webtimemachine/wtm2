@@ -17,7 +17,7 @@ import {
   recoverPassword,
   validateRecoveryCode,
 } from './services/recovery-pass.js';
-import { getUserActiveSessions } from './services/active-sessions.js';
+import { getUserActiveSessions, logoutSessionBySessionId } from './services/active-sessions.js';
 
 /**
  * Handles the request to fetch browsing history entries.
@@ -422,6 +422,34 @@ export const handleGetActiveSessions = async (chrome, request, sendResponse) => 
       sendResponse(res);
     } catch (error) {
       // If an error occurs during fetching, send an error response
+      sendResponse({ error: true });
+    }
+  } else {
+    sendResponse({ error: true });
+  }
+};
+
+export const handleLogoutSessionBySessionId = async (
+  chrome,
+  request,
+  sendResponse,
+) => {
+  // Check if the user is signed in
+  const storageData = await getStorageData(chrome);
+  if (storageData.userStatus) {
+    const baseURL = storageData.baseURL || API_URL;
+
+    const payload = {
+      sessionIds: request.sessionIds,
+    };
+
+    try {
+      // Logout sessions by session ids
+      const res = await logoutSessionBySessionId(storageData.user_info, baseURL, payload);
+      // Send the fetched history entries back as a response
+      sendResponse(res);
+    } catch (error) {
+      // If an error occurs during deletion or fetching, send an error response
       sendResponse({ error: true });
     }
   } else {
