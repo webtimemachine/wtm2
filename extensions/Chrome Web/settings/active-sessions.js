@@ -7,10 +7,16 @@ closeSettingButton.addEventListener('click', function () {
 
 const activeSessionsList = document.getElementById('active-sessions-list');
 
-const appendActiveSessionItem = (name, deleteFunction) => {
+const appendActiveSessionItem = (session, deleteFunction) => {
   var listItem = document.createElement('div');
   var paragraph = document.createElement('p');
   var deleteIcon = document.createElement('img');
+
+  let name = session.userDevice.deviceAlias || `${session.userDevice.device.uaResult.device.model} - ${session.userDevice.device.uaResult.browser.name}`
+
+  if (session.userDevice.isCurrentDevice) {
+    name = `${name} (current)`
+  }
 
   paragraph.textContent = name;
   paragraph.classList.add('truncate');
@@ -22,10 +28,19 @@ const appendActiveSessionItem = (name, deleteFunction) => {
   deleteIcon.addEventListener('click', deleteFunction);
 
   listItem.appendChild(paragraph);
-  listItem.appendChild(deleteIcon);
+
+  if (!session.userDevice.isCurrentDevice) {
+    listItem.appendChild(deleteIcon);
+  }
 
   activeSessionsList.appendChild(listItem);
 };
+
+const logoutSession = async (sessionId) => {
+
+  await chrome.runtime.sendMessage({ type: "logoutSessionBySessionId", sessionIds: [sessionId] });
+  window.location.reload();
+}
 
 document.addEventListener('DOMContentLoaded', async () => {
   const getActiveSessionsRes = await chrome.runtime.sendMessage({ type: "getActiveSessions" });
@@ -34,9 +49,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     for (let i = 0; i < getActiveSessionsRes.length; i++) {
       const session = getActiveSessionsRes[i]
 
-
-      const name = session.userDevice.deviceAlias || `${session.userDevice.device.uaResult.device.model} - ${session.userDevice.device.uaResult.browser.name}`
-      appendActiveSessionItem(name, () => console.log(`Deleting... ${name}`))
+      appendActiveSessionItem(session, () => logoutSession(session.id))
     }
   }
 });
