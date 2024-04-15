@@ -97,7 +97,7 @@ export class UserController {
 
   @ApiOkResponse({
     status: 200,
-    type: UserPreferencesDto,
+    type: UserDeviceDto,
   })
   @JwtAccessToken([])
   @Put('/device/:id')
