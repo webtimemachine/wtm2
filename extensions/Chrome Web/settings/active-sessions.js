@@ -17,6 +17,25 @@ const getCancelButton = (session) => {
   return cancelIcon
 }
 
+const getConfirmButton = (session) => {
+  const confirmButton = document.createElement('img');
+  confirmButton.src = '../icons/check.svg';
+  confirmButton.alt = 'Confirm action';
+  confirmButton.width = 15
+  confirmButton.height = 15
+  confirmButton.id = `confirm-session-id-${session.id}`
+  confirmButton.addEventListener('click', () => processConfirmUpdateDeviceAlias(session));
+
+  return confirmButton
+}
+
+const processConfirmUpdateDeviceAlias = async (session) => {
+  const input = document.getElementById(`input-session-id-${session.id}`)
+
+  await chrome.runtime.sendMessage({ type: "updateDeviceAlias", deviceAlias: input.value, deviceId: session.userDevice.id });
+  window.location.reload();
+}
+
 const getEditButton = (session) => {
   const editIcon = document.createElement('img');
 
@@ -96,8 +115,10 @@ const replaceRowForEditableRow = (session) => {
   if (actionContainer) {
     actionContainer.innerHTML = ''
 
+    const confirmIcon = getConfirmButton(session)
     const cancelIcon = getCancelButton(session)
 
+    actionContainer.appendChild(confirmIcon)
     actionContainer.appendChild(cancelIcon)
   }
 }
