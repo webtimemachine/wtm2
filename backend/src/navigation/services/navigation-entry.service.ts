@@ -1,12 +1,18 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { NavigationEntry, Prisma } from '@prisma/client';
-import { plainToClassFromExist, plainToInstance } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 import { JwtContext } from '../../auth/interfaces';
 
 import {
   CompleteNavigationEntryDto,
   CreateNavigationEntryInputDto,
   GetNavigationEntryDto,
+  DeleteNavigationEntriesDto,
 } from '../dtos';
 
 import {
@@ -274,8 +280,66 @@ export class NavigationEntryService {
       where: { id, userId: jwtContext.user.id },
     });
 
-    return plainToClassFromExist(new MessageResponse(), {
+    return plainToInstance(MessageResponse, {
       message: 'Navigation entry has been deleted',
+    });
+  }
+
+  async deleteNavigationEntries(
+    jwtContext: JwtContext,
+    deleteNavigationEntriesDto: DeleteNavigationEntriesDto,
+  ): Promise<MessageResponse> {
+    const { navigationEntryIds } = deleteNavigationEntriesDto;
+
+    const { deletedNavigationEntries } = await this.prismaService.$transaction(
+      async (prismaClient) => {
+        const entriesThatDontBelongToCurrentUser =
+          await prismaClient.navigationEntry.findMany({
+            where: {
+              id: {
+                in: navigationEntryIds,
+              },
+              userId: {
+                not: jwtContext.user.id,
+              },
+            },
+          });
+
+        if (entriesThatDontBelongToCurrentUser?.length > 0) {
+          throw new ForbiddenException();
+        }
+
+        const deletedNavigationEntries: NavigationEntry[] = [];
+        await Promise.all(
+          navigationEntryIds.map(async (navigationEntryId) => {
+            const navigationEntry =
+              await this.prismaService.navigationEntry.findUnique({
+                where: {
+                  userId: jwtContext.user.id,
+                  id: navigationEntryId,
+                },
+              });
+
+            if (navigationEntry) {
+              this.semanticProcessor.delete(
+                navigationEntry.url,
+                jwtContext.user.id,
+              );
+              const deletedNavigationEntry: NavigationEntry =
+                await this.prismaService.navigationEntry.delete({
+                  where: { id: navigationEntryId, userId: jwtContext.user.id },
+                });
+              deletedNavigationEntries.push(deletedNavigationEntry);
+            }
+          }),
+        );
+
+        return { deletedNavigationEntries };
+      },
+    );
+
+    return plainToInstance(MessageResponse, {
+      message: `${deletedNavigationEntries.length} navigation entries has been deleted`,
     });
   }
 }
