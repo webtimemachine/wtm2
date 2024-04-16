@@ -18,6 +18,7 @@ import {
   handleResendCode,
   handleGetActiveSessions,
   handleLogoutSessionBySessionId,
+  handleUpdateDeviceAlias,
 } from './message-handlers.js';
 
 const handleStartup = async () => {
@@ -205,6 +206,9 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       return true;
     case 'logoutSessionBySessionId':
       handleLogoutSessionBySessionId(chrome, request, sendResponse);
+      return true;
+    case 'updateDeviceAlias':
+      handleUpdateDeviceAlias(chrome, request, sendResponse);
       return true;
     default:
       return false;
