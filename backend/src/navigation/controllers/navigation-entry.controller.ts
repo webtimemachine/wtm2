@@ -16,12 +16,15 @@ import {
   CompleteNavigationEntryDto,
   CreateNavigationEntryInputDto,
   GetNavigationEntryDto,
+  DeleteNavigationEntriesDto,
 } from '../dtos';
 import { NavigationEntryService } from '../services';
 
 import { JwtAccessToken, JwtRequestContext } from '../../auth/decorators';
 import { JwtContext } from '../../auth/interfaces';
+
 import {
+  ApiForbiddenMessageResponse,
   ApiBadRequestMessageResponse,
   ApiInternalServerErrorMessageResponse,
   ApiPaginationResponse,
@@ -79,5 +82,24 @@ export class NavigationEntryController {
     @JwtRequestContext() context: JwtContext,
   ): Promise<MessageResponse> {
     return this.navigationService.deleteNavigationEntry(context, id);
+  }
+
+  @ApiInternalServerErrorMessageResponse()
+  @ApiForbiddenMessageResponse()
+  @ApiBadRequestMessageResponse()
+  @ApiOkResponse({
+    type: MessageResponse,
+  })
+  @JwtAccessToken([])
+  @HttpCode(200)
+  @Delete('/')
+  deleteNavigationEntries(
+    @Body() deleteNavigationEntriesDto: DeleteNavigationEntriesDto,
+    @JwtRequestContext() context: JwtContext,
+  ): Promise<MessageResponse> {
+    return this.navigationService.deleteNavigationEntries(
+      context,
+      deleteNavigationEntriesDto,
+    );
   }
 }
