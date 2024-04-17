@@ -69,3 +69,47 @@ export async function logoutSessionBySessionId (
     );
   }
 }
+
+export async function updateDeviceAlias (
+  user_info,
+  baseURL,
+  payload,
+  deviceId,
+  reexecuted = false,
+) {
+  try {
+    // Convert payload to JSON for the request body
+    const body = JSON.stringify(payload);
+
+    // Send a PUT request to the endpoint for update the device alias
+    const resp = await fetch(`${baseURL}/api/user/device/${deviceId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${user_info.accessToken}`,
+      },
+      body: body,
+    });
+    // Check if the access token has expired (HTTP status code 401)
+    if (resp.status === 401) {
+      throw Error('accessToken expired!');
+    }
+
+    return resp;
+  } catch (err) {
+    console.error(err);
+    // If the function is being re-executed after refreshing the access token, return without re-executing refreshTokenData to prevent an infinite loop
+    if (reexecuted) throw Error('refreshToken expired!');
+    // Refresh the access token and re-execute updateDeviceAlias
+    return await refreshTokenData({ user_info }, baseURL).then(
+      async (res) =>
+        await updateDeviceAlias(
+          { ...user_info, ...res },
+          baseURL,
+          payload,
+          deviceId,
+          true,
+        ),
+    );
+  }
+}
