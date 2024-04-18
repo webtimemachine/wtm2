@@ -1,5 +1,3 @@
-import { API_URL } from './consts.js';
-
 /**
  * Generates a random token using the crypto API.
  * The generated token is a hexadecimal string with 256 bits of randomness.
@@ -36,10 +34,10 @@ export const getStorageData = async (chrome) => {
     ]);
 
     return response.userStatus === undefined
-      ? { userStatus: false, user_info: {} }
+      ? {userStatus: false, user_info: {}}
       : response;
   } catch (error) {
-    return { userStatus: false, user_info: {} };
+    return {userStatus: false, user_info: {}};
   }
 };
 
@@ -107,8 +105,34 @@ export const refreshUser = async (data, baseURL) => {
   }
 };
 
-export const logoutUser = async () => {
-  return await chrome.storage.local.set({ userStatus: false, user_info: {} });
+export const logoutUser = async (user_info, baseURL, reexecuted = false) => {
+  try {
+    const logoutResponse = await fetch(`${baseURL}/api/auth/logout`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${user_info.accessToken}`,
+      },
+    });
+
+    if (logoutResponse.status === 401) {
+      throw Error('accessToken expired!');
+    }
+
+    if (logoutResponse && logoutResponse?.status === 200) {
+      return logoutResponse;
+    } else {
+      return undefined;
+    }
+  } catch (err) {
+    console.error(err);
+    // If the function is being re-executed after refreshing the access token, return without re-executing refreshTokenData to prevent an infinite loop
+    if (reexecuted) throw Error('refreshToken expired!');
+    // Refresh the access token and re-execute logoutUser
+    return await refreshTokenData({user_info}, baseURL).then(
+      async (res) => await logoutUser({...user_info, ...res}, baseURL, true),
+    );
+  }
 };
 
 export const refreshTokenData = async (res, baseURL) => {
@@ -118,7 +142,7 @@ export const refreshTokenData = async (res, baseURL) => {
 
     await chrome.storage.local.set({
       userStatus: true,
-      user_info: { ...res.user_info, ...data },
+      user_info: {...res.user_info, ...data},
     });
 
     return data;
@@ -184,9 +208,9 @@ export async function deleteUserAccount(
     // If the function is being re-executed after refreshing the access token, return without re-executing refreshTokenData to prevent an infinite loop
     if (reexecuted) throw Error('refreshToken expired!');
     // Refresh the access token and re-execute deleteUserAccount
-    return await refreshTokenData({ user_info }, baseURL).then(
+    return await refreshTokenData({user_info}, baseURL).then(
       async (res) =>
-        await deleteUserAccount({ ...user_info, ...res }, baseURL, true),
+        await deleteUserAccount({...user_info, ...res}, baseURL, true),
     );
   }
 }
