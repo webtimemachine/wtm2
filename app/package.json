@@ -1,0 +1,49 @@
+{
+  "name": "wtm-app",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "concurrently \"npm run build:chrome\" \"npm run build:firefox\" --names chrome,firefox",
+    "build:chrome": "tsc && export BROWSER='chrome' && vite build && rm -rf ../app_chrome && mv chrome ../app_chrome",
+    "build:firefox": "tsc && export BROWSER='firefox' && vite build && rm -rf ../app_firefox && mv firefox ../app_firefox",
+    "nodemon": "concurrently \"npm run nodemon:chrome\" \"npm run nodemon:firefox\" --names chrome,firefox",
+    "nodemon:chrome": "nodemon --exec npm run build:chrome",
+    "nodemon:firefox": "nodemon --exec npm run build:firefox",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@chakra-ui/react": "^2.8.2",
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
+    "@tanstack/react-query": "^5.29.2",
+    "clsx": "^2.0.0",
+    "framer-motion": "^11.0.28",
+    "jotai": "^2.8.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "tailwind-merge": "^2.0.0"
+  },
+  "devDependencies": {
+    "@crxjs/vite-plugin": "^2.0.0-beta.21",
+    "@types/chrome": "^0.0.266",
+    "@types/node": "^20.12.7",
+    "@types/react": "^18.2.15",
+    "@types/react-dom": "^18.2.7",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "@vitejs/plugin-react-swc": "^3.3.2",
+    "autoprefixer": "^10.4.16",
+    "concurrently": "^8.2.2",
+    "eslint": "^8.45.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.3",
+    "nodemon": "^3.1.0",
+    "postcss": "^8.4.31",
+    "tailwindcss": "^3.3.5",
+    "typescript": "^5.0.2",
+    "vite": "^4.4.5"
+  }
+}
