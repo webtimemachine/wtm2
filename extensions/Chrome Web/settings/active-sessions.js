@@ -1,3 +1,5 @@
+const loaderContainer = document.getElementById('loader-container');
+
 // -- Close Config / Setting button -- //
 const closeSettingButton = document.getElementById('close-settings-button');
 
@@ -167,4 +169,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       appendActiveSessionItem(session, () => logoutSession(session.id))
     }
   }
+
+  loaderContainer.style.display = 'none';
 });

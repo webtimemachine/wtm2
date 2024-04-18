@@ -2,6 +2,8 @@ const expirationDaysToggle = document.getElementById('expiration-days-toggle');
 const expirationDaysInput = document.getElementById('expiration-days');
 const closeSettingButton = document.getElementById('close-settings-button');
 const submitButton = document.getElementById('submit');
+const loaderContainer = document.getElementById('loader-container');
+const preferencesContainer = document.getElementById('preferences-container');
 
 // -- Close Config / Setting button -- //
 closeSettingButton.addEventListener('click', function () {
@@ -16,6 +18,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     expirationDaysInput.removeAttribute('disabled')
     expirationDaysInput.value = getPreferencesRes.navigationEntryExpirationInDays
   }
+
+  loaderContainer.style.display = 'none';
+  preferencesContainer.style.display = 'flex';
 });
 
 expirationDaysToggle.addEventListener('change', function () {
@@ -27,18 +32,20 @@ expirationDaysToggle.addEventListener('change', function () {
   }
 })
 
-submitButton.addEventListener('click', () => {
+submitButton.addEventListener('click', async () => {
   if (expirationDaysToggle.checked && !expirationDaysInput.value) {
     expirationDaysInput.style.border = '1px solid red'
     return
   }
 
-  chrome.runtime.sendMessage({
+  await chrome.runtime.sendMessage({
     type: "setPreferences", payload: {
       enableNavigationEntryExpiration: expirationDaysToggle.checked,
       navigationEntryExpirationInDays: parseInt(expirationDaysInput.value)
     }
   });
+
+  window.location.reload();
 })
 
 expirationDaysInput.addEventListener('change', () => {
