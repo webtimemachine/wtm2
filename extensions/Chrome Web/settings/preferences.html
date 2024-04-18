@@ -6,7 +6,7 @@
   <link rel="stylesheet" type="text/css" href="../styles.css">
 </head>
 
-<body>
+<body style='min-height: 550px;'>
   <script defer src="preferences.js" type="module"></script>
   <div class='title-container'>
     <h1>Preferences</h1>
@@ -18,7 +18,11 @@
       </svg>
     </div>
   </div>
-  <div style='display: flex; flex-direction: column; min-height: 350px; padding-top: 8px; border-top: 1px solid #333'>
+  <div id="loader-container">
+    <div class="loader"></div>
+  </div>
+  <div style='display: none; flex-direction: column; min-height: 350px; padding-top: 8px; border-top: 1px solid #333'
+    id='preferences-container'>
     <div style='display: flex; align-items: center; padding: 0px 8px; justify-content: space-between;'>
       <p>Enable expirantion date on History entries</p>
       <label class="switch">
@@ -38,8 +42,6 @@
       </div>
     </div>
 
-  </div>
-  <div>
   </div>
 </body>
 
