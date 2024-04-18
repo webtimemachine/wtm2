@@ -1,0 +1,22 @@
+{
+  "name": "wtm",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "app:install": "cd app && npm install",
+    "app:build": "cd app && npm run build",
+    "app:build:chrome": "cd app && npm run build:chrome",
+    "app:build:firefox": "cd app && npm run build:firefox",
+    "app:watch": "cd app && npm run nodemon",
+    "app:watch:chrome": "cd app && npm run nodemon:chrome",
+    "app:watch:firefox": "cd app && npm run nodemon:firefox",
+    "app:build:ios": "xcrun safari-web-extension-converter --project-location ./app_safari --app-name 'wtm' --bundle-identifier com.ttt246llc.wtm --no-open --force --no-prompt ./app_chrome",
+    "backend:install": "cd backend && npm install",
+    "backend:build": "cd backend && npm run build",
+    "backend:start": "cd backend && npm run start",
+    "backend:dev": "cd backend && npm run start:dev",
+    "backend:prod": "cd backend && npm run start:prod"
+  },
+  "author": "",
+  "license": "ISC"
+}
