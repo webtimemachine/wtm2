@@ -144,9 +144,15 @@ export const handleLogin = async (chrome, request, sendResponse) => {
 export const handleLogout = async (sendResponse) => {
   try {
     // Call the logout user function
-    const res = await logoutUser();
-    // Send response back to the caller
-    sendResponse(res);
+    const storageData = await getStorageData(chrome);
+    if (storageData.userStatus) {
+      const baseURL = storageData.baseURL || API_URL;
+      const user_info = storageData.user_info || {};
+      await logoutUser(user_info, baseURL);
+      await chrome.storage.local.set({userStatus: false, user_info: {}});
+      // Send response back to the caller
+      sendResponse(true);
+    }
   } catch (error) {
     // If an error occurs during logout, log the error
     console.log(error);
