@@ -1,3 +1,3 @@
-import { atom } from 'jotai';
+import { atom } from 'jotai'
 
-export const currentScreenAtom = atom<string>('HelloWorld');
+export const currentScreenAtom = atom<string>('Login')
