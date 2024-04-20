@@ -1,18 +1,21 @@
 import { BackgroundMessageHandler } from '../interfaces';
 import { GetVersionResponse } from '../interfaces/get-version.interface';
-// import { apiClient } from '../api.client';
+import { apiClient } from '../api.client';
 
 export const handleGetVersion: BackgroundMessageHandler<'get-version'> = async (
-  payload,
+  _,
   sendResponse,
 ) => {
   try {
-    const serverUrl = payload.authData.serverUrl;
-    const res = await fetch(new URL('/api/version', serverUrl));
+    const res = await apiClient.fetch('/api/version');
     const versionResponse: GetVersionResponse = await res.json();
-    await chrome.storage.local.set({
-      version: versionResponse.version,
-    });
+
+    try {
+      const meRes = await apiClient.fetch('/api/user/me');
+      const me = await meRes.json();
+      console.log('handleGetVersion', { me });
+    } catch (error) {}
+
     sendResponse(versionResponse);
   } catch (error) {
     console.error('handleGetVersion', error);

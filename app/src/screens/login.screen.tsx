@@ -42,15 +42,34 @@ export const LoginScreen: React.FC<{}> = () => {
             Sign up
           </Text>
         </div>
-        <div>
+        <div className='flex pt-2 gap-4'>
           <Button
             colorScheme='blue'
             onClick={() => {
-              getVersionMutation.mutate();
               sayHelloMutation.mutate('Hi from frontend!');
             }}
           >
             Sign In
+          </Button>
+        </div>
+        <div className='flex gap-4 pt-6'>
+          <Button
+            className='w-[200px]'
+            colorScheme='blue'
+            onClick={() => {
+              getVersionMutation.mutate();
+            }}
+          >
+            Get Version
+          </Button>
+          <Button
+            className='w-[200px]'
+            colorScheme='blue'
+            onClick={() => {
+              sayHelloMutation.mutate('Hi from frontend!');
+            }}
+          >
+            Hi :D
           </Button>
         </div>
       </div>
