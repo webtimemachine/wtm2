@@ -7,25 +7,14 @@ export const useGetVersion = () => {
   const toast = useToast();
   const { sendBackgroundMessage } = useSendBackgroundMessage();
 
-  const getVersion = async () => {
-    try {
-      const res = await sendBackgroundMessage('get-version', {
-        sayHello: 'Hello world 🌎',
-      });
-      return res;
-    } catch (error) {
-      console.error('Error while getting version');
-      console.error(error);
-      throw error;
-    }
-  };
+  const gerVersion = () => sendBackgroundMessage('get-version');
 
   const getVersionMutation = useMutation({
-    mutationFn: getVersion,
-    onSuccess: (res) => {
+    mutationFn: gerVersion,
+    onSuccess: ({ version }) => {
       toast({
-        title: 'Message',
-        description: res?.message,
+        title: 'Version Response',
+        description: `Server version: ${version}`,
         status: 'success',
         duration: 3000,
         isClosable: true,
@@ -33,6 +22,12 @@ export const useGetVersion = () => {
     },
     onError: (error) => {
       console.error(error);
+      toast({
+        title: 'Error while getting version',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
     },
   });
   return { getVersionMutation };

@@ -14,7 +14,7 @@ export const useSendBackgroundMessage = () => {
 
   const sendBackgroundMessage = async <T extends BackgroundMessageType>(
     type: T,
-    data: BackgroundMessageDataMap[T],
+    data?: BackgroundMessageDataMap[T],
   ): Promise<BackgroundMessageResponseMap[T]> => {
     const authData: AuthData = {
       serverUrl,
@@ -32,6 +32,11 @@ export const useSendBackgroundMessage = () => {
         type,
         payload,
       });
+
+      if (res.error) {
+        throw new Error(res.error);
+      }
+
       return res as BackgroundMessageResponseMap[T];
     } catch (error) {
       console.error(`Error while sending '${type}'`);

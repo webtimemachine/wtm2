@@ -1,6 +1,6 @@
 import axios, {
   AxiosInstance,
-  //  AxiosResponse
+  // AxiosResponse
 } from 'axios';
 
 // interface RefreshResponse {
@@ -9,22 +9,26 @@ import axios, {
 // }
 
 export const apiClient: AxiosInstance = axios.create({
-  // baseURL: 'https://your-api-base-url.com',
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-// apiClient.interceptors.request.use(
-//   (config) => {
-//     const accessToken = localStorage.getItem('accessToken');
-//     if (accessToken) {
-//       config.headers!['Authorization'] = `Bearer ${accessToken}`;
-//     }
-//     return config;
-//   },
-//   (error) => Promise.reject(error),
-// );
+apiClient.interceptors.request.use(
+  async (config) => {
+    const { serverUrl, accessToken } = await chrome.storage.local.get([
+      'serverUrl',
+      'accessToken',
+    ]);
+
+    config.baseURL = serverUrl;
+    if (accessToken) {
+      config.headers!['Authorization'] = `Bearer ${accessToken}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error),
+);
 
 // apiClient.interceptors.response.use(
 //   (response: AxiosResponse) => response,

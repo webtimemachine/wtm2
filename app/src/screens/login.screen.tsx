@@ -4,7 +4,7 @@ import { ServerUrlEditable } from '../components';
 import { useGetVersion, useSayHello } from '../hooks';
 
 export const LoginScreen: React.FC<{}> = () => {
-  useSayHello();
+  const { sayHelloMutation } = useSayHello();
   const { getVersionMutation } = useGetVersion();
 
   return (
@@ -45,7 +45,10 @@ export const LoginScreen: React.FC<{}> = () => {
         <div>
           <Button
             colorScheme='blue'
-            onClick={() => getVersionMutation.mutate()}
+            onClick={() => {
+              getVersionMutation.mutate();
+              sayHelloMutation.mutate('Hi from frontend!');
+            }}
           >
             Sign In
           </Button>
