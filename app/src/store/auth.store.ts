@@ -1,13 +1,13 @@
-import { useStore } from 'zustand';
-import { createStore } from 'zustand/vanilla';
-import { persist } from 'zustand/middleware';
-import { getRandomToken } from '../utils';
+import { useStore } from 'zustand'
+import { createStore } from 'zustand/vanilla'
+import { persist } from 'zustand/middleware'
+import { getRandomToken } from '../utils'
 
 interface AuthStore {
-  serverUrl: string;
-  deviceKey: string;
-  setServerUrl: (serverUrl: string) => void;
-  logout: () => void;
+  serverUrl: string
+  deviceKey: string
+  setServerUrl: (serverUrl: string) => void
+  logout: () => void
 }
 
 export const authStore = createStore<AuthStore>()(
@@ -21,51 +21,64 @@ export const authStore = createStore<AuthStore>()(
             serverUrl,
             accessToken: null,
             refreshToken: null,
-          });
-          return { serverUrl };
+          })
+          return { serverUrl }
         }),
       logout: () =>
         set((state) => {
           chrome.storage.local.set({
             accessToken: null,
             refreshToken: null,
-          });
-          return state;
-        }),
+          })
+          return state
+        })
     }),
     {
       name: 'auth-vanilla-store',
     },
   ),
-);
+)
 
-export const useAuthStore = <T>(selector?: (state: AuthStore) => T) =>
-  useStore(authStore, selector!);
+export const useAuthStore = <T> (selector?: (state: AuthStore) => T) =>
+  useStore(authStore, selector!)
 
 export const useLogout = () => {
-  const logout = useAuthStore((state) => state.logout);
-  return { logout };
-};
+  const logout = useAuthStore((state) => state.logout)
+  return { logout }
+}
+
+export const useIsLogged = () => {
+  const isLogged = async (): Promise<boolean> => {
+    const tokens = await chrome.storage.local.get([
+      'accessToken',
+      'refreshToken'
+    ])
+
+    return (tokens.accessToken !== null && tokens.refreshToken !== null)
+  }
+
+  return { isLogged }
+}
 
 export const useServerUrl = () => {
-  const serverUrl = useAuthStore((state) => state.serverUrl);
-  const setServerUrl = useAuthStore((state) => state.setServerUrl);
-  return { serverUrl, setServerUrl };
-};
+  const serverUrl = useAuthStore((state) => state.serverUrl)
+  const setServerUrl = useAuthStore((state) => state.setServerUrl)
+  return { serverUrl, setServerUrl }
+}
 
 const initStorage = async () => {
-  let { serverUrl } = await chrome.storage.local.get(['serverUrl']);
+  const { serverUrl } = await chrome.storage.local.get(['serverUrl'])
   if (!serverUrl) {
     await chrome.storage.local.set({
       serverUrl: authStore.getState().serverUrl,
-    });
+    })
   }
 
-  let { deviceKey } = await chrome.storage.local.get(['deviceKey']);
+  const { deviceKey } = await chrome.storage.local.get(['deviceKey'])
   if (!deviceKey) {
     await chrome.storage.local.set({
       deviceKey: authStore.getState().deviceKey,
-    });
+    })
   }
-};
-initStorage();
+}
+initStorage()

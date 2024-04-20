@@ -1,8 +1,8 @@
-import React from 'react';
-import { Text } from '@chakra-ui/react';
-import { ServerUrlEditable } from '../components';
+import React from 'react'
+import { Text } from '@chakra-ui/react'
+import { ServerUrlEditable } from '../components'
 
-export const ServerUrlScreen: React.FC<{}> = () => {
+export const ServerUrlScreen: React.FC<object> = () => {
   return (
     <>
       <div className='flex flex-col p-8 pt-5 bg-slate-100 min-h-screen justify-center items-center w-full'>
@@ -16,5 +16,5 @@ export const ServerUrlScreen: React.FC<{}> = () => {
         </div>
       </div>
     </>
-  );
-};
+  )
+}
