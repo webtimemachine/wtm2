@@ -2,19 +2,21 @@ import { useToast } from '@chakra-ui/react';
 import { useMutation } from '@tanstack/react-query';
 
 import { useSendBackgroundMessage } from './use-send-message.hook';
+import { LoginData } from '../background/interfaces/login.interface';
 
-export const useGetVersion = () => {
+export const useLogin = () => {
   const toast = useToast();
   const { sendBackgroundMessage } = useSendBackgroundMessage();
 
-  const gerVersion = () => sendBackgroundMessage('get-version', undefined);
+  const login = (data: LoginData) => sendBackgroundMessage('login', data);
 
-  const getVersionMutation = useMutation({
-    mutationFn: gerVersion,
-    onSuccess: ({ version }) => {
+  const loginMutation = useMutation({
+    mutationFn: login,
+    onSuccess: (loginRes) => {
+      console.log(loginRes);
       toast({
-        title: 'Version Response',
-        description: `Server version: ${version}`,
+        title: 'Login Response',
+        description: `Welcome: ${loginRes.user.email}`,
         status: 'success',
         duration: 3000,
         isClosable: true,
@@ -23,12 +25,12 @@ export const useGetVersion = () => {
     onError: (error) => {
       console.error(error);
       toast({
-        title: 'Error while getting version',
+        title: 'Error while login',
         status: 'error',
         duration: 3000,
         isClosable: true,
       });
     },
   });
-  return { getVersionMutation };
+  return { loginMutation };
 };

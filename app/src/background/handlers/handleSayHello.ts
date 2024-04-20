@@ -1,8 +1,8 @@
 import { BackgroundMessageHandler } from '../interfaces';
 
 export const handleSayHello: BackgroundMessageHandler<'say-hello'> = async (
-  payload,
   sendResponse,
+  payload,
 ) => {
   console.log('background.ts', { payload });
   const serverUrl = payload.authData.serverUrl;

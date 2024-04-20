@@ -1,14 +1,12 @@
 import { useStore } from 'zustand';
 import { createStore } from 'zustand/vanilla';
 import { persist } from 'zustand/middleware';
+import { getRandomToken } from '../utils';
 
 interface AuthStore {
   serverUrl: string;
-  accessToken: string | null;
-  refreshToken: string | null;
+  deviceKey: string;
   setServerUrl: (serverUrl: string) => void;
-  setAccessToken: (accessToken: string) => void;
-  setRefreshToken: (refreshToken: string) => void;
   logout: () => void;
 }
 
@@ -16,9 +14,7 @@ export const authStore = createStore<AuthStore>()(
   persist(
     (set) => ({
       serverUrl: 'https://wtm-back.vercel.app',
-      accessToken: null,
-      refreshToken: null,
-
+      deviceKey: getRandomToken(),
       setServerUrl: (serverUrl: string) =>
         set(() => {
           chrome.storage.local.set({
@@ -28,18 +24,13 @@ export const authStore = createStore<AuthStore>()(
           });
           return { serverUrl };
         }),
-      setAccessToken: (accessToken: string) => set(() => ({ accessToken })),
-      setRefreshToken: (refreshToken: string) => set(() => ({ refreshToken })),
       logout: () =>
-        set(() => {
+        set((state) => {
           chrome.storage.local.set({
             accessToken: null,
             refreshToken: null,
           });
-          return {
-            accessToken: null,
-            refreshToken: null,
-          };
+          return state;
         }),
     }),
     {
@@ -50,18 +41,6 @@ export const authStore = createStore<AuthStore>()(
 
 export const useAuthStore = <T>(selector?: (state: AuthStore) => T) =>
   useStore(authStore, selector!);
-
-export const useAccessToken = () => {
-  const accessToken = useAuthStore((state) => state.accessToken);
-  const setAccessToken = useAuthStore((state) => state.setAccessToken);
-  return { accessToken, setAccessToken };
-};
-
-export const useRefreshToken = () => {
-  const refreshToken = useAuthStore((state) => state.refreshToken);
-  const setRefreshToken = useAuthStore((state) => state.setRefreshToken);
-  return { refreshToken, setRefreshToken };
-};
 
 export const useLogout = () => {
   const logout = useAuthStore((state) => state.logout);
@@ -75,12 +54,17 @@ export const useServerUrl = () => {
 };
 
 const initStorage = async () => {
-  const fieldName = 'serverUrl';
-  let { [fieldName]: serverUrl } = await chrome.storage.local.get([fieldName]);
+  let { serverUrl } = await chrome.storage.local.get(['serverUrl']);
   if (!serverUrl) {
-    authStore.getState().serverUrl;
     await chrome.storage.local.set({
-      [fieldName]: authStore.getState().serverUrl,
+      serverUrl: authStore.getState().serverUrl,
+    });
+  }
+
+  let { deviceKey } = await chrome.storage.local.get(['deviceKey']);
+  if (!deviceKey) {
+    await chrome.storage.local.set({
+      deviceKey: authStore.getState().deviceKey,
     });
   }
 };
