@@ -1,5 +1,5 @@
 import { SayHelloData, SayHelloResponse } from './say-hello.interface';
-import { GetVersionData, GetVersionResponse } from './get-version.interface';
+import { GetVersionResponse } from './get-version.interface';
 
 export type BackgroundMessageType =
   | 'say-hello'
@@ -9,7 +9,7 @@ export type BackgroundMessageType =
 
 export type BackgroundMessageDataMap = {
   'say-hello': SayHelloData;
-  'get-version': GetVersionData;
+  'get-version': undefined;
   login: LoginData;
   logout: LogoutData;
 };
@@ -48,10 +48,12 @@ export interface AuthData {
 
 export interface BackgroundMessagePayload<T extends BackgroundMessageType> {
   authData: AuthData;
-  data: BackgroundMessageDataMap[T];
+  data?: BackgroundMessageDataMap[T];
 }
 
 export type BackgroundMessageHandler<T extends BackgroundMessageType> = (
   payload: BackgroundMessagePayload<T>,
-  sendResponse: (response: BackgroundMessageResponseMap[T]) => void,
+  sendResponse: (
+    response: BackgroundMessageResponseMap[T] | { error: string },
+  ) => void,
 ) => Promise<void>;

@@ -20,16 +20,27 @@ export const authStore = createStore<AuthStore>()(
       refreshToken: null,
 
       setServerUrl: (serverUrl: string) =>
-        set(() => ({ serverUrl: serverUrl })),
-      setAccessToken: (accessToken: string) =>
-        set(() => ({ accessToken: accessToken })),
-      setRefreshToken: (refreshToken: string) =>
-        set(() => ({ refreshToken: refreshToken })),
+        set(() => {
+          chrome.storage.local.set({
+            serverUrl,
+            accessToken: null,
+            refreshToken: null,
+          });
+          return { serverUrl };
+        }),
+      setAccessToken: (accessToken: string) => set(() => ({ accessToken })),
+      setRefreshToken: (refreshToken: string) => set(() => ({ refreshToken })),
       logout: () =>
-        set(() => ({
-          accessToken: null,
-          refreshToken: null,
-        })),
+        set(() => {
+          chrome.storage.local.set({
+            accessToken: null,
+            refreshToken: null,
+          });
+          return {
+            accessToken: null,
+            refreshToken: null,
+          };
+        }),
     }),
     {
       name: 'auth-vanilla-store',
@@ -62,3 +73,15 @@ export const useServerUrl = () => {
   const setServerUrl = useAuthStore((state) => state.setServerUrl);
   return { serverUrl, setServerUrl };
 };
+
+const initStorage = async () => {
+  const fieldName = 'serverUrl';
+  let { [fieldName]: serverUrl } = await chrome.storage.local.get([fieldName]);
+  if (!serverUrl) {
+    authStore.getState().serverUrl;
+    await chrome.storage.local.set({
+      [fieldName]: authStore.getState().serverUrl,
+    });
+  }
+};
+initStorage();

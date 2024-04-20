@@ -2,7 +2,7 @@ import { Logger } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 
 import { PrismaService } from './common/services';
-import { GetVersionReseponse } from './dtos';
+import { GetVersionResponse } from './dtos';
 import { getVersion } from './getVersion';
 
 export class AppService {
@@ -10,8 +10,8 @@ export class AppService {
 
   constructor(private readonly prismaService: PrismaService) {}
 
-  async getVersion(): Promise<GetVersionReseponse> {
+  async getVersion(): Promise<GetVersionResponse> {
     const version = await getVersion();
-    return plainToInstance(GetVersionReseponse, { version });
+    return plainToInstance(GetVersionResponse, { version });
   }
 }

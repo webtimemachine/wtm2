@@ -7,18 +7,10 @@ export const useSayHello = () => {
   const toast = useToast();
   const { sendBackgroundMessage } = useSendBackgroundMessage();
 
-  const sayHello = async () => {
-    try {
-      const res = await sendBackgroundMessage('say-hello', {
-        sayHello: 'Hello world 🌎',
-      });
-      return res;
-    } catch (error) {
-      console.error("Error while sending 'Hello world'");
-      console.error(error);
-      throw error;
-    }
-  };
+  const sayHello = (sayHello: string) =>
+    sendBackgroundMessage('say-hello', {
+      sayHello,
+    });
 
   const sayHelloMutation = useMutation({
     mutationFn: sayHello,
@@ -33,6 +25,12 @@ export const useSayHello = () => {
     },
     onError: (error) => {
       console.error(error);
+      toast({
+        title: 'Error while saying Hi!',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
     },
   });
   return { sayHelloMutation };
