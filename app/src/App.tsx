@@ -1,15 +1,9 @@
-import React from 'react'
-import { LoginScreen } from './screens/login.screen'
-import { useCurrentScreen } from './hooks'
+import React from 'react';
+import { useNavigationStore } from './store';
 
 const App: React.FC<{}> = () => {
-  const { currentScreen } = useCurrentScreen()
+  const CurrentScreen = useNavigationStore((state) => state.CurrentScreen);
+  return <CurrentScreen />;
+};
 
-  return (
-    <>
-      {currentScreen === 'Login' && <LoginScreen />}
-    </>
-  )
-}
-
-export default App
+export default App;

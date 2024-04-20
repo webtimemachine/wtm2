@@ -3,25 +3,25 @@ import { useMutation } from '@tanstack/react-query';
 
 import { useSendBackgroundMessage } from './use-send-message.hook';
 
-export const useSayHello = () => {
+export const useGetVersion = () => {
   const toast = useToast();
   const { sendBackgroundMessage } = useSendBackgroundMessage();
 
-  const sayHello = async () => {
+  const getVersion = async () => {
     try {
-      const res = await sendBackgroundMessage('say-hello', {
+      const res = await sendBackgroundMessage('get-version', {
         sayHello: 'Hello world 🌎',
       });
       return res;
     } catch (error) {
-      console.error("Error while sending 'Hello world'");
+      console.error('Error while getting version');
       console.error(error);
       throw error;
     }
   };
 
-  const sayHelloMutation = useMutation({
-    mutationFn: sayHello,
+  const getVersionMutation = useMutation({
+    mutationFn: getVersion,
     onSuccess: (res) => {
       toast({
         title: 'Message',
@@ -35,5 +35,5 @@ export const useSayHello = () => {
       console.error(error);
     },
   });
-  return { sayHelloMutation };
+  return { getVersionMutation };
 };
