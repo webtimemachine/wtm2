@@ -1,11 +1,40 @@
 import React from 'react';
-import { Button, Input, Text } from '@chakra-ui/react';
+import {
+  Button,
+  Input,
+  InputGroup,
+  InputRightElement,
+  Text,
+} from '@chakra-ui/react';
 import { ServerUrlEditable } from '../components';
-import { useGetVersion, useSayHello } from '../hooks';
+import { useGetVersion, useLogin, useSayHello } from '../hooks';
+import { useAuthStore } from '../store';
 
 export const LoginScreen: React.FC<{}> = () => {
+  const deviceKey = useAuthStore((state) => state.deviceKey);
+
+  // TODO remove this testing mutations
   const { sayHelloMutation } = useSayHello();
   const { getVersionMutation } = useGetVersion();
+
+  const { loginMutation } = useLogin();
+
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
+
+  const [showPass, setShowPass] = React.useState(false);
+
+  const handleLogin = () => {
+    // TODO implement validations
+    const loginData = {
+      email,
+      password,
+      deviceKey,
+      userAgent: window.navigator.userAgent,
+    };
+
+    loginMutation.mutate(loginData);
+  };
 
   return (
     <>
@@ -23,16 +52,32 @@ export const LoginScreen: React.FC<{}> = () => {
             type='text'
             name='email'
             placeholder='Email'
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
             backgroundColor={'white'}
           />
         </div>
         <div className='pb-4 flex w-full'>
-          <Input
-            type='password'
-            name='password'
-            placeholder='Password'
-            backgroundColor={'white'}
-          />
+          <InputGroup size='md'>
+            <Input
+              pr='4.5rem'
+              type={showPass ? 'text' : 'password'}
+              name='password'
+              placeholder='Enter password'
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              backgroundColor={'white'}
+            />
+            <InputRightElement width='4.5rem'>
+              <Button
+                h='1.75rem'
+                size='sm'
+                onClick={() => setShowPass(!showPass)}
+              >
+                {showPass ? 'Hide' : 'Show'}
+              </Button>
+            </InputRightElement>
+          </InputGroup>
         </div>
         <div className='flex flex-row w-full justify-between'>
           <Text fontSize={'small'} className='cursor-pointer'>
@@ -45,13 +90,14 @@ export const LoginScreen: React.FC<{}> = () => {
         <div className='flex pt-2 gap-4'>
           <Button
             colorScheme='blue'
-            onClick={() => {
-              sayHelloMutation.mutate('Hi from frontend!');
-            }}
+            onClick={() => handleLogin()}
+            isLoading={loginMutation.isPending}
           >
             Sign In
           </Button>
         </div>
+
+        {/* TODO remove these testing buttons */}
         <div className='flex gap-4 pt-6'>
           <Button
             className='w-[200px]'

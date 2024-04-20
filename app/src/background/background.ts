@@ -1,4 +1,4 @@
-import { handleGetVersion, handleSayHello } from './handlers';
+import { handleGetVersion, handleLogin, handleSayHello } from './handlers';
 import { BackgroundMessageType } from './interfaces';
 
 chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
@@ -6,11 +6,15 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
 
   switch (type) {
     case 'say-hello':
-      handleSayHello(request.payload, sendResponse);
+      handleSayHello(sendResponse, request?.payload);
       return true;
 
     case 'get-version':
-      handleGetVersion(request.payload, sendResponse);
+      handleGetVersion(sendResponse, request?.payload);
+      return true;
+
+    case 'login':
+      handleLogin(sendResponse, request?.payload);
       return true;
 
     default:
