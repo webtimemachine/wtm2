@@ -1,3 +1,4 @@
+import { getErrorMessage } from '../utils'
 import { LoginData, LoginResponse } from './interfaces/login.interface'
 import { GetNavigationEntriesData, GetNavigationEntriesResponse } from './interfaces/navigation-entry'
 class ApiClient {
@@ -19,6 +20,32 @@ class ApiClient {
     }
 
     return fetch(new URL(endpoint, serverUrl), init)
+  }
+
+  async refreshToken (): Promise<void> {
+    const { serverUrl, refreshToken } = await chrome.storage.local.get([
+      'serverUrl',
+      'refreshToken'
+    ])
+
+    try {
+      const resp = await fetch(new URL('/api/auth/refresh', serverUrl), {
+        method: 'GET', headers: {
+          Authorization: `Bearer ${refreshToken}`,
+          'Content-Type': 'application/json'
+        },
+      })
+
+      const data = await resp.json()
+
+      await chrome.storage.local.set({
+        accessToken: data.accessToken,
+        refreshToken: data.refreshToken,
+      })
+    } catch (error) {
+      console.error('Refresh Token Error', error)
+      throw error
+    }
   }
 
   async login (data: LoginData): Promise<LoginResponse> {
@@ -69,6 +96,16 @@ class ApiClient {
 
     } catch (error) {
       console.error('ApiClient getNavigationEntries', error)
+      const message = getErrorMessage(error)
+
+      if (message.includes('Unauthorized')) {
+        try {
+          await this.refreshToken()
+          return this.getNavigationEntries(data)
+        } catch (refreshError) {
+          throw error
+        }
+      }
       throw error
     }
   }

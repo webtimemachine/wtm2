@@ -1,3 +1,4 @@
-export { cn } from './cn';
-export { last } from './last';
-export { getRandomToken } from './get-random-token';
+export { cn } from './cn'
+export { last } from './last'
+export { getRandomToken } from './get-random-token'
+export { getErrorMessage } from './error-message'

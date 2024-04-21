@@ -16,6 +16,6 @@ export const handleGetNavigationEntries: BackgroundMessageHandler<'get-navigatio
     sendResponse(getNavigationEntriesResp)
   } catch (error) {
     console.error('handleGetNavigationEntries', error)
-    sendResponse({ error: 'Error getting navigation entries' })
+    sendResponse({ error: 'Error retrieving navigation entries' })
   }
 }
