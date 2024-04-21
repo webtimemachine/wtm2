@@ -10,11 +10,12 @@ export const useNavigationEntries = () => {
 
   const getNavigationEntries = () => sendBackgroundMessage('get-navigation-entries', undefined)
 
-  const { data, isLoading, error, refetch } = useQuery({ queryKey: ['getNavigationEntriesQuery'], queryFn: getNavigationEntries, enabled: true })
+  const { data, isLoading, error, refetch } = useQuery({ queryKey: ['getNavigationEntriesQuery'], queryFn: getNavigationEntries, enabled: true, retry: false })
 
   if (!isLoading && error && error.message.includes('Unauthorized')) {
-    logout()
-    navigateTo('login')
+    logout().then(() => {
+      navigateTo('login')
+    })
   }
 
   return { data, isLoading, error, refetch }

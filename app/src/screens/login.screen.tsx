@@ -101,7 +101,7 @@ export const LoginScreen: React.FC<object> = () => {
         </div>
 
         {/* TODO remove these testing buttons */}
-        <div className='flex gap-4 pt-6'>
+        <div className='flex w-full gap-4 pt-6'>
           <Button
             className='w-[200px]'
             colorScheme='blue'

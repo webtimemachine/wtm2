@@ -1,16 +1,16 @@
-import { useToast } from '@chakra-ui/react';
-import { useMutation } from '@tanstack/react-query';
+import { useToast } from '@chakra-ui/react'
+import { useMutation } from '@tanstack/react-query'
 
-import { useSendBackgroundMessage } from './use-send-message.hook';
+import { useSendBackgroundMessage } from './use-send-message.hook'
 
 export const useSayHello = () => {
-  const toast = useToast();
-  const { sendBackgroundMessage } = useSendBackgroundMessage();
+  const toast = useToast()
+  const { sendBackgroundMessage } = useSendBackgroundMessage()
 
   const sayHello = (sayHello: string) =>
     sendBackgroundMessage('say-hello', {
       sayHello,
-    });
+    })
 
   const sayHelloMutation = useMutation({
     mutationFn: sayHello,
@@ -21,17 +21,18 @@ export const useSayHello = () => {
         status: 'success',
         duration: 3000,
         isClosable: true,
-      });
+      })
     },
     onError: (error) => {
-      console.error(error);
+      console.error(error)
       toast({
         title: 'Error while saying Hi!',
         status: 'error',
         duration: 3000,
         isClosable: true,
-      });
+      })
     },
-  });
-  return { sayHelloMutation };
-};
+    retry: false
+  })
+  return { sayHelloMutation }
+}

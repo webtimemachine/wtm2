@@ -1,13 +1,13 @@
-import { useToast } from '@chakra-ui/react';
-import { useMutation } from '@tanstack/react-query';
+import { useToast } from '@chakra-ui/react'
+import { useMutation } from '@tanstack/react-query'
 
-import { useSendBackgroundMessage } from './use-send-message.hook';
+import { useSendBackgroundMessage } from './use-send-message.hook'
 
 export const useGetVersion = () => {
-  const toast = useToast();
-  const { sendBackgroundMessage } = useSendBackgroundMessage();
+  const toast = useToast()
+  const { sendBackgroundMessage } = useSendBackgroundMessage()
 
-  const gerVersion = () => sendBackgroundMessage('get-version', undefined);
+  const gerVersion = () => sendBackgroundMessage('get-version', undefined)
 
   const getVersionMutation = useMutation({
     mutationFn: gerVersion,
@@ -18,17 +18,18 @@ export const useGetVersion = () => {
         status: 'success',
         duration: 3000,
         isClosable: true,
-      });
+      })
     },
     onError: (error) => {
-      console.error(error);
+      console.error(error)
       toast({
         title: 'Error while getting version',
         status: 'error',
         duration: 3000,
         isClosable: true,
-      });
+      })
     },
-  });
-  return { getVersionMutation };
-};
+    retry: false
+  })
+  return { getVersionMutation }
+}

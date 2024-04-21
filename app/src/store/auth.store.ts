@@ -19,16 +19,16 @@ export const authStore = createStore<AuthStore>()(
         set(() => {
           chrome.storage.local.set({
             serverUrl,
-            accessToken: null,
-            refreshToken: null,
+            accessToken: '',
+            refreshToken: '',
           })
           return { serverUrl }
         }),
       logout: () =>
         set((state) => {
           chrome.storage.local.set({
-            accessToken: null,
-            refreshToken: null,
+            accessToken: '',
+            refreshToken: '',
           })
           return state
         })
@@ -43,7 +43,13 @@ export const useAuthStore = <T> (selector?: (state: AuthStore) => T) =>
   useStore(authStore, selector!)
 
 export const useLogout = () => {
-  const logout = useAuthStore((state) => state.logout)
+  const logout = async (): Promise<void> => {
+    await chrome.storage.local.set({
+      accessToken: '',
+      refreshToken: '',
+    })
+  }
+
   return { logout }
 }
 
@@ -54,7 +60,9 @@ export const useIsLogged = () => {
       'refreshToken'
     ])
 
-    return (tokens.accessToken !== null && tokens.refreshToken !== null)
+    const { accessToken, refreshToken } = tokens
+
+    return (accessToken ?? false) && (refreshToken ?? false)
   }
 
   return { isLogged }

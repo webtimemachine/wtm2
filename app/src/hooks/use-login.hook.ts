@@ -36,6 +36,7 @@ export const useLogin = () => {
         isClosable: true,
       })
     },
+    retry: false
   })
 
   const navigateToMainPageIfIsLogged = async () => {

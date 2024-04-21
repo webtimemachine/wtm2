@@ -11,8 +11,8 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
   const { logout } = useLogout()
   const { navigateTo } = useNavigationStore()
 
-  const handleLogout = () => {
-    logout()
+  const handleLogout = async () => {
+    await logout()
     navigateTo('login')
   }
 
