@@ -23,7 +23,7 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
         <div className='pb-4'>
           <Text fontSize={'xx-large'} fontWeight={'bold'}>WebTM</Text>
         </div>
-        <div className='flex flex-col w-full h-[400px] justify-between'>
+        <div className='flex flex-col w-full min-h-[400px] justify-between'>
           <div>
             <div className='p-4 flex w-full'>
               <Input type='text' name='search' placeholder='Search' backgroundColor={'white'} />

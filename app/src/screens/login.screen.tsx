@@ -58,6 +58,7 @@ export const LoginScreen: React.FC<object> = () => {
             value={email}
             onChange={(event) => setEmail(event.target.value)}
             backgroundColor={'white'}
+            autoCapitalize='false'
           />
         </div>
         <div className='pb-4 flex w-full'>

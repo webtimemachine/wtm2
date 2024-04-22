@@ -1,6 +1,5 @@
-import { getErrorMessage } from '../utils'
 import { LoginData, LoginResponse } from './interfaces/login.interface'
-import { GetNavigationEntriesData, GetNavigationEntriesResponse } from './interfaces/navigation-entry'
+
 class ApiClient {
   async fetch (endpoint: string, init: RequestInit = {}): Promise<Response> {
     const { serverUrl, accessToken } = await chrome.storage.local.get([
@@ -76,36 +75,6 @@ class ApiClient {
       return loginResponse
     } catch (error) {
       console.error('ApiClient login', error)
-      throw error
-    }
-  }
-
-  async getNavigationEntries (data: GetNavigationEntriesData): Promise<GetNavigationEntriesResponse> {
-    try {
-      const { offset, limit, query, isSemantic } = data
-      const res = await this.fetch(`/api/navigation-entry?offset=${offset}&limit=${limit}${query ? `&query=${query}` : ''}&isSemantic=${isSemantic}`, { method: 'GET' })
-
-      if (res.status !== 200) {
-        const errorJson = await res.json()
-        throw new Error(errorJson?.message || 'GET Navigation Entries Error')
-      }
-
-      const getNavigationEntriesResponse: GetNavigationEntriesResponse = await res.json()
-
-      return getNavigationEntriesResponse
-
-    } catch (error) {
-      console.error('ApiClient getNavigationEntries', error)
-      const message = getErrorMessage(error)
-
-      if (message.includes('Unauthorized')) {
-        try {
-          await this.refreshToken()
-          return this.getNavigationEntries(data)
-        } catch (refreshError) {
-          throw error
-        }
-      }
       throw error
     }
   }
