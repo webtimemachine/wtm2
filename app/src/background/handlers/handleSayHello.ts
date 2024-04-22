@@ -5,7 +5,7 @@ export const handleSayHello: BackgroundMessageHandler<'say-hello'> = async (
   payload,
 ) => {
   console.log('background.ts', { payload });
-  const serverUrl = payload.authData.serverUrl;
+  const { serverUrl } = await chrome.storage.local.get(['serverUrl']);
   sendResponse({
     message: `Hello from background.ts 👋 - serverUrl:  ${serverUrl}`,
   });

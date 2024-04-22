@@ -1,25 +1,16 @@
-import { useAuthStore } from '../store';
 import {
   BackgroundMessageType,
   BackgroundMessageDataMap,
   BackgroundMessageResponseMap,
-  AuthData,
   BackgroundMessagePayload,
 } from '../background/interfaces';
 
 export const useSendBackgroundMessage = () => {
-  const serverUrl = useAuthStore((state) => state.serverUrl);
-
   const sendBackgroundMessage = async <T extends BackgroundMessageType>(
     type: T,
     data: BackgroundMessageDataMap[T],
   ): Promise<BackgroundMessageResponseMap[T]> => {
-    const authData: AuthData = {
-      serverUrl,
-    };
-
     const payload: BackgroundMessagePayload<T> = {
-      authData,
       data,
     };
 

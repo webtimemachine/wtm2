@@ -15,12 +15,7 @@ export type BackgroundMessageResponseMap = {
   login: LoginResponse;
 };
 
-export interface AuthData {
-  serverUrl: string;
-}
-
 export interface BackgroundMessagePayload<T extends BackgroundMessageType> {
-  authData: AuthData;
   data: BackgroundMessageDataMap[T];
 }
 
