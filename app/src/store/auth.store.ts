@@ -2,7 +2,6 @@ import { useStore } from 'zustand';
 import { createStore } from 'zustand/vanilla';
 import { persist } from 'zustand/middleware';
 import { getRandomToken } from '../utils';
-import { useNavigationStore } from '.';
 
 interface AuthStore {
   deviceKey: string;
@@ -33,26 +32,6 @@ export const authStore = createStore<AuthStore>()(
 
 export const useAuthStore = <T>(selector?: (state: AuthStore) => T) =>
   useStore(authStore, selector!);
-
-export const useLogout = () => {
-  const { navigateTo } = useNavigationStore();
-
-  const logout = async () => {
-    await chrome.storage.local.set({
-      accessToken: '',
-      refreshToken: '',
-    });
-    navigateTo('login');
-  };
-
-  return { logout };
-};
-
-export const useServerUrl = () => {
-  const serverUrl = useAuthStore((state) => state.serverUrl);
-  const setServerUrl = useAuthStore((state) => state.setServerUrl);
-  return { serverUrl, setServerUrl };
-};
 
 const initStorage = async () => {
   const { serverUrl } = await chrome.storage.local.get(['serverUrl']);

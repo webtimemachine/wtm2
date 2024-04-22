@@ -97,7 +97,7 @@ export class AuthService {
   private buildRefreshToken(payload: JWTPayload): string {
     return this.jwtService.sign(payload, {
       secret: appEnv.JWT_REFRESH_SECRET,
-      expiresIn: appEnv.JWT_REFRESH_EXPIRATION,
+      ...(payload?.exp ? {} : { expiresIn: appEnv.JWT_REFRESH_EXPIRATION }),
     });
   }
 
@@ -339,7 +339,7 @@ export class AuthService {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { iat, exp, ...rest } = context.payload;
     const accessToken = this.buildAccessToken(rest);
-    const refreshToken = this.buildRefreshToken(rest);
+    const refreshToken = this.buildRefreshToken({ ...rest, exp });
 
     const { exp: expiration } = this.jwtService.decode(refreshToken) as {
       exp: number;
