@@ -1,1 +1,1 @@
-export { GetVersionReseponse } from './get-version.response';
+export { GetVersionResponse } from './get-version.response';
