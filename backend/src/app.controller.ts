@@ -1,7 +1,7 @@
 import { Controller, Get, Logger } from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { AppService } from './app.service';
-import { GetVersionReseponse } from './dtos';
+import { GetVersionResponse } from './dtos';
 
 @ApiTags('Root')
 @Controller()
@@ -13,7 +13,7 @@ export class AppController {
   @Get('/version')
   @ApiOkResponse({
     status: 200,
-    type: GetVersionReseponse,
+    type: GetVersionResponse,
     isArray: true,
   })
   getVersion() {

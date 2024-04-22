@@ -1,10 +1,12 @@
-const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+import { BackgroundMessageHandler } from '../interfaces';
 
-export const handleSayHello = async (
-  request: any,
-  sendResponse: (response?: any) => void,
+export const handleSayHello: BackgroundMessageHandler<'say-hello'> = async (
+  sendResponse,
+  payload,
 ) => {
-  await sleep(3000);
-  console.log('background.js', { payload: request.payload });
-  sendResponse({ message: 'Hello from background.ts 👋' });
+  console.log('background.ts', { payload });
+  const { serverUrl } = await chrome.storage.local.get(['serverUrl']);
+  sendResponse({
+    message: `Hello from background.ts 👋 - serverUrl:  ${serverUrl}`,
+  });
 };
