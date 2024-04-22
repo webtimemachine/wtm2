@@ -11,7 +11,8 @@ import {
 } from '@chakra-ui/react';
 import { CheckIcon, CloseIcon, EditIcon } from '@chakra-ui/icons';
 
-import { useServerUrl } from '../store';
+import { useServerUrl } from '../hooks';
+
 import clsx from 'clsx';
 
 const EditableControls = () => {
