@@ -1,26 +1,26 @@
-import { handleGetVersion, handleLogin, handleSayHello } from './handlers'
-import { handleGetNavigationEntries } from './handlers/handleGetNavigationEntries'
-import { BackgroundMessageType } from './interfaces'
+import { handleGetVersion, handleLogin, handleSayHello } from './handlers';
+import { handleGetNavigationEntries } from './handlers/handleGetNavigationEntries';
+import { BackgroundMessageType } from './interfaces';
 
 chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
-  const type: BackgroundMessageType = request.type
+  const type: BackgroundMessageType = request.type;
 
   switch (type) {
     case 'say-hello':
-      handleSayHello(sendResponse, request?.payload)
-      return true
+      handleSayHello(sendResponse, request?.payload);
+      return true;
 
     case 'get-version':
-      handleGetVersion(sendResponse, request?.payload)
-      return true
+      handleGetVersion(sendResponse, request?.payload);
+      return true;
 
     case 'login':
-      handleLogin(sendResponse, request?.payload)
-      return true
+      handleLogin(sendResponse, request?.payload);
+      return true;
     case 'get-navigation-entries':
-      handleGetNavigationEntries(sendResponse, request?.payload)
-      return true
+      handleGetNavigationEntries(sendResponse, request?.payload);
+      return true;
     default:
-      return false
+      return false;
   }
-})
+});
