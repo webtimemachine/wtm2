@@ -1,28 +1,28 @@
-import React from 'react';
+import React, { useEffect } from 'react'
 import {
   Button,
   Input,
   InputGroup,
   InputRightElement,
   Text,
-} from '@chakra-ui/react';
-import { ServerUrlEditable } from '../components';
-import { useGetVersion, useLogin, useSayHello } from '../hooks';
-import { useAuthStore } from '../store';
+} from '@chakra-ui/react'
+import { ServerUrlEditable } from '../components'
+import { useGetVersion, useLogin, useSayHello } from '../hooks'
+import { useAuthStore } from '../store'
 
 export const LoginScreen: React.FC<{}> = () => {
-  const deviceKey = useAuthStore((state) => state.deviceKey);
+  const deviceKey = useAuthStore((state) => state.deviceKey)
 
   // TODO remove this testing mutations
-  const { sayHelloMutation } = useSayHello();
-  const { getVersionMutation } = useGetVersion();
+  const { sayHelloMutation } = useSayHello()
+  const { getVersionMutation } = useGetVersion()
 
-  const { loginMutation } = useLogin();
+  const { loginMutation, navigateToMainPageIfIsLogged } = useLogin()
 
-  const [email, setEmail] = React.useState('');
-  const [password, setPassword] = React.useState('');
+  const [email, setEmail] = React.useState('')
+  const [password, setPassword] = React.useState('')
 
-  const [showPass, setShowPass] = React.useState(false);
+  const [showPass, setShowPass] = React.useState(false)
 
   const handleLogin = () => {
     // TODO implement validations
@@ -31,10 +31,14 @@ export const LoginScreen: React.FC<{}> = () => {
       password,
       deviceKey,
       userAgent: window.navigator.userAgent,
-    };
+    }
 
-    loginMutation.mutate(loginData);
-  };
+    loginMutation.mutate(loginData)
+  }
+
+  useEffect(() => {
+    navigateToMainPageIfIsLogged()
+  })
 
   return (
     <>
@@ -55,6 +59,7 @@ export const LoginScreen: React.FC<{}> = () => {
             value={email}
             onChange={(event) => setEmail(event.target.value)}
             backgroundColor={'white'}
+            autoCapitalize='false'
           />
         </div>
         <div className='pb-4 flex w-full'>
@@ -98,12 +103,12 @@ export const LoginScreen: React.FC<{}> = () => {
         </div>
 
         {/* TODO remove these testing buttons */}
-        <div className='flex gap-4 pt-6'>
+        <div className='flex w-full gap-4 pt-6'>
           <Button
             className='w-[200px]'
             colorScheme='blue'
             onClick={() => {
-              getVersionMutation.mutate();
+              getVersionMutation.mutate()
             }}
           >
             Get Version
@@ -112,7 +117,7 @@ export const LoginScreen: React.FC<{}> = () => {
             className='w-[200px]'
             colorScheme='blue'
             onClick={() => {
-              sayHelloMutation.mutate('Hi from frontend!');
+              sayHelloMutation.mutate('Hi from frontend!')
             }}
           >
             Hi :D
@@ -120,5 +125,5 @@ export const LoginScreen: React.FC<{}> = () => {
         </div>
       </div>
     </>
-  );
-};
+  )
+}
