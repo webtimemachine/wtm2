@@ -1,6 +1,15 @@
-import { handleGetVersion, handleLogin, handleSayHello } from './handlers';
-import { handleGetNavigationEntries } from './handlers/handleGetNavigationEntries';
+import {
+  handleGetVersion,
+  handleLogin,
+  handleSayHello,
+  handleUpdated,
+  handleGetNavigationEntries,
+} from './handlers';
 import { BackgroundMessageType } from './interfaces';
+
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+  handleUpdated(tabId, changeInfo, tab);
+});
 
 chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
   const type: BackgroundMessageType = request.type;
