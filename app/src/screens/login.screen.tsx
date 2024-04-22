@@ -1,28 +1,28 @@
-import React, { useEffect } from 'react'
+import React, { useEffect } from 'react';
 import {
   Button,
   Input,
   InputGroup,
   InputRightElement,
   Text,
-} from '@chakra-ui/react'
-import { ServerUrlEditable } from '../components'
-import { useGetVersion, useLogin, useSayHello } from '../hooks'
-import { useAuthStore } from '../store'
+} from '@chakra-ui/react';
+import { ServerUrlEditable } from '../components';
+import { useGetVersion, useLogin, useSayHello } from '../hooks';
+import { useAuthStore } from '../store';
 
 export const LoginScreen: React.FC<{}> = () => {
-  const deviceKey = useAuthStore((state) => state.deviceKey)
+  const deviceKey = useAuthStore((state) => state.deviceKey);
 
   // TODO remove this testing mutations
-  const { sayHelloMutation } = useSayHello()
-  const { getVersionMutation } = useGetVersion()
+  const { sayHelloMutation } = useSayHello();
+  const { getVersionMutation } = useGetVersion();
 
-  const { loginMutation, navigateToMainPageIfIsLogged } = useLogin()
+  const { loginMutation, navigateToMainPageIfIsLogged } = useLogin();
 
-  const [email, setEmail] = React.useState('')
-  const [password, setPassword] = React.useState('')
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
 
-  const [showPass, setShowPass] = React.useState(false)
+  const [showPass, setShowPass] = React.useState(false);
 
   const handleLogin = () => {
     // TODO implement validations
@@ -31,14 +31,14 @@ export const LoginScreen: React.FC<{}> = () => {
       password,
       deviceKey,
       userAgent: window.navigator.userAgent,
-    }
+    };
 
-    loginMutation.mutate(loginData)
-  }
+    loginMutation.mutate(loginData);
+  };
 
   useEffect(() => {
-    navigateToMainPageIfIsLogged()
-  })
+    navigateToMainPageIfIsLogged();
+  });
 
   return (
     <>
@@ -108,7 +108,7 @@ export const LoginScreen: React.FC<{}> = () => {
             className='w-[200px]'
             colorScheme='blue'
             onClick={() => {
-              getVersionMutation.mutate()
+              getVersionMutation.mutate();
             }}
           >
             Get Version
@@ -117,7 +117,7 @@ export const LoginScreen: React.FC<{}> = () => {
             className='w-[200px]'
             colorScheme='blue'
             onClick={() => {
-              sayHelloMutation.mutate('Hi from frontend!')
+              sayHelloMutation.mutate('Hi from frontend!');
             }}
           >
             Hi :D
@@ -125,5 +125,5 @@ export const LoginScreen: React.FC<{}> = () => {
         </div>
       </div>
     </>
-  )
-}
+  );
+};
