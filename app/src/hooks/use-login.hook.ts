@@ -25,7 +25,8 @@ export const useLogin = () => {
     onError: (error) => {
       console.error(error);
       toast({
-        title: 'Error while login',
+        title: 'Invalid credentials',
+        description: 'Please check your email and password and try again.',
         status: 'error',
         duration: 3000,
         isClosable: true,
