@@ -1,9 +1,5 @@
 import { create } from 'zustand';
-import {
-  LoginScreen,
-  ServerUrlScreen,
-  NavigationEntriesScreen,
-} from '../screens';
+import { LoginScreen, NavigationEntriesScreen } from '../screens';
 
 import { last } from '../utils';
 
@@ -20,8 +16,6 @@ const mapScreenName = (screenName: ScreenName): JSX.Element => {
   switch (screenName) {
     case 'login':
       return <LoginScreen />;
-    case 'server-url':
-      return <ServerUrlScreen />;
     case 'navigation-entries':
       return <NavigationEntriesScreen />;
   }

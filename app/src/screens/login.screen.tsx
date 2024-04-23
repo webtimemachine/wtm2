@@ -5,40 +5,63 @@ import {
   InputGroup,
   InputRightElement,
   Text,
+  FormControl,
+  FormErrorMessage,
 } from '@chakra-ui/react';
 import { ServerUrlEditable } from '../components';
-import { useGetVersion, useLogin, useSayHello } from '../hooks';
-import { useAuthStore } from '../store';
+import { useLogin } from '../hooks';
+import { useAuthStore, useNavigationStore } from '../store';
+
+import clsx from 'clsx';
+
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export const LoginScreen: React.FC<{}> = () => {
   const deviceKey = useAuthStore((state) => state.deviceKey);
 
-  // TODO remove this testing mutations
-  const { sayHelloMutation } = useSayHello();
-  const { getVersionMutation } = useGetVersion();
-
-  const { loginMutation, navigateToMainPageIfIsLogged } = useLogin();
+  const { loginMutation } = useLogin();
+  const { navigateTo } = useNavigationStore();
 
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
-
   const [showPass, setShowPass] = React.useState(false);
 
-  const handleLogin = () => {
-    // TODO implement validations
-    const loginData = {
-      email,
-      password,
-      deviceKey,
-      userAgent: window.navigator.userAgent,
-    };
+  const [emailError, setEmailError] = React.useState('');
 
-    loginMutation.mutate(loginData);
+  const validateInputs = () => {
+    let emailErrorFound = false;
+
+    if (!email) {
+      setEmailError('Email is required');
+      emailErrorFound = true;
+    } else {
+      if (!emailRegex.test(email)) {
+        setEmailError('Please enter a valid email address');
+        emailErrorFound = true;
+      }
+    }
+
+    return emailErrorFound;
+  };
+
+  const handleLogin = () => {
+    const errorsFound = validateInputs();
+    if (!errorsFound) {
+      const loginData = {
+        email,
+        password,
+        deviceKey,
+        userAgent: window.navigator.userAgent,
+      };
+      loginMutation.mutate(loginData);
+    }
   };
 
   useEffect(() => {
-    navigateToMainPageIfIsLogged();
-  });
+    if (loginMutation.isSuccess) {
+      navigateTo('navigation-entries');
+    }
+  }, [loginMutation.isSuccess]);
 
   return (
     <>
@@ -51,18 +74,28 @@ export const LoginScreen: React.FC<{}> = () => {
         <div className='pb-4 flex w-full'>
           <ServerUrlEditable />
         </div>
-        <div className='pb-4 flex w-full'>
-          <Input
-            type='text'
-            name='email'
-            placeholder='Email'
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-            backgroundColor={'white'}
-            autoCapitalize='false'
-          />
-        </div>
-        <div className='pb-4 flex w-full'>
+        <FormControl isInvalid={!!emailError}>
+          <div
+            className={clsx(['flex flex-col w-full', !emailError && 'pb-4'])}
+          >
+            <Input
+              type='text'
+              name='email'
+              placeholder='Email'
+              value={email}
+              onChange={(event) => {
+                setEmail(event.target.value);
+                if (emailError) setEmailError('');
+              }}
+              backgroundColor={'white'}
+            />
+            <div className='[&>div]:mt-1 [&>div]:mb-1'>
+              <FormErrorMessage>{emailError}</FormErrorMessage>
+            </div>
+          </div>
+        </FormControl>
+
+        <div className='pb-4 flex flex-col w-full'>
           <InputGroup size='md'>
             <Input
               pr='4.5rem'
@@ -84,7 +117,8 @@ export const LoginScreen: React.FC<{}> = () => {
             </InputRightElement>
           </InputGroup>
         </div>
-        <div className='flex flex-row w-full justify-between'>
+
+        <div className='flex flex-row w-full justify-between pb-4'>
           <Text fontSize={'small'} className='cursor-pointer'>
             Recovery password
           </Text>
@@ -92,35 +126,14 @@ export const LoginScreen: React.FC<{}> = () => {
             Sign up
           </Text>
         </div>
-        <div className='flex pt-2 gap-4'>
+        <div className='flex gap-4'>
           <Button
             colorScheme='blue'
             onClick={() => handleLogin()}
+            isDisabled={!email || !password || !!emailError}
             isLoading={loginMutation.isPending}
           >
             Sign In
-          </Button>
-        </div>
-
-        {/* TODO remove these testing buttons */}
-        <div className='flex w-full gap-4 pt-6'>
-          <Button
-            className='w-[200px]'
-            colorScheme='blue'
-            onClick={() => {
-              getVersionMutation.mutate();
-            }}
-          >
-            Get Version
-          </Button>
-          <Button
-            className='w-[200px]'
-            colorScheme='blue'
-            onClick={() => {
-              sayHelloMutation.mutate('Hi from frontend!');
-            }}
-          >
-            Hi :D
           </Button>
         </div>
       </div>
