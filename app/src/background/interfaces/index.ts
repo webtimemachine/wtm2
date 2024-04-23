@@ -1,7 +1,10 @@
 import { SayHelloData, SayHelloResponse } from './say-hello.interface';
 import { GetVersionResponse } from './get-version.interface';
 import { LoginData, LoginResponse } from './login.interface';
-import { GetNavigationEntriesResponse } from './navigation-entry';
+import {
+  GetNavigationEntriesData,
+  GetNavigationEntriesResponse,
+} from './navigation-entry';
 
 export type BackgroundMessageType =
   | 'say-hello'
@@ -13,7 +16,7 @@ export type BackgroundMessageDataMap = {
   'say-hello': SayHelloData;
   'get-version': undefined;
   login: LoginData;
-  'get-navigation-entries': undefined;
+  'get-navigation-entries': GetNavigationEntriesData;
 };
 export type BackgroundMessageResponseMap = {
   'say-hello': SayHelloResponse;

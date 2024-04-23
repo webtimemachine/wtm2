@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Checkbox, Input, Text, IconButton } from '@chakra-ui/react';
 import { CompleteNavigationEntryDto } from '../background/interfaces/navigation-entry';
 import { useNavigationEntries } from '../hooks/use-navigation-entries.hook';
@@ -6,7 +6,9 @@ import { useLogout } from '../hooks/use-logout.hook';
 import { SettingsIcon, SmallCloseIcon } from '@chakra-ui/icons';
 
 export const NavigationEntriesScreen: React.FC<object> = () => {
-  const { data } = useNavigationEntries();
+  const { data, page, setPage, setQuery, setIsSemantic } =
+    useNavigationEntries();
+  const [userQuery, setUserQuery] = useState<string>('');
 
   // TODO Delete logout function & button
   const { logout } = useLogout();
@@ -35,10 +37,23 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
                 name='search'
                 placeholder='Search'
                 backgroundColor={'white'}
+                onChange={(e) => setUserQuery(e.target.value)}
               />
+              <div className='pl-4'>
+                <Button
+                  colorScheme='blue'
+                  onClick={() => {
+                    setQuery(userQuery);
+                  }}
+                >
+                  Search
+                </Button>
+              </div>
             </div>
             <div className='flex pb-2'>
-              <Checkbox>Is semantic?</Checkbox>
+              <Checkbox onChange={(e) => setIsSemantic(e.target.checked)}>
+                Is semantic?
+              </Checkbox>
             </div>
             <div className='flex flex-col w-full'>
               {data && data.items.length ? (
@@ -70,11 +85,26 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
           </div>
 
           <div className='flex w-full justify-between pt-4'>
-            <Button colorScheme='blue'>&larr;</Button>
+            <Button
+              colorScheme='blue'
+              disabled={data && data?.offset === 0}
+              onClick={() => {
+                data && data?.offset > 0 && setPage(page - 1);
+              }}
+            >
+              &larr;
+            </Button>
             <Button colorScheme='blue' onClick={logout}>
               Logout
             </Button>
-            <Button colorScheme='blue'>&rarr;</Button>
+            <Button
+              colorScheme='blue'
+              onClick={() => {
+                data && data.offset < data.count && setPage(page + 1);
+              }}
+            >
+              &rarr;
+            </Button>
           </div>
         </div>
       </div>
