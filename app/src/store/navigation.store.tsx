@@ -1,9 +1,13 @@
 import { create } from 'zustand';
-import { LoginScreen, ServerUrlScreen } from '../screens';
+import {
+  LoginScreen,
+  ServerUrlScreen,
+  NavigationEntriesScreen,
+} from '../screens';
 
 import { last } from '../utils';
 
-export type ScreenName = 'login' | 'server-url';
+export type ScreenName = 'login' | 'server-url' | 'navigation-entries';
 
 interface NavigationStore {
   CurrentScreen: () => JSX.Element;
@@ -18,6 +22,8 @@ const mapScreenName = (screenName: ScreenName): JSX.Element => {
       return <LoginScreen />;
     case 'server-url':
       return <ServerUrlScreen />;
+    case 'navigation-entries':
+      return <NavigationEntriesScreen />;
   }
   return <></>;
 };

@@ -32,6 +32,7 @@ export const useSayHello = () => {
         isClosable: true,
       });
     },
+    retry: false,
   });
   return { sayHelloMutation };
 };
