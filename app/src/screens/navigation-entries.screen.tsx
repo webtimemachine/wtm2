@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Checkbox, Input, Text, IconButton } from '@chakra-ui/react';
 import { CompleteNavigationEntryDto } from '../background/interfaces/navigation-entry';
 import { useNavigationEntries } from '../hooks/use-navigation-entries.hook';
@@ -6,12 +6,30 @@ import { useLogout } from '../hooks/use-logout.hook';
 import { SettingsIcon, SmallCloseIcon } from '@chakra-ui/icons';
 
 export const NavigationEntriesScreen: React.FC<object> = () => {
-  const { data, page, setPage, setQuery, setIsSemantic } =
-    useNavigationEntries();
-  const [userQuery, setUserQuery] = useState<string>('');
-
   // TODO Delete logout function & button
   const { logout } = useLogout();
+
+  const LIMIT = 8;
+  const [page, setPage] = useState<number>(0);
+  const [query, setQuery] = useState<string>('');
+  const [isSemantic, setIsSemantic] = useState<boolean>(false);
+
+  const offset = page * LIMIT;
+  const limit = LIMIT;
+
+  const { navigationEntriesQuery } = useNavigationEntries({
+    offset,
+    limit,
+    query,
+    isSemantic,
+  });
+
+  const navigationEntries = navigationEntriesQuery?.data?.items;
+  const count = navigationEntriesQuery?.data?.count || 0;
+
+  useEffect(() => {
+    navigationEntriesQuery.refetch();
+  }, [page, isSemantic]);
 
   return (
     <>
@@ -37,13 +55,13 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
                 name='search'
                 placeholder='Search'
                 backgroundColor={'white'}
-                onChange={(e) => setUserQuery(e.target.value)}
+                onChange={(e) => setQuery(e.target.value)}
               />
               <div className='pl-4'>
                 <Button
                   colorScheme='blue'
                   onClick={() => {
-                    setQuery(userQuery);
+                    navigationEntriesQuery.refetch();
                   }}
                 >
                   Search
@@ -56,8 +74,8 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
               </Checkbox>
             </div>
             <div className='flex flex-col w-full'>
-              {data && data.items.length ? (
-                data.items.map((element: CompleteNavigationEntryDto) => {
+              {navigationEntries && navigationEntries.length ? (
+                navigationEntries.map((element: CompleteNavigationEntryDto) => {
                   return (
                     <div
                       key={element.id}
@@ -87,9 +105,9 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
           <div className='flex w-full justify-between pt-4'>
             <Button
               colorScheme='blue'
-              disabled={data && data?.offset === 0}
+              isDisabled={offset === 0}
               onClick={() => {
-                data && data?.offset > 0 && setPage(page - 1);
+                page > 0 && setPage(page - 1);
               }}
             >
               &larr;
@@ -99,9 +117,8 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
             </Button>
             <Button
               colorScheme='blue'
-              onClick={() => {
-                data && data.offset < data.count && setPage(page + 1);
-              }}
+              isDisabled={offset >= count}
+              onClick={() => setPage(page + 1)}
             >
               &rarr;
             </Button>

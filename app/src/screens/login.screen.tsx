@@ -18,6 +18,7 @@ const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export const LoginScreen: React.FC<{}> = () => {
   const deviceKey = useAuthStore((state) => state.deviceKey);
+  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
 
   const { loginMutation } = useLogin();
   const { navigateTo } = useNavigationStore();
@@ -56,6 +57,10 @@ export const LoginScreen: React.FC<{}> = () => {
       loginMutation.mutate(loginData);
     }
   };
+
+  useEffect(() => {
+    if (isLoggedIn) navigateTo('navigation-entries');
+  }, [isLoggedIn]);
 
   useEffect(() => {
     if (loginMutation.isSuccess) {
