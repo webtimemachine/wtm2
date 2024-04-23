@@ -1,6 +1,5 @@
 import { create } from 'zustand';
 import { LoginScreen, NavigationEntriesScreen } from '../screens';
-
 import { last } from '../utils';
 
 export type ScreenName = 'login' | 'server-url' | 'navigation-entries';
@@ -22,7 +21,11 @@ const mapScreenName = (screenName: ScreenName): JSX.Element => {
   return <></>;
 };
 
-const initialScreen: ScreenName = 'login';
+let initialScreen: ScreenName = 'login';
+const authVanillaStoreData = localStorage.getItem('auth-vanilla-store');
+if (authVanillaStoreData && JSON.parse(authVanillaStoreData)?.isLoggedIn) {
+  initialScreen = 'navigation-entries';
+}
 
 export const useNavigationStore = create<NavigationStore>()((set) => ({
   CurrentScreen: () => mapScreenName(initialScreen),

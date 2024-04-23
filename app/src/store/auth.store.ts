@@ -7,6 +7,8 @@ interface AuthStore {
   deviceKey: string;
   serverUrl: string;
   setServerUrl: (serverUrl: string) => void;
+  isLoggedIn: boolean;
+  setIsLoggedIn: (isLoggedIn: boolean) => void;
 }
 
 export const authStore = createStore<AuthStore>()(
@@ -20,9 +22,12 @@ export const authStore = createStore<AuthStore>()(
             serverUrl,
             accessToken: '',
             refreshToken: '',
+            isLoggedIn: false,
           });
           return { serverUrl };
         }),
+      isLoggedIn: false,
+      setIsLoggedIn: (isLoggedIn: boolean) => set(() => ({ isLoggedIn })),
     }),
     {
       name: 'auth-vanilla-store',

@@ -3,9 +3,11 @@ import { useMutation } from '@tanstack/react-query';
 
 import { useSendBackgroundMessage } from './use-send-message.hook';
 import { LoginData } from '../background/interfaces/login.interface';
+import { useAuthStore } from '../store';
 
 export const useLogin = () => {
   const toast = useToast();
+  const setIsLoggedIn = useAuthStore((state) => state.setIsLoggedIn);
   const { sendBackgroundMessage } = useSendBackgroundMessage();
 
   const login = (data: LoginData) => sendBackgroundMessage('login', data);
@@ -13,6 +15,7 @@ export const useLogin = () => {
   const loginMutation = useMutation({
     mutationFn: login,
     onSuccess: (loginRes) => {
+      setIsLoggedIn(true);
       console.log(loginRes);
       toast({
         title: 'Login Response',
@@ -23,6 +26,7 @@ export const useLogin = () => {
       });
     },
     onError: (error) => {
+      setIsLoggedIn(false);
       console.error(error);
       toast({
         title: 'Invalid credentials',
@@ -32,7 +36,6 @@ export const useLogin = () => {
         isClosable: true,
       });
     },
-    retry: false,
   });
 
   return { loginMutation };
