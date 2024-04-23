@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "format": "prettier --write \"src/**/*.ts\" \"src/**/*.tsx\" \"test/**/*.ts\"",
     "build": "concurrently \"npm run build:chrome\" \"npm run build:firefox\" --names chrome,firefox",
     "build:chrome": "tsc && export BROWSER='chrome' && vite build && rm -rf ../app_chrome && mv chrome ../app_chrome",
     "build:firefox": "tsc && export BROWSER='firefox' && vite build && rm -rf ../app_firefox && mv firefox ../app_firefox",

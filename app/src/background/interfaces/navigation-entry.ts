@@ -1,0 +1,27 @@
+import { UserDeviceResponse } from './user-device.interface';
+
+export interface CompleteNavigationEntryDto {
+  id: number;
+  url: string;
+  title: string;
+  navigationDate: Date;
+  userId: number;
+  userDeviceId: number;
+  userDevice: UserDeviceResponse;
+  expirationDate?: Date;
+}
+
+export interface GetNavigationEntriesResponse {
+  offset: number;
+  limit: number;
+  count: number;
+  query: string;
+  items: CompleteNavigationEntryDto[];
+}
+
+export interface GetNavigationEntriesData {
+  offset: number;
+  limit: number;
+  query: string;
+  isSemantic: boolean;
+}

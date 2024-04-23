@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Button,
   Input,
@@ -17,7 +17,7 @@ export const LoginScreen: React.FC<{}> = () => {
   const { sayHelloMutation } = useSayHello();
   const { getVersionMutation } = useGetVersion();
 
-  const { loginMutation } = useLogin();
+  const { loginMutation, navigateToMainPageIfIsLogged } = useLogin();
 
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
@@ -35,6 +35,10 @@ export const LoginScreen: React.FC<{}> = () => {
 
     loginMutation.mutate(loginData);
   };
+
+  useEffect(() => {
+    navigateToMainPageIfIsLogged();
+  });
 
   return (
     <>
@@ -55,6 +59,7 @@ export const LoginScreen: React.FC<{}> = () => {
             value={email}
             onChange={(event) => setEmail(event.target.value)}
             backgroundColor={'white'}
+            autoCapitalize='false'
           />
         </div>
         <div className='pb-4 flex w-full'>
@@ -98,7 +103,7 @@ export const LoginScreen: React.FC<{}> = () => {
         </div>
 
         {/* TODO remove these testing buttons */}
-        <div className='flex gap-4 pt-6'>
+        <div className='flex w-full gap-4 pt-6'>
           <Button
             className='w-[200px]'
             colorScheme='blue'

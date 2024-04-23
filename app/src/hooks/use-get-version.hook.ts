@@ -29,6 +29,7 @@ export const useGetVersion = () => {
         isClosable: true,
       });
     },
+    retry: false,
   });
   return { getVersionMutation };
 };
