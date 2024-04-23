@@ -32,15 +32,9 @@ const getNavigationEntries = async (
 
 export const handleGetNavigationEntries: BackgroundMessageHandler<
   'get-navigation-entries'
-> = async (sendResponse) => {
+> = async (sendResponse, payload) => {
   try {
-    const data: GetNavigationEntriesData = {
-      isSemantic: false,
-      limit: 10,
-      offset: 0,
-      query: '',
-    };
-    const getNavigationEntriesResp = await getNavigationEntries(data);
+    const getNavigationEntriesResp = await getNavigationEntries(payload.data);
     sendResponse(getNavigationEntriesResp);
   } catch (error) {
     console.error('handleGetNavigationEntries', error);
