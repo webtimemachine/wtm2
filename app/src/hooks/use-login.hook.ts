@@ -3,20 +3,19 @@ import { useMutation } from '@tanstack/react-query';
 
 import { useSendBackgroundMessage } from './use-send-message.hook';
 import { LoginData } from '../background/interfaces/login.interface';
-import { useNavigationStore } from '../store';
-import { useIsLoggedIn } from './use-logged-in.hook';
+import { useAuthStore } from '../store';
 
 export const useLogin = () => {
   const toast = useToast();
+  const setIsLoggedIn = useAuthStore((state) => state.setIsLoggedIn);
   const { sendBackgroundMessage } = useSendBackgroundMessage();
-  const { navigateTo } = useNavigationStore();
-  const { isLoggedIn } = useIsLoggedIn();
 
   const login = (data: LoginData) => sendBackgroundMessage('login', data);
 
   const loginMutation = useMutation({
     mutationFn: login,
     onSuccess: (loginRes) => {
+      setIsLoggedIn(true);
       console.log(loginRes);
       toast({
         title: 'Login Response',
@@ -25,28 +24,19 @@ export const useLogin = () => {
         duration: 3000,
         isClosable: true,
       });
-      navigateTo('navigation-entries');
     },
     onError: (error) => {
+      setIsLoggedIn(false);
       console.error(error);
       toast({
-        title: 'Error while login',
+        title: 'Invalid credentials',
+        description: 'Please check your email and password and try again.',
         status: 'error',
         duration: 3000,
         isClosable: true,
       });
     },
-    retry: false,
   });
 
-  const navigateToMainPageIfIsLogged = async () => {
-    //TODO Verify if token are expired before navigation
-    const isUserLogged = await isLoggedIn();
-
-    if (isUserLogged) {
-      navigateTo('navigation-entries');
-    }
-  };
-
-  return { loginMutation, navigateToMainPageIfIsLogged };
+  return { loginMutation };
 };
