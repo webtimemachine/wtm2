@@ -1,19 +1,21 @@
 import { BackgroundMessageHandler } from '../interfaces';
 import { apiClient } from '../api.client';
-import {
-  GetNavigationEntriesData,
-  GetNavigationEntriesResponse,
-} from '../interfaces/navigation-entry';
+import { GetNavigationEntriesResponse } from '../interfaces/navigation-entry';
 
-const getNavigationEntries = async (
-  data: GetNavigationEntriesData,
-): Promise<GetNavigationEntriesResponse> => {
+export const handleGetNavigationEntries: BackgroundMessageHandler<
+  'get-navigation-entries'
+> = async (sendResponse, payload) => {
   try {
-    const { offset, limit, query, isSemantic } = data;
+    const { offset, limit, query, isSemantic } = payload.data;
     const res = await apiClient.fetch(
       `/api/navigation-entry?offset=${offset}&limit=${limit}${query ? `&query=${query}` : ''}&isSemantic=${isSemantic}`,
       { method: 'GET' },
     );
+
+    if (res.status === 401) {
+      sendResponse({ error: 'Unnauthorized' });
+      return;
+    }
 
     if (res.status !== 200) {
       const errorJson = await res.json();
@@ -23,21 +25,9 @@ const getNavigationEntries = async (
     const getNavigationEntriesResponse: GetNavigationEntriesResponse =
       await res.json();
 
-    return getNavigationEntriesResponse;
-  } catch (error) {
-    console.error('ApiClient getNavigationEntries', error);
-    throw error;
-  }
-};
-
-export const handleGetNavigationEntries: BackgroundMessageHandler<
-  'get-navigation-entries'
-> = async (sendResponse, payload) => {
-  try {
-    const getNavigationEntriesResp = await getNavigationEntries(payload.data);
-    sendResponse(getNavigationEntriesResp);
-  } catch (error) {
+    sendResponse(getNavigationEntriesResponse);
+  } catch (error: any) {
     console.error('handleGetNavigationEntries', error);
-    sendResponse({ error: 'Error retrieving navigation entries' });
+    sendResponse({ error: error?.message || 'GET Navigation Entries Error' });
   }
 };
