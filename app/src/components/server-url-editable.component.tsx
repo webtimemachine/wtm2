@@ -65,7 +65,6 @@ export const ServerUrlEditable = () => {
         onSubmit={() => {
           try {
             const url = new URL(value).origin;
-            console.log(url);
             setServerUrl(url);
             setValue(url);
           } catch (error) {
