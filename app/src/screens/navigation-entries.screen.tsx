@@ -2,13 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { Button, Checkbox, Input, Text, IconButton } from '@chakra-ui/react';
 import { CompleteNavigationEntryDto } from '../background/interfaces/navigation-entry';
 import { useNavigationEntries } from '../hooks/use-navigation-entries.hook';
-import { useLogout } from '../hooks/use-logout.hook';
 import { SettingsIcon, SmallCloseIcon } from '@chakra-ui/icons';
 import { useNavigationStore } from '../store';
 
 export const NavigationEntriesScreen: React.FC<object> = () => {
-  // TODO Delete logout function & button
-  const { logout } = useLogout();
   const { navigateTo } = useNavigationStore();
 
   const LIMIT = 8;
@@ -31,7 +28,7 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
 
   useEffect(() => {
     navigationEntriesQuery.refetch();
-  }, [page, isSemantic]);
+  }, [page, isSemantic, navigationEntriesQuery]);
 
   return (
     <>
@@ -110,9 +107,6 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
               }}
             >
               &larr;
-            </Button>
-            <Button colorScheme='blue' onClick={logout}>
-              Logout
             </Button>
             <Button
               colorScheme='blue'
