@@ -27,15 +27,11 @@ class ApiClient {
       }
 
       return res;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       if (error?.message === 'Unauthorized') {
-        try {
-          await this.refresh();
-          console.log('ApiClient Retrying request after refresh', { endpoint });
-          return this.fetch(endpoint, init);
-        } catch (error) {
-          throw error;
-        }
+        await this.refresh();
+        return this.fetch(endpoint, init);
       } else {
         throw error;
       }
@@ -73,7 +69,6 @@ class ApiClient {
   }
 
   async refresh(): Promise<void> {
-    console.log('ApiClient Refreshing...');
     const { serverUrl, refreshToken } = await chrome.storage.local.get([
       'serverUrl',
       'refreshToken',

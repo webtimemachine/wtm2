@@ -23,11 +23,16 @@ export const handleUpdated = async (
     ) {
       let htmlContent = '';
 
-      const results = await chrome.scripting.executeScript({
-        target: { tabId: tabId },
-        func: DOMtoString,
-        args: ['body'],
-      });
+      let results;
+      try {
+        results = await chrome.scripting.executeScript({
+          target: { tabId: tabId },
+          func: DOMtoString,
+          args: ['body'],
+        });
+      } catch (error) {
+        return;
+      }
 
       if (results.length) {
         htmlContent = results?.[0]?.result || '';
@@ -44,15 +49,10 @@ export const handleUpdated = async (
         ),
       };
 
-      console.log('handleUpdated', { navigationEntry });
-
-      const res = await apiClient.fetch('/api/navigation-entry', {
+      await apiClient.fetch('/api/navigation-entry', {
         method: 'POST',
         body: JSON.stringify(navigationEntry),
       });
-
-      const jsonRes = await res.json();
-      console.log('handleUpdated', { res, jsonRes });
     }
   }
 };
