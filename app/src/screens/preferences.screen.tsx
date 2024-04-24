@@ -3,7 +3,7 @@ import { Text, IconButton, Switch, Input, Button } from '@chakra-ui/react';
 import { ArrowBackIcon } from '@chakra-ui/icons';
 import { useNavigationStore } from '../store';
 
-export const PreferenciesScreen: React.FC<object> = () => {
+export const PreferencesScreen: React.FC<object> = () => {
   const [enabled, setEnabled] = useState(false);
   const [days, setDays] = useState<number | null>(null);
   const { navigateBack } = useNavigationStore();
@@ -23,7 +23,7 @@ export const PreferenciesScreen: React.FC<object> = () => {
           </IconButton>
           <div className='flex w-full justify-center pr-[40px]'>
             <Text fontSize={'xx-large'} fontWeight={'bold'}>
-              Preferencies
+              Preferences
             </Text>
           </div>
         </div>

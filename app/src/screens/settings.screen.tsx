@@ -24,9 +24,9 @@ export const SettingsScreen: React.FC<object> = () => {
         <div className='flex flex-col w-full min-h-[400px]'>
           <div
             className='flex w-full py-2 cursor-pointer border-b border-solid border-[#333]'
-            onClick={() => navigateTo('preferencies')}
+            onClick={() => navigateTo('preferences')}
           >
-            <Text fontSize={'medium'}>Preferencies</Text>
+            <Text fontSize={'medium'}>Preferences</Text>
           </div>
           <div className='flex w-full py-2 cursor-pointer border-b border-solid border-[#333]'>
             <Text fontSize={'medium'}>Active Sessions</Text>
