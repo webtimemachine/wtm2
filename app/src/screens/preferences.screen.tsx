@@ -3,12 +3,17 @@ import { Text, IconButton, Switch, Input, Button } from '@chakra-ui/react';
 import { ArrowBackIcon } from '@chakra-ui/icons';
 import { useNavigationStore } from '../store';
 import { useGetPreferences } from '../hooks/use-get-preferences.hook';
+import { useUpdatePreferences } from '../hooks/use-update-preferences.hook';
 
 export const PreferencesScreen: React.FC<object> = () => {
   const [enabled, setEnabled] = useState(false);
   const [days, setDays] = useState<number | null>(null);
   const { navigateBack } = useNavigationStore();
   const { userPreferencesQuery } = useGetPreferences();
+  const { updatePreferencesQuery } = useUpdatePreferences({
+    enableNavigationEntryExpiration: enabled,
+    navigationEntryExpirationInDays: days || 0,
+  });
 
   useEffect(() => {
     if (!enabled) {
@@ -22,6 +27,10 @@ export const PreferencesScreen: React.FC<object> = () => {
       setDays(userPreferencesQuery.data?.navigationEntryExpirationInDays);
     }
   }, [userPreferencesQuery.data]);
+
+  const handleSavePreferences = async () => {
+    updatePreferencesQuery.mutate();
+  };
 
   return (
     <>
@@ -61,7 +70,11 @@ export const PreferencesScreen: React.FC<object> = () => {
           </div>
         </div>
         <div className='pb-8'>
-          <Button colorScheme='blue' isDisabled={enabled && !days}>
+          <Button
+            colorScheme='blue'
+            isDisabled={enabled && !days}
+            onClick={handleSavePreferences}
+          >
             Save
           </Button>
         </div>
