@@ -4,10 +4,12 @@ import { CompleteNavigationEntryDto } from '../background/interfaces/navigation-
 import { useNavigationEntries } from '../hooks/use-navigation-entries.hook';
 import { useLogout } from '../hooks/use-logout.hook';
 import { SettingsIcon, SmallCloseIcon } from '@chakra-ui/icons';
+import { useNavigationStore } from '../store';
 
 export const NavigationEntriesScreen: React.FC<object> = () => {
   // TODO Delete logout function & button
   const { logout } = useLogout();
+  const { navigateTo } = useNavigationStore();
 
   const LIMIT = 8;
   const [page, setPage] = useState<number>(0);
@@ -36,7 +38,7 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
       <div className='flex flex-col px-5 py-3 bg-slate-100 min-h-screen items-center w-full'>
         <div className='flex w-full justify-end'>
           <IconButton aria-label='Settings icon'>
-            <SettingsIcon boxSize={5} />
+            <SettingsIcon boxSize={5} onClick={() => navigateTo('settings')} />
           </IconButton>
         </div>
         <div className='pb-4'>
