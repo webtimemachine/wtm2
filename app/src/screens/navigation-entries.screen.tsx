@@ -35,10 +35,7 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
     <>
       <div className='flex flex-col px-5 py-3 bg-slate-100 min-h-screen items-center w-full'>
         <div className='flex w-full justify-end'>
-          <IconButton
-            aria-label='Settings icon'
-            onClick={() => console.log('hola')}
-          >
+          <IconButton aria-label='Settings icon'>
             <SettingsIcon boxSize={5} />
           </IconButton>
         </div>
