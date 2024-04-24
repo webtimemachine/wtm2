@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, IconButton } from '@chakra-ui/react';
-import { SmallCloseIcon } from '@chakra-ui/icons';
+import { ArrowBackIcon } from '@chakra-ui/icons';
 import { useNavigationStore } from '../store';
 import { useLogout } from '../hooks/use-logout.hook';
 
@@ -11,15 +11,15 @@ export const SettingsScreen: React.FC<object> = () => {
   return (
     <>
       <div className='flex flex-col px-5 py-3 bg-slate-100 min-h-screen items-center w-full'>
-        <div className='flex w-full justify-end'>
+        <div className='flex w-full justify-start pb-4 gap-4 items-center'>
           <IconButton aria-label='Settings icon'>
-            <SmallCloseIcon boxSize={5} onClick={() => navigateBack()} />
+            <ArrowBackIcon boxSize={5} onClick={() => navigateBack()} />
           </IconButton>
-        </div>
-        <div className='pb-4'>
-          <Text fontSize={'xx-large'} fontWeight={'bold'}>
-            Settings
-          </Text>
+          <div className='flex w-full justify-center pr-[40px]'>
+            <Text fontSize={'xx-large'} fontWeight={'bold'}>
+              Settings
+            </Text>
+          </div>
         </div>
         <div className='flex flex-col w-full min-h-[400px]'>
           <div
