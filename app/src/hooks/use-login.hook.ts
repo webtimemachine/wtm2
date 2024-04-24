@@ -16,7 +16,6 @@ export const useLogin = () => {
     mutationFn: login,
     onSuccess: (loginRes) => {
       setIsLoggedIn(true);
-      console.log(loginRes);
       toast({
         title: 'Login Response',
         description: `Welcome: ${loginRes.user.email}`,
