@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, IconButton } from '@chakra-ui/react';
-import { CloseIcon } from '@chakra-ui/icons';
+import { SmallCloseIcon } from '@chakra-ui/icons';
 import { useNavigationStore } from '../store';
 import { useLogout } from '../hooks/use-logout.hook';
 
@@ -13,7 +13,7 @@ export const SettingsScreen: React.FC<object> = () => {
       <div className='flex flex-col px-5 py-3 bg-slate-100 min-h-screen items-center w-full'>
         <div className='flex w-full justify-end'>
           <IconButton aria-label='Settings icon'>
-            <CloseIcon boxSize={5} onClick={() => navigateBack()} />
+            <SmallCloseIcon boxSize={5} onClick={() => navigateBack()} />
           </IconButton>
         </div>
         <div className='pb-4'>
@@ -21,9 +21,17 @@ export const SettingsScreen: React.FC<object> = () => {
             Settings
           </Text>
         </div>
-        <div className='flex flex-col w-full min-h-[400px] justify-between'>
+        <div className='flex flex-col w-full min-h-[400px]'>
           <div className='flex w-full py-2 cursor-pointer border-b border-solid border-[#333]'>
             <Text fontSize={'medium'}>Preferencies</Text>
+          </div>
+          <div className='flex w-full py-2 cursor-pointer border-b border-solid border-[#333]'>
+            <Text fontSize={'medium'}>Active Sessions</Text>
+          </div>
+          <div className='flex w-full py-2 cursor-pointer border-b border-solid border-[#333]'>
+            <Text fontSize={'medium'} color={'red'}>
+              Delete account
+            </Text>
           </div>
         </div>
         <div
