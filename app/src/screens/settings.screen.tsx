@@ -5,7 +5,7 @@ import { useNavigationStore } from '../store';
 import { useLogout } from '../hooks/use-logout.hook';
 
 export const SettingsScreen: React.FC<object> = () => {
-  const { navigateBack } = useNavigationStore();
+  const { navigateBack, navigateTo } = useNavigationStore();
   const { logout } = useLogout();
 
   return (
@@ -22,7 +22,10 @@ export const SettingsScreen: React.FC<object> = () => {
           </Text>
         </div>
         <div className='flex flex-col w-full min-h-[400px]'>
-          <div className='flex w-full py-2 cursor-pointer border-b border-solid border-[#333]'>
+          <div
+            className='flex w-full py-2 cursor-pointer border-b border-solid border-[#333]'
+            onClick={() => navigateTo('preferencies')}
+          >
             <Text fontSize={'medium'}>Preferencies</Text>
           </div>
           <div className='flex w-full py-2 cursor-pointer border-b border-solid border-[#333]'>
