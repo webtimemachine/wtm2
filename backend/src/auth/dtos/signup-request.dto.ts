@@ -4,7 +4,7 @@ import { IsEmail, IsNotEmpty, Matches } from 'class-validator';
 
 export class SignUpRequestDto {
   static validationErrorMessage =
-    'Password must contain at least one digit, one lowercase letter, one uppercase letter, and be between 8 and 20 characters in length.';
+    'Password must be between 8 and 20 characters long and contain at least one uppercase letter, one lowercase letter, and one digit. Spaces are not allowed.';
 
   @ApiProperty()
   @IsNotEmpty()
