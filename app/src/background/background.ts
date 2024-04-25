@@ -8,6 +8,7 @@ import {
 import { handleCloseActiveSession } from './handlers/handleCloseActiveSession';
 import { handleGetActiveSessions } from './handlers/handleGetActiveSessions';
 import { handleGetPreferences } from './handlers/handleGetPreferences';
+import { handleUpdateDeviceAlias } from './handlers/handleUpdateDeviceAlias';
 import { handleUpdatePreferences } from './handlers/handleUpdatePreferences';
 import { BackgroundMessageType } from './interfaces';
 
@@ -42,6 +43,9 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
       return true;
     case 'close-active-session':
       handleCloseActiveSession(sendResponse, request?.payload);
+      return true;
+    case 'update-device-alias':
+      handleUpdateDeviceAlias(sendResponse, request?.payload);
       return true;
     default:
       return false;
