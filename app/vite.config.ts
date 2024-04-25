@@ -17,11 +17,16 @@ export default defineConfig({
   build: {
     outDir: browser,
     rollupOptions: {
+      input: {
+        background: 'src/background/background.ts',
+        popup: 'index.html',
+      },
       output: {
-        assetFileNames: 'assets/[name][extname]',
-        entryFileNames: 'assets/[name].js',
-        chunkFileNames: 'assets/[name].js',
+        entryFileNames: '[name].js',
+        chunkFileNames: 'chunks/[name]-[hash].js',
+        assetFileNames: '[name][extname]',
       },
     },
+    chunkSizeWarningLimit: 1000,
   },
 });
