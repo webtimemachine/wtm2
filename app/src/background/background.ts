@@ -5,6 +5,7 @@ import {
   handleUpdated,
   handleGetNavigationEntries,
 } from './handlers';
+import { handleCloseActiveSession } from './handlers/handleCloseActiveSession';
 import { handleGetActiveSessions } from './handlers/handleGetActiveSessions';
 import { handleGetPreferences } from './handlers/handleGetPreferences';
 import { handleUpdatePreferences } from './handlers/handleUpdatePreferences';
@@ -38,6 +39,9 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
       return true;
     case 'get-active-sessions':
       handleGetActiveSessions(sendResponse, request?.payload);
+      return true;
+    case 'close-active-session':
+      handleCloseActiveSession(sendResponse, request?.payload);
       return true;
     default:
       return false;
