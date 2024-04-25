@@ -11,6 +11,7 @@ import { useNavigationStore } from '../store';
 import { useGetActiveSessions } from '../hooks/use-get-active-sessions.hook';
 import { ActiveSessionsResponse } from '../background/interfaces/active-sessons.interface';
 import { useCloseActiveSession } from '../hooks/use-close-active-session.hook';
+import { useUpdateDeviceAlias } from '../hooks/use-update-device-alias.hook';
 
 export const ActiveSessionsScreen: React.FC<object> = () => {
   const [editingSession, setEditingSession] =
@@ -19,12 +20,21 @@ export const ActiveSessionsScreen: React.FC<object> = () => {
   const { navigateBack } = useNavigationStore();
   const { getActiveSessionsQuery } = useGetActiveSessions();
   const { closeActiveSession } = useCloseActiveSession();
+  const { updateDeviceAlias } = useUpdateDeviceAlias();
 
   useEffect(() => {
     if (closeActiveSession.isSuccess) {
       getActiveSessionsQuery.refetch();
     }
   }, [closeActiveSession.isSuccess, getActiveSessionsQuery]);
+
+  useEffect(() => {
+    if (updateDeviceAlias.isSuccess && editingSession) {
+      setEditingSession(undefined);
+      getActiveSessionsQuery.refetch();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [updateDeviceAlias.isSuccess]);
 
   return (
     <>
@@ -55,7 +65,7 @@ export const ActiveSessionsScreen: React.FC<object> = () => {
                 }
                 return (
                   <div
-                    className='flex w-full justify-between items-center bg-white px-2 py-1 rounded'
+                    className='flex w-full justify-between items-center bg-white px-2 py-1 rounded-lg'
                     key={session.id}
                   >
                     {!editingSession || editingSession.id !== session.id ? (
@@ -69,7 +79,11 @@ export const ActiveSessionsScreen: React.FC<object> = () => {
                             className='cursor-pointer'
                             onClick={() => {
                               setEditingSession(session);
-                              setEditingSessionName(name);
+                              setEditingSessionName(
+                                session.userDevice.isCurrentDevice
+                                  ? name.split(' (current)')[0]
+                                  : name,
+                              );
                             }}
                           >
                             <EditIcon boxSize={4} />
@@ -102,6 +116,14 @@ export const ActiveSessionsScreen: React.FC<object> = () => {
                           <IconButton
                             aria-label='Delete icon'
                             className='cursor-pointer'
+                            onClick={() => {
+                              if (editingSessionName) {
+                                updateDeviceAlias.mutate({
+                                  id: editingSession.userDeviceId,
+                                  deviceAlias: editingSessionName,
+                                });
+                              }
+                            }}
                           >
                             <CheckIcon boxSize={4} />
                           </IconButton>

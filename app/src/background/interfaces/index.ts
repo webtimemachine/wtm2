@@ -12,6 +12,10 @@ import {
 import { ActiveSessionsResponse } from './active-sessons.interface';
 import { CloseActiveSessionsData } from './close-active-session';
 import { BasicResponse } from './basic-response';
+import {
+  UpdateDeviceAliasData,
+  UserDeviceResponse,
+} from './user-device.interface';
 
 export type BackgroundMessageType =
   | 'say-hello'
@@ -21,7 +25,8 @@ export type BackgroundMessageType =
   | 'update-preferences'
   | 'get-user-preferences'
   | 'get-active-sessions'
-  | 'close-active-session';
+  | 'close-active-session'
+  | 'update-device-alias';
 
 export type BackgroundMessageDataMap = {
   'say-hello': SayHelloData;
@@ -32,6 +37,7 @@ export type BackgroundMessageDataMap = {
   'get-user-preferences': undefined;
   'get-active-sessions': undefined;
   'close-active-session': CloseActiveSessionsData;
+  'update-device-alias': UpdateDeviceAliasData;
 };
 export type BackgroundMessageResponseMap = {
   'say-hello': SayHelloResponse;
@@ -42,6 +48,7 @@ export type BackgroundMessageResponseMap = {
   'get-user-preferences': PreferenciesResponse;
   'get-active-sessions': ActiveSessionsResponse[];
   'close-active-session': BasicResponse;
+  'update-device-alias': UserDeviceResponse;
 };
 
 export interface BackgroundMessagePayload<T extends BackgroundMessageType> {
