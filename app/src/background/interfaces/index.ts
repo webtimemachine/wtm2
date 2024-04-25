@@ -1,11 +1,18 @@
 import { SayHelloData, SayHelloResponse } from './say-hello.interface';
 import { GetVersionResponse } from './get-version.interface';
-import { LoginData, LoginResponse } from './login.interface';
+import {
+  LoginData,
+  LoginResponse,
+  VerifyEmailResponse,
+} from './login.interface';
 import {
   GetNavigationEntriesData,
   GetNavigationEntriesResponse,
-} from './navigation-entry';
+} from './navigation-entry.interface';
 import { UpdatePreferenciesData, PreferenciesResponse } from './preferences';
+import { SignUpData, SignUpResponse } from './sign-up.interface';
+import { ResendCodeResponse } from './resend-code-interface';
+import { VerifyCodeData } from './verify-code-interface';
 
 export type BackgroundMessageType =
   | 'say-hello'
@@ -13,7 +20,10 @@ export type BackgroundMessageType =
   | 'login'
   | 'get-navigation-entries'
   | 'update-preferences'
-  | 'get-user-preferences';
+  | 'get-user-preferences'
+  | 'sign-up'
+  | 'resend-code'
+  | 'verify-code';
 
 export type BackgroundMessageDataMap = {
   'say-hello': SayHelloData;
@@ -22,14 +32,20 @@ export type BackgroundMessageDataMap = {
   'get-navigation-entries': GetNavigationEntriesData;
   'update-preferences': UpdatePreferenciesData;
   'get-user-preferences': undefined;
+  'sign-up': SignUpData;
+  'resend-code': undefined;
+  'verify-code': VerifyCodeData;
 };
 export type BackgroundMessageResponseMap = {
   'say-hello': SayHelloResponse;
   'get-version': GetVersionResponse;
-  login: LoginResponse;
+  login: LoginResponse | VerifyEmailResponse;
   'get-navigation-entries': GetNavigationEntriesResponse;
   'update-preferences': PreferenciesResponse;
   'get-user-preferences': PreferenciesResponse;
+  'sign-up': SignUpResponse;
+  'resend-code': ResendCodeResponse;
+  'verify-code': LoginResponse;
 };
 
 export interface BackgroundMessagePayload<T extends BackgroundMessageType> {

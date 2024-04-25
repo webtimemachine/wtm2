@@ -2,12 +2,18 @@ import { useToast } from '@chakra-ui/react';
 import { useMutation } from '@tanstack/react-query';
 
 import { useSendBackgroundMessage } from './use-send-message.hook';
-import { LoginData } from '../background/interfaces/login.interface';
 import { useAuthStore } from '../store';
+
+import {
+  LoginData,
+  isLoginRes,
+} from '../background/interfaces/login.interface';
 
 export const useLogin = () => {
   const toast = useToast();
-  const setIsLoggedIn = useAuthStore((state) => state.setIsLoggedIn);
+  const { setIsLoggedIn, setEmail, setIsValidatingEmail } = useAuthStore(
+    (state) => state,
+  );
   const { sendBackgroundMessage } = useSendBackgroundMessage();
 
   const login = (data: LoginData) => sendBackgroundMessage('login', data);
@@ -15,17 +21,27 @@ export const useLogin = () => {
   const loginMutation = useMutation({
     mutationFn: login,
     onSuccess: (loginRes) => {
-      setIsLoggedIn(true);
-      toast({
-        title: 'Login Response',
-        description: `Welcome: ${loginRes.user.email}`,
-        status: 'success',
-        duration: 3000,
-        isClosable: true,
-      });
+      if (isLoginRes(loginRes)) {
+        setIsLoggedIn(true);
+        setIsValidatingEmail(false);
+        setEmail(loginRes.user.email);
+        toast({
+          title: 'Welcome back!',
+          description: `Welcome ${loginRes.user.email}`,
+          status: 'success',
+          duration: 3000,
+          isClosable: true,
+        });
+      } else {
+        setIsLoggedIn(false);
+        setIsValidatingEmail(true);
+        setEmail(loginRes.email);
+      }
     },
     onError: (error) => {
       setIsLoggedIn(false);
+      setIsValidatingEmail(false);
+      setEmail('');
       console.error(error);
       toast({
         title: 'Invalid credentials',
