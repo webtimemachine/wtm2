@@ -12,8 +12,8 @@ export const SettingsScreen: React.FC<object> = () => {
     <>
       <div className='flex flex-col px-5 py-3 bg-slate-100 min-h-screen items-center w-full'>
         <div className='flex w-full justify-start pb-4 gap-4 items-center'>
-          <IconButton aria-label='Settings icon'>
-            <ArrowBackIcon boxSize={5} onClick={() => navigateBack()} />
+          <IconButton aria-label='Settings icon' onClick={() => navigateBack()}>
+            <ArrowBackIcon boxSize={5} />
           </IconButton>
           <div className='flex w-full justify-center pr-[40px]'>
             <Text fontSize={'xx-large'} fontWeight={'bold'}>
