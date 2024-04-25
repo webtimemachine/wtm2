@@ -7,12 +7,19 @@ class ApiClient {
       'accessToken',
     ]);
 
+    init = {
+      ...init,
+      headers: {
+        'Content-Type': 'application/json',
+        ...init?.headers,
+      },
+    };
+
     try {
       if (accessToken) {
         init = {
           ...init,
           headers: {
-            'Content-Type': 'application/json',
             ...init?.headers,
             Authorization: `Bearer ${accessToken}`,
           },

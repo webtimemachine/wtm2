@@ -100,7 +100,7 @@ export const LoginScreen: React.FC<{}> = () => {
           </div>
         </FormControl>
 
-        <div className='pb-4 flex flex-col w-full'>
+        <div className='flex flex-col w-full pb-4'>
           <InputGroup size='md'>
             <Input
               pr='4.5rem'
@@ -124,10 +124,19 @@ export const LoginScreen: React.FC<{}> = () => {
         </div>
 
         <div className='flex flex-row w-full justify-between pb-4'>
-          <Text fontSize={'small'} className='cursor-pointer'>
+          <Text
+            fontSize={'small'}
+            className='hover:cursor-pointer hover:underline'
+          >
             Recovery password
           </Text>
-          <Text fontSize={'small'} className='cursor-pointer'>
+          <Text
+            fontSize={'small'}
+            className='hover:cursor-pointer hover:underline'
+            onClick={() => {
+              navigateTo('sign-up');
+            }}
+          >
             Sign up
           </Text>
         </div>
