@@ -5,6 +5,7 @@ import {
   SettingsScreen,
   PreferencesScreen,
   SignUpScreen,
+  ValidateEmailScreen,
 } from '../screens';
 
 import { last } from '../utils';
@@ -15,7 +16,8 @@ export type ScreenName =
   | 'navigation-entries'
   | 'settings'
   | 'preferences'
-  | 'sign-up';
+  | 'sign-up'
+  | 'validate-email';
 
 interface NavigationStore {
   CurrentScreen: () => JSX.Element;
@@ -36,19 +38,33 @@ const mapScreenName = (screenName: ScreenName): JSX.Element => {
       return <PreferencesScreen />;
     case 'sign-up':
       return <SignUpScreen />;
+    case 'validate-email':
+      return <ValidateEmailScreen />;
   }
   return <></>;
 };
 
 let initialScreen: ScreenName = 'login';
+let initialNavigation: ScreenName[] = [];
 const authVanillaStoreData = localStorage.getItem('auth-vanilla-store');
-if (authVanillaStoreData && JSON.parse(authVanillaStoreData)?.isLoggedIn) {
+if (
+  authVanillaStoreData &&
+  JSON.parse(authVanillaStoreData)?.state?.isLoggedIn
+) {
   initialScreen = 'navigation-entries';
 }
+if (
+  authVanillaStoreData &&
+  JSON.parse(authVanillaStoreData)?.state?.isValidatingEmail
+) {
+  initialScreen = 'validate-email';
+  initialNavigation.push('login');
+}
+initialNavigation.push(initialScreen);
 
 export const useNavigationStore = create<NavigationStore>()((set) => ({
   CurrentScreen: () => mapScreenName(initialScreen),
-  navigation: [initialScreen],
+  navigation: initialNavigation,
   navigateTo: (screenName: ScreenName) =>
     set((state) => ({
       navigation: [...state.navigation, screenName],

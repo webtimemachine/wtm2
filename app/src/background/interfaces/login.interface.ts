@@ -17,9 +17,19 @@ export interface LoginResponse {
   };
 }
 
+export interface VerifyEmailResponse {
+  id: number;
+  email: string;
+  partialToken: string;
+}
+
 export interface LoginData {
   email: string;
   password: string;
   deviceKey: string;
   userAgent: string;
 }
+
+export const isLoginRes = (
+  loginRes: LoginResponse | VerifyEmailResponse,
+): loginRes is LoginResponse => (loginRes as any)?.accessToken;

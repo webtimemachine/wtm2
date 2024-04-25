@@ -9,13 +9,16 @@ import {
   FormErrorMessage,
   Tooltip,
   useDisclosure,
+  IconButton,
 } from '@chakra-ui/react';
+import { ArrowBackIcon, InfoIcon } from '@chakra-ui/icons';
+
 import { ServerUrlEditable } from '../components';
 import { useSignUp } from '../hooks';
 
-import clsx from 'clsx';
 import { useNavigationStore } from '../store';
-import { InfoIcon } from '@chakra-ui/icons';
+
+import clsx from 'clsx';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[^\s]{8,20}$/;
@@ -94,12 +97,18 @@ export const SignUpScreen: React.FC<{}> = () => {
 
   return (
     <>
-      <div className='flex flex-col p-8 pt-5 bg-slate-100 min-h-screen justify-center items-center w-full'>
-        <div className='pb-12'>
-          <Text fontSize={'xx-large'} fontWeight={'bold'}>
-            Sign Up
-          </Text>
+      <div className='flex flex-col p-8 pt-10 bg-slate-100 min-h-screen items-center w-full'>
+        <div className='flex w-full justify-start pb-4 gap-4 items-center'>
+          <IconButton aria-label='Back icon'>
+            <ArrowBackIcon boxSize={5} onClick={() => navigateBack()} />
+          </IconButton>
+          <div className='flex w-full justify-center pr-[40px]'>
+            <Text fontSize={'xx-large'} fontWeight={'bold'}>
+              Sign Up
+            </Text>
+          </div>
         </div>
+
         <div className='pb-4 flex w-full'>
           <ServerUrlEditable />
         </div>
@@ -203,16 +212,6 @@ export const SignUpScreen: React.FC<{}> = () => {
           </div>
         </FormControl>
 
-        <div className='flex flex-row gap-2 w-full pb-4'>
-          <Text fontSize={'small'}>Already have an account?</Text>
-          <Text
-            fontSize={'small'}
-            className='hover:cursor-pointer hover:underline'
-            onClick={() => navigateBack()}
-          >
-            Login
-          </Text>
-        </div>
         <div className='flex gap-4'>
           <Button
             colorScheme='blue'
