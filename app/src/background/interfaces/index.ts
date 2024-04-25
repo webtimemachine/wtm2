@@ -12,6 +12,7 @@ import {
 import { UpdatePreferenciesData, PreferenciesResponse } from './preferences';
 import { SignUpData, SignUpResponse } from './sign-up.interface';
 import { ResendCodeResponse } from './resend-code-interface';
+import { VerifyCodeData } from './verify-code-interface';
 
 export type BackgroundMessageType =
   | 'say-hello'
@@ -21,7 +22,8 @@ export type BackgroundMessageType =
   | 'update-preferences'
   | 'get-user-preferences'
   | 'sign-up'
-  | 'resend-code';
+  | 'resend-code'
+  | 'verify-code';
 
 export type BackgroundMessageDataMap = {
   'say-hello': SayHelloData;
@@ -32,6 +34,7 @@ export type BackgroundMessageDataMap = {
   'get-user-preferences': undefined;
   'sign-up': SignUpData;
   'resend-code': undefined;
+  'verify-code': VerifyCodeData;
 };
 export type BackgroundMessageResponseMap = {
   'say-hello': SayHelloResponse;
@@ -42,6 +45,7 @@ export type BackgroundMessageResponseMap = {
   'get-user-preferences': PreferenciesResponse;
   'sign-up': SignUpResponse;
   'resend-code': ResendCodeResponse;
+  'verify-code': LoginResponse;
 };
 
 export interface BackgroundMessagePayload<T extends BackgroundMessageType> {

@@ -21,11 +21,11 @@ export const handleResendCode: BackgroundMessageHandler<'resend-code'> = async (
     });
 
     if (res.status === 200) {
-      const signUpResponse: ResendCodeResponse = await res.json();
-      sendResponse(signUpResponse);
+      const resendCodeResponse: ResendCodeResponse = await res.json();
+      sendResponse(resendCodeResponse);
     } else {
-      const signUpErrorResponse: ResendCodeErrorResponse = await res.json();
-      throw new Error(signUpErrorResponse?.message?.toString());
+      const resendCodeErrorResponse: ResendCodeErrorResponse = await res.json();
+      throw new Error(resendCodeErrorResponse?.message?.toString());
     }
   } catch (error) {
     console.error('handleResendCode', error);
