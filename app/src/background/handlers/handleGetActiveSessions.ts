@@ -20,7 +20,7 @@ export const handleGetActiveSessions: BackgroundMessageHandler<
       throw new Error(errorJson?.message || 'GET Active Session Error');
     }
 
-    const getActSessionsResponse: ActiveSessionsResponse =
+    const getActSessionsResponse: ActiveSessionsResponse[] =
       await actSessionsResponse.json();
 
     sendResponse(getActSessionsResponse);

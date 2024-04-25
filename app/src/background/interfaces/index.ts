@@ -36,7 +36,7 @@ export type BackgroundMessageResponseMap = {
   'get-navigation-entries': GetNavigationEntriesResponse;
   'update-preferences': PreferenciesResponse;
   'get-user-preferences': PreferenciesResponse;
-  'get-active-sessions': ActiveSessionsResponse;
+  'get-active-sessions': ActiveSessionsResponse[];
 };
 
 export interface BackgroundMessagePayload<T extends BackgroundMessageType> {
