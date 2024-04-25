@@ -2,10 +2,7 @@ import { useAuthStore, useNavigationStore } from '../store';
 
 export const useLogout = () => {
   const { navigateTo } = useNavigationStore();
-  const setIsLoggedIn = useAuthStore((state) => state.setIsLoggedIn);
-  const setIsValidatingEmail = useAuthStore(
-    (state) => state.setIsValidatingEmail,
-  );
+  const storeLogout = useAuthStore((state) => state.logout);
 
   const logout = async () => {
     await chrome.storage.local.set({
@@ -13,8 +10,7 @@ export const useLogout = () => {
       refreshToken: '',
       partialToken: '',
     });
-    setIsLoggedIn(false);
-    setIsValidatingEmail(false);
+    storeLogout();
     navigateTo('login');
   };
 

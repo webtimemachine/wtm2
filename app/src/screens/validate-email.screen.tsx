@@ -1,29 +1,19 @@
 import React, { useState } from 'react';
 import { Button, IconButton, Input, Text } from '@chakra-ui/react';
-import { ServerUrlEditable } from '../components';
-// import { useSignUp } from '../hooks';
+import { ArrowBackIcon, RepeatIcon } from '@chakra-ui/icons';
 
-import clsx from 'clsx';
-import { ArrowBackIcon } from '@chakra-ui/icons';
 import { useAuthStore, useNavigationStore } from '../store';
+import { ServerUrlEditable } from '../components';
+import { useResendCode } from '../hooks';
 
 export const ValidateEmailScreen: React.FC<{}> = () => {
-  // const { signUpMutation } = useSignUp();
+  const { resendCodeMutation } = useResendCode();
   const { navigateBack } = useNavigationStore();
   const setIsValidatingEmail = useAuthStore(
     (state) => state.setIsValidatingEmail,
   );
 
   const [verificationCode, serVerificationCode] = useState('');
-
-  const handleValidate = () => {
-    // signUpMutation.mutate({
-    //   email,
-    //   password,
-    // });
-
-    console.log('handleValidate');
-  };
 
   return (
     <>
@@ -49,7 +39,7 @@ export const ValidateEmailScreen: React.FC<{}> = () => {
           <ServerUrlEditable />
         </div>
 
-        <div className={clsx(['flex flex-col w-full pb-4'])}>
+        <div className='flex flex-col w-full pb-2'>
           <Input
             type='text'
             name='verification-code'
@@ -63,22 +53,21 @@ export const ValidateEmailScreen: React.FC<{}> = () => {
         </div>
 
         <div className='flex flex-row gap-2 w-full pb-4'>
-          <Text fontSize={'small'}>Didn't found the verification code?</Text>
-          <Text
-            fontSize={'small'}
-            className='hover:cursor-pointer hover:underline'
-            onClick={() => console.log('AAAAA')}
-          >
-            Resend Code
-          </Text>
-        </div>
-        <div className='flex gap-4'>
           <Button
+            leftIcon={<RepeatIcon />}
             colorScheme='blue'
-            onClick={() => handleValidate()}
-            isDisabled={!verificationCode}
-            // isLoading={signUpMutation.isPending}
+            variant='gray'
+            size='sm'
+            onClick={() => resendCodeMutation.mutate()}
+            isLoading={resendCodeMutation.isPending}
+            loadingText='Sending email...'
           >
+            Resend Email
+          </Button>
+        </div>
+
+        <div className='flex gap-4'>
+          <Button colorScheme='blue' isDisabled={!verificationCode}>
             Validate
           </Button>
         </div>

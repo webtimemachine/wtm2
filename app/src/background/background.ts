@@ -7,6 +7,7 @@ import {
   handleGetPreferences,
   handleUpdatePreferences,
   handleSignUp,
+  handleResendCode,
 } from './handlers';
 
 import { BackgroundMessageType } from './interfaces';
@@ -45,6 +46,10 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
 
     case 'sign-up':
       handleSignUp(sendResponse, request?.payload);
+      return true;
+
+    case 'resend-code':
+      handleResendCode(sendResponse, request);
       return true;
 
     default:

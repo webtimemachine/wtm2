@@ -1,7 +1,29 @@
-import { LoginData, LoginResponse } from './interfaces/login.interface';
+import {
+  LoginData,
+  LoginResponse,
+  VerifyEmailResponse,
+  isLoginRes,
+} from './interfaces/login.interface';
 
 class ApiClient {
   async fetch(endpoint: string, init: RequestInit = {}): Promise<Response> {
+    const { serverUrl } = await chrome.storage.local.get(['serverUrl']);
+    init = {
+      ...init,
+      headers: {
+        'Content-Type': 'application/json',
+        ...init?.headers,
+      },
+    };
+
+    const res = await fetch(new URL(endpoint, serverUrl), init);
+    return res;
+  }
+
+  async securedFetch(
+    endpoint: string,
+    init: RequestInit = {},
+  ): Promise<Response> {
     const { serverUrl, accessToken } = await chrome.storage.local.get([
       'serverUrl',
       'accessToken',
@@ -37,15 +59,20 @@ class ApiClient {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       if (error?.message === 'Unauthorized') {
-        await this.refresh();
-        return this.fetch(endpoint, init);
+        try {
+          await this.refresh();
+          console.log('ApiClient Retrying request after refresh', { endpoint });
+          return this.securedFetch(endpoint, init);
+        } catch (error) {
+          throw error;
+        }
       } else {
         throw error;
       }
     }
   }
 
-  async login(data: LoginData): Promise<LoginResponse> {
+  async login(data: LoginData): Promise<LoginResponse | VerifyEmailResponse> {
     const { serverUrl } = await chrome.storage.local.get(['serverUrl']);
     try {
       const res = await fetch(new URL('/api/auth/login', serverUrl), {
@@ -61,12 +88,20 @@ class ApiClient {
         throw new Error(errorJson?.message || 'Login Error');
       }
 
-      const loginResponse: LoginResponse = await res.json();
-      const { accessToken, refreshToken } = loginResponse;
-      await chrome.storage.local.set({
-        accessToken,
-        refreshToken,
-      });
+      const loginResponse: LoginResponse | VerifyEmailResponse =
+        await res.json();
+      if (isLoginRes(loginResponse)) {
+        const { accessToken, refreshToken } = loginResponse;
+        await chrome.storage.local.set({
+          accessToken,
+          refreshToken,
+        });
+      } else {
+        const { partialToken } = loginResponse;
+        await chrome.storage.local.set({
+          partialToken,
+        });
+      }
 
       return loginResponse;
     } catch (error) {
