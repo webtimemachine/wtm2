@@ -9,6 +9,7 @@ export const useSignUp = () => {
   const toast = useToast();
   const { sendBackgroundMessage } = useSendBackgroundMessage();
   const navigateTo = useNavigationStore((state) => state.navigateTo);
+  const setEmail = useAuthStore((state) => state.setEmail);
   const setIsValidatingEmail = useAuthStore(
     (state) => state.setIsValidatingEmail,
   );
@@ -20,11 +21,13 @@ export const useSignUp = () => {
     onSuccess: (res) => {
       if (res.partialToken) {
         setIsValidatingEmail(true);
+        setEmail(res.email);
         navigateTo('validate-email');
       }
     },
     onError: (error) => {
       console.error(error);
+      setEmail('');
       toast({
         title:
           error.message === 'Conflict'

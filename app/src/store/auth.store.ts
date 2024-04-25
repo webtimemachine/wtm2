@@ -4,6 +4,8 @@ import { persist } from 'zustand/middleware';
 import { getRandomToken } from '../utils';
 
 interface AuthStore {
+  email: string;
+  setEmail: (email: string) => void;
   deviceKey: string;
   serverUrl: string;
   setServerUrl: (serverUrl: string) => void;
@@ -11,11 +13,14 @@ interface AuthStore {
   setIsLoggedIn: (isLoggedIn: boolean) => void;
   isValidatingEmail: boolean;
   setIsValidatingEmail: (isValidatingEmail: boolean) => void;
+  logout: () => void;
 }
 
 export const authStore = createStore<AuthStore>()(
   persist(
     (set) => ({
+      email: '',
+      setEmail: (email: string) => set(() => ({ email })),
       deviceKey: getRandomToken(),
       serverUrl: 'https://wtm-back.vercel.app',
       setServerUrl: (serverUrl: string) =>
@@ -34,11 +39,19 @@ export const authStore = createStore<AuthStore>()(
       isValidatingEmail: false,
       setIsValidatingEmail: (isValidatingEmail: boolean) =>
         set(() => {
-          chrome.storage.local.set({
-            partialToken: '',
-          });
+          if (!isValidatingEmail) {
+            chrome.storage.local.set({
+              partialToken: '',
+            });
+          }
           return { isValidatingEmail };
         }),
+      logout: () =>
+        set(() => ({
+          isLoggedIn: false,
+          isValidatingEmail: false,
+          email: '',
+        })),
     }),
     {
       name: 'auth-vanilla-store',

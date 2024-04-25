@@ -7,7 +7,7 @@ export const handleGetVersion: BackgroundMessageHandler<'get-version'> = async (
   _,
 ) => {
   try {
-    const res = await apiClient.fetch('/api/version');
+    const res = await apiClient.securedFetch('/api/version');
     const versionResponse: GetVersionResponse = await res.json();
     sendResponse(versionResponse);
   } catch (error) {

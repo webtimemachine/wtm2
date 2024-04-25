@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Button,
   Input,
@@ -29,15 +29,15 @@ export const SignUpScreen: React.FC<{}> = () => {
   const { signUpMutation } = useSignUp();
   const { navigateBack } = useNavigationStore();
 
-  const [email, setEmail] = React.useState('');
-  const [password, setPassword] = React.useState('');
-  const [showPass, setShowPass] = React.useState(false);
-  const [confirmPassword, setConformPassword] = React.useState('');
-  const [showConfirmPass, setShowConfirmPass] = React.useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPass, setShowPass] = useState(false);
+  const [confirmPassword, setConformPassword] = useState('');
+  const [showConfirmPass, setShowConfirmPass] = useState(false);
 
-  const [emailError, setEmailError] = React.useState('');
-  const [passwordError, setPasswordError] = React.useState('');
-  const [confirmPassError, setConfirmPassError] = React.useState('');
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const [confirmPassError, setConfirmPassError] = useState('');
 
   const {
     isOpen: passTooltipIsOpen,

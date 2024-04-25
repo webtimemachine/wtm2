@@ -10,7 +10,7 @@ export const handleSignUp: BackgroundMessageHandler<'sign-up'> = async (
   payload,
 ) => {
   try {
-    const res = await apiClient.fetch('/api/auth/signup', {
+    const res = await apiClient.securedFetch('/api/auth/signup', {
       method: 'POST',
       body: JSON.stringify(payload.data),
     });

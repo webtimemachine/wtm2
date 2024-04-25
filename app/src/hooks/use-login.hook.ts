@@ -12,6 +12,7 @@ import {
 export const useLogin = () => {
   const toast = useToast();
   const setIsLoggedIn = useAuthStore((state) => state.setIsLoggedIn);
+  const setEmail = useAuthStore((state) => state.setEmail);
   const setIsValidatingEmail = useAuthStore(
     (state) => state.setIsValidatingEmail,
   );
@@ -25,6 +26,7 @@ export const useLogin = () => {
       if (isLoginRes(loginRes)) {
         setIsLoggedIn(true);
         setIsValidatingEmail(false);
+        setEmail(loginRes.user.email);
         toast({
           title: 'Login Response',
           description: `Welcome: ${loginRes.user.email}`,
@@ -35,11 +37,13 @@ export const useLogin = () => {
       } else {
         setIsLoggedIn(false);
         setIsValidatingEmail(true);
+        setEmail(loginRes.email);
       }
     },
     onError: (error) => {
       setIsLoggedIn(false);
       setIsValidatingEmail(false);
+      setEmail('');
       console.error(error);
       toast({
         title: 'Invalid credentials',
