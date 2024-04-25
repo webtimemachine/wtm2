@@ -4,6 +4,7 @@ import {
   NavigationEntriesScreen,
   SettingsScreen,
   PreferencesScreen,
+  ActiveSessionsScreen,
 } from '../screens';
 import { last } from '../utils';
 
@@ -12,7 +13,8 @@ export type ScreenName =
   | 'server-url'
   | 'navigation-entries'
   | 'settings'
-  | 'preferences';
+  | 'preferences'
+  | 'active-sessions';
 
 interface NavigationStore {
   CurrentScreen: () => JSX.Element;
@@ -31,6 +33,8 @@ const mapScreenName = (screenName: ScreenName): JSX.Element => {
       return <SettingsScreen />;
     case 'preferences':
       return <PreferencesScreen />;
+    case 'active-sessions':
+      return <ActiveSessionsScreen />;
   }
   return <></>;
 };
