@@ -1,6 +1,10 @@
 import { SayHelloData, SayHelloResponse } from './say-hello.interface';
 import { GetVersionResponse } from './get-version.interface';
-import { LoginData, LoginResponse } from './login.interface';
+import {
+  LoginData,
+  LoginResponse,
+  VerifyEmailResponse,
+} from './login.interface';
 import {
   GetNavigationEntriesData,
   GetNavigationEntriesResponse,
@@ -29,7 +33,7 @@ export type BackgroundMessageDataMap = {
 export type BackgroundMessageResponseMap = {
   'say-hello': SayHelloResponse;
   'get-version': GetVersionResponse;
-  login: LoginResponse;
+  login: LoginResponse | VerifyEmailResponse;
   'get-navigation-entries': GetNavigationEntriesResponse;
   'update-preferences': PreferenciesResponse;
   'get-user-preferences': PreferenciesResponse;

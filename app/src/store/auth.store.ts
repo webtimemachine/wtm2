@@ -9,6 +9,8 @@ interface AuthStore {
   setServerUrl: (serverUrl: string) => void;
   isLoggedIn: boolean;
   setIsLoggedIn: (isLoggedIn: boolean) => void;
+  isValidatingEmail: boolean;
+  setIsValidatingEmail: (isValidatingEmail: boolean) => void;
 }
 
 export const authStore = createStore<AuthStore>()(
@@ -22,12 +24,21 @@ export const authStore = createStore<AuthStore>()(
             serverUrl,
             accessToken: '',
             refreshToken: '',
+            partialToken: '',
             isLoggedIn: false,
           });
           return { serverUrl };
         }),
       isLoggedIn: false,
       setIsLoggedIn: (isLoggedIn: boolean) => set(() => ({ isLoggedIn })),
+      isValidatingEmail: false,
+      setIsValidatingEmail: (isValidatingEmail: boolean) =>
+        set(() => {
+          chrome.storage.local.set({
+            partialToken: '',
+          });
+          return { isValidatingEmail };
+        }),
     }),
     {
       name: 'auth-vanilla-store',
