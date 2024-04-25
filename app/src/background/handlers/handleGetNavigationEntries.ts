@@ -7,7 +7,7 @@ export const handleGetNavigationEntries: BackgroundMessageHandler<
 > = async (sendResponse, payload) => {
   try {
     const { offset, limit, query, isSemantic } = payload.data;
-    const res = await apiClient.fetch(
+    const res = await apiClient.securedFetch(
       `/api/navigation-entry?offset=${offset}&limit=${limit}${query ? `&query=${query}` : ''}&isSemantic=${isSemantic}`,
       { method: 'GET' },
     );

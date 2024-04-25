@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Button,
   Input,
@@ -13,6 +13,7 @@ import { useLogin } from '../hooks';
 import { useAuthStore, useNavigationStore } from '../store';
 
 import clsx from 'clsx';
+import { isLoginRes } from '../background/interfaces/login.interface';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -23,11 +24,11 @@ export const LoginScreen: React.FC<{}> = () => {
   const { loginMutation } = useLogin();
   const { navigateTo } = useNavigationStore();
 
-  const [email, setEmail] = React.useState('');
-  const [password, setPassword] = React.useState('');
-  const [showPass, setShowPass] = React.useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPass, setShowPass] = useState(false);
 
-  const [emailError, setEmailError] = React.useState('');
+  const [emailError, setEmailError] = useState('');
 
   const validateInputs = () => {
     let emailErrorFound = false;
@@ -63,15 +64,18 @@ export const LoginScreen: React.FC<{}> = () => {
   }, [isLoggedIn]);
 
   useEffect(() => {
-    if (loginMutation.isSuccess) {
-      navigateTo('navigation-entries');
-    }
-  }, [loginMutation.isSuccess]);
+    if (loginMutation.isSuccess)
+      if (isLoginRes(loginMutation.data)) {
+        navigateTo('navigation-entries');
+      } else {
+        navigateTo('validate-email');
+      }
+  }, [loginMutation.isSuccess, loginMutation.data]);
 
   return (
     <>
-      <div className='flex flex-col p-8 pt-5 bg-slate-100 min-h-screen justify-center items-center w-full'>
-        <div className='pb-12'>
+      <div className='flex flex-col p-8 pt-10 bg-slate-100 min-h-screen items-center w-full'>
+        <div className='pb-4'>
           <Text fontSize={'xx-large'} fontWeight={'bold'}>
             WebTM
           </Text>
@@ -100,7 +104,7 @@ export const LoginScreen: React.FC<{}> = () => {
           </div>
         </FormControl>
 
-        <div className='pb-4 flex flex-col w-full'>
+        <div className='flex flex-col w-full pb-4'>
           <InputGroup size='md'>
             <Input
               pr='4.5rem'
@@ -124,10 +128,19 @@ export const LoginScreen: React.FC<{}> = () => {
         </div>
 
         <div className='flex flex-row w-full justify-between pb-4'>
-          <Text fontSize={'small'} className='cursor-pointer'>
+          <Text
+            fontSize={'small'}
+            className='hover:cursor-pointer hover:underline'
+          >
             Recovery password
           </Text>
-          <Text fontSize={'small'} className='cursor-pointer'>
+          <Text
+            fontSize={'small'}
+            className='hover:cursor-pointer hover:underline'
+            onClick={() => {
+              navigateTo('sign-up');
+            }}
+          >
             Sign up
           </Text>
         </div>

@@ -1,4 +1,4 @@
-import { ManifestV3Export } from '@crxjs/vite-plugin'
+import { ManifestV3Export } from '@crxjs/vite-plugin';
 
 export const manifestFirefox: ManifestV3Export = {
   manifest_version: 3,
@@ -9,9 +9,7 @@ export const manifestFirefox: ManifestV3Export = {
   action: {
     default_popup: 'index.html',
   },
-  host_permissions: [
-    "<all_urls>"
-  ],
+  host_permissions: ['<all_urls>'],
   icons: {
     '16': 'app-icon.png',
     '32': 'app-icon.png',
@@ -21,4 +19,4 @@ export const manifestFirefox: ManifestV3Export = {
   background: {
     scripts: ['src/background/background.ts'],
   },
-}
+};
