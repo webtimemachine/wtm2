@@ -4,12 +4,15 @@ import {
   handleSayHello,
   handleUpdated,
   handleGetNavigationEntries,
+  handleGetPreferences,
+  handleUpdatePreferences,
+  handleSignUp,
+  handleResendCode,
+  handleVerifyCode,
 } from './handlers';
 import { handleCloseActiveSession } from './handlers/handleCloseActiveSession';
 import { handleGetActiveSessions } from './handlers/handleGetActiveSessions';
-import { handleGetPreferences } from './handlers/handleGetPreferences';
 import { handleUpdateDeviceAlias } from './handlers/handleUpdateDeviceAlias';
-import { handleUpdatePreferences } from './handlers/handleUpdatePreferences';
 import { BackgroundMessageType } from './interfaces';
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
@@ -29,12 +32,15 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
     case 'login':
       handleLogin(sendResponse, request?.payload);
       return true;
+
     case 'get-navigation-entries':
       handleGetNavigationEntries(sendResponse, request?.payload);
       return true;
+
     case 'update-preferences':
       handleUpdatePreferences(sendResponse, request?.payload);
       return true;
+
     case 'get-user-preferences':
       handleGetPreferences(sendResponse, request?.payload);
       return true;
@@ -47,6 +53,18 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
     case 'update-device-alias':
       handleUpdateDeviceAlias(sendResponse, request?.payload);
       return true;
+    case 'sign-up':
+      handleSignUp(sendResponse, request?.payload);
+      return true;
+
+    case 'resend-code':
+      handleResendCode(sendResponse, request?.payloadest);
+      return true;
+
+    case 'verify-code':
+      handleVerifyCode(sendResponse, request?.payload);
+      return true;
+
     default:
       return false;
   }
