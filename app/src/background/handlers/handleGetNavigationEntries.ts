@@ -1,6 +1,6 @@
 import { BackgroundMessageHandler } from '../interfaces';
 import { apiClient } from '../api.client';
-import { GetNavigationEntriesResponse } from '../interfaces/navigation-entry';
+import { GetNavigationEntriesResponse } from '../interfaces/navigation-entry.interface';
 
 export const handleGetNavigationEntries: BackgroundMessageHandler<
   'get-navigation-entries'

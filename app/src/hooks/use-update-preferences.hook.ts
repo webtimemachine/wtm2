@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import { useSendBackgroundMessage } from './use-send-message.hook';
-import { UpdatePreferenciesData } from '../background/interfaces/preferences';
+import { UpdatePreferenciesData } from '../background/interfaces/preferences.interface';
 import { useToast } from '@chakra-ui/react';
 
 export const useUpdatePreferences = (params: UpdatePreferenciesData) => {

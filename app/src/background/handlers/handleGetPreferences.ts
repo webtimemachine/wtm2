@@ -1,6 +1,6 @@
 import { BackgroundMessageHandler } from '../interfaces';
 import { apiClient } from '../api.client';
-import { PreferenciesResponse } from '../interfaces/preferences';
+import { PreferenciesResponse } from '../interfaces/preferences.interface';
 
 export const handleGetPreferences: BackgroundMessageHandler<
   'get-user-preferences'

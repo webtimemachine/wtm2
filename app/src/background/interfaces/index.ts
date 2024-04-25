@@ -4,8 +4,12 @@ import { LoginData, LoginResponse } from './login.interface';
 import {
   GetNavigationEntriesData,
   GetNavigationEntriesResponse,
-} from './navigation-entry';
-import { UpdatePreferenciesData, PreferenciesResponse } from './preferences';
+} from './navigation-entry.interface';
+import {
+  UpdatePreferenciesData,
+  PreferenciesResponse,
+} from './preferences.interface';
+import { ActiveSessionsResponse } from './active-sessons.interface';
 
 export type BackgroundMessageType =
   | 'say-hello'
@@ -13,7 +17,8 @@ export type BackgroundMessageType =
   | 'login'
   | 'get-navigation-entries'
   | 'update-preferences'
-  | 'get-user-preferences';
+  | 'get-user-preferences'
+  | 'get-active-sessions';
 
 export type BackgroundMessageDataMap = {
   'say-hello': SayHelloData;
@@ -22,6 +27,7 @@ export type BackgroundMessageDataMap = {
   'get-navigation-entries': GetNavigationEntriesData;
   'update-preferences': UpdatePreferenciesData;
   'get-user-preferences': undefined;
+  'get-active-sessions': undefined;
 };
 export type BackgroundMessageResponseMap = {
   'say-hello': SayHelloResponse;
@@ -30,6 +36,7 @@ export type BackgroundMessageResponseMap = {
   'get-navigation-entries': GetNavigationEntriesResponse;
   'update-preferences': PreferenciesResponse;
   'get-user-preferences': PreferenciesResponse;
+  'get-active-sessions': ActiveSessionsResponse;
 };
 
 export interface BackgroundMessagePayload<T extends BackgroundMessageType> {
