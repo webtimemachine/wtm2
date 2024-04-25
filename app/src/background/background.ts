@@ -8,6 +8,7 @@ import {
   handleUpdatePreferences,
   handleSignUp,
   handleResendCode,
+  handleVerifyCode,
 } from './handlers';
 
 import { BackgroundMessageType } from './interfaces';
@@ -49,7 +50,11 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
       return true;
 
     case 'resend-code':
-      handleResendCode(sendResponse, request);
+      handleResendCode(sendResponse, request?.payloadest);
+      return true;
+
+    case 'verify-code':
+      handleVerifyCode(sendResponse, request?.payload);
       return true;
 
     default:

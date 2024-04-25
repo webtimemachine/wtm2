@@ -11,10 +11,8 @@ import {
 
 export const useLogin = () => {
   const toast = useToast();
-  const setIsLoggedIn = useAuthStore((state) => state.setIsLoggedIn);
-  const setEmail = useAuthStore((state) => state.setEmail);
-  const setIsValidatingEmail = useAuthStore(
-    (state) => state.setIsValidatingEmail,
+  const { setIsLoggedIn, setEmail, setIsValidatingEmail } = useAuthStore(
+    (state) => state,
   );
   const { sendBackgroundMessage } = useSendBackgroundMessage();
 
@@ -28,8 +26,8 @@ export const useLogin = () => {
         setIsValidatingEmail(false);
         setEmail(loginRes.user.email);
         toast({
-          title: 'Login Response',
-          description: `Welcome: ${loginRes.user.email}`,
+          title: 'Welcome back!',
+          description: `Welcome ${loginRes.user.email}`,
           status: 'success',
           duration: 3000,
           isClosable: true,

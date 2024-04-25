@@ -1,19 +1,27 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, IconButton, Input, Text } from '@chakra-ui/react';
 import { ArrowBackIcon, RepeatIcon } from '@chakra-ui/icons';
 
 import { useAuthStore, useNavigationStore } from '../store';
 import { ServerUrlEditable } from '../components';
-import { useResendCode } from '../hooks';
+import { useResendCode, useVerifyCode } from '../hooks';
 
 export const ValidateEmailScreen: React.FC<{}> = () => {
-  const { resendCodeMutation } = useResendCode();
-  const { navigateBack } = useNavigationStore();
-  const setIsValidatingEmail = useAuthStore(
-    (state) => state.setIsValidatingEmail,
-  );
-
+  const { navigateBack, navigateTo } = useNavigationStore();
+  const { setIsValidatingEmail, deviceKey } = useAuthStore((state) => state);
   const [verificationCode, serVerificationCode] = useState('');
+
+  const { resendCodeMutation } = useResendCode();
+  const { verificationCodeMutation } = useVerifyCode();
+
+  useEffect(() => {
+    if (verificationCodeMutation.isSuccess)
+      if (verificationCodeMutation.data) {
+        navigateTo('navigation-entries');
+      } else {
+        navigateTo('validate-email');
+      }
+  }, [verificationCodeMutation.isSuccess, verificationCodeMutation.data]);
 
   return (
     <>
@@ -46,7 +54,7 @@ export const ValidateEmailScreen: React.FC<{}> = () => {
             placeholder='Verification code'
             value={verificationCode}
             onChange={(event) => {
-              serVerificationCode(event.target.value);
+              serVerificationCode(event.target.value.replace(/\D/g, ''));
             }}
             backgroundColor={'white'}
           />
@@ -67,7 +75,19 @@ export const ValidateEmailScreen: React.FC<{}> = () => {
         </div>
 
         <div className='flex gap-4'>
-          <Button colorScheme='blue' isDisabled={!verificationCode}>
+          <Button
+            colorScheme='blue'
+            isDisabled={!verificationCode}
+            onClick={() =>
+              verificationCodeMutation.mutate({
+                deviceKey,
+                verificationCode,
+                userAgent: window.navigator.userAgent,
+              })
+            }
+            isLoading={verificationCodeMutation.isPending}
+            loadingText='Verifying email'
+          >
             Validate
           </Button>
         </div>

@@ -7,3 +7,4 @@ export { handleGetPreferences } from './handleGetPreferences';
 export { handleUpdatePreferences } from './handleUpdatePreferences';
 export { handleSignUp } from './handleSignUp';
 export { handleResendCode } from './handleResendCode';
+export { handleVerifyCode } from './handleVerifyCode';
