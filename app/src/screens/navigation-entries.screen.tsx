@@ -39,8 +39,11 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
               WebTM
             </Text>
           </div>
-          <IconButton aria-label='Back icon'>
-            <SettingsIcon boxSize={5} onClick={() => navigateTo('settings')} />
+          <IconButton
+            aria-label='Back icon'
+            onClick={() => navigateTo('settings')}
+          >
+            <SettingsIcon boxSize={5} />
           </IconButton>
         </div>
         <div className='flex flex-col w-full min-h-[400px] justify-between'>
