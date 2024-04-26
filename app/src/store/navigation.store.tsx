@@ -4,6 +4,7 @@ import {
   NavigationEntriesScreen,
   SettingsScreen,
   PreferencesScreen,
+  ActiveSessionsScreen,
   SignUpScreen,
   ValidateEmailScreen,
 } from '../screens';
@@ -16,6 +17,7 @@ export type ScreenName =
   | 'navigation-entries'
   | 'settings'
   | 'preferences'
+  | 'active-sessions'
   | 'sign-up'
   | 'validate-email';
 
@@ -36,6 +38,8 @@ const mapScreenName = (screenName: ScreenName): JSX.Element => {
       return <SettingsScreen />;
     case 'preferences':
       return <PreferencesScreen />;
+    case 'active-sessions':
+      return <ActiveSessionsScreen />;
     case 'sign-up':
       return <SignUpScreen />;
     case 'validate-email':
@@ -45,7 +49,7 @@ const mapScreenName = (screenName: ScreenName): JSX.Element => {
 };
 
 let initialScreen: ScreenName = 'login';
-let initialNavigation: ScreenName[] = [];
+const initialNavigation: ScreenName[] = [];
 const authVanillaStoreData = localStorage.getItem('auth-vanilla-store');
 if (
   authVanillaStoreData &&

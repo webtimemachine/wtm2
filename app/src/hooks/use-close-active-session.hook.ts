@@ -1,18 +1,19 @@
 import { useMutation } from '@tanstack/react-query';
 import { useSendBackgroundMessage } from './use-send-message.hook';
-import { UpdatePreferenciesData } from '../background/interfaces/preferences.interface';
 import { useToast } from '@chakra-ui/react';
+import { CloseActiveSessionsData } from '../background/interfaces/close-active-session';
 
-export const useUpdatePreferences = (params: UpdatePreferenciesData) => {
+export const useCloseActiveSession = () => {
   const toast = useToast();
   const { sendBackgroundMessage } = useSendBackgroundMessage();
 
-  const updatePreferencesQuery = useMutation({
-    mutationFn: () => sendBackgroundMessage('update-preferences', params),
+  const closeActiveSession = useMutation({
+    mutationFn: (params: CloseActiveSessionsData) =>
+      sendBackgroundMessage('close-active-session', params),
     onSuccess: () => {
       toast({
         title: 'Success',
-        description: `User preferences updated!`,
+        description: `Device session logged out!`,
         status: 'success',
         duration: 3000,
         isClosable: true,
@@ -20,5 +21,5 @@ export const useUpdatePreferences = (params: UpdatePreferenciesData) => {
     },
   });
 
-  return { updatePreferencesQuery };
+  return { closeActiveSession };
 };

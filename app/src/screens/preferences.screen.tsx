@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Text, IconButton, Switch, Input, Button } from '@chakra-ui/react';
 import { ArrowBackIcon } from '@chakra-ui/icons';
 import { useNavigationStore } from '../store';
-import { useGetPreferences } from '../hooks/use-get-preferences.hook';
-import { useUpdatePreferences } from '../hooks/use-update-preferences.hook';
+import { useGetPreferences, useUpdatePreferences } from '../hooks';
 
 export const PreferencesScreen: React.FC<object> = () => {
   const [enabled, setEnabled] = useState(false);
@@ -36,8 +35,8 @@ export const PreferencesScreen: React.FC<object> = () => {
     <>
       <div className='flex flex-col px-5 py-3 bg-slate-100 min-h-screen items-center w-full'>
         <div className='flex w-full justify-start pb-4 gap-4 items-center'>
-          <IconButton aria-label='Back icon'>
-            <ArrowBackIcon boxSize={5} onClick={() => navigateBack()} />
+          <IconButton aria-label='Back icon' onClick={() => navigateBack()}>
+            <ArrowBackIcon boxSize={5} />
           </IconButton>
           <div className='flex w-full justify-center pr-[40px]'>
             <Text fontSize={'xx-large'} fontWeight={'bold'}>
