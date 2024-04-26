@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, IconButton } from '@chakra-ui/react';
+import { Text, IconButton, Button } from '@chakra-ui/react';
 import { ArrowBackIcon } from '@chakra-ui/icons';
 import { useLogout } from '../hooks';
 import { useNavigation } from '../store';
@@ -34,17 +34,17 @@ export const SettingsScreen: React.FC<object> = () => {
           >
             <Text fontSize={'medium'}>Active Sessions</Text>
           </div>
-          <div className='flex w-full py-2 cursor-pointer border-b border-solid border-[#333]'>
+          <div
+            className='flex w-full py-2 cursor-pointer border-b border-solid border-[#333]'
+            onClick={() => navigateTo('confirm-delete-account')}
+          >
             <Text fontSize={'medium'} color={'red'}>
               Delete account
             </Text>
           </div>
         </div>
-        <div
-          className='flex w-full py-2 cursor-pointer justify-center'
-          onClick={logout}
-        >
-          <Text fontSize={'medium'}>Logout</Text>
+        <div className='flex w-full py-2 cursor-pointer justify-center'>
+          <Button onClick={logout}>Logout</Button>
         </div>
       </div>
     </>

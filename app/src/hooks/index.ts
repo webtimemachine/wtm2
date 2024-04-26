@@ -11,6 +11,7 @@ export { useGetPreferences } from './use-get-preferences.hook';
 export { useUpdateDeviceAlias } from './use-update-device-alias.hook';
 export { useUpdatePreferences } from './use-update-preferences.hook';
 export { useLogout } from './use-logout.hook';
+export { useConfirmDeleteAccount } from './use-confirm-delete-account.hook';
 export { useRecoverPassword } from './use-recover-password.hook';
 export { useValidateRecoveryCode } from './use-validate-recovery-code.hook';
 export { useRestorePassword } from './use-restore-password.hook';

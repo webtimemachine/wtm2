@@ -44,6 +44,7 @@ export type BackgroundMessageType =
   | 'sign-up'
   | 'resend-code'
   | 'verify-code'
+  | 'confirm-delete-account'
   | 'recover-password'
   | 'validate-recovery-code'
   | 'restore-password';
@@ -60,6 +61,7 @@ export type BackgroundMessageDataMap = {
   'sign-up': SignUpData;
   'resend-code': undefined;
   'verify-code': VerifyCodeData;
+  'confirm-delete-account': undefined;
   'recover-password': RecoverPasswordData;
   'validate-recovery-code': ValidateRecoveryCodeData;
   'restore-password': RestorePasswordData;
@@ -76,6 +78,7 @@ export type BackgroundMessageResponseMap = {
   'sign-up': SignUpResponse;
   'resend-code': ResendCodeResponse;
   'verify-code': LoginResponse;
+  'confirm-delete-account': BasicResponse;
   'recover-password': RecoverPasswordResponse;
   'validate-recovery-code': ValidateRecoveryCodeResponse;
   'restore-password': LoginResponse;

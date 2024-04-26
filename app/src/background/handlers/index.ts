@@ -10,6 +10,7 @@ export { handleVerifyCode } from './handleVerifyCode';
 export { handleCloseActiveSession } from './handleCloseActiveSession';
 export { handleGetActiveSessions } from './handleGetActiveSessions';
 export { handleUpdateDeviceAlias } from './handleUpdateDeviceAlias';
+export { handleConfirmDeleteAccount } from './handleConfirmDeleteAccount';
 export { handleRecoverPassword } from './handleRecoverPassword';
 export { handleValidateRecoveryCode } from './handleValidateRecoveryCode';
 export { handleRestorePassword } from './handleRestorePassword';
