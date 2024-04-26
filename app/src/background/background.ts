@@ -9,10 +9,10 @@ import {
   handleSignUp,
   handleResendCode,
   handleVerifyCode,
+  handleGetActiveSessions,
+  handleCloseActiveSession,
+  handleUpdateDeviceAlias,
 } from './handlers';
-import { handleCloseActiveSession } from './handlers/handleCloseActiveSession';
-import { handleGetActiveSessions } from './handlers/handleGetActiveSessions';
-import { handleUpdateDeviceAlias } from './handlers/handleUpdateDeviceAlias';
 import { BackgroundMessageType } from './interfaces';
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {

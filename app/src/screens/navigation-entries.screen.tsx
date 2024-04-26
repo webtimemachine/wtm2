@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Checkbox, Input, Text, IconButton } from '@chakra-ui/react';
 import { CompleteNavigationEntryDto } from '../background/interfaces/navigation-entry.interface';
-import { useNavigationEntries } from '../hooks/use-navigation-entries.hook';
 import { SettingsIcon, SmallCloseIcon } from '@chakra-ui/icons';
 import { useNavigationStore } from '../store';
+import { useNavigationEntries } from '../hooks';
 
 export const NavigationEntriesScreen: React.FC<object> = () => {
   const { navigateTo } = useNavigationStore();

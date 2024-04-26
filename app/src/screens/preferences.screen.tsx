@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Text, IconButton, Switch, Input, Button } from '@chakra-ui/react';
 import { ArrowBackIcon } from '@chakra-ui/icons';
 import { useNavigationStore } from '../store';
-import { useGetPreferences } from '../hooks/use-get-preferences.hook';
-import { useUpdatePreferences } from '../hooks/use-update-preferences.hook';
+import { useGetPreferences, useUpdatePreferences } from '../hooks';
 
 export const PreferencesScreen: React.FC<object> = () => {
   const [enabled, setEnabled] = useState(false);
