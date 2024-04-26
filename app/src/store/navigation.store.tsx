@@ -13,6 +13,7 @@ import {
 } from '../screens';
 
 import { last } from '../utils';
+import { ConfirmDeleteAccountScreen } from '../screens/confirm-delete-account.screen';
 import { readAuthStateFromLocal, useAuthStore } from './auth.store';
 
 export type ScreenName =
@@ -24,6 +25,7 @@ export type ScreenName =
   | 'active-sessions'
   | 'sign-up'
   | 'validate-email'
+  | 'confirm-delete-account'
   | 'forgot-password'
   | 'validate-recovery-code'
   | 'recovery-new-password';
@@ -51,6 +53,8 @@ const mapScreenName = (screenName: ScreenName): JSX.Element => {
       return <SignUpScreen />;
     case 'validate-email':
       return <ValidateEmailScreen />;
+    case 'confirm-delete-account':
+      return <ConfirmDeleteAccountScreen />;
     case 'forgot-password':
       return <ForgotPasswordScreen />;
     case 'validate-recovery-code':
