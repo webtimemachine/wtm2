@@ -1,6 +1,6 @@
 import { BackgroundMessageHandler } from '../interfaces';
 import { apiClient } from '../api.client';
-import { VerifyCodeErrorResponse } from '../interfaces/verify-code-interface';
+import { VerifyCodeErrorResponse } from '../interfaces/verify-code.interface';
 import { LoginResponse } from '../interfaces/login.interface';
 
 export const handleVerifyCode: BackgroundMessageHandler<'verify-code'> = async (
@@ -20,13 +20,13 @@ export const handleVerifyCode: BackgroundMessageHandler<'verify-code'> = async (
     });
 
     if (res.status === 200) {
-      const loginResponse: LoginResponse = await res.json();
-      const { accessToken, refreshToken } = loginResponse;
+      const emailVerifyRes: LoginResponse = await res.json();
+      const { accessToken, refreshToken } = emailVerifyRes;
       await chrome.storage.local.set({
         accessToken,
         refreshToken,
       });
-      sendResponse(loginResponse);
+      sendResponse(emailVerifyRes);
     } else {
       const verifyCodeErrorResponse: VerifyCodeErrorResponse = await res.json();
       throw new Error(verifyCodeErrorResponse?.message?.toString());

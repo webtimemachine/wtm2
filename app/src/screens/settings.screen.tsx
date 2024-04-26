@@ -1,16 +1,16 @@
 import React from 'react';
 import { Text, IconButton, Button } from '@chakra-ui/react';
 import { ArrowBackIcon } from '@chakra-ui/icons';
-import { useNavigationStore } from '../store';
 import { useLogout } from '../hooks';
+import { useNavigation } from '../store';
 
 export const SettingsScreen: React.FC<object> = () => {
-  const { navigateBack, navigateTo } = useNavigationStore();
+  const { navigateBack, navigateTo } = useNavigation();
   const { logout } = useLogout();
 
   return (
     <>
-      <div className='flex flex-col px-5 py-3 bg-slate-100 min-h-screen items-center w-full'>
+      <div className='flex flex-col px-5 py-3 bg-slate-100 items-center w-full'>
         <div className='flex w-full justify-start pb-4 gap-4 items-center'>
           <IconButton aria-label='Settings icon' onClick={() => navigateBack()}>
             <ArrowBackIcon boxSize={5} />

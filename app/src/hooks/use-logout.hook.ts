@@ -1,16 +1,11 @@
-import { useAuthStore, useNavigationStore } from '../store';
+import { useAuthStore, useNavigation } from '../store';
 
 export const useLogout = () => {
-  const { navigateTo } = useNavigationStore();
-  const storeLogout = useAuthStore((state) => state.logout);
+  const { navigateTo } = useNavigation();
+  const notifyLogout = useAuthStore((state) => state.notifyLogout);
 
   const logout = async () => {
-    await chrome.storage.local.set({
-      accessToken: '',
-      refreshToken: '',
-      partialToken: '',
-    });
-    storeLogout();
+    notifyLogout();
     navigateTo('login');
   };
 

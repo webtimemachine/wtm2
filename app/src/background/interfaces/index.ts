@@ -1,4 +1,3 @@
-import { SayHelloData, SayHelloResponse } from './say-hello.interface';
 import { GetVersionResponse } from './get-version.interface';
 import {
   LoginData,
@@ -20,12 +19,20 @@ import {
   UserDeviceResponse,
 } from './user-device.interface';
 import { SignUpData, SignUpResponse } from './sign-up.interface';
-import { ResendCodeResponse } from './resend-code-interface';
-import { VerifyCodeData } from './verify-code-interface';
 import { ActiveSessionsResponse } from './active-sessons.interface';
+import { ResendCodeResponse } from './resend-code.interface';
+import { VerifyCodeData } from './verify-code.interface';
+import {
+  RecoverPasswordData,
+  RecoverPasswordResponse,
+} from './recover-password.interface';
+import {
+  ValidateRecoveryCodeData,
+  ValidateRecoveryCodeResponse,
+} from './validate-recovery-code.interface';
+import { RestorePasswordData } from './restore-password.interface';
 
 export type BackgroundMessageType =
-  | 'say-hello'
   | 'get-version'
   | 'login'
   | 'get-navigation-entries'
@@ -37,10 +44,12 @@ export type BackgroundMessageType =
   | 'sign-up'
   | 'resend-code'
   | 'verify-code'
-  | 'confirm-delete-account';
+  | 'confirm-delete-account'
+  | 'recover-password'
+  | 'validate-recovery-code'
+  | 'restore-password';
 
 export type BackgroundMessageDataMap = {
-  'say-hello': SayHelloData;
   'get-version': undefined;
   login: LoginData;
   'get-navigation-entries': GetNavigationEntriesData;
@@ -53,9 +62,11 @@ export type BackgroundMessageDataMap = {
   'resend-code': undefined;
   'verify-code': VerifyCodeData;
   'confirm-delete-account': undefined;
+  'recover-password': RecoverPasswordData;
+  'validate-recovery-code': ValidateRecoveryCodeData;
+  'restore-password': RestorePasswordData;
 };
 export type BackgroundMessageResponseMap = {
-  'say-hello': SayHelloResponse;
   'get-version': GetVersionResponse;
   login: LoginResponse | VerifyEmailResponse;
   'get-navigation-entries': GetNavigationEntriesResponse;
@@ -68,6 +79,9 @@ export type BackgroundMessageResponseMap = {
   'resend-code': ResendCodeResponse;
   'verify-code': LoginResponse;
   'confirm-delete-account': BasicResponse;
+  'recover-password': RecoverPasswordResponse;
+  'validate-recovery-code': ValidateRecoveryCodeResponse;
+  'restore-password': LoginResponse;
 };
 
 export interface BackgroundMessagePayload<T extends BackgroundMessageType> {

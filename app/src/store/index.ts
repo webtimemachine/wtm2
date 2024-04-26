@@ -1,2 +1,2 @@
-export { useNavigationStore } from './navigation.store';
+export { useNavigation } from './navigation.store';
 export { authStore, useAuthStore } from './auth.store';

@@ -7,10 +7,14 @@ import {
   ActiveSessionsScreen,
   SignUpScreen,
   ValidateEmailScreen,
+  ForgotPasswordScreen,
+  ValidateRecoveryCode,
+  RecoveryNewPassword,
 } from '../screens';
 
 import { last } from '../utils';
 import { ConfirmDeleteAccountScreen } from '../screens/confirm-delete-account.screen';
+import { readAuthStateFromLocal, useAuthStore } from './auth.store';
 
 export type ScreenName =
   | 'login'
@@ -21,7 +25,10 @@ export type ScreenName =
   | 'active-sessions'
   | 'sign-up'
   | 'validate-email'
-  | 'confirm-delete-account';
+  | 'confirm-delete-account'
+  | 'forgot-password'
+  | 'validate-recovery-code'
+  | 'recovery-new-password';
 
 interface NavigationStore {
   CurrentScreen: () => JSX.Element;
@@ -48,31 +55,28 @@ const mapScreenName = (screenName: ScreenName): JSX.Element => {
       return <ValidateEmailScreen />;
     case 'confirm-delete-account':
       return <ConfirmDeleteAccountScreen />;
+    case 'forgot-password':
+      return <ForgotPasswordScreen />;
+    case 'validate-recovery-code':
+      return <ValidateRecoveryCode />;
+    case 'recovery-new-password':
+      return <RecoveryNewPassword />;
   }
   return <></>;
 };
 
 let initialScreen: ScreenName = 'login';
-const initialNavigation: ScreenName[] = [];
-const authVanillaStoreData = localStorage.getItem('auth-vanilla-store');
-if (
-  authVanillaStoreData &&
-  JSON.parse(authVanillaStoreData)?.state?.isLoggedIn
-) {
+
+const authState = readAuthStateFromLocal();
+if (authState && authState.persistedScreen) {
+  initialScreen = authState.persistedScreen;
+} else if (authState && authState.isLoggedIn) {
   initialScreen = 'navigation-entries';
 }
-if (
-  authVanillaStoreData &&
-  JSON.parse(authVanillaStoreData)?.state?.isValidatingEmail
-) {
-  initialScreen = 'validate-email';
-  initialNavigation.push('login');
-}
-initialNavigation.push(initialScreen);
 
-export const useNavigationStore = create<NavigationStore>()((set) => ({
+const useNavigationStore = create<NavigationStore>()((set) => ({
   CurrentScreen: () => mapScreenName(initialScreen),
-  navigation: initialNavigation,
+  navigation: [initialScreen],
   navigateTo: (screenName: ScreenName) =>
     set((state) => ({
       navigation: [...state.navigation, screenName],
@@ -87,3 +91,15 @@ export const useNavigationStore = create<NavigationStore>()((set) => ({
       };
     }),
 }));
+
+export const useNavigation = () => {
+  const navigationStore = useNavigationStore();
+  const { notifyLogout } = useAuthStore((state) => state);
+
+  const navigateTo = (screenName: ScreenName) => {
+    if (screenName === 'login') notifyLogout();
+    return navigationStore.navigateTo(screenName);
+  };
+
+  return { ...navigationStore, navigateTo };
+};
