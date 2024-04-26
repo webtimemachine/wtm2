@@ -6,9 +6,12 @@ export const handleGetPreferences: BackgroundMessageHandler<
   'get-user-preferences'
 > = async (sendResponse) => {
   try {
-    const preferencesResponse = await apiClient.fetch('/api/user/preferences', {
-      method: 'GET',
-    });
+    const preferencesResponse = await apiClient.securedFetch(
+      '/api/user/preferences',
+      {
+        method: 'GET',
+      },
+    );
 
     if (preferencesResponse.status === 401) {
       sendResponse({ error: 'Unnauthorized' });

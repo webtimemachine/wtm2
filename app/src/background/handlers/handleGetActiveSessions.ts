@@ -6,9 +6,12 @@ export const handleGetActiveSessions: BackgroundMessageHandler<
   'get-active-sessions'
 > = async (sendResponse) => {
   try {
-    const actSessionsResponse = await apiClient.fetch('/api/auth/session', {
-      method: 'GET',
-    });
+    const actSessionsResponse = await apiClient.securedFetch(
+      '/api/auth/session',
+      {
+        method: 'GET',
+      },
+    );
 
     if (actSessionsResponse.status === 401) {
       sendResponse({ error: 'Unnauthorized' });

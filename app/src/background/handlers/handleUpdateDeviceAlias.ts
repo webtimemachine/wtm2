@@ -6,7 +6,7 @@ export const handleUpdateDeviceAlias: BackgroundMessageHandler<
   'update-device-alias'
 > = async (sendResponse, payload) => {
   try {
-    const updateDeviceAliasResponse = await apiClient.fetch(
+    const updateDeviceAliasResponse = await apiClient.securedFetch(
       `/api/user/device/${payload.data.id}`,
       {
         method: 'PUT',

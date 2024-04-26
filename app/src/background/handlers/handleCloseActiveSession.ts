@@ -6,7 +6,7 @@ export const handleCloseActiveSession: BackgroundMessageHandler<
   'close-active-session'
 > = async (sendResponse, payload) => {
   try {
-    const closeActiveSessionsResponse = await apiClient.fetch(
+    const closeActiveSessionsResponse = await apiClient.securedFetch(
       '/api/auth/session/logout',
       {
         method: 'POST',
