@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, IconButton } from '@chakra-ui/react';
+import { Text, IconButton, Button } from '@chakra-ui/react';
 import { ArrowBackIcon } from '@chakra-ui/icons';
 import { useNavigationStore } from '../store';
 import { useLogout } from '../hooks';
@@ -43,11 +43,8 @@ export const SettingsScreen: React.FC<object> = () => {
             </Text>
           </div>
         </div>
-        <div
-          className='flex w-full py-2 cursor-pointer justify-center'
-          onClick={logout}
-        >
-          <Text fontSize={'medium'}>Logout</Text>
+        <div className='flex w-full py-2 cursor-pointer justify-center'>
+          <Button onClick={logout}>Logout</Button>
         </div>
       </div>
     </>
