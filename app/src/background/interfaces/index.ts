@@ -36,7 +36,8 @@ export type BackgroundMessageType =
   | 'update-device-alias'
   | 'sign-up'
   | 'resend-code'
-  | 'verify-code';
+  | 'verify-code'
+  | 'confirm-delete-account';
 
 export type BackgroundMessageDataMap = {
   'say-hello': SayHelloData;
@@ -51,6 +52,7 @@ export type BackgroundMessageDataMap = {
   'sign-up': SignUpData;
   'resend-code': undefined;
   'verify-code': VerifyCodeData;
+  'confirm-delete-account': undefined;
 };
 export type BackgroundMessageResponseMap = {
   'say-hello': SayHelloResponse;
@@ -65,6 +67,7 @@ export type BackgroundMessageResponseMap = {
   'sign-up': SignUpResponse;
   'resend-code': ResendCodeResponse;
   'verify-code': LoginResponse;
+  'confirm-delete-account': BasicResponse;
 };
 
 export interface BackgroundMessagePayload<T extends BackgroundMessageType> {

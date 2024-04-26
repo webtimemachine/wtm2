@@ -12,6 +12,7 @@ import {
   handleGetActiveSessions,
   handleCloseActiveSession,
   handleUpdateDeviceAlias,
+  handleConfirmDeleteAccount,
 } from './handlers';
 import { BackgroundMessageType } from './interfaces';
 
@@ -56,15 +57,15 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
     case 'sign-up':
       handleSignUp(sendResponse, request?.payload);
       return true;
-
     case 'resend-code':
       handleResendCode(sendResponse, request?.payloadest);
       return true;
-
     case 'verify-code':
       handleVerifyCode(sendResponse, request?.payload);
       return true;
-
+    case 'confirm-delete-account':
+      handleConfirmDeleteAccount(sendResponse, request?.payload);
+      return true;
     default:
       return false;
   }
