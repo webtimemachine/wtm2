@@ -69,7 +69,7 @@ export const LoginScreen: React.FC<{}> = () => {
 
   return (
     <>
-      <div className='flex flex-col p-8 pt-10 bg-slate-100 min-h-screen items-center w-full'>
+      <div className='flex flex-col p-8 pt-10 bg-slate-100 items-center w-full'>
         <div className='pb-4'>
           <Text fontSize={'xx-large'} fontWeight={'bold'}>
             WebTM

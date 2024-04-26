@@ -32,7 +32,7 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
 
   return (
     <>
-      <div className='flex flex-col px-5 py-3 bg-slate-100 min-h-screen items-center w-full'>
+      <div className='flex flex-col px-5 py-3 bg-slate-100 items-center w-full'>
         <div className='flex w-full justify-start pb-4 gap-4 items-center'>
           <div className='flex w-full justify-center pl-[40px]'>
             <Text fontSize={'xx-large'} fontWeight={'bold'}>
