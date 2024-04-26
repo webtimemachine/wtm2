@@ -34,7 +34,10 @@ export const SettingsScreen: React.FC<object> = () => {
           >
             <Text fontSize={'medium'}>Active Sessions</Text>
           </div>
-          <div className='flex w-full py-2 cursor-pointer border-b border-solid border-[#333]'>
+          <div
+            className='flex w-full py-2 cursor-pointer border-b border-solid border-[#333]'
+            onClick={() => navigateTo('confirm-delete-account')}
+          >
             <Text fontSize={'medium'} color={'red'}>
               Delete account
             </Text>

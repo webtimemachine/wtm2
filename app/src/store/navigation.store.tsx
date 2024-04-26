@@ -10,6 +10,7 @@ import {
 } from '../screens';
 
 import { last } from '../utils';
+import { ConfirmDeleteAccountScreen } from '../screens/confirm-delete-account.screen';
 
 export type ScreenName =
   | 'login'
@@ -19,7 +20,8 @@ export type ScreenName =
   | 'preferences'
   | 'active-sessions'
   | 'sign-up'
-  | 'validate-email';
+  | 'validate-email'
+  | 'confirm-delete-account';
 
 interface NavigationStore {
   CurrentScreen: () => JSX.Element;
@@ -44,6 +46,8 @@ const mapScreenName = (screenName: ScreenName): JSX.Element => {
       return <SignUpScreen />;
     case 'validate-email':
       return <ValidateEmailScreen />;
+    case 'confirm-delete-account':
+      return <ConfirmDeleteAccountScreen />;
   }
   return <></>;
 };
