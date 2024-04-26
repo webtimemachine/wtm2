@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import { Text, IconButton, Button } from '@chakra-ui/react';
 import { ArrowBackIcon } from '@chakra-ui/icons';
-import { useNavigationStore } from '../store';
+import { useNavigation } from '../store';
 import { useConfirmDeleteAccount } from '../hooks';
 
 export const ConfirmDeleteAccountScreen: React.FC<object> = () => {
-  const { navigateBack, navigateTo } = useNavigationStore();
+  const { navigateBack, navigateTo } = useNavigation();
   const { confirmDeleteAccount } = useConfirmDeleteAccount();
 
   useEffect(() => {
