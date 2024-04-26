@@ -18,5 +18,6 @@ export const manifestFirefox: ManifestV3Export = {
   },
   background: {
     scripts: ['src/background/background.ts'],
+    type: 'module',
   },
 };
