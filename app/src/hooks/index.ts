@@ -1,4 +1,3 @@
-export { useSayHello } from './use-say-hello.hook';
 export { useGetVersion } from './use-get-version.hook';
 export { useLogin } from './use-login.hook';
 export { useSignUp } from './use-sign-up.hook';
@@ -12,3 +11,6 @@ export { useGetPreferences } from './use-get-preferences.hook';
 export { useUpdateDeviceAlias } from './use-update-device-alias.hook';
 export { useUpdatePreferences } from './use-update-preferences.hook';
 export { useLogout } from './use-logout.hook';
+export { useRecoverPassword } from './use-recover-password.hook';
+export { useValidateRecoveryCode } from './use-validate-recovery-code.hook';
+export { useRestorePassword } from './use-restore-password.hook';

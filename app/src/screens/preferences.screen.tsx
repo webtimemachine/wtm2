@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Text, IconButton, Switch, Input, Button } from '@chakra-ui/react';
 import { ArrowBackIcon } from '@chakra-ui/icons';
-import { useNavigationStore } from '../store';
 import { useGetPreferences, useUpdatePreferences } from '../hooks';
+import { useNavigation } from '../store';
 
 export const PreferencesScreen: React.FC<object> = () => {
   const [enabled, setEnabled] = useState(false);
   const [days, setDays] = useState<number | null>(null);
-  const { navigateBack } = useNavigationStore();
+  const { navigateBack } = useNavigation();
   const { userPreferencesQuery } = useGetPreferences();
   const { updatePreferencesQuery } = useUpdatePreferences({
     enableNavigationEntryExpiration: enabled,
@@ -33,7 +33,7 @@ export const PreferencesScreen: React.FC<object> = () => {
 
   return (
     <>
-      <div className='flex flex-col px-5 py-3 bg-slate-100 min-h-screen items-center w-full'>
+      <div className='flex flex-col px-5 py-3 bg-slate-100 items-center w-full'>
         <div className='flex w-full justify-start pb-4 gap-4 items-center'>
           <IconButton aria-label='Back icon' onClick={() => navigateBack()}>
             <ArrowBackIcon boxSize={5} />

@@ -2,18 +2,18 @@ import { useMutation } from '@tanstack/react-query';
 import { useToast } from '@chakra-ui/react';
 
 import { useSendBackgroundMessage } from './use-send-message.hook';
-import { VerifyCodeData } from '../background/interfaces/verify-code.interface';
+import { RestorePasswordData } from '../background/interfaces/restore-password.interface';
 import { useAuthStore } from '../store';
 
-export const useVerifyCode = () => {
+export const useRestorePassword = () => {
   const toast = useToast();
   const notifyLogin = useAuthStore((state) => state.notifyLogin);
 
   const { sendBackgroundMessage } = useSendBackgroundMessage();
 
-  const verificationCodeMutation = useMutation({
-    mutationFn: (data: VerifyCodeData) =>
-      sendBackgroundMessage('verify-code', data),
+  const restorePasswordMutation = useMutation({
+    mutationFn: (data: RestorePasswordData) =>
+      sendBackgroundMessage('restore-password', data),
     onSuccess: (loginRes) => {
       console.log(loginRes);
       notifyLogin();
@@ -28,13 +28,13 @@ export const useVerifyCode = () => {
     onError: (error) => {
       console.error(error);
       toast({
-        title: 'Invalid verificacion code',
-        description: 'Please review your verificacion code and try againg',
+        title: 'Unexpected Error',
+        description: 'Please try againg',
         status: 'error',
         duration: 3000,
         isClosable: true,
       });
     },
   });
-  return { verificationCodeMutation };
+  return { restorePasswordMutation };
 };
