@@ -3,7 +3,7 @@ import { apiClient } from '../api.client';
 import {
   ResendCodeResponse,
   ResendCodeErrorResponse,
-} from '../interfaces/resend-code-interface';
+} from '../interfaces/resend-code.interface';
 
 export const handleResendCode: BackgroundMessageHandler<'resend-code'> = async (
   sendResponse,

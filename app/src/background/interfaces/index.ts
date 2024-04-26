@@ -1,4 +1,3 @@
-import { SayHelloData, SayHelloResponse } from './say-hello.interface';
 import { GetVersionResponse } from './get-version.interface';
 import {
   LoginData,
@@ -20,12 +19,20 @@ import {
   UserDeviceResponse,
 } from './user-device.interface';
 import { SignUpData, SignUpResponse } from './sign-up.interface';
-import { ResendCodeResponse } from './resend-code-interface';
-import { VerifyCodeData } from './verify-code-interface';
 import { ActiveSessionsResponse } from './active-sessons.interface';
+import { ResendCodeResponse } from './resend-code.interface';
+import { VerifyCodeData } from './verify-code.interface';
+import {
+  RecoverPasswordData,
+  RecoverPasswordResponse,
+} from './recover-password.interface';
+import {
+  ValidateRecoveryCodeData,
+  ValidateRecoveryCodeResponse,
+} from './validate-recovery-code.interface';
+import { RestorePasswordData } from './restore-password.interface';
 
 export type BackgroundMessageType =
-  | 'say-hello'
   | 'get-version'
   | 'login'
   | 'get-navigation-entries'
@@ -36,10 +43,12 @@ export type BackgroundMessageType =
   | 'update-device-alias'
   | 'sign-up'
   | 'resend-code'
-  | 'verify-code';
+  | 'verify-code'
+  | 'recover-password'
+  | 'validate-recovery-code'
+  | 'restore-password';
 
 export type BackgroundMessageDataMap = {
-  'say-hello': SayHelloData;
   'get-version': undefined;
   login: LoginData;
   'get-navigation-entries': GetNavigationEntriesData;
@@ -51,9 +60,11 @@ export type BackgroundMessageDataMap = {
   'sign-up': SignUpData;
   'resend-code': undefined;
   'verify-code': VerifyCodeData;
+  'recover-password': RecoverPasswordData;
+  'validate-recovery-code': ValidateRecoveryCodeData;
+  'restore-password': RestorePasswordData;
 };
 export type BackgroundMessageResponseMap = {
-  'say-hello': SayHelloResponse;
   'get-version': GetVersionResponse;
   login: LoginResponse | VerifyEmailResponse;
   'get-navigation-entries': GetNavigationEntriesResponse;
@@ -65,6 +76,9 @@ export type BackgroundMessageResponseMap = {
   'sign-up': SignUpResponse;
   'resend-code': ResendCodeResponse;
   'verify-code': LoginResponse;
+  'recover-password': RecoverPasswordResponse;
+  'validate-recovery-code': ValidateRecoveryCodeResponse;
+  'restore-password': LoginResponse;
 };
 
 export interface BackgroundMessagePayload<T extends BackgroundMessageType> {

@@ -7,7 +7,7 @@ import {
   CheckIcon,
   CloseIcon,
 } from '@chakra-ui/icons';
-import { useNavigationStore } from '../store';
+import { useNavigation } from '../store';
 import { ActiveSessionsResponse } from '../background/interfaces/active-sessons.interface';
 import {
   useCloseActiveSession,
@@ -19,7 +19,7 @@ export const ActiveSessionsScreen: React.FC<object> = () => {
   const [editingSession, setEditingSession] =
     useState<ActiveSessionsResponse>();
   const [editingSessionName, setEditingSessionName] = useState<string>();
-  const { navigateBack } = useNavigationStore();
+  const { navigateBack } = useNavigation();
   const { getActiveSessionsQuery } = useGetActiveSessions();
   const { closeActiveSession } = useCloseActiveSession();
   const { updateDeviceAlias } = useUpdateDeviceAlias();

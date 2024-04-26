@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Text, IconButton, Switch, Input, Button } from '@chakra-ui/react';
 import { ArrowBackIcon } from '@chakra-ui/icons';
-import { useNavigationStore } from '../store';
 import { useGetPreferences, useUpdatePreferences } from '../hooks';
+import { useNavigation } from '../store';
 
 export const PreferencesScreen: React.FC<object> = () => {
   const [enabled, setEnabled] = useState(false);
   const [days, setDays] = useState<number | null>(null);
-  const { navigateBack } = useNavigationStore();
+  const { navigateBack } = useNavigation();
   const { userPreferencesQuery } = useGetPreferences();
   const { updatePreferencesQuery } = useUpdatePreferences({
     enableNavigationEntryExpiration: enabled,
