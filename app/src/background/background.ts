@@ -1,7 +1,6 @@
 import {
   handleGetVersion,
   handleLogin,
-  handleSayHello,
   handleUpdated,
   handleGetNavigationEntries,
   handleGetPreferences,
@@ -13,6 +12,9 @@ import {
   handleCloseActiveSession,
   handleUpdateDeviceAlias,
   handleConfirmDeleteAccount,
+  handleRecoverPassword,
+  handleValidateRecoveryCode,
+  handleRestorePassword,
 } from './handlers';
 import { BackgroundMessageType } from './interfaces';
 
@@ -24,9 +26,6 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
   const type: BackgroundMessageType = request.type;
 
   switch (type) {
-    case 'say-hello':
-      handleSayHello(sendResponse, request?.payload);
-      return true;
     case 'get-version':
       handleGetVersion(sendResponse, request?.payload);
       return true;
@@ -66,6 +65,19 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
     case 'confirm-delete-account':
       handleConfirmDeleteAccount(sendResponse, request?.payload);
       return true;
+
+    case 'recover-password':
+      handleRecoverPassword(sendResponse, request?.payload);
+      return true;
+
+    case 'validate-recovery-code':
+      handleValidateRecoveryCode(sendResponse, request?.payload);
+      return true;
+
+    case 'restore-password':
+      handleRestorePassword(sendResponse, request?.payload);
+      return true;
+
     default:
       return false;
   }

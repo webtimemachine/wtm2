@@ -1,41 +1,36 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Button,
+  FormControl,
+  IconButton,
   Input,
   InputGroup,
-  InputRightElement,
   Text,
-  FormControl,
+  InputRightElement,
+  useDisclosure,
   FormErrorMessage,
   Tooltip,
-  useDisclosure,
-  IconButton,
 } from '@chakra-ui/react';
-import { ArrowBackIcon, InfoIcon } from '@chakra-ui/icons';
+import { Icon, InfoIcon } from '@chakra-ui/icons';
+import { LuLogIn } from 'react-icons/lu';
 
-import { ServerUrlEditable } from '../components';
-import { useSignUp } from '../hooks';
+import { useAuthStore, useNavigation } from '../store';
+import { useRestorePassword } from '../hooks';
 
-import { useNavigation } from '../store';
-
-import clsx from 'clsx';
-
-const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[^\s]{8,20}$/;
 const passwordRegexMessage =
   'Password must be between 8 and 20 characters long and contain at least one uppercase letter, one lowercase letter, and one digit. Spaces are not allowed.';
 
-export const SignUpScreen: React.FC<{}> = () => {
-  const { signUpMutation } = useSignUp();
-  const { navigateBack } = useNavigation();
+export const RecoveryNewPassword: React.FC<{}> = () => {
+  const { navigateTo } = useNavigation();
+  const { recoveryEmail, deviceKey } = useAuthStore((state) => state);
+  const { restorePasswordMutation } = useRestorePassword();
 
-  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPass, setShowPass] = useState(false);
   const [confirmPassword, setConformPassword] = useState('');
   const [showConfirmPass, setShowConfirmPass] = useState(false);
 
-  const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [confirmPassError, setConfirmPassError] = useState('');
 
@@ -50,16 +45,6 @@ export const SignUpScreen: React.FC<{}> = () => {
     let emailErrorFound = false;
     let passwordErrorFound = false;
     let confirmPassErrorFound = false;
-
-    if (!email) {
-      setEmailError('Email is required');
-      emailErrorFound = true;
-    } else {
-      if (!emailRegex.test(email)) {
-        setEmailError('Please enter a valid email address');
-        emailErrorFound = true;
-      }
-    }
 
     if (!password) {
       setPasswordError('Password is required');
@@ -84,58 +69,54 @@ export const SignUpScreen: React.FC<{}> = () => {
     return emailErrorFound || passwordErrorFound || confirmPassErrorFound;
   };
 
-  const handleSignUp = () => {
+  const handleRestorePassword = () => {
     const errorsFound = validateInputs();
     if (!errorsFound) {
-      const signUpData = {
-        email,
+      restorePasswordMutation.mutate({
         password,
-      };
-      signUpMutation.mutate(signUpData);
+        verificationPassword: confirmPassword,
+        deviceKey,
+        userAgent: window.navigator.userAgent,
+      });
     }
   };
+
+  useEffect(() => {
+    if (restorePasswordMutation.isSuccess) {
+      navigateTo('navigation-entries');
+    }
+  }, [restorePasswordMutation.isSuccess]);
 
   return (
     <>
       <div className='flex flex-col p-8 pt-10 bg-slate-100 items-center w-full'>
         <div className='flex w-full justify-start pb-4 gap-4 items-center'>
           <IconButton aria-label='Back icon'>
-            <ArrowBackIcon boxSize={5} onClick={() => navigateBack()} />
+            <Icon
+              className='rotate-180'
+              as={LuLogIn}
+              boxSize={5}
+              onClick={() => {
+                navigateTo('login');
+              }}
+            />
           </IconButton>
+
           <div className='flex w-full justify-center pr-[40px]'>
             <Text fontSize={'xx-large'} fontWeight={'bold'}>
-              Sign Up
+              New Password
             </Text>
           </div>
         </div>
 
-        <div className='pb-4 flex w-full'>
-          <ServerUrlEditable />
-        </div>
-        <FormControl isInvalid={!!emailError}>
-          <div
-            className={clsx(['flex flex-col w-full', !emailError && 'pb-4'])}
-          >
-            <Input
-              type='text'
-              name='email'
-              placeholder='Email'
-              value={email}
-              autoCapitalize='false'
-              onChange={(event) => {
-                setEmail(event.target.value);
-                if (emailError) setEmailError('');
-              }}
-              backgroundColor={'white'}
-            />
-            <div className='[&>div]:mt-1 [&>div]:mb-1 select-none'>
-              <FormErrorMessage>{emailError}</FormErrorMessage>
-            </div>
+        <div className='flex w-full pb-4 gap-2 items-center'>
+          <div className='[&>p]:px-3 [&>p]:py-[6px] [&>p]:w-full [&>p]:bg-slate-200 [&>p]:rounded-lg'>
+            <Text fontSize='medium'>Email: {recoveryEmail}</Text>
           </div>
-        </FormControl>
+        </div>
 
         <FormControl isInvalid={!!passwordError}>
-          <div className='flex flex-col w-full pb-4 '>
+          <div className='flex flex-col w-full pb-4'>
             <InputGroup size='md'>
               <Input
                 pr='4.5rem'
@@ -183,7 +164,7 @@ export const SignUpScreen: React.FC<{}> = () => {
         </FormControl>
 
         <FormControl isInvalid={!!confirmPassError}>
-          <div className='flex flex-col w-full pb-4 '>
+          <div className='flex flex-col w-full pb-4'>
             <InputGroup size='md'>
               <Input
                 pr='4.5rem'
@@ -213,21 +194,20 @@ export const SignUpScreen: React.FC<{}> = () => {
           </div>
         </FormControl>
 
-        <div className='flex gap-4'>
+        <div className='flex gap-4 pt-2'>
           <Button
             colorScheme='blue'
-            onClick={() => handleSignUp()}
+            onClick={() => handleRestorePassword()}
             isDisabled={
-              !email ||
               !password ||
-              !confirmPassword ||
-              !!emailError ||
               !!passwordError ||
+              !confirmPassword ||
               !!confirmPassError
             }
-            isLoading={signUpMutation.isPending}
+            isLoading={restorePasswordMutation.isPending}
+            loadingText='Updating'
           >
-            Sign Up
+            Update Password
           </Button>
         </div>
       </div>

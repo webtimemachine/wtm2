@@ -1,8 +1,8 @@
 import React from 'react';
-import { useNavigationStore } from './store';
+import { useNavigation } from './store';
 
 const App: React.FC<{}> = () => {
-  const CurrentScreen = useNavigationStore((state) => state.CurrentScreen);
+  const { CurrentScreen } = useNavigation();
   return <CurrentScreen />;
 };
 

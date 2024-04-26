@@ -4,6 +4,8 @@ export interface VerifyCodeData {
   userAgent: string;
 }
 
+// LoginResponse is being used
+
 export interface VerifyCodeErrorResponse {
   message: string;
   statusCode: number;
