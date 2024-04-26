@@ -1,11 +1,11 @@
 import React from 'react';
 import { Text, IconButton } from '@chakra-ui/react';
 import { ArrowBackIcon } from '@chakra-ui/icons';
-import { useNavigationStore } from '../store';
 import { useLogout } from '../hooks';
+import { useNavigation } from '../store';
 
 export const SettingsScreen: React.FC<object> = () => {
-  const { navigateBack, navigateTo } = useNavigationStore();
+  const { navigateBack, navigateTo } = useNavigation();
   const { logout } = useLogout();
 
   return (

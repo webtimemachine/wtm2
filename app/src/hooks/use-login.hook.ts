@@ -11,9 +11,7 @@ import {
 
 export const useLogin = () => {
   const toast = useToast();
-  const { setIsLoggedIn, setEmail, setIsValidatingEmail } = useAuthStore(
-    (state) => state,
-  );
+  const { notifyLogin, notifyEmailValidation } = useAuthStore((state) => state);
   const { sendBackgroundMessage } = useSendBackgroundMessage();
 
   const login = (data: LoginData) => sendBackgroundMessage('login', data);
@@ -22,9 +20,8 @@ export const useLogin = () => {
     mutationFn: login,
     onSuccess: (loginRes) => {
       if (isLoginRes(loginRes)) {
-        setIsLoggedIn(true);
-        setIsValidatingEmail(false);
-        setEmail(loginRes.user.email);
+        notifyLogin();
+
         toast({
           title: 'Welcome back!',
           description: `Welcome ${loginRes.user.email}`,
@@ -33,15 +30,10 @@ export const useLogin = () => {
           isClosable: true,
         });
       } else {
-        setIsLoggedIn(false);
-        setIsValidatingEmail(true);
-        setEmail(loginRes.email);
+        notifyEmailValidation();
       }
     },
     onError: (error) => {
-      setIsLoggedIn(false);
-      setIsValidatingEmail(false);
-      setEmail('');
       console.error(error);
       toast({
         title: 'Invalid credentials',

@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { Button, Checkbox, Input, Text, IconButton } from '@chakra-ui/react';
 import { CompleteNavigationEntryDto } from '../background/interfaces/navigation-entry.interface';
 import { SettingsIcon, SmallCloseIcon } from '@chakra-ui/icons';
-import { useNavigationStore } from '../store';
 import { useNavigationEntries } from '../hooks';
+import { useNavigation } from '../store';
 
 export const NavigationEntriesScreen: React.FC<object> = () => {
-  const { navigateTo } = useNavigationStore();
+  const { navigateTo } = useNavigation();
 
   const LIMIT = 8;
   const [page, setPage] = useState<number>(0);
