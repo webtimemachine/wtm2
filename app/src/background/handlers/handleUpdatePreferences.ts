@@ -1,15 +1,18 @@
 import { BackgroundMessageHandler } from '../interfaces';
 import { apiClient } from '../api.client';
-import { PreferenciesResponse } from '../interfaces/preferences';
+import { PreferenciesResponse } from '../interfaces/preferences.interface';
 
 export const handleUpdatePreferences: BackgroundMessageHandler<
   'update-preferences'
 > = async (sendResponse, payload) => {
   try {
-    const preferencesResponse = await apiClient.fetch('/api/user/preferences', {
-      method: 'PUT',
-      body: JSON.stringify(payload.data),
-    });
+    const preferencesResponse = await apiClient.securedFetch(
+      '/api/user/preferences',
+      {
+        method: 'PUT',
+        body: JSON.stringify(payload.data),
+      },
+    );
 
     if (preferencesResponse.status === 401) {
       sendResponse({ error: 'Unnauthorized' });

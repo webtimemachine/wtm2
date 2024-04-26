@@ -1,18 +1,19 @@
 import { useMutation } from '@tanstack/react-query';
 import { useSendBackgroundMessage } from './use-send-message.hook';
-import { UpdatePreferenciesData } from '../background/interfaces/preferences.interface';
 import { useToast } from '@chakra-ui/react';
+import { UpdateDeviceAliasData } from '../background/interfaces/user-device.interface';
 
-export const useUpdatePreferences = (params: UpdatePreferenciesData) => {
+export const useUpdateDeviceAlias = () => {
   const toast = useToast();
   const { sendBackgroundMessage } = useSendBackgroundMessage();
 
-  const updatePreferencesQuery = useMutation({
-    mutationFn: () => sendBackgroundMessage('update-preferences', params),
+  const updateDeviceAlias = useMutation({
+    mutationFn: (params: UpdateDeviceAliasData) =>
+      sendBackgroundMessage('update-device-alias', params),
     onSuccess: () => {
       toast({
         title: 'Success',
-        description: `User preferences updated!`,
+        description: `Device alias updated!`,
         status: 'success',
         duration: 3000,
         isClosable: true,
@@ -20,5 +21,5 @@ export const useUpdatePreferences = (params: UpdatePreferenciesData) => {
     },
   });
 
-  return { updatePreferencesQuery };
+  return { updateDeviceAlias };
 };

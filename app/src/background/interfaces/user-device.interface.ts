@@ -48,3 +48,8 @@ export interface UserDeviceResponse {
   deviceAlias: string;
   device: DeviceResponse;
 }
+
+export interface UpdateDeviceAliasData {
+  id: number;
+  deviceAlias: string;
+}

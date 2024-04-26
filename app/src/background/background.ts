@@ -9,8 +9,10 @@ import {
   handleSignUp,
   handleResendCode,
   handleVerifyCode,
+  handleGetActiveSessions,
+  handleCloseActiveSession,
+  handleUpdateDeviceAlias,
 } from './handlers';
-
 import { BackgroundMessageType } from './interfaces';
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
@@ -24,11 +26,9 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
     case 'say-hello':
       handleSayHello(sendResponse, request?.payload);
       return true;
-
     case 'get-version':
       handleGetVersion(sendResponse, request?.payload);
       return true;
-
     case 'login':
       handleLogin(sendResponse, request?.payload);
       return true;
@@ -44,7 +44,15 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
     case 'get-user-preferences':
       handleGetPreferences(sendResponse, request?.payload);
       return true;
-
+    case 'get-active-sessions':
+      handleGetActiveSessions(sendResponse, request?.payload);
+      return true;
+    case 'close-active-session':
+      handleCloseActiveSession(sendResponse, request?.payload);
+      return true;
+    case 'update-device-alias':
+      handleUpdateDeviceAlias(sendResponse, request?.payload);
+      return true;
     case 'sign-up':
       handleSignUp(sendResponse, request?.payload);
       return true;
