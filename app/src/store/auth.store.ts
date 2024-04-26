@@ -3,55 +3,134 @@ import { createStore } from 'zustand/vanilla';
 import { persist } from 'zustand/middleware';
 import { getRandomToken } from '../utils';
 
-interface AuthStore {
-  email: string;
-  setEmail: (email: string) => void;
+import { ScreenName } from './navigation.store';
+
+interface AuthState {
   deviceKey: string;
   serverUrl: string;
-  setServerUrl: (serverUrl: string) => void;
+  recoveryEmail: string;
+  persistedScreen: ScreenName | '';
   isLoggedIn: boolean;
-  setIsLoggedIn: (isLoggedIn: boolean) => void;
-  isValidatingEmail: boolean;
-  setIsValidatingEmail: (isValidatingEmail: boolean) => void;
-  logout: () => void;
 }
+
+interface AuthStore extends AuthState {
+  notifyLogin: () => void;
+  notifyLogout: () => void;
+  notifyEmailValidation: () => void;
+  notifyRecoveryCodeSent: (email: string) => void;
+  notifyRecoveryCodeValidated: () => void;
+  updateServerUrl: (serverUrl: string) => void;
+}
+
+export const readAuthStateFromLocal = (): AuthState | undefined => {
+  const authVanillaStoreData = localStorage.getItem('auth-vanilla-store');
+  if (authVanillaStoreData && JSON.parse(authVanillaStoreData)?.state) {
+    const state: AuthState = JSON.parse(authVanillaStoreData)?.state;
+    return state;
+  }
+};
 
 export const authStore = createStore<AuthStore>()(
   persist(
     (set) => ({
-      email: '',
-      setEmail: (email: string) => set(() => ({ email })),
       deviceKey: getRandomToken(),
       serverUrl: 'https://wtm-back.vercel.app',
-      setServerUrl: (serverUrl: string) =>
+      persistedScreen: '',
+      recoveryEmail: '',
+      isLoggedIn: false,
+
+      updateServerUrl: (serverUrl: string) =>
         set(() => {
           chrome.storage.local.set({
             serverUrl,
             accessToken: '',
             refreshToken: '',
             partialToken: '',
-            isLoggedIn: false,
+            recoveryToken: '',
           });
-          return { serverUrl };
+
+          return {
+            serverUrl,
+            persistedScreen: '',
+            recoveryEmail: '',
+            isLoggedIn: false,
+          };
         }),
-      isLoggedIn: false,
-      setIsLoggedIn: (isLoggedIn: boolean) => set(() => ({ isLoggedIn })),
-      isValidatingEmail: false,
-      setIsValidatingEmail: (isValidatingEmail: boolean) =>
+
+      notifyRecoveryCodeSent: (recoveryEmail: string) =>
         set(() => {
-          if (!isValidatingEmail) {
-            chrome.storage.local.set({
-              partialToken: '',
-            });
-          }
-          return { isValidatingEmail };
+          chrome.storage.local.set({
+            accessToken: '',
+            refreshToken: '',
+            partialToken: '',
+            recoveryToken: '',
+          });
+
+          return {
+            persistedScreen: 'validate-recovery-code',
+            recoveryEmail,
+            isLoggedIn: false,
+          };
         }),
-      logout: () =>
-        set(() => ({
-          isLoggedIn: false,
-          isValidatingEmail: false,
-          email: '',
-        })),
+
+      notifyRecoveryCodeValidated: () =>
+        set(() => {
+          chrome.storage.local.set({
+            accessToken: '',
+            refreshToken: '',
+            partialToken: '',
+          });
+
+          return {
+            persistedScreen: 'recovery-new-password',
+            isLoggedIn: false,
+          };
+        }),
+
+      notifyEmailValidation: () =>
+        set(() => {
+          chrome.storage.local.set({
+            accessToken: '',
+            refreshToken: '',
+            recoveryToken: '',
+          });
+
+          return {
+            persistedScreen: 'validate-email',
+            recoveryEmail: '',
+            isLoggedIn: false,
+          };
+        }),
+
+      notifyLogin: () =>
+        set(() => {
+          chrome.storage.local.set({
+            partialToken: '',
+            recoveryToken: '',
+          });
+
+          return {
+            persistedScreen: '',
+            recoveryEmail: '',
+            isLoggedIn: true,
+          };
+        }),
+
+      notifyLogout: () =>
+        set(() => {
+          chrome.storage.local.set({
+            accessToken: '',
+            refreshToken: '',
+            partialToken: '',
+            recoveryToken: '',
+          });
+
+          return {
+            persistedScreen: '',
+            recoveryEmail: '',
+            isLoggedIn: false,
+          };
+        }),
     }),
     {
       name: 'auth-vanilla-store',

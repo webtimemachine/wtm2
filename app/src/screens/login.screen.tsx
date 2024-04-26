@@ -10,19 +10,18 @@ import {
 } from '@chakra-ui/react';
 import { ServerUrlEditable } from '../components';
 import { useLogin } from '../hooks';
-import { useAuthStore, useNavigationStore } from '../store';
+import { useAuthStore, useNavigation } from '../store';
+import { isLoginRes } from '../background/interfaces/login.interface';
 
 import clsx from 'clsx';
-import { isLoginRes } from '../background/interfaces/login.interface';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export const LoginScreen: React.FC<{}> = () => {
   const deviceKey = useAuthStore((state) => state.deviceKey);
-  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
 
   const { loginMutation } = useLogin();
-  const { navigateTo } = useNavigationStore();
+  const { navigateTo } = useNavigation();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -60,10 +59,6 @@ export const LoginScreen: React.FC<{}> = () => {
   };
 
   useEffect(() => {
-    if (isLoggedIn) navigateTo('navigation-entries');
-  }, [isLoggedIn]);
-
-  useEffect(() => {
     if (loginMutation.isSuccess)
       if (isLoginRes(loginMutation.data)) {
         navigateTo('navigation-entries');
@@ -74,7 +69,7 @@ export const LoginScreen: React.FC<{}> = () => {
 
   return (
     <>
-      <div className='flex flex-col p-8 pt-10 bg-slate-100 min-h-screen items-center w-full'>
+      <div className='flex flex-col p-8 pt-10 bg-slate-100 items-center w-full'>
         <div className='pb-4'>
           <Text fontSize={'xx-large'} fontWeight={'bold'}>
             WebTM
@@ -83,6 +78,7 @@ export const LoginScreen: React.FC<{}> = () => {
         <div className='pb-4 flex w-full'>
           <ServerUrlEditable />
         </div>
+
         <FormControl isInvalid={!!emailError}>
           <div
             className={clsx(['flex flex-col w-full', !emailError && 'pb-4'])}
@@ -92,6 +88,7 @@ export const LoginScreen: React.FC<{}> = () => {
               name='email'
               placeholder='Email'
               value={email}
+              autoCapitalize='false'
               onChange={(event) => {
                 setEmail(event.target.value);
                 if (emailError) setEmailError('');
@@ -131,15 +128,14 @@ export const LoginScreen: React.FC<{}> = () => {
           <Text
             fontSize={'small'}
             className='hover:cursor-pointer hover:underline'
+            onClick={() => navigateTo('forgot-password')}
           >
-            Recovery password
+            Forgot password?
           </Text>
           <Text
             fontSize={'small'}
             className='hover:cursor-pointer hover:underline'
-            onClick={() => {
-              navigateTo('sign-up');
-            }}
+            onClick={() => navigateTo('sign-up')}
           >
             Sign up
           </Text>
