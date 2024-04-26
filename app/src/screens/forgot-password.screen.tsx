@@ -102,6 +102,7 @@ export const ForgotPasswordScreen: React.FC<{}> = () => {
                 name='email'
                 placeholder='Email'
                 value={email}
+                autoCapitalize='false'
                 onChange={(event) => {
                   setEmail(event.target.value);
                   if (emailError) setEmailError('');
