@@ -14,3 +14,4 @@ export { handleConfirmDeleteAccount } from './handleConfirmDeleteAccount';
 export { handleRecoverPassword } from './handleRecoverPassword';
 export { handleValidateRecoveryCode } from './handleValidateRecoveryCode';
 export { handleRestorePassword } from './handleRestorePassword';
+export { handleDeleteNavigationEntry } from './handleDeleteNavigationEntry';

@@ -5,6 +5,7 @@ import {
   VerifyEmailResponse,
 } from './login.interface';
 import {
+  DeleteNavigationEntriesData,
   GetNavigationEntriesData,
   GetNavigationEntriesResponse,
 } from './navigation-entry.interface';
@@ -47,7 +48,8 @@ export type BackgroundMessageType =
   | 'confirm-delete-account'
   | 'recover-password'
   | 'validate-recovery-code'
-  | 'restore-password';
+  | 'restore-password'
+  | 'delete-navigation-entry';
 
 export type BackgroundMessageDataMap = {
   'get-version': undefined;
@@ -65,6 +67,7 @@ export type BackgroundMessageDataMap = {
   'recover-password': RecoverPasswordData;
   'validate-recovery-code': ValidateRecoveryCodeData;
   'restore-password': RestorePasswordData;
+  'delete-navigation-entry': DeleteNavigationEntriesData;
 };
 export type BackgroundMessageResponseMap = {
   'get-version': GetVersionResponse;
@@ -82,6 +85,7 @@ export type BackgroundMessageResponseMap = {
   'recover-password': RecoverPasswordResponse;
   'validate-recovery-code': ValidateRecoveryCodeResponse;
   'restore-password': LoginResponse;
+  'delete-navigation-entry': BasicResponse;
 };
 
 export interface BackgroundMessagePayload<T extends BackgroundMessageType> {
