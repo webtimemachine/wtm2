@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Checkbox, Input, Text, IconButton } from '@chakra-ui/react';
+import {
+  Button,
+  Checkbox,
+  Input,
+  Text,
+  IconButton,
+  Link,
+} from '@chakra-ui/react';
 import { CompleteNavigationEntryDto } from '../background/interfaces/navigation-entry.interface';
 import { SettingsIcon, SmallCloseIcon } from '@chakra-ui/icons';
 import { useNavigationEntries } from '../hooks';
@@ -29,7 +36,6 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
   useEffect(() => {
     navigationEntriesQuery.refetch();
   }, [page, isSemantic, navigationEntriesQuery]);
-
   return (
     <>
       <div className='flex flex-col px-5 py-3 bg-slate-100 items-center w-full'>
@@ -80,13 +86,15 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
                       key={element.id}
                       className='flex w-full bg-white px-2 py-1 rounded mb-1 items-center justify-between'
                     >
-                      <Text
-                        fontSize={'small'}
-                        className='overflow-hidden truncate'
-                      >
-                        {new Date(element.navigationDate).toLocaleString()} -{' '}
-                        {element.title}
-                      </Text>
+                      <Link href={element.url} isExternal>
+                        <Text
+                          fontSize={'small'}
+                          className='overflow-hidden truncate'
+                        >
+                          {new Date(element.navigationDate).toLocaleString()} -{' '}
+                          {element.title}
+                        </Text>
+                      </Link>
                       <SmallCloseIcon boxSize={5} />
                     </div>
                   );
