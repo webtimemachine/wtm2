@@ -59,13 +59,9 @@ class ApiClient {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       if (error?.message === 'Unauthorized') {
-        try {
-          await this.refresh();
-          console.log('ApiClient Retrying request after refresh', { endpoint });
-          return this.securedFetch(endpoint, init);
-        } catch (error) {
-          throw error;
-        }
+        await this.refresh();
+        console.log('ApiClient Retrying request after refresh', { endpoint });
+        return this.securedFetch(endpoint, init);
       } else {
         throw error;
       }
