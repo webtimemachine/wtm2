@@ -15,6 +15,7 @@ import {
   handleRecoverPassword,
   handleValidateRecoveryCode,
   handleRestorePassword,
+  handleDeleteNavigationEntry,
 } from './handlers';
 import { BackgroundMessageType } from './interfaces';
 
@@ -75,6 +76,9 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
         return true;
       case 'restore-password':
         handleRestorePassword(sendResponse, request?.payload);
+        return true;
+      case 'delete-navigation-entry':
+        handleDeleteNavigationEntry(sendResponse, request?.payload);
         return true;
 
       default:
