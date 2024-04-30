@@ -84,6 +84,7 @@ describe('AuthService', () => {
     password: 'password123',
     deviceKey: '1234',
     userAgent: undefined,
+    userAgentData: undefined,
   };
 
   const loginResult = {
@@ -171,11 +172,12 @@ describe('AuthService', () => {
     it('should login successfully and return tokens', async () => {
       prismaService.$transaction = jest.fn().mockReturnValue(loginResult);
 
-      const { deviceKey, userAgent } = loginRequestDto;
+      const { deviceKey, userAgent, userAgentData } = loginRequestDto;
 
       const result = await authService.login(
         deviceKey,
         userAgent,
+        userAgentData,
         existingUser,
       );
 
@@ -190,11 +192,12 @@ describe('AuthService', () => {
     it('should return SignUpResponseDto when user is not verified', async () => {
       prismaService.$transaction = jest.fn().mockReturnValue(signUpResult);
 
-      const { deviceKey, userAgent } = loginRequestDto;
+      const { deviceKey, userAgent, userAgentData } = loginRequestDto;
       (jwtService.sign as jest.Mock).mockReturnValue('mockedToken');
       const result = await authService.login(
         deviceKey,
         userAgent,
+        userAgentData,
         nonVerifiedUser,
       );
 
@@ -256,6 +259,8 @@ describe('AuthService', () => {
               deviceKey: 'local',
               userAgent:
                 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+              userAgentData:
+                '{"brands":[{"brand":"Chromium","version":"124"},{"brand":"Google Chrome","version":"124"},{"brand":"Not-A.Brand","version":"99"}],"mobile":false,"platform":"Windows"}',
               createdAt: new Date('2024-04-09T14:25:20.000Z'),
               updateAt: new Date('2024-04-09T14:25:20.000Z'),
             },
@@ -282,6 +287,8 @@ describe('AuthService', () => {
             deviceKey: 'local',
             userAgent:
               'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+            userAgentData:
+              '{"brands":[{"brand":"Chromium","version":"124"},{"brand":"Google Chrome","version":"124"},{"brand":"Not-A.Brand","version":"99"}],"mobile":false,"platform":"Windows"}',
             createdAt: new Date('2024-04-08T16:58:34.000Z'),
             updateAt: new Date('2024-04-09T14:23:46.000Z'),
           },
@@ -307,6 +314,8 @@ describe('AuthService', () => {
               deviceKey: 'local',
               userAgent:
                 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+              userAgentData:
+                '{"brands":[{"brand":"Chromium","version":"124"},{"brand":"Google Chrome","version":"124"},{"brand":"Not-A.Brand","version":"99"}],"mobile":false,"platform":"Windows"}',
               uaResult: {
                 ua: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
                 browser: {
@@ -342,6 +351,7 @@ describe('AuthService', () => {
       expect(prismaService.session.findMany).toHaveBeenCalledWith({
         where: { userDevice: { userId: jwtContext.user.id } },
         include: expect.any(Object),
+        orderBy: expect.any(Object),
       });
     });
   });

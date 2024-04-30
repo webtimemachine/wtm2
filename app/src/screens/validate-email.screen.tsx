@@ -83,6 +83,9 @@ export const ValidateEmailScreen: React.FC<{}> = () => {
                 deviceKey,
                 verificationCode,
                 userAgent: window.navigator.userAgent,
+                userAgentData: JSON.stringify(
+                  (window as any)?.navigator?.userAgentData || '{}',
+                ),
               })
             }
             isLoading={verificationCodeMutation.isPending}

@@ -1,6 +1,6 @@
 import { BackgroundMessageHandler } from '../interfaces';
 import { apiClient } from '../api.client';
-import { ActiveSessionsResponse } from '../interfaces/active-sessons.interface';
+import { ActiveSession } from '../interfaces/active-sessons.interface';
 
 export const handleGetActiveSessions: BackgroundMessageHandler<
   'get-active-sessions'
@@ -23,7 +23,7 @@ export const handleGetActiveSessions: BackgroundMessageHandler<
       throw new Error(errorJson?.message || 'GET Active Session Error');
     }
 
-    const getActSessionsResponse: ActiveSessionsResponse[] =
+    const getActSessionsResponse: ActiveSession[] =
       await actSessionsResponse.json();
 
     sendResponse(getActSessionsResponse);

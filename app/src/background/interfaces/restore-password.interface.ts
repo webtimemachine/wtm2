@@ -3,6 +3,7 @@ export interface RestorePasswordData {
   verificationPassword: string;
   deviceKey: string;
   userAgent: string;
+  userAgentData: string;
 }
 
 // LoginResponse is being used

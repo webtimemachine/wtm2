@@ -2,9 +2,32 @@
 @tailwind components;
 @tailwind utilities;
 
-
 body,
 #root {
   display: flex;
   width: 100%;
+}
+
+@layer utilities {
+  .scrollbar::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  /* 
+  .scrollbar::-webkit-scrollbar-track {
+    border-radius: 100vh;
+    background: #f3f4f6; 
+  }
+  */
+
+  .scrollbar::-webkit-scrollbar-thumb {
+    background: #9ca3af80;
+    border-radius: 100vh;
+    border: 3px solid #f3f4f6;
+  }
+
+  .scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #9ca3af;
+  }
 }

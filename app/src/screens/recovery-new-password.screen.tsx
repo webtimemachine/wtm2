@@ -77,6 +77,9 @@ export const RecoveryNewPassword: React.FC<{}> = () => {
         verificationPassword: confirmPassword,
         deviceKey,
         userAgent: window.navigator.userAgent,
+        userAgentData: JSON.stringify(
+          (window as any)?.navigator?.userAgentData || '{}',
+        ),
       });
     }
   };

@@ -181,6 +181,7 @@ export class AuthService {
   async login(
     deviceKey: string,
     userAgent: string | undefined,
+    userAgentData: string | undefined,
     user: CompleteUser,
   ): Promise<LoginResponseDto | SignUpResponseDto> {
     if (!user.verified) {
@@ -210,17 +211,22 @@ export class AuthService {
           device = await prismaClient.device.create({
             data: {
               deviceKey,
-              userAgent: userAgent,
+              userAgent,
+              userAgentData,
             },
           });
         } else {
-          if (userAgent && userAgent !== '') {
+          if (
+            (userAgent && userAgent !== '') ||
+            (userAgentData && userAgentData !== '')
+          ) {
             device = await prismaClient.device.update({
               where: {
                 deviceKey,
               },
               data: {
                 userAgent,
+                userAgentData,
               },
             });
           }
@@ -528,8 +534,13 @@ export class AuthService {
     restorePasswordDto: RestorePasswordDto,
   ): Promise<LoginResponseDto | SignUpResponseDto> {
     const { user } = jwtContext;
-    const { password, verificationPassword, deviceKey, userAgent } =
-      restorePasswordDto;
+    const {
+      password,
+      verificationPassword,
+      deviceKey,
+      userAgent,
+      userAgentData,
+    } = restorePasswordDto;
 
     if (password !== verificationPassword) throw new ForbiddenException();
     const hashedPassword = bcrypt.hashSync(password, appEnv.BCRYPT_SALT);
@@ -558,7 +569,7 @@ export class AuthService {
       },
     );
 
-    return await this.login(deviceKey, userAgent, updatedUser);
+    return await this.login(deviceKey, userAgent, userAgentData, updatedUser);
   }
 
   async verifyAccount(
@@ -569,7 +580,12 @@ export class AuthService {
     if (user.verified) {
       throw new BadRequestException('Email already verified');
     }
-    const { verificationCode: bodyCode, deviceKey, userAgent } = verifyEmailDto;
+    const {
+      verificationCode: bodyCode,
+      deviceKey,
+      userAgent,
+      userAgentData,
+    } = verifyEmailDto;
     const databaseCode = user.verificationCode || '';
 
     if (!bcrypt.compareSync(bodyCode, databaseCode)) {
@@ -590,6 +606,7 @@ export class AuthService {
     const loginResponse: LoginResponseDto = (await this.login(
       deviceKey,
       userAgent,
+      userAgentData,
       user,
     )) as LoginResponseDto;
     return loginResponse;
@@ -631,7 +648,11 @@ export class AuthService {
           },
         },
         include: completeSessionInclude,
+        orderBy: {
+          createdAt: 'desc',
+        },
       });
+
     return AuthService.completeSessionsToDtos(jwtContext, completeSessions);
   }
 

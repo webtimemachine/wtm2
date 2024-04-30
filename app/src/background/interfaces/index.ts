@@ -15,12 +15,9 @@ import {
 } from './preferences.interface';
 import { CloseActiveSessionsData } from './close-active-session';
 import { BasicResponse } from './basic-response';
-import {
-  UpdateDeviceAliasData,
-  UserDeviceResponse,
-} from './user-device.interface';
+import { UpdateDeviceAliasData, UserDevice } from './user-device.interface';
 import { SignUpData, SignUpResponse } from './sign-up.interface';
-import { ActiveSessionsResponse } from './active-sessons.interface';
+import { ActiveSession } from './active-sessons.interface';
 import { ResendCodeResponse } from './resend-code.interface';
 import { VerifyCodeData } from './verify-code.interface';
 import {
@@ -75,9 +72,9 @@ export type BackgroundMessageResponseMap = {
   'get-navigation-entries': GetNavigationEntriesResponse;
   'update-preferences': PreferenciesResponse;
   'get-user-preferences': PreferenciesResponse;
-  'get-active-sessions': ActiveSessionsResponse[];
+  'get-active-sessions': ActiveSession[];
   'close-active-session': BasicResponse;
-  'update-device-alias': UserDeviceResponse;
+  'update-device-alias': UserDevice;
   'sign-up': SignUpResponse;
   'resend-code': ResendCodeResponse;
   'verify-code': LoginResponse;

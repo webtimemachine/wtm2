@@ -53,6 +53,9 @@ export const LoginScreen: React.FC<{}> = () => {
         password,
         deviceKey,
         userAgent: window.navigator.userAgent,
+        userAgentData: JSON.stringify(
+          (window as any)?.navigator?.userAgentData || '{}',
+        ),
       };
       loginMutation.mutate(loginData);
     }

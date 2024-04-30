@@ -33,20 +33,21 @@ export interface UAResult {
   cpu: UACPU;
 }
 
-export interface DeviceResponse {
+export interface Device {
   id: number;
   deviceKey: string;
   userAgent?: string;
   uaResult?: UAResult;
+  userAgentData?: string;
 }
 
-export interface UserDeviceResponse {
+export interface UserDevice {
   id: number;
   userId: number;
   deviceId: number;
   isCurrentDevice: boolean;
   deviceAlias: string;
-  device: DeviceResponse;
+  device: Device;
 }
 
 export interface UpdateDeviceAliasData {
