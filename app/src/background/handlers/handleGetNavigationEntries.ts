@@ -7,10 +7,16 @@ export const handleGetNavigationEntries: BackgroundMessageHandler<
 > = async (sendResponse, payload) => {
   try {
     const { offset, limit, query, isSemantic } = payload.data;
-    const res = await apiClient.securedFetch(
-      `/api/navigation-entry?offset=${offset}&limit=${limit}${query ? `&query=${query}` : ''}&isSemantic=${isSemantic}`,
-      { method: 'GET' },
-    );
+    const url =
+      '/api/navigation-entry?' +
+      new URLSearchParams({
+        offset: offset.toString(),
+        limit: limit.toString(),
+        query: query,
+        isSemantic: String(isSemantic),
+      }).toString();
+
+    const res = await apiClient.securedFetch(url, { method: 'GET' });
 
     if (res.status === 401) {
       sendResponse({ error: 'Unnauthorized' });

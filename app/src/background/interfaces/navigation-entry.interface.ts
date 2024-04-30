@@ -25,3 +25,7 @@ export interface GetNavigationEntriesData {
   query: string;
   isSemantic: boolean;
 }
+
+export interface DeleteNavigationEntriesData {
+  id: number;
+}

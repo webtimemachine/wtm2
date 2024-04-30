@@ -14,8 +14,7 @@ export const handleUpdated = async (
   tab: chrome.tabs.Tab,
 ): Promise<void> => {
   const { accessToken } = await chrome.storage.local.get(['accessToken']);
-
-  if (accessToken && changeInfo.status === 'complete') {
+  if (accessToken && changeInfo.status === 'complete' && tabId) {
     if (
       tab.url &&
       !tab.url.startsWith('chrome://') &&
