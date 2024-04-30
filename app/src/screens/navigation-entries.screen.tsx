@@ -1,21 +1,38 @@
 import React, { useEffect, useState } from 'react';
 import {
   Button,
-  Checkbox,
   Input,
   Text,
   IconButton,
   Link,
+  Icon,
+  Switch,
 } from '@chakra-ui/react';
+
+import {
+  SettingsIcon,
+  SmallCloseIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+} from '@chakra-ui/icons';
+import { BsStars } from 'react-icons/bs';
+
 import { CompleteNavigationEntryDto } from '../background/interfaces/navigation-entry.interface';
-import { SettingsIcon, SmallCloseIcon } from '@chakra-ui/icons';
 import { useDeleteNavigationEntry, useNavigationEntries } from '../hooks';
+
 import { useNavigation } from '../store';
+import { getBrowserIconFromDevice } from '../utils';
+
+import clsx from 'clsx';
+
+const truncateString = (str: string, maxLength: number) => {
+  return str.length <= maxLength ? str : str.slice(0, maxLength) + '...';
+};
 
 export const NavigationEntriesScreen: React.FC<object> = () => {
   const { navigateTo } = useNavigation();
 
-  const LIMIT = 8;
+  const LIMIT = 16;
   const [page, setPage] = useState<number>(0);
   const [query, setQuery] = useState<string>('');
   const [isSemantic, setIsSemantic] = useState<boolean>(false);
@@ -31,8 +48,9 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
     isSemantic,
   });
 
-  const navigationEntries = navigationEntriesQuery?.data?.items;
+  const navigationEntries = navigationEntriesQuery?.data?.items || [];
   const count = navigationEntriesQuery?.data?.count || 0;
+  const pagesCount = Math.ceil(count / limit);
 
   useEffect(() => {
     navigationEntriesQuery.refetch();
@@ -42,6 +60,15 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
     navigationEntriesQuery,
     deleteNavigationEntry.isSuccess,
   ]);
+
+  const search = () => {
+    setPage(0);
+    navigationEntriesQuery.refetch();
+  };
+
+  const prev = () => page > 0 && setPage(page - 1);
+  const next = () => !(offset + limit >= count) && setPage(page + 1);
+
   return (
     <>
       <div className='flex flex-col px-5 py-3 bg-slate-100 items-center w-full'>
@@ -60,56 +87,97 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
         </div>
         <div className='flex flex-col w-full min-h-[400px] justify-between'>
           <div>
-            <div className='pt-4 pb-2 flex w-full'>
+            <div className='pt-4 flex w-full'>
               <Input
                 type='text'
                 name='search'
                 placeholder='Search'
                 backgroundColor={'white'}
                 onChange={(e) => setQuery(e.target.value)}
+                onKeyUp={(e) => {
+                  if (e.key === 'Enter') {
+                    search();
+                  }
+                }}
               />
               <div className='pl-4'>
-                <Button
-                  colorScheme='blue'
-                  onClick={() => {
-                    navigationEntriesQuery.refetch();
-                  }}
-                >
+                <Button colorScheme='blue' onClick={() => search()}>
                   Search
                 </Button>
               </div>
             </div>
-            <div className='flex pb-2'>
-              <Checkbox onChange={(e) => setIsSemantic(e.target.checked)}>
-                Is semantic?
-              </Checkbox>
+
+            <div className='flex py-1 '>
+              <div
+                className='flex items-center gap-1 p-1 h-[32px] select-none cursor-pointer hover:bg-white rounded-lg'
+                onClick={() => setIsSemantic((value) => !value)}
+              >
+                <Icon
+                  className={clsx([
+                    isSemantic ? 'fill-blue-500' : 'fill-gray-500',
+                  ])}
+                  as={BsStars}
+                  boxSize={4}
+                />
+                <Text className='text-slate-600 mr-1' fontSize='small'>
+                  AI Search
+                </Text>
+                <Switch
+                  size='sm'
+                  isChecked={isSemantic}
+                  onChange={() => setIsSemantic((value) => !value)}
+                />
+              </div>
             </div>
-            <div className='flex flex-col w-full'>
+
+            <div
+              id='content'
+              className='flex flex-col w-full max-h-[300px] overflow-y-auto scrollbar pr-1'
+            >
               {navigationEntries && navigationEntries.length ? (
                 navigationEntries.map((element: CompleteNavigationEntryDto) => {
+                  const BrowserIcon = getBrowserIconFromDevice(
+                    element.userDevice.device,
+                  );
+
                   return (
                     <div
                       key={element.id}
-                      className='flex w-full bg-white px-2 py-1 rounded mb-1 items-center justify-between'
+                      className='flex w-full bg-white px-2 py-1 rounded-lg mb-1 items-center justify-between'
                     >
-                      <Link
-                        href={element.url}
-                        isExternal
-                        className='overflow-hidden truncate'
-                      >
-                        <Text fontSize={'small'}>
-                          {new Date(element.navigationDate).toLocaleString()} -{' '}
-                          {element.title}
-                        </Text>
-                      </Link>
-                      <SmallCloseIcon
-                        boxSize={5}
-                        className='cursor-pointer'
-                        onClick={() =>
+                      <div className='flex gap-2'>
+                        <div className='flex justify-center items-center'>
+                          <Icon as={BrowserIcon} boxSize={6} color='gray.600' />
+                        </div>
+                        <div className='flex flex-col w-full'>
+                          <Link
+                            href={element.url}
+                            isExternal
+                            className='overflow-hidden truncate'
+                          >
+                            <Text className='' fontSize={'small'}>
+                              {truncateString(element.title, 45)}
+                            </Text>
+                            <Text
+                              className='text-slate-600'
+                              fontSize={'smaller'}
+                            >
+                              {new Date(
+                                element.navigationDate,
+                              ).toLocaleString()}
+                            </Text>
+                          </Link>
+                        </div>
+                      </div>
+                      <IconButton
+                        aria-label='delete navigation entry'
+                        size='xs'
+                        icon={<SmallCloseIcon />}
+                        onClick={() => {
                           deleteNavigationEntry.mutate({
                             id: element.id,
-                          })
-                        }
+                          });
+                        }}
                       />
                     </div>
                   );
@@ -124,23 +192,34 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
             </div>
           </div>
 
-          <div className='flex w-full justify-between pt-4'>
-            <Button
+          <div className='flex w-full justify-between items-center pt-4'>
+            <IconButton
               colorScheme='blue'
+              icon={<ChevronLeftIcon />}
+              aria-label='left'
               isDisabled={offset === 0}
-              onClick={() => {
-                page > 0 && setPage(page - 1);
+              onClick={() => prev()}
+            />
+            <div
+              className='select-none'
+              onWheel={(e) => {
+                if (e.deltaY < 0) next();
+                else prev();
               }}
             >
-              &larr;
-            </Button>
-            <Button
+              <Text className='text-slate-600' fontSize='medium'>
+                {page + 1}
+                {' / '}
+                {pagesCount}
+              </Text>
+            </div>
+            <IconButton
               colorScheme='blue'
-              isDisabled={offset >= count}
-              onClick={() => setPage(page + 1)}
-            >
-              &rarr;
-            </Button>
+              icon={<ChevronRightIcon />}
+              aria-label='right'
+              isDisabled={offset + limit >= count}
+              onClick={() => next()}
+            />
           </div>
         </div>
       </div>

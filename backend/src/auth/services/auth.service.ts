@@ -631,7 +631,11 @@ export class AuthService {
           },
         },
         include: completeSessionInclude,
+        orderBy: {
+          createdAt: 'desc',
+        },
       });
+
     return AuthService.completeSessionsToDtos(jwtContext, completeSessions);
   }
 

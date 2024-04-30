@@ -1,4 +1,4 @@
-import { UserDeviceResponse } from './user-device.interface';
+import { UserDevice } from './user-device.interface';
 
 export interface CompleteNavigationEntryDto {
   id: number;
@@ -7,7 +7,7 @@ export interface CompleteNavigationEntryDto {
   navigationDate: Date;
   userId: number;
   userDeviceId: number;
-  userDevice: UserDeviceResponse;
+  userDevice: UserDevice;
   expirationDate?: Date;
 }
 

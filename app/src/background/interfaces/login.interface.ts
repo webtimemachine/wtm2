@@ -1,4 +1,4 @@
-import { UserDeviceResponse } from './user-device.interface';
+import { UserDevice } from './user-device.interface';
 
 export interface LoginResponse {
   accessToken: string;
@@ -13,7 +13,7 @@ export interface LoginResponse {
     deviceId: number;
     isCurrentDevice: boolean;
     deviceAlias: string;
-    device: UserDeviceResponse;
+    device: UserDevice;
   };
 }
 
