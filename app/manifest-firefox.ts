@@ -2,9 +2,9 @@ import { ManifestV3Export } from '@crxjs/vite-plugin';
 
 export const manifestFirefox: ManifestV3Export = {
   manifest_version: 3,
-  name: 'WebTM - pocReact',
+  name: 'WebTM',
   version: '1.2',
-  description: 'WebTM - pocReact',
+  description: 'WebTM',
   permissions: ['tabs', 'activeTab', 'storage', 'scripting'],
   action: {
     default_popup: 'index.html',
