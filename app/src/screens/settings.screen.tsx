@@ -1,8 +1,14 @@
 import React from 'react';
-import { Text, IconButton, Button } from '@chakra-ui/react';
+import { Text, IconButton, Button, Icon } from '@chakra-ui/react';
 import { ArrowBackIcon } from '@chakra-ui/icons';
+
 import { useLogout } from '../hooks';
 import { useNavigation } from '../store';
+
+import { LuSettings2 } from 'react-icons/lu';
+import { BsPersonLock } from 'react-icons/bs';
+import { FaRegTrashAlt } from 'react-icons/fa';
+import { FaSignOutAlt } from 'react-icons/fa';
 
 export const SettingsScreen: React.FC<object> = () => {
   const { navigateBack, navigateTo } = useNavigation();
@@ -16,35 +22,44 @@ export const SettingsScreen: React.FC<object> = () => {
             <ArrowBackIcon boxSize={5} />
           </IconButton>
           <div className='flex w-full justify-center pr-[40px]'>
-            <Text fontSize={'xx-large'} fontWeight={'bold'}>
+            <Text fontSize='xx-large' fontWeight='bold'>
               Settings
             </Text>
           </div>
         </div>
-        <div className='flex flex-col w-full min-h-[400px]'>
+        <div className='flex flex-col gap-3 w-full min-h-[400px]'>
           <div
-            className='flex w-full py-2 cursor-pointer border-b border-solid border-[#333]'
+            className='flex gap-2 items-center w-full p-2 select-none bg-white rounded-lg cursor-pointer'
             onClick={() => navigateTo('preferences')}
           >
-            <Text fontSize={'medium'}>Preferences</Text>
+            <Icon as={LuSettings2} boxSize={5} color='gray.600' />
+            <Text fontSize='medium'>Preferences</Text>
           </div>
           <div
-            className='flex w-full py-2 cursor-pointer border-b border-solid border-[#333]'
+            className='flex gap-2 items-center w-full p-2 select-none bg-white rounded-lg cursor-pointer'
             onClick={() => navigateTo('active-sessions')}
           >
-            <Text fontSize={'medium'}>Active Sessions</Text>
+            <Icon as={BsPersonLock} boxSize={5} color='gray.600' />
+            <Text fontSize='medium'>Active Sessions</Text>
           </div>
           <div
-            className='flex w-full py-2 cursor-pointer border-b border-solid border-[#333]'
+            className='flex gap-2 items-center w-full p-2 select-none bg-white rounded-lg cursor-pointer'
             onClick={() => navigateTo('confirm-delete-account')}
           >
-            <Text fontSize={'medium'} color={'red'}>
+            <Icon as={FaRegTrashAlt} boxSize={4} color='red.600' />
+            <Text fontSize='medium' color='red.600'>
               Delete account
             </Text>
           </div>
         </div>
-        <div className='flex w-full py-2 cursor-pointer justify-center'>
-          <Button onClick={logout}>Logout</Button>
+        <div className='pb-8'>
+          <Button
+            rightIcon={<FaSignOutAlt />}
+            colorScheme='blue'
+            onClick={() => logout()}
+          >
+            Logout
+          </Button>
         </div>
       </div>
     </>
