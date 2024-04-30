@@ -132,7 +132,7 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
 
             <div
               id='content'
-              className='flex flex-col w-full max-h-[300px] overflow-y-auto scrollbar pr-1'
+              className='flex flex-col w-full h-[300px] overflow-y-auto scrollbar pr-1'
             >
               {navigationEntries && navigationEntries.length ? (
                 navigationEntries.map((element: CompleteNavigationEntryDto) => {
