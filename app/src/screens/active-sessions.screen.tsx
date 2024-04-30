@@ -16,7 +16,11 @@ import {
   useGetActiveSessions,
   useUpdateDeviceAlias,
 } from '../hooks';
-import { getBrowserIconFromDevice, getOSIconFromDevice } from '../utils';
+import {
+  getBrowserIconFromDevice,
+  getOSIconFromDevice,
+  getSupportedBrowserFromDevice,
+} from '../utils';
 
 const moveCurrentSessionToFirst = (arr: ActiveSession[]) => {
   const currentIndex = arr.findIndex(
@@ -69,7 +73,9 @@ export const ActiveSessionsScreen: React.FC<object> = () => {
 
     const osName = session.userDevice.device.uaResult?.os.name;
     const deviceModel = session.userDevice.device.uaResult?.device.model;
-    const browserName = session.userDevice.device.uaResult?.browser.name;
+    const browserName = getSupportedBrowserFromDevice(
+      session.userDevice.device,
+    );
     const isCurrentDevice = session.userDevice.isCurrentDevice;
 
     let name = deviceAlias || `${browserName} - ${deviceModel || osName} `;

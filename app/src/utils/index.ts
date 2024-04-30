@@ -4,3 +4,4 @@ export { getRandomToken } from './getRandomToken';
 export { DOMtoString } from './DOMtoString';
 export { getBrowserIconFromDevice } from './getBrowserIconFromDevice';
 export { getOSIconFromDevice } from './getOSIconFromDevice';
+export { getSupportedBrowserFromDevice } from './getSupportedBrowserFromDevice';

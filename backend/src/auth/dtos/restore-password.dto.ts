@@ -27,4 +27,9 @@ export class RestorePasswordDto {
   @IsOptional()
   @Transform(({ value }) => (value || '').toString().trim())
   userAgent?: string = '';
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @Transform(({ value }) => (value || '').toString().trim())
+  userAgentData?: string = '';
 }

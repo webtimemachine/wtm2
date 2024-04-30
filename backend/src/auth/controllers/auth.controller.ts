@@ -83,8 +83,13 @@ export class AuthController {
     @Body() body: LoginRequestDto,
   ): Promise<LoginResponseDto | SignUpResponseDto> {
     const user = req.user;
-    const { deviceKey, userAgent } = body;
-    return await this.authService.login(deviceKey, userAgent, user);
+    const { deviceKey, userAgent, userAgentData } = body;
+    return await this.authService.login(
+      deviceKey,
+      userAgent,
+      userAgentData,
+      user,
+    );
   }
 
   @ApiOkResponse({

@@ -38,6 +38,7 @@ export interface Device {
   deviceKey: string;
   userAgent?: string;
   uaResult?: UAResult;
+  userAgentData?: string;
 }
 
 export interface UserDevice {

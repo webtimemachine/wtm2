@@ -40,7 +40,7 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
   const offset = page * LIMIT;
   const limit = LIMIT;
 
-  const { deleteNavigationEntry } = useDeleteNavigationEntry();
+  const { deleteNavigationEntryMutation } = useDeleteNavigationEntry();
   const { navigationEntriesQuery } = useNavigationEntries({
     offset,
     limit,
@@ -58,7 +58,7 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
     page,
     isSemantic,
     navigationEntriesQuery,
-    deleteNavigationEntry.isSuccess,
+    deleteNavigationEntryMutation.isSuccess,
   ]);
 
   const search = () => {
@@ -174,7 +174,7 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
                         size='xs'
                         icon={<SmallCloseIcon />}
                         onClick={() => {
-                          deleteNavigationEntry.mutate({
+                          deleteNavigationEntryMutation.mutate({
                             id: element.id,
                           });
                         }}
