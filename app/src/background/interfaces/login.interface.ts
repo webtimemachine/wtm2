@@ -28,6 +28,7 @@ export interface LoginData {
   password: string;
   deviceKey: string;
   userAgent: string;
+  userAgentData: string;
 }
 
 export const isLoginRes = (

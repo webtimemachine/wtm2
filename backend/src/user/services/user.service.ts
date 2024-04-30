@@ -43,6 +43,10 @@ export class UserService {
         userDevice.device.userAgent !== null
           ? userDevice.device.userAgent
           : undefined,
+      userAgentData:
+        userDevice.device.userAgentData !== null
+          ? userDevice.device.userAgentData
+          : undefined,
     });
 
     if (userAgent) {

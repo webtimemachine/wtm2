@@ -5,16 +5,30 @@ import {
   FaFirefox,
   FaEdge,
   FaSafari,
+  FaBrave,
 } from 'react-icons/fa6';
+import { getSupportedBrowserFromDevice } from '.';
 
 export const getBrowserIconFromDevice = (device: Device) => {
-  const browserName = device.uaResult?.browser.name;
+  const supportedBrowser = getSupportedBrowserFromDevice(device);
 
-  if (browserName && browserName === 'Chrome') return FaChrome;
-  if (browserName && browserName === 'Firefox') return FaFirefox;
-  if (browserName && browserName === 'Safari') return FaSafari;
-  if (browserName && browserName === 'Mobile Safari') return FaSafari;
-  if (browserName && browserName === 'Edge') return FaEdge;
+  switch (supportedBrowser) {
+    case 'Chrome':
+      return FaChrome;
 
-  return FaEarthAmericas;
+    case 'Firefox':
+      return FaFirefox;
+
+    case 'Safari':
+      return FaSafari;
+
+    case 'Edge':
+      return FaEdge;
+
+    case 'Brave':
+      return FaBrave;
+
+    case 'Unknown':
+      return FaEarthAmericas;
+  }
 };
