@@ -64,7 +64,10 @@ const mockedSession = {
     device: {
       id: BigInt(1),
       deviceKey: '123',
-      userAgent: 'Chrome/121.0.6167.161',
+      userAgent:
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+      userAgentData:
+        '{"brands":[{"brand":"Chromium","version":"124"},{"brand":"Google Chrome","version":"124"},{"brand":"Not-A.Brand","version":"99"}],"mobile":false,"platform":"Windows"}',
       createdAt: new Date(),
       updateAt: new Date(),
     },

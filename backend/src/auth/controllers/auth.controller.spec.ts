@@ -81,6 +81,7 @@ describe('AuthController', () => {
         password: '123456',
         deviceKey: '123456',
         userAgent: undefined,
+        userAgentData: undefined,
       };
 
       const loginResponseDto = {
@@ -104,6 +105,7 @@ describe('AuthController', () => {
       expect(mockAuthService.login).toHaveBeenCalledWith(
         loginRequestDto.deviceKey,
         loginRequestDto.userAgent,
+        loginRequestDto.userAgentData,
         req.user,
       );
       expect(result).toEqual(loginResponseDto);

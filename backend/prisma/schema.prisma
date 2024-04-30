@@ -55,8 +55,9 @@ model UserPreferences {
 model Device {
   id BigInt @id @default(autoincrement())
 
-  deviceKey String  @unique @db.VarChar()
-  userAgent String? @db.VarChar()
+  deviceKey     String  @unique @db.VarChar()
+  userAgent     String? @db.VarChar()
+  userAgentData String? @db.VarChar()
 
   createdAt DateTime  @default(now()) @db.Timestamptz(0)
   updateAt  DateTime? @updatedAt @db.Timestamptz(0)

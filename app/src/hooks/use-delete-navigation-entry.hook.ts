@@ -7,7 +7,7 @@ export const useDeleteNavigationEntry = () => {
   const toast = useToast();
   const { sendBackgroundMessage } = useSendBackgroundMessage();
 
-  const deleteNavigationEntry = useMutation({
+  const deleteNavigationEntryMutation = useMutation({
     mutationFn: (params: DeleteNavigationEntriesData) =>
       sendBackgroundMessage('delete-navigation-entry', params),
     onSuccess: () => {
@@ -21,5 +21,5 @@ export const useDeleteNavigationEntry = () => {
     },
   });
 
-  return { deleteNavigationEntry };
+  return { deleteNavigationEntryMutation };
 };
