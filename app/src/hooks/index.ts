@@ -15,3 +15,4 @@ export { useConfirmDeleteAccount } from './use-confirm-delete-account.hook';
 export { useRecoverPassword } from './use-recover-password.hook';
 export { useValidateRecoveryCode } from './use-validate-recovery-code.hook';
 export { useRestorePassword } from './use-restore-password.hook';
+export { useDeleteNavigationEntry } from './use-delete-navigation-entry.hook';

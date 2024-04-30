@@ -1,8 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Checkbox, Input, Text, IconButton } from '@chakra-ui/react';
+import {
+  Button,
+  Checkbox,
+  Input,
+  Text,
+  IconButton,
+  Link,
+} from '@chakra-ui/react';
 import { CompleteNavigationEntryDto } from '../background/interfaces/navigation-entry.interface';
 import { SettingsIcon, SmallCloseIcon } from '@chakra-ui/icons';
-import { useNavigationEntries } from '../hooks';
+import { useDeleteNavigationEntry, useNavigationEntries } from '../hooks';
 import { useNavigation } from '../store';
 
 export const NavigationEntriesScreen: React.FC<object> = () => {
@@ -16,6 +23,7 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
   const offset = page * LIMIT;
   const limit = LIMIT;
 
+  const { deleteNavigationEntry } = useDeleteNavigationEntry();
   const { navigationEntriesQuery } = useNavigationEntries({
     offset,
     limit,
@@ -28,8 +36,12 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
 
   useEffect(() => {
     navigationEntriesQuery.refetch();
-  }, [page, isSemantic, navigationEntriesQuery]);
-
+  }, [
+    page,
+    isSemantic,
+    navigationEntriesQuery,
+    deleteNavigationEntry.isSuccess,
+  ]);
   return (
     <>
       <div className='flex flex-col px-5 py-3 bg-slate-100 items-center w-full'>
@@ -80,14 +92,25 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
                       key={element.id}
                       className='flex w-full bg-white px-2 py-1 rounded mb-1 items-center justify-between'
                     >
-                      <Text
-                        fontSize={'small'}
+                      <Link
+                        href={element.url}
+                        isExternal
                         className='overflow-hidden truncate'
                       >
-                        {new Date(element.navigationDate).toLocaleString()} -{' '}
-                        {element.title}
-                      </Text>
-                      <SmallCloseIcon boxSize={5} />
+                        <Text fontSize={'small'}>
+                          {new Date(element.navigationDate).toLocaleString()} -{' '}
+                          {element.title}
+                        </Text>
+                      </Link>
+                      <SmallCloseIcon
+                        boxSize={5}
+                        className='cursor-pointer'
+                        onClick={() =>
+                          deleteNavigationEntry.mutate({
+                            id: element.id,
+                          })
+                        }
+                      />
                     </div>
                   );
                 })
