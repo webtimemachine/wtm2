@@ -14,13 +14,6 @@ body,
     height: 10px;
   }
 
-  /* 
-  .scrollbar::-webkit-scrollbar-track {
-    border-radius: 100vh;
-    background: #f3f4f6; 
-  }
-  */
-
   .scrollbar::-webkit-scrollbar-thumb {
     background: #9ca3af80;
     border-radius: 100vh;

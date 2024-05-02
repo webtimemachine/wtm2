@@ -156,7 +156,7 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
                             className='overflow-hidden truncate'
                           >
                             <Text className='' fontSize={'small'}>
-                              {truncateString(element.title, 45)}
+                              {truncateString(element.title, 40)}
                             </Text>
                             <Text
                               className='text-slate-600'
