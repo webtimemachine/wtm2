@@ -133,12 +133,11 @@ jobs:
           asset_name: wtm.ipa
           asset_content_type: application/octet-stream
 
-      - name: 'Publish to Chrome Store'
-        uses: cardinalby/webext-buildtools-chrome-webstore-publish-action@v1
+      - name: 'Upload to Chrome Store'
+        uses: cardinalby/webext-buildtools-chrome-webstore-action@v1
         with:
-          action: 'publish'
           apiClientId: ${{ secrets.CHROME_CLIENT_ID }}
           apiClientSecret: ${{ secrets.CHROME_SECRET }}
           apiRefreshToken: ${{ secrets.CHROME_REFRESH_TOKEN }}
           extensionId: ${{ secrets.CHROME_EXTENSION_ID }}
-          zip_file: 'chrome-extension.zip'
+          zipFilePath: 'chrome-extension.zip'
