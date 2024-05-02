@@ -13,10 +13,21 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Install dependencies
+        working-directory: app
+        run: npm install
+
+      - name: Build Chrome Extension app
+        working-directory: app
+        run: npm run build:chrome
+
       - name: Create ZIP file for Chrome extension
-        working-directory: extensions
         run: |
-          zip -r chrome-extension.zip ./Chrome\ Web
+          zip -r chrome-extension.zip ./app_chrome
+
+      - name: Build iOS app from Chrome code
+        working-directory: app
+        run: npm run build:ios
 
       - name: Install dependencies & build backend project
         working-directory: backend
@@ -26,11 +37,9 @@ jobs:
           zip -r backend.zip ./dist
 
       - name: Install Dependencies
-        working-directory: 'extensions'
         run: brew install coreutils
 
       - name: Decode and Install Apple Provisioning Profiles and Certificate
-        working-directory: 'extensions'
         run: |
           echo "${{ secrets.ENCODED_CERTIFICATE }}" | base64 --decode --output cert.p12
           echo "${{ secrets.ENCODED_PROVISIONING_PROFILE_APP }}" | base64 --decode --output app.mobileprovision
@@ -54,14 +63,13 @@ jobs:
           ENCODED_PROVISIONING_PROFILE_EXTENSION: ${{ secrets.ENCODED_PROVISIONING_PROFILE_EXTENSION }}
           KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
           P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
+
       - name: List all schemes
-        working-directory: 'extensions'
         run: xcodebuild -list
 
       - name: Build Safari Extension for Testing
-        working-directory: 'extensions'
         run: |
-          xcodebuild build-for-testing -scheme "Web Time Machine (iOS)" -sdk iphonesimulator -derivedDataPath './build' -allowProvisioningUpdates
+          xcodebuild build-for-testing -scheme "wtm (iOS)" -sdk iphonesimulator -derivedDataPath './build' -allowProvisioningUpdates
 
       - name: Test Safari Extension
         working-directory: 'extensions'
@@ -74,12 +82,12 @@ jobs:
             file_to_build="`ls -A | grep -i \\.xcodeproj\$`"
           fi
           file_to_build=`echo $file_to_build | awk '{$1=$1;print}'`
-          xcodebuild test-without-building -scheme "Web Time Machine (iOS)" -"$filetype_parameter" "$file_to_build" -destination 'platform=iOS Simulator,name=iPhone 14,OS=16.2' -derivedDataPath './build'
+          xcodebuild test-without-building -scheme "wtm (iOS)" -"$filetype_parameter" "$file_to_build" -destination 'platform=iOS Simulator,name=iPhone 14,OS=16.2' -derivedDataPath './build'
 
       - name: Archive the iOS App
         working-directory: 'extensions'
         run: |
-          xcodebuild archive -scheme "Web Time Machine (iOS)" -sdk iphoneos -configuration AppStoreDistribution archive -archivePath "$PWD/build/Web Time Machine.xcarchive" -allowProvisioningUpdates
+          xcodebuild archive -scheme "wtm (iOS)" -sdk iphoneos -configuration AppStoreDistribution archive -archivePath "$PWD/build/Web Time Machine.xcarchive" -allowProvisioningUpdates
 
       - name: Export the .ipa File
         working-directory: 'extensions'
@@ -133,7 +141,7 @@ jobs:
       - name: 'Publish to Chrome Store'
         uses: cardinalby/webext-buildtools-chrome-webstore-publish-action@v1
         with:
-          action: 'publish' 
+          action: 'publish'
           apiClientId: ${{ secrets.CHROME_CLIENT_ID }}
           apiClientSecret: ${{ secrets.CHROME_SECRET }}
           apiRefreshToken: ${{ secrets.CHROME_REFRESH_TOKEN }}
