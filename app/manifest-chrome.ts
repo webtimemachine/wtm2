@@ -3,7 +3,7 @@ import { ManifestV3Export } from '@crxjs/vite-plugin';
 export const manifestChrome: ManifestV3Export = {
   manifest_version: 3,
   name: 'WebTM',
-  version: '1.2',
+  version: '1.3',
   description: 'WebTM',
   permissions: ['tabs', 'activeTab', 'storage', 'scripting'],
   action: {
