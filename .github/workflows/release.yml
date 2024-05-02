@@ -1,7 +1,9 @@
 on:
-  push:
-    tags:
-      - 'v*'
+  pull_request:
+    branches: ['main']
+  # push:
+  #   tags:
+  #     - 'v*'
 
 name: Create Release and Upload Release Assets
 
@@ -94,56 +96,56 @@ jobs:
         run: |
           xcodebuild -exportArchive -archivePath "$PWD/build/Web Time Machine.xcarchive" -exportOptionsPlist "$PWD/ExportOptions.plist" -exportPath "$PWD/build"
 
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: Web Time Machine Release ${{ github.ref }}
-          draft: false
-          prerelease: false
+      # - name: Create Release
+      #   id: create_release
+      #   uses: actions/create-release@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     tag_name: ${{ github.ref }}
+      #     release_name: Web Time Machine Release ${{ github.ref }}
+      #     draft: false
+      #     prerelease: false
 
-      - name: Upload Release Chrome extension Asset
-        id: upload-release-asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: extensions/chrome-extension.zip
-          asset_name: chrome-extension.zip
-          asset_content_type: application/zip
+      # - name: Upload Release Chrome extension Asset
+      #   id: upload-release-asset
+      #   uses: actions/upload-release-asset@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     upload_url: ${{ steps.create_release.outputs.upload_url }}
+      #     asset_path: extensions/chrome-extension.zip
+      #     asset_name: chrome-extension.zip
+      #     asset_content_type: application/zip
 
-      - name: Upload Release Backend Asset
-        id: upload-release-asset-backend
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: backend/backend.zip
-          asset_name: backend.zip
-          asset_content_type: application/zip
+      # - name: Upload Release Backend Asset
+      #   id: upload-release-asset-backend
+      #   uses: actions/upload-release-asset@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     upload_url: ${{ steps.create_release.outputs.upload_url }}
+      #     asset_path: backend/backend.zip
+      #     asset_name: backend.zip
+      #     asset_content_type: application/zip
 
-      - name: Upload .ipa to Release
-        id: upload-release-asset-ipa
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: 'extensions/build/Web Time Machine.ipa'
-          asset_name: Web Time Machine.ipa
-          asset_content_type: application/octet-stream
+      # - name: Upload .ipa to Release
+      #   id: upload-release-asset-ipa
+      #   uses: actions/upload-release-asset@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     upload_url: ${{ steps.create_release.outputs.upload_url }}
+      #     asset_path: 'extensions/build/Web Time Machine.ipa'
+      #     asset_name: Web Time Machine.ipa
+      #     asset_content_type: application/octet-stream
 
-      - name: 'Publish to Chrome Store'
-        uses: cardinalby/webext-buildtools-chrome-webstore-publish-action@v1
-        with:
-          action: 'publish'
-          apiClientId: ${{ secrets.CHROME_CLIENT_ID }}
-          apiClientSecret: ${{ secrets.CHROME_SECRET }}
-          apiRefreshToken: ${{ secrets.CHROME_REFRESH_TOKEN }}
-          extensionId: ${{ secrets.CHROME_EXTENSION_ID }}
-          zip_file: 'extensions/chrome-extension.zip'
+      # - name: 'Publish to Chrome Store'
+      #   uses: cardinalby/webext-buildtools-chrome-webstore-publish-action@v1
+      #   with:
+      #     action: 'publish'
+      #     apiClientId: ${{ secrets.CHROME_CLIENT_ID }}
+      #     apiClientSecret: ${{ secrets.CHROME_SECRET }}
+      #     apiRefreshToken: ${{ secrets.CHROME_REFRESH_TOKEN }}
+      #     extensionId: ${{ secrets.CHROME_EXTENSION_ID }}
+      #     zip_file: 'extensions/chrome-extension.zip'
