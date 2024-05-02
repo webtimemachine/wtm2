@@ -141,4 +141,4 @@ jobs:
           apiClientSecret: ${{ secrets.CHROME_SECRET }}
           apiRefreshToken: ${{ secrets.CHROME_REFRESH_TOKEN }}
           extensionId: ${{ secrets.CHROME_EXTENSION_ID }}
-          zip_file: 'extensions/chrome-extension.zip'
+          zip_file: 'chrome-extension.zip'
