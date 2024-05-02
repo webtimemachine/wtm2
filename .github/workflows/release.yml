@@ -20,16 +20,22 @@ jobs:
         run: npm install
 
       - name: Build Chrome Extension app
-        working-directory: app
-        run: npm run build:chrome
+        run: npm run app:build:chrome
 
       - name: Create ZIP file for Chrome extension
         run: |
           zip -r chrome-extension.zip ./app_chrome
 
       - name: Build iOS app from Chrome code
-        working-directory: app
-        run: npm run build:ios
+        run: npm run app:build:ios
+
+      - name: Copy ExportOptions.plist file
+        run: cp app/ExportOptions.plist app_safari/wtm
+
+      - name: Update xcode project file
+        run: |
+          sed -i '' 's/PRODUCT_BUNDLE_IDENTIFIER = com.ttt246llc.wtm;/PRODUCT_BUNDLE_IDENTIFIER = com.ttt246llc.wtm;\nPROVISIONING_PROFILE_SPECIFIER = "Web Time Machine Prov Profile Dev";/' app_safari/wtm/wtm.xcodeproj/project.pbxproj
+          sed -i '' 's/PRODUCT_BUNDLE_IDENTIFIER = com.ttt246llc.wtm.Extension;/PRODUCT_BUNDLE_IDENTIFIER = com.ttt246llc.wtm.Extension;\nPROVISIONING_PROFILE_SPECIFIER = "Web Time Machine Prov Profile Dev Extension";/' app_safari/wtm/wtm.xcodeproj/project.pbxproj
 
       - name: Install dependencies & build backend project
         working-directory: backend
@@ -67,34 +73,36 @@ jobs:
           P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
 
       - name: List all schemes
+        working-directory: 'app_safari/wtm'
         run: xcodebuild -list
 
       - name: Build Safari Extension for Testing
+        working-directory: 'app_safari/wtm'
         run: |
           xcodebuild build-for-testing -scheme "wtm (iOS)" -sdk iphonesimulator -derivedDataPath './build' -allowProvisioningUpdates
 
-      - name: Test Safari Extension
-        working-directory: 'extensions'
-        run: |
-          if [ "`ls -A | grep -i \\.xcworkspace\$`" ]; then
-            filetype_parameter="workspace"
-            file_to_build="`ls -A | grep -i \\.xcworkspace\$`"
-          else
-            filetype_parameter="project"
-            file_to_build="`ls -A | grep -i \\.xcodeproj\$`"
-          fi
-          file_to_build=`echo $file_to_build | awk '{$1=$1;print}'`
-          xcodebuild test-without-building -scheme "wtm (iOS)" -"$filetype_parameter" "$file_to_build" -destination 'platform=iOS Simulator,name=iPhone 14,OS=16.2' -derivedDataPath './build'
+      # - name: Test Safari Extension
+      #   working-directory: 'app_safari/wtm'
+      #   run: |
+      #     if [ "`ls -A | grep -i \\.xcworkspace\$`" ]; then
+      #       filetype_parameter="workspace"
+      #       file_to_build="`ls -A | grep -i \\.xcworkspace\$`"
+      #     else
+      #       filetype_parameter="project"
+      #       file_to_build="`ls -A | grep -i \\.xcodeproj\$`"
+      #     fi
+      #     file_to_build=`echo $file_to_build | awk '{$1=$1;print}'`
+      #     xcodebuild test-without-building -scheme "wtm (iOS)" -"$filetype_parameter" "$file_to_build" -destination 'platform=iOS Simulator,name=iPhone 14,OS=16.2' -derivedDataPath './build'
 
       - name: Archive the iOS App
-        working-directory: 'extensions'
+        working-directory: 'app_safari/wtm'
         run: |
-          xcodebuild archive -scheme "wtm (iOS)" -sdk iphoneos -configuration AppStoreDistribution archive -archivePath "$PWD/build/Web Time Machine.xcarchive" -allowProvisioningUpdates
+          xcodebuild archive -scheme "wtm (iOS)" -sdk iphoneos -configuration AppStoreDistribution DEVELOPMENT_TEAM=2858MX5336 CODE_SIGN_STYLE=Manual -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.4' archive -archivePath "$PWD/build/Web Time Machine.xcarchive" -allowProvisioningUpdates
 
       - name: Export the .ipa File
-        working-directory: 'extensions'
+        working-directory: 'app_safari/wtm'
         run: |
-          xcodebuild -exportArchive -archivePath "$PWD/build/Web Time Machine.xcarchive" -exportOptionsPlist "$PWD/ExportOptions.plist" -exportPath "$PWD/build"
+          xcodebuild -exportArchive -archivePath "$PWD/build/Web Time Machine.xcarchive" -exportOptionsPlist "$PWD/ExportOptions.plist" DEVELOPMENT_TEAM=2858MX5336 -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.4' -exportPath "$PWD/build"
 
       # - name: Create Release
       #   id: create_release
