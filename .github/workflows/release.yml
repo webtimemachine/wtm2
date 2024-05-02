@@ -132,12 +132,3 @@ jobs:
           asset_path: 'app_safari/wtm/build/wtm.ipa'
           asset_name: wtm.ipa
           asset_content_type: application/octet-stream
-
-      - name: 'Upload to Chrome Store'
-        uses: cardinalby/webext-buildtools-chrome-webstore-action@v1
-        with:
-          apiClientId: ${{ secrets.CHROME_CLIENT_ID }}
-          apiClientSecret: ${{ secrets.CHROME_SECRET }}
-          apiRefreshToken: ${{ secrets.CHROME_REFRESH_TOKEN }}
-          extensionId: ${{ secrets.CHROME_EXTENSION_ID }}
-          zipFilePath: 'chrome-extension.zip'
