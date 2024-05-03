@@ -100,7 +100,9 @@ describe('handleGetNavigationEntries', () => {
       data: { offset: 0, limit: 10, query: '', isSemantic: true },
     };
 
-    (apiClient.securedFetch as jest.Mock).mockRejectedValueOnce(undefined);
+    (apiClient.securedFetch as jest.Mock).mockRejectedValueOnce(
+      new Error('Network Error'),
+    );
 
     await handleGetNavigationEntries(sendResponse, payload);
 
