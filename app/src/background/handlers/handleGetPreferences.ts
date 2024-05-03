@@ -14,7 +14,7 @@ export const handleGetPreferences: BackgroundMessageHandler<
     );
 
     if (preferencesResponse.status === 401) {
-      sendResponse({ error: 'Unnauthorized' });
+      sendResponse({ error: 'Unauthorized' });
       return;
     }
 

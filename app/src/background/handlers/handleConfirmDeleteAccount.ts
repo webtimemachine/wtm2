@@ -15,7 +15,7 @@ export const handleConfirmDeleteAccount: BackgroundMessageHandler<
     );
 
     if (confirmDeleteAccountResponse.status === 401) {
-      sendResponse({ error: 'Unnauthorized' });
+      sendResponse({ error: 'Unauthorized' });
       return;
     }
 
