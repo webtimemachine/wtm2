@@ -50,9 +50,7 @@ describe('handleCloseActiveSession', () => {
 
     (apiClient.securedFetch as jest.Mock).mockResolvedValueOnce({
       status: 500,
-      json: jest
-        .fn()
-        .mockResolvedValueOnce({ message: 'Internal Server Error' }),
+      json: jest.fn().mockResolvedValueOnce({ message: undefined }),
     });
 
     await handleCloseActiveSession(sendResponse, { data: payload });
