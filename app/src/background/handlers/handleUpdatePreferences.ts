@@ -29,7 +29,6 @@ export const handleUpdatePreferences: BackgroundMessageHandler<
 
     sendResponse(updatePreferenciesResponse);
   } catch (error) {
-    console.error('handleUpdatePreferences', error);
     sendResponse({ error: 'Error while updating preferences' });
   }
 };

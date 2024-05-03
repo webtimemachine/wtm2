@@ -29,7 +29,6 @@ export const handleSignUp: BackgroundMessageHandler<'sign-up'> = async (
       });
     }
   } catch (error) {
-    console.error('handleSignUp', error);
     sendResponse({ error: 'Error while sign up' });
   }
 };

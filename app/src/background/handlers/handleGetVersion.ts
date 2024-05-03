@@ -11,7 +11,6 @@ export const handleGetVersion: BackgroundMessageHandler<'get-version'> = async (
     const versionResponse: GetVersionResponse = await res.json();
     sendResponse(versionResponse);
   } catch (error) {
-    console.error('handleGetVersion', error);
     sendResponse({ error: 'Error geting version' });
   }
 };

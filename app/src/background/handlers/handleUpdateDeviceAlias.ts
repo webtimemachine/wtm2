@@ -29,7 +29,6 @@ export const handleUpdateDeviceAlias: BackgroundMessageHandler<
 
     sendResponse(deviceResponse);
   } catch (error) {
-    console.error('handleUpdateDeviceAlias', error);
     sendResponse({ error: 'Error while updating device alias' });
   }
 };
