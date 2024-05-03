@@ -28,7 +28,6 @@ export const handleDeleteNavigationEntry: BackgroundMessageHandler<
 
     sendResponse(deleteNavEntryResponse);
   } catch (error) {
-    console.error('handleDeleteNavigationEntry', error);
     sendResponse({ error: 'Error while deleting a navigation entry' });
   }
 };

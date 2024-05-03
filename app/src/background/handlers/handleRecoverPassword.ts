@@ -20,7 +20,6 @@ export const handleRecoverPassword: BackgroundMessageHandler<
       throw new Error(verifyCodeErrorResponse?.message?.toString());
     }
   } catch (error) {
-    console.error('handleRecoverPassword', error);
     sendResponse({ error: 'Error sending the recovery code' });
   }
 };

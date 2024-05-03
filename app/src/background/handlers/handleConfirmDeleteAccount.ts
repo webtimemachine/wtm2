@@ -31,7 +31,6 @@ export const handleConfirmDeleteAccount: BackgroundMessageHandler<
 
     sendResponse(confirmResponse);
   } catch (error) {
-    console.error('handleConfirmDeleteAccount', error);
     sendResponse({ error: 'Error while confirm deleting account' });
   }
 };

@@ -28,7 +28,6 @@ export const handleGetPreferences: BackgroundMessageHandler<
 
     sendResponse(getPreferenciesResponse);
   } catch (error) {
-    console.error('handleGetPreferences', error);
     sendResponse({ error: 'Error while getting user preferences' });
   }
 };

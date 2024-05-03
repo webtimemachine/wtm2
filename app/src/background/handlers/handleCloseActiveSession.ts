@@ -29,7 +29,6 @@ export const handleCloseActiveSession: BackgroundMessageHandler<
 
     sendResponse(closeActSessionsResponse);
   } catch (error) {
-    console.error('handleCloseActiveSession', error);
     sendResponse({ error: 'Error while closing an active session' });
   }
 };
