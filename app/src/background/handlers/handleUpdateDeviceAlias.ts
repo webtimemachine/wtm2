@@ -15,7 +15,7 @@ export const handleUpdateDeviceAlias: BackgroundMessageHandler<
     );
 
     if (updateDeviceAliasResponse.status === 401) {
-      sendResponse({ error: 'Unnauthorized' });
+      sendResponse({ error: 'Unauthorized' });
       return;
     }
 

@@ -14,7 +14,7 @@ export const handleGetActiveSessions: BackgroundMessageHandler<
     );
 
     if (actSessionsResponse.status === 401) {
-      sendResponse({ error: 'Unnauthorized' });
+      sendResponse({ error: 'Unauthorized' });
       return;
     }
 

@@ -19,7 +19,7 @@ export const handleGetNavigationEntries: BackgroundMessageHandler<
     const res = await apiClient.securedFetch(url, { method: 'GET' });
 
     if (res.status === 401) {
-      sendResponse({ error: 'Unnauthorized' });
+      sendResponse({ error: 'Unauthorized' });
       return;
     }
 

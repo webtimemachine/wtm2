@@ -14,7 +14,7 @@ export const handleDeleteNavigationEntry: BackgroundMessageHandler<
     );
 
     if (deleteNavEntryRequestResponse.status === 401) {
-      sendResponse({ error: 'Unnauthorized' });
+      sendResponse({ error: 'Unauthorized' });
       return;
     }
 
