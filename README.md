@@ -149,6 +149,4 @@ You will also need to set this env variables as secrets on your GitHub repositor
 
 - Once completed, you'll see a notification confirming the successful installation. The extension should now be visible in your list of installed extensions.
 
-- This step only applies if you want to change the API URL. In local extension folder: [const.js](./extensions/Chrome%20Web/consts.js) is the file where you can change the API environment. Remember that every time you change the code, you should go to **Extensions** in your browser and then click in update.
-
 created by ttt246
