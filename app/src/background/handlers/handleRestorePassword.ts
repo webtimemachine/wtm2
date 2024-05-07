@@ -31,7 +31,6 @@ export const handleRestorePassword: BackgroundMessageHandler<
       throw new Error(restorePassError?.message?.toString());
     }
   } catch (error) {
-    console.error('handleRestorePassword', error);
     sendResponse({ error: 'Error restoring the password' });
   }
 };

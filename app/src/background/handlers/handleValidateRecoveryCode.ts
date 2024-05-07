@@ -30,7 +30,6 @@ export const handleValidateRecoveryCode: BackgroundMessageHandler<
       throw new Error(validateRecoveryCodeError?.message?.toString());
     }
   } catch (error) {
-    console.error('handleValidateRecoveryCode', error);
     sendResponse({ error: 'Error validating recovery code' });
   }
 };

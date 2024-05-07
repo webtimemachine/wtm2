@@ -9,7 +9,6 @@ export const handleLogin: BackgroundMessageHandler<'login'> = async (
     const loginResponse = await apiClient.login(payload.data);
     sendResponse(loginResponse);
   } catch (error) {
-    console.error('handleLogin', error);
     sendResponse({ error: 'Error while login' });
   }
 };

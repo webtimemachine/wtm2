@@ -15,7 +15,7 @@ export const handleCloseActiveSession: BackgroundMessageHandler<
     );
 
     if (closeActiveSessionsResponse.status === 401) {
-      sendResponse({ error: 'Unnauthorized' });
+      sendResponse({ error: 'Unauthorized' });
       return;
     }
 
@@ -29,7 +29,6 @@ export const handleCloseActiveSession: BackgroundMessageHandler<
 
     sendResponse(closeActSessionsResponse);
   } catch (error) {
-    console.error('handleCloseActiveSession', error);
     sendResponse({ error: 'Error while closing an active session' });
   }
 };

@@ -15,7 +15,7 @@ export const handleUpdatePreferences: BackgroundMessageHandler<
     );
 
     if (preferencesResponse.status === 401) {
-      sendResponse({ error: 'Unnauthorized' });
+      sendResponse({ error: 'Unauthorized' });
       return;
     }
 
@@ -29,7 +29,6 @@ export const handleUpdatePreferences: BackgroundMessageHandler<
 
     sendResponse(updatePreferenciesResponse);
   } catch (error) {
-    console.error('handleUpdatePreferences', error);
     sendResponse({ error: 'Error while updating preferences' });
   }
 };

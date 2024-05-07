@@ -14,7 +14,7 @@ export const handleGetActiveSessions: BackgroundMessageHandler<
     );
 
     if (actSessionsResponse.status === 401) {
-      sendResponse({ error: 'Unnauthorized' });
+      sendResponse({ error: 'Unauthorized' });
       return;
     }
 
@@ -28,7 +28,6 @@ export const handleGetActiveSessions: BackgroundMessageHandler<
 
     sendResponse(getActSessionsResponse);
   } catch (error) {
-    console.error('handleGetActiveSessions', error);
     sendResponse({ error: 'Error while getting active sessions' });
   }
 };
