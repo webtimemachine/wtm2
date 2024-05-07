@@ -19,7 +19,7 @@ export const handleGetNavigationEntries: BackgroundMessageHandler<
     const res = await apiClient.securedFetch(url, { method: 'GET' });
 
     if (res.status === 401) {
-      sendResponse({ error: 'Unnauthorized' });
+      sendResponse({ error: 'Unauthorized' });
       return;
     }
 
@@ -34,7 +34,6 @@ export const handleGetNavigationEntries: BackgroundMessageHandler<
     sendResponse(getNavigationEntriesResponse);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
-    console.error('handleGetNavigationEntries', error);
     sendResponse({ error: error?.message || 'GET Navigation Entries Error' });
   }
 };

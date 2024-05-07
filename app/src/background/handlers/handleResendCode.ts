@@ -28,7 +28,6 @@ export const handleResendCode: BackgroundMessageHandler<'resend-code'> = async (
       throw new Error(resendCodeErrorResponse?.message?.toString());
     }
   } catch (error) {
-    console.error('handleResendCode', error);
     sendResponse({ error: 'Error resending email verification code' });
   }
 };

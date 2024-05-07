@@ -15,7 +15,7 @@ export const handleConfirmDeleteAccount: BackgroundMessageHandler<
     );
 
     if (confirmDeleteAccountResponse.status === 401) {
-      sendResponse({ error: 'Unnauthorized' });
+      sendResponse({ error: 'Unauthorized' });
       return;
     }
 
@@ -31,7 +31,6 @@ export const handleConfirmDeleteAccount: BackgroundMessageHandler<
 
     sendResponse(confirmResponse);
   } catch (error) {
-    console.error('handleConfirmDeleteAccount', error);
     sendResponse({ error: 'Error while confirm deleting account' });
   }
 };

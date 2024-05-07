@@ -32,7 +32,6 @@ export const handleVerifyCode: BackgroundMessageHandler<'verify-code'> = async (
       throw new Error(verifyCodeErrorResponse?.message?.toString());
     }
   } catch (error) {
-    console.error('handleVerifyCode', error);
-    sendResponse({ error: 'Error verifing email verification code' });
+    sendResponse({ error: 'Error verifying email verification code' });
   }
 };

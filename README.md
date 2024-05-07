@@ -144,6 +144,4 @@ As a result you will found the built folders for chrome and firefox at the root 
 
 - Once completed, you'll see a notification confirming the successful installation. The extension should now be visible in your list of installed extensions.
 
-<br/>
-
-> Created by ttt246
+Created by ttt246
