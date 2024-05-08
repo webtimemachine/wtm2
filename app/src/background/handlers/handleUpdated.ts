@@ -48,7 +48,6 @@ export const handleUpdated = async (
         ),
       };
 
-      console.log('handleUpdated', { navigationEntry });
       await apiClient.securedFetch('/api/navigation-entry', {
         method: 'POST',
         body: JSON.stringify(navigationEntry),
