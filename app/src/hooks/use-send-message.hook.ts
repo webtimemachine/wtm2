@@ -35,10 +35,8 @@ export const useSendBackgroundMessage = () => {
             duration: 9000,
             isClosable: true,
           });
-          throw new Error(res.error);
-        } else {
-          throw new Error(res.error);
         }
+        throw new Error(res.error);
       }
 
       return res as BackgroundMessageResponseMap[T];
