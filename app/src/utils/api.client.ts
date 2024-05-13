@@ -3,7 +3,7 @@ import {
   LoginResponse,
   VerifyEmailResponse,
   isLoginRes,
-} from './interfaces/login.interface';
+} from '../interfaces/login.interface';
 
 class ApiClient {
   async fetch(endpoint: string, init: RequestInit = {}): Promise<Response> {

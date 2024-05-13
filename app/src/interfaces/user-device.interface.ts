@@ -51,6 +51,7 @@ export interface UserDevice {
 }
 
 export interface UpdateDeviceAliasData {
+  // REVIEW
   id: number;
   deviceAlias: string;
 }

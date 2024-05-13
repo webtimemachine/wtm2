@@ -1,12 +1,31 @@
 import { useQuery } from '@tanstack/react-query';
-import { useSendBackgroundMessage } from './use-send-message.hook';
+
+import { apiClient } from '../utils/api.client';
+import { PreferenciesResponse } from '../interfaces';
+import { useHandleSessionExpired } from '.';
 
 export const useGetPreferences = () => {
-  const { sendBackgroundMessage } = useSendBackgroundMessage();
+  const { handleSessioExpired } = useHandleSessionExpired();
+
+  const getUserPreferences = async () => {
+    const res = await apiClient.securedFetch('/api/user/preferences', {
+      method: 'GET',
+    });
+
+    if (res.status === 401) await handleSessioExpired();
+
+    if (res.status !== 200) {
+      const errorJson = await res.json();
+      throw new Error(errorJson?.message || 'GET User Preferences Error');
+    }
+
+    const response: PreferenciesResponse = await res.json();
+    return response;
+  };
 
   const userPreferencesQuery = useQuery({
     queryKey: ['getUserPreferencesQuery'],
-    queryFn: () => sendBackgroundMessage('get-user-preferences', undefined),
+    queryFn: () => getUserPreferences(),
     enabled: true,
   });
 

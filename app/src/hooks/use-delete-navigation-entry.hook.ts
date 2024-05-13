@@ -1,15 +1,36 @@
 import { useMutation } from '@tanstack/react-query';
-import { useSendBackgroundMessage } from './use-send-message.hook';
 import { useToast } from '@chakra-ui/react';
-import { DeleteNavigationEntriesData } from '../background/interfaces/navigation-entry.interface';
+
+import { apiClient } from '../utils/api.client';
+import { BasicResponse, DeleteNavigationEntriesData } from '../interfaces';
+import { useHandleSessionExpired } from '.';
 
 export const useDeleteNavigationEntry = () => {
   const toast = useToast();
-  const { sendBackgroundMessage } = useSendBackgroundMessage();
+
+  const { handleSessioExpired } = useHandleSessionExpired();
+
+  const deleteNavigationEntry = async (data: DeleteNavigationEntriesData) => {
+    const res = await apiClient.securedFetch(
+      `/api/navigation-entry/${data.id}`,
+      {
+        method: 'DELETE',
+      },
+    );
+
+    if (res.status === 401) await handleSessioExpired();
+
+    if (res.status !== 200) {
+      const errorJson = await res.json();
+      throw new Error(errorJson?.message || 'DELETE Navigation entry Error');
+    }
+
+    const response: BasicResponse = await res.json();
+    return response;
+  };
 
   const deleteNavigationEntryMutation = useMutation({
-    mutationFn: (params: DeleteNavigationEntriesData) =>
-      sendBackgroundMessage('delete-navigation-entry', params),
+    mutationFn: deleteNavigationEntry,
     onSuccess: () => {
       toast({
         title: 'Success',

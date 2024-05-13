@@ -18,7 +18,7 @@ export default defineConfig({
     outDir: browser,
     rollupOptions: {
       input: {
-        background: 'src/background/background.ts',
+        content: 'src/content-scripts/content.ts',
         popup: 'index.html',
       },
       output: {

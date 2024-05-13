@@ -11,7 +11,7 @@ import {
 import { ServerUrlEditable } from '../components';
 import { useLogin } from '../hooks';
 import { useAuthStore, useNavigation } from '../store';
-import { isLoginRes } from '../background/interfaces/login.interface';
+import { isLoginRes } from '../interfaces/login.interface';
 
 import clsx from 'clsx';
 

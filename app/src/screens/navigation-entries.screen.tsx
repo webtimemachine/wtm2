@@ -17,7 +17,7 @@ import {
 } from '@chakra-ui/icons';
 import { BsStars } from 'react-icons/bs';
 
-import { CompleteNavigationEntryDto } from '../background/interfaces/navigation-entry.interface';
+import { CompleteNavigationEntryDto } from '../interfaces/navigation-entry.interface';
 import { useDeleteNavigationEntry, useNavigationEntries } from '../hooks';
 
 import { useNavigation } from '../store';
@@ -54,12 +54,7 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
 
   useEffect(() => {
     navigationEntriesQuery.refetch();
-  }, [
-    page,
-    isSemantic,
-    navigationEntriesQuery,
-    deleteNavigationEntryMutation.isSuccess,
-  ]);
+  }, [page, isSemantic, deleteNavigationEntryMutation.isSuccess]);
 
   const search = () => {
     setPage(0);
