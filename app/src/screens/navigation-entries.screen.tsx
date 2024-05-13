@@ -71,156 +71,150 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
 
   return (
     <>
-      <div className='flex flex-col px-5 py-3 bg-slate-100 items-center w-full'>
-        <div className='flex w-full justify-start pb-4 gap-4 items-center'>
-          <div className='flex w-full justify-center pl-[40px]'>
-            <Text fontSize={'xx-large'} fontWeight={'bold'}>
-              WebTM
-            </Text>
-          </div>
-          <IconButton
-            aria-label='Back icon'
-            onClick={() => navigateTo('settings')}
-          >
-            <SettingsIcon boxSize={5} />
-          </IconButton>
-        </div>
-        <div className='flex flex-col w-full min-h-[400px] justify-between'>
-          <div>
-            <div className='pt-4 flex w-full'>
-              <Input
-                type='text'
-                name='search'
-                placeholder='Search'
-                backgroundColor={'white'}
-                onChange={(e) => setQuery(e.target.value)}
-                onKeyUp={(e) => {
-                  if (e.key === 'Enter') {
-                    search();
-                  }
-                }}
-              />
-              <div className='pl-4'>
-                <Button colorScheme='blue' onClick={() => search()}>
-                  Search
-                </Button>
-              </div>
-            </div>
-
-            <div className='flex py-1 '>
-              <div
-                className='flex items-center gap-1 p-1 h-[32px] select-none cursor-pointer hover:bg-white rounded-lg'
-                onClick={() => setIsSemantic((value) => !value)}
-              >
-                <Icon
-                  className={clsx([
-                    isSemantic ? 'fill-blue-500' : 'fill-gray-500',
-                  ])}
-                  as={BsStars}
-                  boxSize={4}
-                />
-                <Text className='text-slate-600 mr-1' fontSize='small'>
-                  AI Search
-                </Text>
-                <Switch
-                  size='sm'
-                  isChecked={isSemantic}
-                  onChange={() => setIsSemantic((value) => !value)}
-                />
-              </div>
-            </div>
-
-            <div
-              id='content'
-              className='flex flex-col w-full h-[300px] overflow-y-auto scrollbar pr-1'
-            >
-              {navigationEntries && navigationEntries.length ? (
-                navigationEntries.map((element: CompleteNavigationEntryDto) => {
-                  const BrowserIcon = getBrowserIconFromDevice(
-                    element.userDevice.device,
-                  );
-
-                  return (
-                    <div
-                      key={element.id}
-                      className='flex w-full bg-white px-2 py-1 rounded-lg mb-1 items-center justify-between'
-                    >
-                      <div className='flex gap-2'>
-                        <div className='flex justify-center items-center'>
-                          <Icon as={BrowserIcon} boxSize={6} color='gray.600' />
-                        </div>
-                        <div className='flex flex-col w-full'>
-                          <Link
-                            href={element.url}
-                            isExternal
-                            className='overflow-hidden truncate'
-                          >
-                            <Text className='' fontSize={'small'}>
-                              {truncateString(element.title, 40)}
-                            </Text>
-                            <Text
-                              className='text-slate-600'
-                              fontSize={'smaller'}
-                            >
-                              {new Date(
-                                element.navigationDate,
-                              ).toLocaleString()}
-                            </Text>
-                          </Link>
-                        </div>
-                      </div>
-                      <IconButton
-                        aria-label='delete navigation entry'
-                        size='xs'
-                        icon={<SmallCloseIcon />}
-                        onClick={() => {
-                          deleteNavigationEntryMutation.mutate({
-                            id: element.id,
-                          });
-                        }}
-                      />
-                    </div>
-                  );
-                })
-              ) : (
-                <div>
-                  <Text fontSize={'small'}>
-                    No results found. Try different search terms!
-                  </Text>
-                </div>
-              )}
-            </div>
-          </div>
-
-          <div className='flex w-full justify-between items-center pt-4'>
-            <IconButton
-              colorScheme='blue'
-              icon={<ChevronLeftIcon />}
-              aria-label='left'
-              isDisabled={offset === 0}
-              onClick={() => prev()}
-            />
-            <div
-              className='select-none'
-              onWheel={(e) => {
-                if (e.deltaY < 0) next();
-                else prev();
-              }}
-            >
-              <Text className='text-slate-600' fontSize='medium'>
-                {page + 1}
-                {' / '}
-                {pagesCount}
+      <div className='flex flex-col px-5 py-3 bg-slate-100 items-center w-full min-h-[600px] h-screen'>
+        <div className='flex flex-col w-full'>
+          <div className='flex w-full justify-start pb-4 gap-4 items-center'>
+            <div className='flex w-full justify-center pl-[40px]'>
+              <Text fontSize={'xx-large'} fontWeight={'bold'}>
+                WebTM
               </Text>
             </div>
             <IconButton
-              colorScheme='blue'
-              icon={<ChevronRightIcon />}
-              aria-label='right'
-              isDisabled={offset + limit >= count}
-              onClick={() => next()}
-            />
+              aria-label='Back icon'
+              onClick={() => navigateTo('settings')}
+            >
+              <SettingsIcon boxSize={5} />
+            </IconButton>
           </div>
+
+          <div className='pt-4 flex w-full'>
+            <Input
+              type='text'
+              name='search'
+              placeholder='Search'
+              backgroundColor={'white'}
+              onChange={(e) => setQuery(e.target.value)}
+              onKeyUp={(e) => {
+                if (e.key === 'Enter') {
+                  search();
+                }
+              }}
+            />
+            <div className='pl-4'>
+              <Button colorScheme='blue' onClick={() => search()}>
+                Search
+              </Button>
+            </div>
+          </div>
+
+          <div className='flex py-1'>
+            <div
+              className='flex items-center gap-1 p-1 h-[32px] select-none cursor-pointer hover:bg-white rounded-lg'
+              onClick={() => setIsSemantic((value) => !value)}
+            >
+              <Icon
+                className={clsx([
+                  isSemantic ? 'fill-blue-500' : 'fill-gray-500',
+                ])}
+                as={BsStars}
+                boxSize={4}
+              />
+              <Text className='text-slate-600 mr-1' fontSize='small'>
+                AI Search
+              </Text>
+              <Switch
+                size='sm'
+                isChecked={isSemantic}
+                onChange={() => setIsSemantic((value) => !value)}
+              />
+            </div>
+          </div>
+        </div>
+
+        <div
+          id='content'
+          className='flex flex-col w-full h-full min-h-[350px] overflow-y-auto scrollbar pr-1'
+        >
+          {navigationEntries && navigationEntries.length ? (
+            navigationEntries.map((element: CompleteNavigationEntryDto) => {
+              const BrowserIcon = getBrowserIconFromDevice(
+                element.userDevice.device,
+              );
+
+              return (
+                <div
+                  key={element.id}
+                  className='flex w-full bg-white px-2 py-1 rounded-lg mb-1 items-center justify-between'
+                >
+                  <div className='flex gap-2'>
+                    <div className='flex justify-center items-center'>
+                      <Icon as={BrowserIcon} boxSize={6} color='gray.600' />
+                    </div>
+                    <div className='flex flex-col w-full'>
+                      <Link
+                        href={element.url}
+                        isExternal
+                        className='overflow-hidden truncate'
+                      >
+                        <Text className='' fontSize={'small'}>
+                          {truncateString(element.title, 40)}
+                        </Text>
+                        <Text className='text-slate-600' fontSize={'smaller'}>
+                          {new Date(element.navigationDate).toLocaleString()}
+                        </Text>
+                      </Link>
+                    </div>
+                  </div>
+                  <IconButton
+                    aria-label='delete navigation entry'
+                    size='xs'
+                    icon={<SmallCloseIcon />}
+                    onClick={() => {
+                      deleteNavigationEntryMutation.mutate({
+                        id: element.id,
+                      });
+                    }}
+                  />
+                </div>
+              );
+            })
+          ) : (
+            <div>
+              <Text fontSize={'small'}>
+                No results found. Try different search terms!
+              </Text>
+            </div>
+          )}
+        </div>
+
+        <div className='flex w-full justify-between items-center py-4'>
+          <IconButton
+            colorScheme='blue'
+            icon={<ChevronLeftIcon />}
+            aria-label='left'
+            isDisabled={offset === 0}
+            onClick={() => prev()}
+          />
+          <div
+            className='select-none'
+            onWheel={(e) => {
+              if (e.deltaY < 0) next();
+              else prev();
+            }}
+          >
+            <Text className='text-slate-600' fontSize='medium'>
+              {page + 1}
+              {' / '}
+              {pagesCount}
+            </Text>
+          </div>
+          <IconButton
+            colorScheme='blue'
+            icon={<ChevronRightIcon />}
+            aria-label='right'
+            isDisabled={offset + limit >= count}
+            onClick={() => next()}
+          />
         </div>
       </div>
     </>
