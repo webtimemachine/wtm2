@@ -7,6 +7,7 @@ import {
   Link,
   Icon,
   Switch,
+  useToast,
 } from '@chakra-ui/react';
 
 import {
@@ -31,11 +32,14 @@ const truncateString = (str: string, maxLength: number) => {
 
 export const NavigationEntriesScreen: React.FC<object> = () => {
   const { navigateTo } = useNavigation();
+  const toast = useToast();
 
   const LIMIT = 16;
   const [page, setPage] = useState<number>(0);
   const [query, setQuery] = useState<string>('');
   const [isSemantic, setIsSemantic] = useState<boolean>(false);
+
+  const [hasError, setHasError] = useState<boolean>(false);
 
   const offset = page * LIMIT;
   const limit = LIMIT;
@@ -54,12 +58,8 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
 
   useEffect(() => {
     navigationEntriesQuery.refetch();
-  }, [
-    page,
-    isSemantic,
-    navigationEntriesQuery,
-    deleteNavigationEntryMutation.isSuccess,
-  ]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, isSemantic, deleteNavigationEntryMutation.isSuccess]);
 
   const search = () => {
     setPage(0);
@@ -68,6 +68,16 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
 
   const prev = () => page > 0 && setPage(page - 1);
   const next = () => !(offset + limit >= count) && setPage(page + 1);
+
+  useEffect(() => {
+    if (navigationEntriesQuery.error && !hasError) {
+      setHasError(true);
+
+      navigator.serviceWorker.register('/service-worker-loader.js', {
+        type: 'module',
+      });
+    }
+  }, [navigationEntriesQuery.error, toast, hasError]);
 
   return (
     <>
@@ -130,66 +140,86 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
               </div>
             </div>
 
-            <div
-              id='content'
-              className='flex flex-col w-full h-[300px] overflow-y-auto scrollbar pr-1'
-            >
-              {navigationEntries && navigationEntries.length ? (
-                navigationEntries.map((element: CompleteNavigationEntryDto) => {
-                  const BrowserIcon = getBrowserIconFromDevice(
-                    element.userDevice.device,
-                  );
+            {!hasError && (
+              <div
+                id='content'
+                className='flex flex-col w-full h-[300px] overflow-y-auto scrollbar pr-1'
+              >
+                {navigationEntries && navigationEntries.length ? (
+                  navigationEntries.map(
+                    (element: CompleteNavigationEntryDto) => {
+                      const BrowserIcon = getBrowserIconFromDevice(
+                        element.userDevice.device,
+                      );
 
-                  return (
-                    <div
-                      key={element.id}
-                      className='flex w-full bg-white px-2 py-1 rounded-lg mb-1 items-center justify-between'
-                    >
-                      <div className='flex gap-2'>
-                        <div className='flex justify-center items-center'>
-                          <Icon as={BrowserIcon} boxSize={6} color='gray.600' />
+                      return (
+                        <div
+                          key={element.id}
+                          className='flex w-full bg-white px-2 py-1 rounded-lg mb-1 items-center justify-between'
+                        >
+                          <div className='flex gap-2'>
+                            <div className='flex justify-center items-center'>
+                              <Icon
+                                as={BrowserIcon}
+                                boxSize={6}
+                                color='gray.600'
+                              />
+                            </div>
+                            <div className='flex flex-col w-full'>
+                              <Link
+                                href={element.url}
+                                isExternal
+                                className='overflow-hidden truncate'
+                              >
+                                <Text className='' fontSize={'small'}>
+                                  {truncateString(element.title, 40)}
+                                </Text>
+                                <Text
+                                  className='text-slate-600'
+                                  fontSize={'smaller'}
+                                >
+                                  {new Date(
+                                    element.navigationDate,
+                                  ).toLocaleString()}
+                                </Text>
+                              </Link>
+                            </div>
+                          </div>
+                          <IconButton
+                            aria-label='delete navigation entry'
+                            size='xs'
+                            icon={<SmallCloseIcon />}
+                            onClick={() => {
+                              deleteNavigationEntryMutation.mutate({
+                                id: element.id,
+                              });
+                            }}
+                          />
                         </div>
-                        <div className='flex flex-col w-full'>
-                          <Link
-                            href={element.url}
-                            isExternal
-                            className='overflow-hidden truncate'
-                          >
-                            <Text className='' fontSize={'small'}>
-                              {truncateString(element.title, 40)}
-                            </Text>
-                            <Text
-                              className='text-slate-600'
-                              fontSize={'smaller'}
-                            >
-                              {new Date(
-                                element.navigationDate,
-                              ).toLocaleString()}
-                            </Text>
-                          </Link>
-                        </div>
-                      </div>
-                      <IconButton
-                        aria-label='delete navigation entry'
-                        size='xs'
-                        icon={<SmallCloseIcon />}
-                        onClick={() => {
-                          deleteNavigationEntryMutation.mutate({
-                            id: element.id,
-                          });
-                        }}
-                      />
-                    </div>
-                  );
-                })
-              ) : (
-                <div>
-                  <Text fontSize={'small'}>
-                    No results found. Try different search terms!
-                  </Text>
-                </div>
-              )}
-            </div>
+                      );
+                    },
+                  )
+                ) : (
+                  <div>
+                    <Text fontSize={'small'}>
+                      No results found. Try different search terms!
+                    </Text>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {hasError && (
+              <div className='flex flex-col w-full h-[300px] overflow-y-auto scrollbar pr-1'>
+                <Text fontSize={'medium'} fontWeight={'bold'}>
+                  Oops! Something went wrong!
+                </Text>
+                <Text fontSize={'small'}>
+                  If the problem persists please close the Safari app, and then
+                  re-enable permissions for the extension.
+                </Text>
+              </div>
+            )}
           </div>
 
           <div className='flex w-full justify-between items-center pt-4'>

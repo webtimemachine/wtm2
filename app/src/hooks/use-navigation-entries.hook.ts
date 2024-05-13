@@ -9,6 +9,7 @@ export const useNavigationEntries = (params: GetNavigationEntriesData) => {
     queryKey: ['getNavigationEntriesQuery'],
     queryFn: () => sendBackgroundMessage('get-navigation-entries', params),
     enabled: false,
+    retry: false,
   });
 
   return { navigationEntriesQuery };
