@@ -21,8 +21,8 @@ const client = weaviate.client({
 });
 
 @Injectable()
-export class SemanticProcessor {
-  private readonly logger = new Logger(SemanticProcessor.name);
+export class IndexerService {
+  private readonly logger = new Logger(IndexerService.name);
   private readonly multitenantCollection = 'MultiTenancyCollection';
 
   constructor(private readonly prismaService: PrismaService) {}

@@ -26,7 +26,7 @@ import { PrismaService } from '../../common/services';
 import { UserService } from '../../user/services';
 import { CompleteUser } from '../../user/types';
 
-import { SemanticProcessor } from '../../semanticSearch/services/';
+import { IndexerService } from '../../encoder/services';
 import { QueryService } from '../../query/services';
 import { ExplicitFilterService } from '../../filter/services';
 
@@ -36,7 +36,7 @@ export class NavigationEntryService {
 
   constructor(
     private readonly prismaService: PrismaService,
-    private readonly semanticProcessor: SemanticProcessor,
+    private readonly indexerService: IndexerService,
     private readonly queryService: QueryService,
     private readonly explicitFilter: ExplicitFilterService,
   ) {}
@@ -128,7 +128,7 @@ export class NavigationEntryService {
       },
     });
     try {
-      await this.semanticProcessor.index(
+      await this.indexerService.index(
         content!,
         createNavigationEntryInputDto.url,
         jwtContext.user.id,
@@ -192,7 +192,7 @@ export class NavigationEntryService {
     if (isSemantic) {
       let urls: Set<string> | undefined;
       if (query) {
-        urls = await this.semanticProcessor.search(query, jwtContext.user.id);
+        urls = await this.indexerService.search(query, jwtContext.user.id);
       }
       whereQuery = {
         ...(query !== undefined ? { url: { in: [...urls!] } } : {}),
@@ -275,7 +275,7 @@ export class NavigationEntryService {
     if (!navigationEntry) {
       throw new NotFoundException();
     }
-    this.semanticProcessor.delete(navigationEntry.url, jwtContext.user.id);
+    this.indexerService.delete(navigationEntry.url, jwtContext.user.id);
     await this.prismaService.navigationEntry.delete({
       where: { id, userId: jwtContext.user.id },
     });
@@ -321,7 +321,7 @@ export class NavigationEntryService {
               });
 
             if (navigationEntry) {
-              this.semanticProcessor.delete(
+              this.indexerService.delete(
                 navigationEntry.url,
                 jwtContext.user.id,
               );
