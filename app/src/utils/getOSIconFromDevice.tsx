@@ -1,4 +1,4 @@
-import { Device } from '../background/interfaces/user-device.interface';
+import { Device } from '../interfaces/user-device.interface';
 import {
   FaWindows,
   FaLinux,

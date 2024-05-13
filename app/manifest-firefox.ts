@@ -21,8 +21,14 @@ export const manifestFirefox: ManifestV3Export = {
     '48': 'app-icon.png',
     '128': 'app-icon.png',
   },
-  background: {
-    scripts: ['src/background/background.ts'],
-    type: 'module',
+  content_scripts: [
+    {
+      matches: ['*://*/*'],
+      js: ['src/content-scripts/content.ts'],
+      run_at: 'document_end',
+    },
+  ],
+  content_security_policy: {
+    extension_pages: "script-src 'self'; object-src 'self'",
   },
 } as ManifestV3Export;
