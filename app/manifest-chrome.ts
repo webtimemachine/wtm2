@@ -3,8 +3,9 @@ import { ManifestV3Export } from '@crxjs/vite-plugin';
 export const manifestChrome: ManifestV3Export = {
   manifest_version: 3,
   name: 'WebTM',
-  version: '1.3',
-  description: 'WebTM',
+  version: '1.5',
+  description:
+    'WebTM is a cross-platform solution to integrate the navigation history between desktop and mobile web browsers. Focusing on providing a solution for integration between Google Chrome, Firefox and Safari iOS.',
   permissions: ['tabs', 'activeTab', 'storage', 'scripting'],
   action: {
     default_popup: 'index.html',
