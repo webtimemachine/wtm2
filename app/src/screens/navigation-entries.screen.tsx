@@ -7,6 +7,7 @@ import {
   Link,
   Icon,
   Switch,
+  Spinner,
 } from '@chakra-ui/react';
 
 import {
@@ -173,11 +174,16 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
                 </div>
               );
             })
-          ) : (
+          ) : !navigationEntriesQuery.isLoading ? (
             <div>
               <Text fontSize={'small'}>
                 No results found. Try different search terms!
               </Text>
+            </div>
+          ) : null}
+          {navigationEntriesQuery.isLoading && (
+            <div className='flex w-full h-full items-center justify-center'>
+              <Spinner size={'lg'} />
             </div>
           )}
         </div>
@@ -197,11 +203,17 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
               else prev();
             }}
           >
-            <Text className='text-slate-600' fontSize='medium'>
-              {page + 1}
-              {' / '}
-              {pagesCount}
-            </Text>
+            {pagesCount ? (
+              <Text className='text-slate-600' fontSize='medium'>
+                {page + 1}
+                {' / '}
+                {pagesCount}
+              </Text>
+            ) : (
+              <Text className='text-slate-600' fontSize='medium'>
+                -
+              </Text>
+            )}
           </div>
           <IconButton
             colorScheme='blue'
