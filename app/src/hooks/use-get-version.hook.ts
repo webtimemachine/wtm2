@@ -1,13 +1,17 @@
 import { useToast } from '@chakra-ui/react';
 import { useMutation } from '@tanstack/react-query';
 
-import { useSendBackgroundMessage } from './use-send-message.hook';
+import { apiClient } from '../utils/api.client';
+import { GetVersionResponse } from '../interfaces';
 
 export const useGetVersion = () => {
   const toast = useToast();
-  const { sendBackgroundMessage } = useSendBackgroundMessage();
 
-  const gerVersion = () => sendBackgroundMessage('get-version', undefined);
+  const gerVersion = async () => {
+    const res = await apiClient.fetch('/api/version');
+    const versionResponse: GetVersionResponse = await res.json();
+    return versionResponse;
+  };
 
   const getVersionMutation = useMutation({
     mutationFn: gerVersion,

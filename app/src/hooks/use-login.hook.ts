@@ -1,20 +1,25 @@
 import { useToast } from '@chakra-ui/react';
 import { useMutation } from '@tanstack/react-query';
-
-import { useSendBackgroundMessage } from './use-send-message.hook';
 import { useAuthStore } from '../store';
 
+import { apiClient } from '../utils/api.client';
 import {
   LoginData,
+  LoginResponse,
+  VerifyEmailResponse,
   isLoginRes,
-} from '../background/interfaces/login.interface';
+} from '../interfaces';
 
 export const useLogin = () => {
   const toast = useToast();
   const { notifyLogin, notifyEmailValidation } = useAuthStore((state) => state);
-  const { sendBackgroundMessage } = useSendBackgroundMessage();
 
-  const login = (data: LoginData) => sendBackgroundMessage('login', data);
+  const login = async (
+    data: LoginData,
+  ): Promise<LoginResponse | VerifyEmailResponse> => {
+    const loginResponse = await apiClient.login(data);
+    return loginResponse;
+  };
 
   const loginMutation = useMutation({
     mutationFn: login,
