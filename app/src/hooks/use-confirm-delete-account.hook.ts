@@ -1,14 +1,35 @@
 import { useMutation } from '@tanstack/react-query';
-import { useSendBackgroundMessage } from './use-send-message.hook';
 import { useToast } from '@chakra-ui/react';
+
+import { apiClient } from '../utils/api.client';
+import { BasicResponse } from '../interfaces';
+import { useHandleSessionExpired } from '.';
 
 export const useConfirmDeleteAccount = () => {
   const toast = useToast();
-  const { sendBackgroundMessage } = useSendBackgroundMessage();
 
-  const confirmDeleteAccount = useMutation({
-    mutationFn: () =>
-      sendBackgroundMessage('confirm-delete-account', undefined),
+  const { handleSessioExpired } = useHandleSessionExpired();
+
+  const confirmDeleteAccount = async () => {
+    const res = await apiClient.securedFetch('/api/user', {
+      method: 'DELETE',
+    });
+
+    if (res.status === 401) await handleSessioExpired();
+
+    if (res.status !== 200) {
+      const errorJson = await res.json();
+      throw new Error(
+        errorJson?.message || 'DELETE Confirm delete account Error',
+      );
+    }
+
+    const response: BasicResponse = await res.json();
+    return response;
+  };
+
+  const confirmDeleteAccountMutation = useMutation({
+    mutationFn: confirmDeleteAccount,
     onSuccess: () => {
       toast({
         title: 'Success',
@@ -20,5 +41,5 @@ export const useConfirmDeleteAccount = () => {
     },
   });
 
-  return { confirmDeleteAccount };
+  return { confirmDeleteAccountMutation };
 };

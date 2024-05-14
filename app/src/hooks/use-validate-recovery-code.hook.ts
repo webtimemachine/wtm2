@@ -1,17 +1,38 @@
 import { useMutation } from '@tanstack/react-query';
 import { useToast } from '@chakra-ui/react';
 
-import { useSendBackgroundMessage } from './use-send-message.hook';
-import { ValidateRecoveryCodeData } from '../background/interfaces/validate-recovery-code.interface';
+import { apiClient } from '../utils/api.client';
+import {
+  ValidateRecoveryCodeData,
+  ValidateRecoveryCodeErrorResponse,
+  ValidateRecoveryCodeResponse,
+} from '../interfaces';
 
 export const useValidateRecoveryCode = () => {
   const toast = useToast();
 
-  const { sendBackgroundMessage } = useSendBackgroundMessage();
+  const validateRecoveryCode = async (data: ValidateRecoveryCodeData) => {
+    const res = await apiClient.fetch(
+      '/api/auth/password/validate-recovery-code',
+      {
+        method: 'POST',
+        body: JSON.stringify(data),
+      },
+    );
+
+    if (res.status === 200) {
+      const response: ValidateRecoveryCodeResponse = await res.json();
+      const { recoveryToken } = response;
+      await chrome.storage.local.set({ recoveryToken });
+      return response;
+    } else {
+      const errorRes: ValidateRecoveryCodeErrorResponse = await res.json();
+      throw new Error(errorRes?.message?.toString());
+    }
+  };
 
   const validateRecoveryCodeMutation = useMutation({
-    mutationFn: (data: ValidateRecoveryCodeData) =>
-      sendBackgroundMessage('validate-recovery-code', data),
+    mutationFn: validateRecoveryCode,
     onSuccess: (res) => {
       console.log(res);
       toast({
