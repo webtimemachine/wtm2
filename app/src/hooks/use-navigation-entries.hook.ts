@@ -1,13 +1,45 @@
 import { useQuery } from '@tanstack/react-query';
-import { useSendBackgroundMessage } from './use-send-message.hook';
-import { GetNavigationEntriesData } from '../background/interfaces/navigation-entry.interface';
+
+import { apiClient } from '../utils/api.client';
+import {
+  GetNavigationEntriesData,
+  GetNavigationEntriesResponse,
+} from '../interfaces';
+import { useHandleSessionExpired } from '.';
 
 export const useNavigationEntries = (params: GetNavigationEntriesData) => {
-  const { sendBackgroundMessage } = useSendBackgroundMessage();
+  //
+
+  const { handleSessioExpired } = useHandleSessionExpired();
+
+  const getNavigationEntries = async (params: GetNavigationEntriesData) => {
+    const { offset, limit, query, isSemantic } = params;
+
+    const url =
+      '/api/navigation-entry?' +
+      new URLSearchParams({
+        offset: offset.toString(),
+        limit: limit.toString(),
+        query: query,
+        isSemantic: String(isSemantic),
+      }).toString();
+
+    const res = await apiClient.securedFetch(url, { method: 'GET' });
+
+    if (res.status === 401) await handleSessioExpired();
+
+    if (res.status !== 200) {
+      const errorJson = await res.json();
+      throw new Error(errorJson?.message || 'GET Navigation Entries Error');
+    }
+
+    const response: GetNavigationEntriesResponse = await res.json();
+    return response;
+  };
 
   const navigationEntriesQuery = useQuery({
     queryKey: ['getNavigationEntriesQuery'],
-    queryFn: () => sendBackgroundMessage('get-navigation-entries', params),
+    queryFn: () => getNavigationEntries(params),
     enabled: false,
   });
 
