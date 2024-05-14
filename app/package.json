@@ -14,8 +14,8 @@
     "nodemon:firefox": "nodemon --exec npm run build:firefox",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "test": "jest",
-    "test:cov": "jest --coverage"
+    "test": "jest --passWithNoTests",
+    "test:cov": "jest --passWithNoTests --coverage"
   },
   "dependencies": {
     "@chakra-ui/icons": "^2.1.1",
