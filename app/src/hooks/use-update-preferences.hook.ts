@@ -1,14 +1,34 @@
 import { useMutation } from '@tanstack/react-query';
-import { useSendBackgroundMessage } from './use-send-message.hook';
-import { UpdatePreferenciesData } from '../background/interfaces/preferences.interface';
 import { useToast } from '@chakra-ui/react';
 
-export const useUpdatePreferences = (params: UpdatePreferenciesData) => {
-  const toast = useToast();
-  const { sendBackgroundMessage } = useSendBackgroundMessage();
+import { apiClient } from '../utils/api.client';
+import { PreferenciesResponse, UpdatePreferenciesData } from '../interfaces';
+import { useHandleSessionExpired } from '.';
 
-  const updatePreferencesQuery = useMutation({
-    mutationFn: () => sendBackgroundMessage('update-preferences', params),
+export const useUpdatePreferences = () => {
+  const toast = useToast();
+
+  const { handleSessioExpired } = useHandleSessionExpired();
+
+  const updatePreferences = async (data: UpdatePreferenciesData) => {
+    const res = await apiClient.securedFetch('/api/user/preferences', {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
+
+    if (res.status === 401) await handleSessioExpired();
+
+    if (res.status !== 200) {
+      const errorJson = await res.json();
+      throw new Error(errorJson?.message || 'PUT Update Preferences Error');
+    }
+
+    const response: PreferenciesResponse = await res.json();
+    return response;
+  };
+
+  const updatePreferencesMutation = useMutation({
+    mutationFn: (data: UpdatePreferenciesData) => updatePreferences(data),
     onSuccess: () => {
       toast({
         title: 'Success',
@@ -20,5 +40,5 @@ export const useUpdatePreferences = (params: UpdatePreferenciesData) => {
     },
   });
 
-  return { updatePreferencesQuery };
+  return { updatePreferencesMutation };
 };

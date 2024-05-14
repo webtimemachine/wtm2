@@ -6,13 +6,13 @@ import { useConfirmDeleteAccount } from '../hooks';
 
 export const ConfirmDeleteAccountScreen: React.FC<object> = () => {
   const { navigateBack, navigateTo } = useNavigation();
-  const { confirmDeleteAccount } = useConfirmDeleteAccount();
+  const { confirmDeleteAccountMutation } = useConfirmDeleteAccount();
 
   useEffect(() => {
-    if (confirmDeleteAccount.isSuccess) {
+    if (confirmDeleteAccountMutation.isSuccess) {
       navigateTo('login');
     }
-  }, [confirmDeleteAccount.isSuccess, navigateTo]);
+  }, [confirmDeleteAccountMutation.isSuccess, navigateTo]);
 
   return (
     <>
@@ -36,7 +36,7 @@ export const ConfirmDeleteAccountScreen: React.FC<object> = () => {
         <div className='pb-8'>
           <Button
             colorScheme='red'
-            onClick={() => confirmDeleteAccount.mutate()}
+            onClick={() => confirmDeleteAccountMutation.mutate()}
           >
             Confirm
           </Button>

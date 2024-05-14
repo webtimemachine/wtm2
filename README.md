@@ -1,15 +1,15 @@
-# WebTM
+# WebTM ![WTM  Website](https://cronitor.io/badges/CbeIhd/production/7FN5-J8hdv7hTI7zSN0Yyc6TBw0.svg) ![WTM  API](https://cronitor.io/badges/DOrpsj/production/0PbZKWShlq8iS_6_sPowwKHxKVI.svg)<img align="right" width="100" height="100" src="./app/public/app-icon.png">
 
-WebTM is a cross-platform solution to integrate the navigation history between desktop and mobile web browsers. Focusing on providing a solution for an integration between Google Chrome, Safari, Firefox, Android and iOS. This repository implements the backend solution with a NestJS application that provides a REST API and a PostgreSQL database used through PrismaORM.
+Web Time Machine is a cross-platform solution built using React, Vite, and TypeScript to integrate the navigation history between desktop and mobile web browsers. Focusing on providing a solution for an integration between Google Chrome, Safari, Firefox, Android and iOS. This repository implements the backend solution with a NestJS application that provides a REST API and a PostgreSQL database used through PrismaORM.
 
 ## Installation
 
 ```bash
-$ cd backend
-$ npm install
+npm run app:install
+npm run backend:install
 ```
 
-Copy the `sample.env` to `.env` on the backend folder and edit the values if necessary. Please watch the [Set the environment variables](#set-the-environment-variables).
+<br/>
 
 ## Running with Docker
 
@@ -25,62 +25,14 @@ Also you can run the ngrok to get a public access to your API. That's so useful 
 
 1. Visit the [Ngrok website](https://ngrok.com/) and sign up for an account.
 2. After signing up, navigate to the dashboard to obtain your authentication token and domain
-3. Run the following command:
 
-```
-docker run --net=host -it -e NGROK_AUTHTOKEN=2L3OvbfDz... ngrok/ngrok:latest http --domain=youronwdomain.ngrok-free.app API_PORT
-```
+<br/>
 
-## Running the app
+## Set the backend environment variables
 
-```bash
-$ cd backend
+Copy the `sample.env` to `.env` and `sample.db.env` to `db.env` on the backend folder and edit the values if necessary.
 
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
-
-## Open API Docs
-
-To see the Open API Specification navigate to / of your API running on the port you have enter in the .env. Ex: [http://localhost:5000/](http://localhost:5000/)
-
-# How to deploy your own Backend of WTM
-
-If you want to use WebTM app saving and managing your own navigation data the best way to do it is to deploy your own backend and connect it to the extension. Next we detail the steps to do achieve this.
-
-- [WebTM](#webtm)
-  - [Installation](#installation)
-  - [Running with Docker](#running-with-docker)
-  - [Running the app](#running-the-app)
-  - [Open API Docs](#open-api-docs)
-- [How to deploy your own Backend of WTM](#how-to-deploy-your-own-backend-of-wtm)
-  - [Deploy WTM on Vercel](#deploy-wtm-on-vercel)
-  - [Create a Vercel Postgres Serverless SQL](#create-a-vercel-postgres-serverless-sql)
-  - [Set the environment variables](#set-the-environment-variables)
-- [Chrome Extension](#chrome-extension)
-  - [Install the extension in Chrome (using the .zip file or the extension folder)](#install-the-extension-in-chrome-using-the-zip-file-or-the-extension-folder)
-
-### Deploy WTM on Vercel
-
-Deploy [this repository](https://github.com/webtimemachine/wtm2) into your vercel account using the following button. After the deploy is complete you will need to go to the project settings and change the root folder to `backend` and also set the env variables.
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fwebtimemachine%2Fwtm2)
-
-## Create a Vercel Postgres Serverless SQL
-
-The backend of WTM uses a PostgressDB, we recommend using Vercel Postgres. In order to do that you need to go to your Vercel dashboard on the tab 'Storage' and create a new DB. Then you need to setup the connection with your app, open the Advanced Options an set `DATABASE` as the envaronment variables prefix. After doing that, you can do to the env variables of you project and get the DATABASE_URL and DATABASE_URL_NON_POOLING to use on your local, connect to the database using an SQL client like [DBeaver](https://dbeaver.io/) and update your repository secrets.
-
-![db-connect-project](./docs/db-connect-project.png)
-
-## Set the environment variables
-
-To run the project in a local environment create a .env file on the root of the project and follow the example on sample.env
+### Env Variables:
 
 1. **PORT**:
    - Example: **`PORT=5000`**
@@ -133,7 +85,50 @@ To run the project in a local environment create a .env file on the root of the 
 
 You will also need to set this env variables as secrets on your GitHub repository for the db migrations GitHub action to work properly.
 
-# Chrome Extension
+<br/>
+
+## Running the backend
+
+```bash
+# development
+npm run backend:dev
+
+# production mode
+npm run backend:prod
+```
+
+## Open API Docs
+
+To see the Open API Specification navigate to / of your API running on the port you have enter in the .env. Ex: [http://localhost:5000/](http://localhost:5000/)
+
+<br/>
+
+## Deploy WTM backend on Vercel
+
+Deploy [this repository](https://github.com/webtimemachine/wtm2) into your vercel account using the following button. After the deploy is complete you will need to go to the project settings and change the root folder to `backend` and also set the env variables.
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fwebtimemachine%2Fwtm2)
+
+<br/>
+
+## Create a Vercel Postgres Serverless SQL
+
+The backend of WTM uses a PostgressDB, we recommend using Vercel Postgres. In order to do that you need to go to your Vercel dashboard on the tab 'Storage' and create a new DB. Then you need to setup the connection with your app, open the Advanced Options an set `DATABASE` as the envaronment variables prefix. After doing that, you can do to the env variables of you project and get the DATABASE_URL and DATABASE_URL_NON_POOLING to use on your local, connect to the database using an SQL client like [DBeaver](https://dbeaver.io/) and update your repository secrets.
+
+![db-connect-project](./docs/db-connect-project.png)
+
+<br/>
+
+## Build the Extension
+
+```bash
+npm run app:install
+npm run app:build
+```
+
+As a result you will found the built folders for chrome and firefox at the root folder on `app_chrome` and `app_firefox`
+
+<br/>
 
 ## Install the extension in Chrome (using the .zip file or the extension folder)
 
@@ -149,6 +144,4 @@ You will also need to set this env variables as secrets on your GitHub repositor
 
 - Once completed, you'll see a notification confirming the successful installation. The extension should now be visible in your list of installed extensions.
 
-- This step only applies if you want to change the API URL. In local extension folder: [const.js](./extensions/Chrome%20Web/consts.js) is the file where you can change the API environment. Remember that every time you change the code, you should go to **Extensions** in your browser and then click in update.
-
-created by ttt246
+Created by ttt246

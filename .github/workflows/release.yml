@@ -17,12 +17,15 @@ jobs:
         working-directory: app
         run: npm install
 
-      - name: Build Chrome Extension app
-        run: npm run app:build:chrome
+      - name: Build Chrome and Firefox Extensions apps
+        run: |
+          npm run app:build:chrome
+          npm run app:build:firefox
 
-      - name: Create ZIP file for Chrome extension
+      - name: Create ZIP files
         run: |
           zip -r chrome-extension.zip ./app_chrome
+          zip -r -j firefox-extension.zip ./app_firefox
 
       - name: Build iOS app from Chrome code
         run: npm run app:build:ios
@@ -101,7 +104,7 @@ jobs:
           prerelease: false
 
       - name: Upload Release Chrome extension Asset
-        id: upload-release-asset
+        id: upload-release-asset-chrome
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -109,6 +112,17 @@ jobs:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: chrome-extension.zip
           asset_name: chrome-extension.zip
+          asset_content_type: application/zip
+
+      - name: Upload Release Firefox extension Asset
+        id: upload-release-asset-firefox
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: firefox-extension.zip
+          asset_name: firefox-extension.zip
           asset_content_type: application/zip
 
       - name: Upload Release Backend Asset

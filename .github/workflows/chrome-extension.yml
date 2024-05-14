@@ -2,7 +2,7 @@ name: Check Chrome Extension tests
 
 on:
   pull_request:
-    branches: ['main']
+    branches: ['develop']
 
 jobs:
   testcheck:
@@ -22,6 +22,10 @@ jobs:
       - name: Install dependencies
         working-directory: app
         run: npm install
+
+      - name: Run Tests
+        working-directory: app
+        run: npm run test:cov
 
       - name: Build Chrome Extension app
         working-directory: app
