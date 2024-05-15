@@ -8,7 +8,7 @@ import { useHandleSessionExpired } from '.';
 export const useConfirmDeleteAccount = () => {
   const toast = useToast();
 
-  const { handleSessioExpired } = useHandleSessionExpired();
+  const { handleSessionExpired } = useHandleSessionExpired();
 
   const confirmDeleteAccount = async () => {
     try {
@@ -25,8 +25,12 @@ export const useConfirmDeleteAccount = () => {
 
       const response: BasicResponse = await res.json();
       return response;
-    } catch (error) {
-      await handleSessioExpired();
+    } catch (error: any) {
+      if (`${error?.message}`.toLowerCase().includes('unauthorized')) {
+        await handleSessionExpired();
+      } else {
+        throw error;
+      }
     }
   };
 
