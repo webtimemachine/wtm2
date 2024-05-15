@@ -12,20 +12,22 @@ export const useCloseActiveSession = () => {
   const { handleSessioExpired } = useHandleSessionExpired();
 
   const closeActiveSession = async (data: CloseActiveSessionsData) => {
-    const res = await apiClient.securedFetch('/api/auth/session/logout', {
-      method: 'POST',
-      body: JSON.stringify(data),
-    });
+    try {
+      const res = await apiClient.securedFetch('/api/auth/session/logout', {
+        method: 'POST',
+        body: JSON.stringify(data),
+      });
 
-    if (res.status === 401) await handleSessioExpired();
+      if (res.status !== 200) {
+        const errorJson = await res.json();
+        throw new Error(errorJson?.message || 'POST Update Preferences Error');
+      }
 
-    if (res.status !== 200) {
-      const errorJson = await res.json();
-      throw new Error(errorJson?.message || 'POST Update Preferences Error');
+      const response: BasicResponse = await res.json();
+      return response;
+    } catch (error) {
+      await handleSessioExpired();
     }
-
-    const response: BasicResponse = await res.json();
-    return response;
   };
 
   const closeActiveSessionMutation = useMutation({
