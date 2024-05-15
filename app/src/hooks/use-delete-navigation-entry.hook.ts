@@ -8,7 +8,7 @@ import { useHandleSessionExpired } from '.';
 export const useDeleteNavigationEntry = () => {
   const toast = useToast();
 
-  const { handleSessioExpired } = useHandleSessionExpired();
+  const { handleSessionExpired } = useHandleSessionExpired();
 
   const deleteNavigationEntry = async (data: DeleteNavigationEntriesData) => {
     try {
@@ -28,7 +28,7 @@ export const useDeleteNavigationEntry = () => {
       return response;
     } catch (error: any) {
       if (`${error?.message}`.toLowerCase().includes('unauthorized')) {
-        await handleSessioExpired();
+        await handleSessionExpired();
       } else {
         throw error;
       }

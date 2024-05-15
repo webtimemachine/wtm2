@@ -9,7 +9,7 @@ import { useHandleSessionExpired } from '.';
 export const useCloseActiveSession = () => {
   const toast = useToast();
 
-  const { handleSessioExpired } = useHandleSessionExpired();
+  const { handleSessionExpired } = useHandleSessionExpired();
 
   const closeActiveSession = async (data: CloseActiveSessionsData) => {
     try {
@@ -27,7 +27,7 @@ export const useCloseActiveSession = () => {
       return response;
     } catch (error: any) {
       if (`${error?.message}`.toLowerCase().includes('unauthorized')) {
-        await handleSessioExpired();
+        await handleSessionExpired();
       } else {
         throw error;
       }

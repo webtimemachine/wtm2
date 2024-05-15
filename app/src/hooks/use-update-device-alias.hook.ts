@@ -7,7 +7,7 @@ import { useHandleSessionExpired } from '.';
 
 export const useUpdateDeviceAlias = () => {
   const toast = useToast();
-  const { handleSessioExpired } = useHandleSessionExpired();
+  const { handleSessionExpired } = useHandleSessionExpired();
 
   const updateDeviceAlias = async (data: UpdateDeviceAliasData) => {
     try {
@@ -25,7 +25,7 @@ export const useUpdateDeviceAlias = () => {
       return response;
     } catch (error: any) {
       if (`${error?.message}`.toLowerCase().includes('unauthorized')) {
-        await handleSessioExpired();
+        await handleSessionExpired();
       } else {
         throw error;
       }
