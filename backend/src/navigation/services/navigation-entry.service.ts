@@ -112,7 +112,7 @@ export class NavigationEntryService {
     jwtContext: JwtContext,
     createNavigationEntryInputDto: CreateNavigationEntryInputDto,
   ): Promise<CompleteNavigationEntryDto> {
-    const { content, ...entryData } = createNavigationEntryInputDto;
+    const { content, images, ...entryData } = createNavigationEntryInputDto;
 
     await this.explicitFilter.filter(
       content!,
@@ -130,6 +130,7 @@ export class NavigationEntryService {
     try {
       await this.indexerService.index(
         content!,
+        images,
         createNavigationEntryInputDto.url,
         jwtContext.user.id,
       );

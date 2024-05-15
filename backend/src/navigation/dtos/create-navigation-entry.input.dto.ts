@@ -16,6 +16,9 @@ export class CreateNavigationEntryInputDto {
   @ApiProperty({ required: false })
   content?: string;
 
+  @ApiProperty({ required: true })
+  images: string[];
+
   @IsNotEmpty()
   @Type(() => Date)
   @IsDate({
