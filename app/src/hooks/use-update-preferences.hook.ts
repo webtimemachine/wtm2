@@ -11,20 +11,22 @@ export const useUpdatePreferences = () => {
   const { handleSessioExpired } = useHandleSessionExpired();
 
   const updatePreferences = async (data: UpdatePreferenciesData) => {
-    const res = await apiClient.securedFetch('/api/user/preferences', {
-      method: 'PUT',
-      body: JSON.stringify(data),
-    });
+    try {
+      const res = await apiClient.securedFetch('/api/user/preferences', {
+        method: 'PUT',
+        body: JSON.stringify(data),
+      });
 
-    if (res.status === 401) await handleSessioExpired();
+      if (res.status !== 200) {
+        const errorJson = await res.json();
+        throw new Error(errorJson?.message || 'PUT Update Preferences Error');
+      }
 
-    if (res.status !== 200) {
-      const errorJson = await res.json();
-      throw new Error(errorJson?.message || 'PUT Update Preferences Error');
+      const response: PreferenciesResponse = await res.json();
+      return response;
+    } catch (error) {
+      await handleSessioExpired();
     }
-
-    const response: PreferenciesResponse = await res.json();
-    return response;
   };
 
   const updatePreferencesMutation = useMutation({
