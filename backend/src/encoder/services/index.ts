@@ -1,10 +1,12 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { PrismaService } from '../../common/services';
-import weaviate from 'weaviate-ts-client';
-import { WeaviateStore, WeaviateLibArgs } from '@langchain/weaviate';
 import { OpenAIEmbeddings } from '@langchain/openai';
+import { WeaviateLibArgs, WeaviateStore } from '@langchain/weaviate';
+import { Document } from '@langchain/core/documents';
+import { Injectable, Logger } from '@nestjs/common';
 import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
+import weaviate from 'weaviate-ts-client';
+import { PrismaService } from '../../common/services';
 import { appEnv } from '../../config';
+import { caption } from '../utils';
 
 const textSplitter = new RecursiveCharacterTextSplitter({
   chunkSize: 1000,
@@ -57,12 +59,25 @@ export class IndexerService {
     };
   }
 
-  async index(content: string, url: string, userId: bigint) {
+  async index(content: string, images: string[], url: string, userId: bigint) {
     const exist =
       (await this.prismaService.navigationEntry.count({
         where: { url: url, userId: userId },
       })) > 0;
     if (!exist) {
+      let extraDocuments: Document[] = [];
+      if (appEnv.ALLOW_IMAGE_ENCODING) {
+        this.logger.debug('Getting text embeddings of images');
+        extraDocuments = await Promise.all(
+          images.map(async (image) => {
+            const captionResult = await caption(image);
+            return new Document({
+              pageContent: captionResult,
+              metadata: { source: url },
+            });
+          }),
+        );
+      }
       this.logger.debug(`Indexing chunks of '${url}'`);
       const documents = await textSplitter.createDocuments(
         [content],
@@ -71,7 +86,7 @@ export class IndexerService {
       const documentChunks = await textSplitter.splitDocuments(documents);
 
       await WeaviateStore.fromDocuments(
-        documentChunks,
+        [...documentChunks, ...extraDocuments],
         new OpenAIEmbeddings({ openAIApiKey: appEnv.OPENAI_ACCESS_TOKEN }),
         await this.vectorStoreArgs(userId),
       );
