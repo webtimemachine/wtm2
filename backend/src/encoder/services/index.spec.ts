@@ -6,6 +6,14 @@ import { WeaviateStore } from '@langchain/weaviate';
 import { Document } from '@langchain/core/documents';
 import { OpenAIEmbeddings } from '@langchain/openai';
 import { IndexerService } from '.';
+import * as utils from '../utils';
+
+jest.mock('../../config', () => ({
+  appEnv: {
+    ...jest.requireActual('../../config').appEnv,
+    ALLOW_IMAGE_ENCODING: true,
+  },
+}));
 
 jest.mock('weaviate-ts-client', () => ({
   __esModule: true,
@@ -86,14 +94,40 @@ describe('Indexer service', () => {
 
       prismaService.navigationEntry.count = jest.fn().mockResolvedValue(0);
 
-      await indexerService.index('Test.Content', 'example.com', 1n);
+      const mockCaption = jest
+        .spyOn(utils, 'caption')
+        .mockImplementation()
+        .mockResolvedValueOnce('image caption 1')
+        .mockResolvedValueOnce('image caption 2');
 
+      await indexerService.index(
+        'Test.Content',
+        ['imageURL 1', 'imageURL 2'],
+        'example.com',
+        1n,
+      );
+
+      expect(mockCaption).toHaveBeenCalledTimes(2);
+      expect(mockCaption).toHaveBeenCalledWith('imageURL 1');
+      expect(mockCaption).toHaveBeenCalledWith('imageURL 2');
       expect(mockWeaviate).toHaveBeenCalledWith(
         [
           new Document({
             pageContent: 'Test.Content',
             metadata: {
               loc: { lines: { from: 1, to: 1 } },
+              source: 'example.com',
+            },
+          }),
+          new Document({
+            pageContent: 'image caption 1',
+            metadata: {
+              source: 'example.com',
+            },
+          }),
+          new Document({
+            pageContent: 'image caption 2',
+            metadata: {
               source: 'example.com',
             },
           }),
@@ -111,7 +145,7 @@ describe('Indexer service', () => {
 
       prismaService.navigationEntry.count = jest.fn().mockResolvedValue(1);
 
-      await indexerService.index('Test.Content', 'example.com', 1n);
+      await indexerService.index('Test.Content', [], 'example.com', 1n);
 
       expect(mockWeaviate).not.toHaveBeenCalled();
     });
