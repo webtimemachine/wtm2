@@ -8,7 +8,7 @@ interface CreateNavigationEntry {
   content: string;
 }
 
-const postNavigationEntry = async () => {
+export const postNavigationEntry = async () => {
   try {
     const url = window.location.href;
 
