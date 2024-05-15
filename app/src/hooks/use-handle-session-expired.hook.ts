@@ -5,7 +5,7 @@ export const useHandleSessionExpired = () => {
   const { logout } = useLogout();
   const toast = useToast();
 
-  const handleSessioExpired = async () => {
+  const handleSessionExpired = async () => {
     await logout();
     toast({
       title: 'Session expired',
@@ -18,5 +18,5 @@ export const useHandleSessionExpired = () => {
     throw new Error('Session expired');
   };
 
-  return { handleSessioExpired };
+  return { handleSessionExpired };
 };

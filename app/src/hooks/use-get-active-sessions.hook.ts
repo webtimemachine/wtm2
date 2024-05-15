@@ -5,7 +5,7 @@ import { ActiveSession } from '../interfaces';
 import { useHandleSessionExpired } from '.';
 
 export const useGetActiveSessions = () => {
-  const { handleSessioExpired } = useHandleSessionExpired();
+  const { handleSessionExpired } = useHandleSessionExpired();
 
   const getActiveSessions = async () => {
     try {
@@ -22,7 +22,7 @@ export const useGetActiveSessions = () => {
       return response;
     } catch (error: any) {
       if (`${error?.message}`.toLowerCase().includes('unauthorized')) {
-        await handleSessioExpired();
+        await handleSessionExpired();
       } else {
         throw error;
       }

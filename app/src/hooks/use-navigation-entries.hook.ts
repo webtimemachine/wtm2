@@ -10,7 +10,7 @@ import { useHandleSessionExpired } from '.';
 export const useNavigationEntries = (params: GetNavigationEntriesData) => {
   //
 
-  const { handleSessioExpired } = useHandleSessionExpired();
+  const { handleSessionExpired } = useHandleSessionExpired();
 
   const getNavigationEntries = async (params: GetNavigationEntriesData) => {
     const { offset, limit, query, isSemantic } = params;
@@ -36,7 +36,7 @@ export const useNavigationEntries = (params: GetNavigationEntriesData) => {
       return response;
     } catch (error: any) {
       if (`${error?.message}`.toLowerCase().includes('unauthorized')) {
-        await handleSessioExpired();
+        await handleSessionExpired();
       } else {
         throw error;
       }
