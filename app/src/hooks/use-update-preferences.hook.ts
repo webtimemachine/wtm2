@@ -8,7 +8,7 @@ import { useHandleSessionExpired } from '.';
 export const useUpdatePreferences = () => {
   const toast = useToast();
 
-  const { handleSessioExpired } = useHandleSessionExpired();
+  const { handleSessionExpired } = useHandleSessionExpired();
 
   const updatePreferences = async (data: UpdatePreferenciesData) => {
     try {
@@ -24,8 +24,12 @@ export const useUpdatePreferences = () => {
 
       const response: PreferenciesResponse = await res.json();
       return response;
-    } catch (error) {
-      await handleSessioExpired();
+    } catch (error: any) {
+      if (`${error?.message}`.toLowerCase().includes('unauthorized')) {
+        await handleSessionExpired();
+      } else {
+        throw error;
+      }
     }
   };
 

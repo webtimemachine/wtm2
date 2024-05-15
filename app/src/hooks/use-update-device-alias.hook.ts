@@ -7,7 +7,7 @@ import { useHandleSessionExpired } from '.';
 
 export const useUpdateDeviceAlias = () => {
   const toast = useToast();
-  const { handleSessioExpired } = useHandleSessionExpired();
+  const { handleSessionExpired } = useHandleSessionExpired();
 
   const updateDeviceAlias = async (data: UpdateDeviceAliasData) => {
     try {
@@ -23,8 +23,12 @@ export const useUpdateDeviceAlias = () => {
 
       const response: BasicResponse = await res.json();
       return response;
-    } catch (error) {
-      await handleSessioExpired();
+    } catch (error: any) {
+      if (`${error?.message}`.toLowerCase().includes('unauthorized')) {
+        await handleSessionExpired();
+      } else {
+        throw error;
+      }
     }
   };
 

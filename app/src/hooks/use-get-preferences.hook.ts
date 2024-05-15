@@ -5,7 +5,7 @@ import { PreferenciesResponse } from '../interfaces';
 import { useHandleSessionExpired } from '.';
 
 export const useGetPreferences = () => {
-  const { handleSessioExpired } = useHandleSessionExpired();
+  const { handleSessionExpired } = useHandleSessionExpired();
 
   const getUserPreferences = async () => {
     try {
@@ -20,8 +20,12 @@ export const useGetPreferences = () => {
 
       const response: PreferenciesResponse = await res.json();
       return response;
-    } catch (error) {
-      await handleSessioExpired();
+    } catch (error: any) {
+      if (`${error?.message}`.toLowerCase().includes('unauthorized')) {
+        await handleSessionExpired();
+      } else {
+        throw error;
+      }
     }
   };
 
