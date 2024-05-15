@@ -33,4 +33,5 @@ export interface LoginData {
 
 export const isLoginRes = (
   loginRes: LoginResponse | VerifyEmailResponse,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): loginRes is LoginResponse => (loginRes as any)?.accessToken;
