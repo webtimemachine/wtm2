@@ -36,8 +36,9 @@ const mainPrompt = ChatPromptTemplate.fromMessages([
 const chain = new LLMChain({ llm: captionerModel, prompt: mainPrompt });
 
 export const caption = async (image: string): Promise<string> => {
+  // HTTP URL or base64 image
   const response = await chain.invoke({
-    image: `data:image/jpeg;base64,${image}`,
+    image,
   });
   return response['text'];
 };
