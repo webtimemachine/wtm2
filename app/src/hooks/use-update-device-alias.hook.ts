@@ -10,20 +10,22 @@ export const useUpdateDeviceAlias = () => {
   const { handleSessioExpired } = useHandleSessionExpired();
 
   const updateDeviceAlias = async (data: UpdateDeviceAliasData) => {
-    const res = await apiClient.securedFetch(`/api/user/device/${data.id}`, {
-      method: 'PUT',
-      body: JSON.stringify({ deviceAlias: data.deviceAlias }),
-    });
+    try {
+      const res = await apiClient.securedFetch(`/api/user/device/${data.id}`, {
+        method: 'PUT',
+        body: JSON.stringify({ deviceAlias: data.deviceAlias }),
+      });
 
-    if (res.status === 401) await handleSessioExpired();
+      if (res.status !== 200) {
+        const errorJson = await res.json();
+        throw new Error(errorJson?.message || 'PUT Update Preferences Error');
+      }
 
-    if (res.status !== 200) {
-      const errorJson = await res.json();
-      throw new Error(errorJson?.message || 'PUT Update Preferences Error');
+      const response: BasicResponse = await res.json();
+      return response;
+    } catch (error) {
+      await handleSessioExpired();
     }
-
-    const response: BasicResponse = await res.json();
-    return response;
   };
 
   const updateDeviceAliasMutation = useMutation({

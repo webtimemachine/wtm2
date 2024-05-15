@@ -11,21 +11,23 @@ export const useConfirmDeleteAccount = () => {
   const { handleSessioExpired } = useHandleSessionExpired();
 
   const confirmDeleteAccount = async () => {
-    const res = await apiClient.securedFetch('/api/user', {
-      method: 'DELETE',
-    });
+    try {
+      const res = await apiClient.securedFetch('/api/user', {
+        method: 'DELETE',
+      });
 
-    if (res.status === 401) await handleSessioExpired();
+      if (res.status !== 200) {
+        const errorJson = await res.json();
+        throw new Error(
+          errorJson?.message || 'DELETE Confirm delete account Error',
+        );
+      }
 
-    if (res.status !== 200) {
-      const errorJson = await res.json();
-      throw new Error(
-        errorJson?.message || 'DELETE Confirm delete account Error',
-      );
+      const response: BasicResponse = await res.json();
+      return response;
+    } catch (error) {
+      await handleSessioExpired();
     }
-
-    const response: BasicResponse = await res.json();
-    return response;
   };
 
   const confirmDeleteAccountMutation = useMutation({
