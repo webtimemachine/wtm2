@@ -54,10 +54,10 @@ const handleStartup = async () => {
  * @param {string} selector
  * @returns {string}
  */
-function DOMtoString (selector) {
+const DOMtoString = (selector) => {
   if (selector) {
     // this function was added because the regex replacement is inconsistent if any of the properties in the tags contains these chars: ["<", ">"]
-    function removeAllAttributes (node) {
+    function removeAllAttributes(node) {
       // Remove attributes from the current node
       while (node.attributes.length > 0) {
         node.removeAttribute(node.attributes[0].name);
@@ -81,6 +81,10 @@ function DOMtoString (selector) {
     const styleNodes = selector.querySelectorAll('style');
     const scriptNodes = selector.querySelectorAll('script');
     const linkNodes = selector.querySelectorAll('link');
+    const imgNodes = selector.querySelectorAll('img');
+    const anchors = selector.querySelectorAll('a');
+
+
 
     // Remove each style element from the cloned body
     styleNodes.forEach((styleNode) => {
@@ -92,14 +96,41 @@ function DOMtoString (selector) {
     linkNodes.forEach((linkNode) => {
       linkNode.parentNode.removeChild(linkNode);
     });
+    // images are removed here to avoid huge returned content due to base64 encoding
+    imgNodes.forEach((imgNode) => {
+      imgNode.parentNode.removeChild(imgNode);
+    });
+    // sites' links have no relevant content
+    anchors.forEach((anchor) => {
+      anchor.parentNode.removeChild(anchor);
+    });
+    // Generally, the header and footer nodes contain presentation data, not the main content itself
+    const header = selector.querySelector('header');
+    if (header) {
+      header.parentNode.removeChild(header);
+    }
+    const footer = selector.querySelector('footer');
+    if (footer) {
+      footer.parentNode.removeChild(footer);
+    }
   } else {
     selector = document.documentElement.outerHTML;
   }
 
   removeAllAttributes(selector);
 
-  return selector.outerHTML;
+  return selector.outerHTML; 
 }
+
+/**
+ * Return the sources of existing images that meet the size threshold
+ *
+ * Note that sources can be HTTP URLs or base64 encoded images
+ * @returns {string[]}
+ */
+const getImages = () => Array.from(document.querySelectorAll('img'))
+  .filter(img => img.height > 500)
+  .map(img => img.src);
 
 const handleUpdated = async (tabId, changeInfo, tab) => {
   if (changeInfo.status === 'complete') {
@@ -108,7 +139,11 @@ const handleUpdated = async (tabId, changeInfo, tab) => {
       !tab.url?.startsWith('chrome://') &&
       !tab.url.startsWith('https://www.google.com/search?q')
     ) {
-      let htmlContent = '';
+
+      const images = await chrome.scripting.executeScript({
+        target: { tabId: tabId },
+        func: getImages
+      });
 
       const results = await chrome.scripting.executeScript({
         target: { tabId: tabId },
@@ -116,19 +151,16 @@ const handleUpdated = async (tabId, changeInfo, tab) => {
         args: ['body'],
       });
 
-      if (results.length) {
-        htmlContent = results[0].result;
-      }
-
       const record = {
         url: tab.url,
         navigationDate: new Date().toISOString(),
         title: tab.title,
         // removes remaining html tags, more that 2 contiguous spaces, more that 2 contiguous line breaks and html entities
-        content: htmlContent.replace(
+        content: results ? results[0].result.replace(
           /(<[^>]*>)|(\s{2,})|(\n{2,})||(&\w+;)/g,
           '',
-        ),
+        ) : '',
+        images: images ? images[0].result : []
       };
 
       const storageData = await getStorageData(chrome);
