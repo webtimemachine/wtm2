@@ -9,23 +9,29 @@ import { useHandleSessionExpired } from '.';
 export const useCloseActiveSession = () => {
   const toast = useToast();
 
-  const { handleSessioExpired } = useHandleSessionExpired();
+  const { handleSessionExpired } = useHandleSessionExpired();
 
   const closeActiveSession = async (data: CloseActiveSessionsData) => {
-    const res = await apiClient.securedFetch('/api/auth/session/logout', {
-      method: 'POST',
-      body: JSON.stringify(data),
-    });
+    try {
+      const res = await apiClient.securedFetch('/api/auth/session/logout', {
+        method: 'POST',
+        body: JSON.stringify(data),
+      });
 
-    if (res.status === 401) await handleSessioExpired();
+      if (res.status !== 200) {
+        const errorJson = await res.json();
+        throw new Error(errorJson?.message || 'POST Update Preferences Error');
+      }
 
-    if (res.status !== 200) {
-      const errorJson = await res.json();
-      throw new Error(errorJson?.message || 'POST Update Preferences Error');
+      const response: BasicResponse = await res.json();
+      return response;
+    } catch (error: any) {
+      if (`${error?.message}`.toLowerCase().includes('unauthorized')) {
+        await handleSessionExpired();
+      } else {
+        throw error;
+      }
     }
-
-    const response: BasicResponse = await res.json();
-    return response;
   };
 
   const closeActiveSessionMutation = useMutation({
