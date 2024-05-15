@@ -8,19 +8,21 @@ export const useGetPreferences = () => {
   const { handleSessioExpired } = useHandleSessionExpired();
 
   const getUserPreferences = async () => {
-    const res = await apiClient.securedFetch('/api/user/preferences', {
-      method: 'GET',
-    });
+    try {
+      const res = await apiClient.securedFetch('/api/user/preferences', {
+        method: 'GET',
+      });
 
-    if (res.status === 401) await handleSessioExpired();
+      if (res.status !== 200) {
+        const errorJson = await res.json();
+        throw new Error(errorJson?.message || 'GET User Preferences Error');
+      }
 
-    if (res.status !== 200) {
-      const errorJson = await res.json();
-      throw new Error(errorJson?.message || 'GET User Preferences Error');
+      const response: PreferenciesResponse = await res.json();
+      return response;
+    } catch (error) {
+      await handleSessioExpired();
     }
-
-    const response: PreferenciesResponse = await res.json();
-    return response;
   };
 
   const userPreferencesQuery = useQuery({
