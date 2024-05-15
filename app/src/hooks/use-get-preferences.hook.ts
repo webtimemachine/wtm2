@@ -20,8 +20,12 @@ export const useGetPreferences = () => {
 
       const response: PreferenciesResponse = await res.json();
       return response;
-    } catch (error) {
-      await handleSessioExpired();
+    } catch (error: any) {
+      if (`${error?.message}`.toLowerCase().includes('unauthorized')) {
+        await handleSessioExpired();
+      } else {
+        throw error;
+      }
     }
   };
 
