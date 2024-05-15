@@ -88,6 +88,7 @@ const createNavigationEntryInputDto: CreateNavigationEntryInputDto = {
   title: 'Example Title',
   navigationDate,
   content: 'Test content',
+  images: [],
 };
 
 const jwtContext: JwtContext = {
@@ -272,7 +273,12 @@ describe('NavigationEntryService', () => {
 
       expect(result).toBeDefined();
       expect(result).toEqual(createdNavigationEntry);
-      expect(mockIndex).toHaveBeenCalledWith('Test content', 'example.com', 1n);
+      expect(mockIndex).toHaveBeenCalledWith(
+        'Test content',
+        [],
+        'example.com',
+        1n,
+      );
       expect(mockFilter).toHaveBeenCalledWith('Test content', 'example.com');
     });
 
@@ -298,7 +304,12 @@ describe('NavigationEntryService', () => {
 
       expect(result).toBeDefined();
       expect(result).toEqual(createdNavigationEntry);
-      expect(mockIndex).toHaveBeenCalledWith('Test content', 'example.com', 1n);
+      expect(mockIndex).toHaveBeenCalledWith(
+        'Test content',
+        [],
+        'example.com',
+        1n,
+      );
       expect(mockFilter).toHaveBeenCalledWith('Test content', 'example.com');
     });
   });
