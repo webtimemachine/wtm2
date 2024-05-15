@@ -10,7 +10,7 @@ import { useHandleSessionExpired } from '.';
 export const useNavigationEntries = (params: GetNavigationEntriesData) => {
   //
 
-  const { handleSessioExpired } = useHandleSessionExpired();
+  const { handleSessionExpired } = useHandleSessionExpired();
 
   const getNavigationEntries = async (params: GetNavigationEntriesData) => {
     const { offset, limit, query, isSemantic } = params;
@@ -24,17 +24,23 @@ export const useNavigationEntries = (params: GetNavigationEntriesData) => {
         isSemantic: String(isSemantic),
       }).toString();
 
-    const res = await apiClient.securedFetch(url, { method: 'GET' });
+    try {
+      const res = await apiClient.securedFetch(url, { method: 'GET' });
 
-    if (res.status === 401) await handleSessioExpired();
+      if (res.status !== 200) {
+        const errorJson = await res.json();
+        throw new Error(errorJson?.message || 'GET Navigation Entries Error');
+      }
 
-    if (res.status !== 200) {
-      const errorJson = await res.json();
-      throw new Error(errorJson?.message || 'GET Navigation Entries Error');
+      const response: GetNavigationEntriesResponse = await res.json();
+      return response;
+    } catch (error: any) {
+      if (`${error?.message}`.toLowerCase().includes('unauthorized')) {
+        await handleSessionExpired();
+      } else {
+        throw error;
+      }
     }
-
-    const response: GetNavigationEntriesResponse = await res.json();
-    return response;
   };
 
   const navigationEntriesQuery = useQuery({

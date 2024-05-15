@@ -8,24 +8,30 @@ import { useHandleSessionExpired } from '.';
 export const useConfirmDeleteAccount = () => {
   const toast = useToast();
 
-  const { handleSessioExpired } = useHandleSessionExpired();
+  const { handleSessionExpired } = useHandleSessionExpired();
 
   const confirmDeleteAccount = async () => {
-    const res = await apiClient.securedFetch('/api/user', {
-      method: 'DELETE',
-    });
+    try {
+      const res = await apiClient.securedFetch('/api/user', {
+        method: 'DELETE',
+      });
 
-    if (res.status === 401) await handleSessioExpired();
+      if (res.status !== 200) {
+        const errorJson = await res.json();
+        throw new Error(
+          errorJson?.message || 'DELETE Confirm delete account Error',
+        );
+      }
 
-    if (res.status !== 200) {
-      const errorJson = await res.json();
-      throw new Error(
-        errorJson?.message || 'DELETE Confirm delete account Error',
-      );
+      const response: BasicResponse = await res.json();
+      return response;
+    } catch (error: any) {
+      if (`${error?.message}`.toLowerCase().includes('unauthorized')) {
+        await handleSessionExpired();
+      } else {
+        throw error;
+      }
     }
-
-    const response: BasicResponse = await res.json();
-    return response;
   };
 
   const confirmDeleteAccountMutation = useMutation({
