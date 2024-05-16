@@ -9,10 +9,7 @@ export const PreferencesScreen: React.FC<object> = () => {
   const [days, setDays] = useState<number | null>(null);
   const { navigateBack } = useNavigation();
   const { userPreferencesQuery } = useGetPreferences();
-  const { updatePreferencesQuery } = useUpdatePreferences({
-    enableNavigationEntryExpiration: enabled,
-    navigationEntryExpirationInDays: days || 0,
-  });
+  const { updatePreferencesMutation } = useUpdatePreferences();
 
   useEffect(() => {
     if (!enabled) {
@@ -28,7 +25,10 @@ export const PreferencesScreen: React.FC<object> = () => {
   }, [userPreferencesQuery.data]);
 
   const handleSavePreferences = async () => {
-    updatePreferencesQuery.mutate();
+    updatePreferencesMutation.mutate({
+      enableNavigationEntryExpiration: enabled,
+      navigationEntryExpirationInDays: days || 0,
+    });
   };
 
   return (

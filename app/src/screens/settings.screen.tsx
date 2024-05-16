@@ -9,6 +9,7 @@ import { LuSettings2 } from 'react-icons/lu';
 import { BsPersonLock } from 'react-icons/bs';
 import { FaRegTrashAlt } from 'react-icons/fa';
 import { FaSignOutAlt } from 'react-icons/fa';
+import { PiTabs } from 'react-icons/pi';
 
 export const SettingsScreen: React.FC<object> = () => {
   const { navigateBack, navigateTo } = useNavigation();
@@ -41,6 +42,13 @@ export const SettingsScreen: React.FC<object> = () => {
           >
             <Icon as={BsPersonLock} boxSize={5} color='gray.600' />
             <Text fontSize='medium'>Active Sessions</Text>
+          </div>
+          <div
+            className='flex gap-2 items-center w-full p-2 select-none bg-white rounded-lg cursor-pointer'
+            onClick={() => window.open(window.location.href, '_blank')}
+          >
+            <Icon as={PiTabs} boxSize={5} color='gray.600' />
+            <Text fontSize='medium'>Open in new tab</Text>
           </div>
           <div
             className='flex gap-2 items-center w-full p-2 select-none bg-white rounded-lg cursor-pointer'

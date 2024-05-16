@@ -1,19 +1,33 @@
-import { useToast } from '@chakra-ui/react';
 import { useMutation } from '@tanstack/react-query';
-
-import { useSendBackgroundMessage } from './use-send-message.hook';
-import { SignUpData } from '../background/interfaces/sign-up.interface';
+import { useToast } from '@chakra-ui/react';
 import { useAuthStore, useNavigation } from '../store';
+
+import { apiClient } from '../utils/api.client';
+import { SignUpData, SignUpResponse, SignUpErrorResponse } from '../interfaces';
 
 export const useSignUp = () => {
   const toast = useToast();
-  const { sendBackgroundMessage } = useSendBackgroundMessage();
   const { navigateTo } = useNavigation();
   const notifyEmailValidation = useAuthStore(
     (state) => state.notifyEmailValidation,
   );
 
-  const signUp = (data: SignUpData) => sendBackgroundMessage('sign-up', data);
+  const signUp = async (data: SignUpData) => {
+    const res = await apiClient.securedFetch('/api/auth/signup', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+
+    if (res.status === 200) {
+      const response: SignUpResponse = await res.json();
+      const { partialToken } = response;
+      await chrome.storage.local.set({ partialToken });
+      return response;
+    } else {
+      const errorRes: SignUpErrorResponse = await res.json();
+      throw new Error(errorRes?.error || errorRes?.message?.toString());
+    }
+  };
 
   const signUpMutation = useMutation({
     mutationFn: signUp,
