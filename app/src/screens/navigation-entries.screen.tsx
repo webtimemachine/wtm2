@@ -67,11 +67,11 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
 
   return (
     <>
-      <div className='flex flex-col px-5 py-3 bg-slate-100 items-center w-full min-h-[600px] h-screen'>
+      <div className='flex flex-col px-5 py-3 items-center w-full min-h-[600px] h-screen'>
         <div className='flex flex-col w-full'>
           <div className='flex w-full justify-start pb-4 gap-4 items-center'>
             <div className='flex w-full justify-center pl-[40px]'>
-              <Text fontSize={'xx-large'} fontWeight={'bold'}>
+              <Text fontSize={'xx-large'} fontWeight={'bold'} noOfLines={1}>
                 WebTM
               </Text>
             </div>

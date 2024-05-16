@@ -181,18 +181,22 @@ export const ActiveSessionsScreen: React.FC<object> = () => {
 
   return (
     <>
-      <div className='flex flex-col px-5 py-3 bg-slate-100 items-center w-full'>
+      <div className='flex flex-col px-5 py-3 items-center w-full'>
         <div className='flex w-full justify-start pb-4 gap-4 items-center'>
           <IconButton aria-label='Back icon' onClick={() => navigateBack()}>
             <ArrowBackIcon boxSize={5} />
           </IconButton>
           <div className='flex w-full justify-center pr-[40px]'>
-            <Text fontSize={'xx-large'} fontWeight={'bold'}>
+            <Text
+              fontSize={'xx-large'}
+              fontWeight={'bold'}
+              style={{ textWrap: 'nowrap' } as React.CSSProperties}
+            >
               Active Sessions
             </Text>
           </div>
         </div>
-        <div className='flex flex-col w-full min-h-[400px]'>
+        <div className='flex flex-col w-full h-full'>
           <Text fontSize={'medium'}>
             Below you can see the complete list of active sessions:
           </Text>
@@ -203,7 +207,7 @@ export const ActiveSessionsScreen: React.FC<object> = () => {
             </div>
           )}
           <Divider className='my-2' />
-          <div className='flex flex-col gap-2 w-full max-h-[300px] overflow-y-auto scrollbar pr-1'>
+          <div className='flex flex-col gap-2 w-full h-full overflow-y-auto scrollbar pr-1'>
             {restSessions &&
               restSessions.map((session) => (
                 <ActiveSessionRow session={session} />
