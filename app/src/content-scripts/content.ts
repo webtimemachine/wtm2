@@ -1,11 +1,12 @@
 import { apiClient } from '../utils/api.client';
-import { DOMtoString } from '../utils';
+import { DOMtoString, getImages } from '../utils';
 
 interface CreateNavigationEntry {
   url: string;
   navigationDate: string;
   title: string;
   content: string;
+  images: string[];
 }
 
 export const postNavigationEntry = async () => {
@@ -20,6 +21,7 @@ export const postNavigationEntry = async () => {
       !url.startsWith('https://www.google.com/search?q')
     ) {
       const htmlContent = DOMtoString('body');
+      const images = getImages()
 
       const navigationEntry: CreateNavigationEntry = {
         url,
@@ -30,6 +32,7 @@ export const postNavigationEntry = async () => {
           /(<[^>]*>)|(\s{2,})|(\n{2,})||(&\w+;)/g,
           '',
         ),
+        images
       };
 
       await apiClient.securedFetch('/api/navigation-entry', {
