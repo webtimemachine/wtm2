@@ -189,15 +189,13 @@ export class NavigationEntryService {
         expirationThreshold.getDate() - navigationEntryExpirationInDays,
       );
     }
-    let whereQuery: Prisma.NavigationEntryWhereInput;
+    let whereQuery: Prisma.NavigationEntryWhereInput = {};
     if (isSemantic) {
       let urls: Set<string> | undefined;
       if (query) {
         urls = await this.indexerService.search(query, jwtContext.user.id);
+        whereQuery = { url: { in: [...urls!] } };
       }
-      whereQuery = {
-        ...(query !== undefined ? { url: { in: [...urls!] } } : {}),
-      };
     } else {
       const queryFilter: Prisma.StringFilter<'NavigationEntry'> = {
         contains: query,
