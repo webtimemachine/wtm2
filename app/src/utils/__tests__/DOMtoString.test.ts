@@ -1,4 +1,4 @@
-import { DOMtoString } from '../DOMtoString';
+import { DOMtoString, getImages } from '../DOMtoString';
 
 describe('DOMtoString', () => {
   beforeEach(() => {
@@ -33,4 +33,24 @@ describe('DOMtoString', () => {
     const expected = 'ERROR: querySelector failed to find node';
     expect(result).toEqual(expected);
   });
+});
+
+describe('getImages', () => {
+  beforeEach(() => {
+    document.body.innerHTML = ''; // Clear the document body before each test
+  });
+
+  it('should get valid images', () => {
+    const expected = ['https://media.image.com/test/1', 'https://media.image.com/test/2']
+    document.body.innerHTML = `
+    <div>
+      <img src="https://media.image.com/test/1" height="1080" width="1920" loading="lazy">
+      <img src="https://media.image.com/test/2" height="1000" width="1920" loading="lazy">
+      <img src="https://media.image.com/test/3" height="250" width="300" loading="lazy">
+    </div>`;
+
+    const result = getImages()
+    expect(result).toEqual(expected);
+  });
+
 });
