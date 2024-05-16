@@ -130,6 +130,9 @@ To run the project in a local environment create a .env file on the root of the 
 16. **WEAVIATE_HOST**:
     - Example: **`WEAVIATE_HOST=localhost:8080`**
     - Usage: Specifies the vector store host.
+17. **ALLOW_IMAGE_ENCODING**:
+    - Example: **`ALLOW_IMAGE_ENCODING=false`**
+    - Usage: Activate or deactivate the calculation of text embeddings from images found on websites. Note that there is a **threshold of 500px** to only consider the largest images, as they are likely the main visual content or article visuals.
 
 You will also need to set this env variables as secrets on your GitHub repository for the db migrations GitHub action to work properly.
 
