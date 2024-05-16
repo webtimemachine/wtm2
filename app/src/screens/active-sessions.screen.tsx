@@ -10,7 +10,7 @@ import {
 import { MdLogout } from 'react-icons/md';
 
 import { useNavigation } from '../store';
-import { ActiveSession } from '../background/interfaces/active-sessons.interface';
+import { ActiveSession } from '../interfaces/active-sessons.interface';
 import {
   useCloseActiveSession,
   useGetActiveSessions,
@@ -37,8 +37,8 @@ const moveCurrentSessionToFirst = (arr: ActiveSession[]) => {
 export const ActiveSessionsScreen: React.FC<object> = () => {
   const { navigateBack } = useNavigation();
   const { getActiveSessionsQuery } = useGetActiveSessions();
-  const { closeActiveSession } = useCloseActiveSession();
-  const { updateDeviceAlias } = useUpdateDeviceAlias();
+  const { closeActiveSessionMutation } = useCloseActiveSession();
+  const { updateDeviceAliasMutation } = useUpdateDeviceAlias();
 
   const [editingSession, setEditingSession] = useState<ActiveSession>();
   const [editingSessionName, setEditingSessionName] = useState<string>();
@@ -51,18 +51,18 @@ export const ActiveSessionsScreen: React.FC<object> = () => {
   }, [getActiveSessionsQuery]);
 
   useEffect(() => {
-    if (closeActiveSession.isSuccess) {
+    if (closeActiveSessionMutation.isSuccess) {
       getActiveSessionsQuery.refetch();
     }
-  }, [closeActiveSession.isSuccess, getActiveSessionsQuery]);
+  }, [closeActiveSessionMutation.isSuccess]);
 
   useEffect(() => {
-    if (updateDeviceAlias.isSuccess && editingSession) {
+    if (updateDeviceAliasMutation.isSuccess && editingSession) {
       setEditingSession(undefined);
       getActiveSessionsQuery.refetch();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [updateDeviceAlias.isSuccess]);
+  }, [updateDeviceAliasMutation.isSuccess]);
 
   interface ActiveSessionRowProps {
     session: ActiveSession;
@@ -83,7 +83,7 @@ export const ActiveSessionsScreen: React.FC<object> = () => {
     if (session.userDevice.isCurrentDevice) name = `${name} (current)`;
 
     const handleCloseActiveSession = () => {
-      closeActiveSession.mutate({
+      closeActiveSessionMutation.mutate({
         sessionIds: [session.id] as number[],
       });
     };
@@ -97,7 +97,7 @@ export const ActiveSessionsScreen: React.FC<object> = () => {
 
     const handleSaveActiveSession = () => {
       if (editingSession && editingSessionName) {
-        updateDeviceAlias.mutate({
+        updateDeviceAliasMutation.mutate({
           id: editingSession.userDeviceId,
           deviceAlias: editingSessionName,
         });

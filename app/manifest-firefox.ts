@@ -3,8 +3,14 @@ import { ManifestV3Export } from '@crxjs/vite-plugin';
 export const manifestFirefox: ManifestV3Export = {
   manifest_version: 3,
   name: 'WebTM',
-  version: '1.2',
-  description: 'WebTM',
+  version: '1.5.1',
+  description:
+    'WebTM is a cross-platform solution to integrate the navigation history between desktop and mobile web browsers. Focusing on providing a solution for integration between Google Chrome, Firefox and Safari iOS.',
+  browser_specific_settings: {
+    gecko: {
+      id: '{5790cffd-a2b7-4cb6-ad05-c5b955ddee3e}',
+    },
+  },
   permissions: ['tabs', 'activeTab', 'storage', 'scripting'],
   action: {
     default_popup: 'index.html',
@@ -17,7 +23,7 @@ export const manifestFirefox: ManifestV3Export = {
     '128': 'app-icon.png',
   },
   background: {
-    scripts: ['src/background/background.ts'],
+    scripts: ['src/service-workers/background.ts'],
     type: 'module',
   },
-};
+} as ManifestV3Export;
