@@ -23,11 +23,7 @@ export const SettingsScreen: React.FC<object> = () => {
             <ArrowBackIcon boxSize={5} />
           </IconButton>
           <div className='flex w-full justify-center pr-[40px]'>
-            <Text
-              fontSize='xx-large'
-              fontWeight='bold'
-              style={{ textWrap: 'nowrap' } as React.CSSProperties}
-            >
+            <Text fontSize={'xx-large'} fontWeight='bold'>
               Settings
             </Text>
           </div>

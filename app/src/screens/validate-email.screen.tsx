@@ -37,11 +37,7 @@ export const ValidateEmailScreen: React.FC<{}> = () => {
             />
           </IconButton>
           <div className='flex w-full justify-center pr-[40px]'>
-            <Text
-              fontSize={'xx-large'}
-              fontWeight={'bold'}
-              style={{ textWrap: 'nowrap' } as React.CSSProperties}
-            >
+            <Text fontSize={'xx-large'} fontWeight={'bold'}>
               Validate Account
             </Text>
           </div>

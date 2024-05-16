@@ -103,11 +103,7 @@ export const SignUpScreen: React.FC<{}> = () => {
             <ArrowBackIcon boxSize={5} onClick={() => navigateBack()} />
           </IconButton>
           <div className='flex w-full justify-center pr-[40px]'>
-            <Text
-              fontSize={'xx-large'}
-              fontWeight={'bold'}
-              style={{ textWrap: 'nowrap' } as React.CSSProperties}
-            >
+            <Text fontSize={'xx-large'} fontWeight={'bold'}>
               Sign Up
             </Text>
           </div>
