@@ -24,7 +24,7 @@ export const ValidateEmailScreen: React.FC<{}> = () => {
 
   return (
     <>
-      <div className='flex flex-col p-8 pt-10 bg-slate-100 items-center w-full'>
+      <div className='flex flex-col p-8 pt-10 items-center w-full'>
         <div className='flex w-full justify-start pb-4 gap-4 items-center'>
           <IconButton aria-label='Back icon'>
             <Icon
@@ -37,7 +37,11 @@ export const ValidateEmailScreen: React.FC<{}> = () => {
             />
           </IconButton>
           <div className='flex w-full justify-center pr-[40px]'>
-            <Text fontSize={'xx-large'} fontWeight={'bold'}>
+            <Text
+              fontSize={'xx-large'}
+              fontWeight={'bold'}
+              style={{ textWrap: 'nowrap' } as React.CSSProperties}
+            >
               Validate Account
             </Text>
           </div>
