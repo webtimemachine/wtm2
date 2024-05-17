@@ -32,7 +32,6 @@ const envSchemas = {
   WEAVIATE_HOST: z.string().default('localhost:8084'),
   WEAVIATE_SCHEME: z.string().default('http'),
   WEAVIATE_API_KEY: z.string().default('api-key'),
-  ALLOW_IMAGE_ENCODING: z.boolean().default(false),
 };
 
 const envSchema = z.object({
