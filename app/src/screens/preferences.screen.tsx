@@ -33,7 +33,7 @@ export const PreferencesScreen: React.FC<object> = () => {
 
   return (
     <>
-      <div className='flex flex-col px-5 py-3 bg-slate-100 items-center w-full'>
+      <div className='flex flex-col px-5 py-3 items-center w-full'>
         <div className='flex w-full justify-start pb-4 gap-4 items-center'>
           <IconButton aria-label='Back icon' onClick={() => navigateBack()}>
             <ArrowBackIcon boxSize={5} />
@@ -44,7 +44,7 @@ export const PreferencesScreen: React.FC<object> = () => {
             </Text>
           </div>
         </div>
-        <div className='flex flex-col w-full min-h-[400px]'>
+        <div className='flex flex-col w-full h-full'>
           <div className='flex w-full py-2 justify-between items-center'>
             <Text fontSize={'medium'}>
               Enable expirantion date on History entries

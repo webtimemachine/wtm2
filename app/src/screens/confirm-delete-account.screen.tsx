@@ -16,7 +16,7 @@ export const ConfirmDeleteAccountScreen: React.FC<object> = () => {
 
   return (
     <>
-      <div className='flex flex-col px-5 py-3 bg-slate-100 min-h-screen items-center w-full'>
+      <div className='flex flex-col px-5 py-3 min-h-screen items-center w-full'>
         <div className='flex w-full justify-start pb-4 gap-4 items-center'>
           <IconButton aria-label='Back icon' onClick={() => navigateBack()}>
             <ArrowBackIcon boxSize={5} />
@@ -27,7 +27,7 @@ export const ConfirmDeleteAccountScreen: React.FC<object> = () => {
             </Text>
           </div>
         </div>
-        <div className='flex flex-col w-full min-h-[400px]'>
+        <div className='flex flex-col w-full h-full'>
           <Text fontSize={'medium'}>
             Do you confirm that you want to delete your account data? Once this
             information is deleted, it cannot be recovered again.

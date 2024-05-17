@@ -63,7 +63,7 @@ export const ForgotPasswordScreen: React.FC<{}> = () => {
 
   return (
     <>
-      <div className='flex flex-col p-8 pt-10 bg-slate-100 items-center w-full'>
+      <div className='flex flex-col p-8 pt-10 items-center w-full'>
         <div className='flex w-full justify-start pb-4 gap-4 items-center'>
           <IconButton aria-label='Back icon'>
             <ArrowBackIcon
