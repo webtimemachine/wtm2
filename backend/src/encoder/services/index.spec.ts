@@ -8,13 +8,6 @@ import { OpenAIEmbeddings } from '@langchain/openai';
 import { IndexerService } from '.';
 import * as utils from '../utils';
 
-jest.mock('../../config', () => ({
-  appEnv: {
-    ...jest.requireActual('../../config').appEnv,
-    ALLOW_IMAGE_ENCODING: true,
-  },
-}));
-
 jest.mock('weaviate-ts-client', () => ({
   __esModule: true,
   default: {
@@ -93,6 +86,9 @@ describe('Indexer service', () => {
         .mockImplementation();
 
       prismaService.navigationEntry.count = jest.fn().mockResolvedValue(0);
+      prismaService.userPreferences.findFirst = jest.fn().mockResolvedValue({
+        enableImageEncoding: true,
+      });
 
       const mockCaption = jest
         .spyOn(utils, 'caption')
