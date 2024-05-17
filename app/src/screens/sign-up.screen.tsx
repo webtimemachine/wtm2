@@ -7,11 +7,9 @@ import {
   Text,
   FormControl,
   FormErrorMessage,
-  Tooltip,
-  useDisclosure,
   IconButton,
 } from '@chakra-ui/react';
-import { ArrowBackIcon, InfoIcon } from '@chakra-ui/icons';
+import { ArrowBackIcon } from '@chakra-ui/icons';
 
 import { ServerUrlEditable } from '../components';
 import { useSignUp } from '../hooks';
@@ -21,9 +19,6 @@ import { useNavigation } from '../store';
 import clsx from 'clsx';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[^\s]{8,20}$/;
-const passwordRegexMessage =
-  'Password must be between 8 and 20 characters long and contain at least one uppercase letter, one lowercase letter, and one digit. Spaces are not allowed.';
 
 export const SignUpScreen: React.FC<{}> = () => {
   const { signUpMutation } = useSignUp();
@@ -38,13 +33,6 @@ export const SignUpScreen: React.FC<{}> = () => {
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [confirmPassError, setConfirmPassError] = useState('');
-
-  const {
-    isOpen: passTooltipIsOpen,
-    onOpen: passTooltipOnOpen,
-    onClose: passTooltipOnClose,
-    onToggle: passTooltipOnToggle,
-  } = useDisclosure();
 
   const validateInputs = () => {
     let emailErrorFound = false;
@@ -65,7 +53,7 @@ export const SignUpScreen: React.FC<{}> = () => {
       setPasswordError('Password is required');
       passwordErrorFound = true;
     } else {
-      if (!passwordRegex.test(password)) {
+      if (password.length < 3) {
         setPasswordError('Please enter a valid password');
         passwordErrorFound = true;
       }
@@ -161,23 +149,6 @@ export const SignUpScreen: React.FC<{}> = () => {
             </InputGroup>
             <div className='[&>div]:mt-1 [&>div]:mb-1 flex gap-2 select-none'>
               <FormErrorMessage>{passwordError}</FormErrorMessage>
-              {!!passwordError && (
-                <div>
-                  <Tooltip
-                    bg='red.600'
-                    label={passwordRegexMessage}
-                    isOpen={passTooltipIsOpen}
-                    hasArrow
-                  >
-                    <InfoIcon
-                      color='red.600'
-                      onMouseEnter={passTooltipOnOpen}
-                      onMouseLeave={passTooltipOnClose}
-                      onClick={passTooltipOnToggle}
-                    />
-                  </Tooltip>
-                </div>
-              )}
             </div>
           </div>
         </FormControl>

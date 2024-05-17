@@ -7,19 +7,13 @@ import {
   InputGroup,
   Text,
   InputRightElement,
-  useDisclosure,
   FormErrorMessage,
-  Tooltip,
 } from '@chakra-ui/react';
-import { Icon, InfoIcon } from '@chakra-ui/icons';
+import { Icon } from '@chakra-ui/icons';
 import { LuLogIn } from 'react-icons/lu';
 
 import { useAuthStore, useNavigation } from '../store';
 import { useRestorePassword } from '../hooks';
-
-const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[^\s]{8,20}$/;
-const passwordRegexMessage =
-  'Password must be between 8 and 20 characters long and contain at least one uppercase letter, one lowercase letter, and one digit. Spaces are not allowed.';
 
 export const RecoveryNewPassword: React.FC<{}> = () => {
   const { navigateTo } = useNavigation();
@@ -34,13 +28,6 @@ export const RecoveryNewPassword: React.FC<{}> = () => {
   const [passwordError, setPasswordError] = useState('');
   const [confirmPassError, setConfirmPassError] = useState('');
 
-  const {
-    isOpen: passTooltipIsOpen,
-    onOpen: passTooltipOnOpen,
-    onClose: passTooltipOnClose,
-    onToggle: passTooltipOnToggle,
-  } = useDisclosure();
-
   const validateInputs = () => {
     let emailErrorFound = false;
     let passwordErrorFound = false;
@@ -50,7 +37,7 @@ export const RecoveryNewPassword: React.FC<{}> = () => {
       setPasswordError('Password is required');
       passwordErrorFound = true;
     } else {
-      if (!passwordRegex.test(password)) {
+      if (password.length < 3) {
         setPasswordError('Please enter a valid password');
         passwordErrorFound = true;
       }
@@ -145,23 +132,6 @@ export const RecoveryNewPassword: React.FC<{}> = () => {
             </InputGroup>
             <div className='[&>div]:mt-1 [&>div]:mb-1 flex gap-2 select-none'>
               <FormErrorMessage>{passwordError}</FormErrorMessage>
-              {!!passwordError && (
-                <div>
-                  <Tooltip
-                    bg='red.600'
-                    label={passwordRegexMessage}
-                    isOpen={passTooltipIsOpen}
-                    hasArrow
-                  >
-                    <InfoIcon
-                      color='red.600'
-                      onMouseEnter={passTooltipOnOpen}
-                      onMouseLeave={passTooltipOnClose}
-                      onClick={passTooltipOnToggle}
-                    />
-                  </Tooltip>
-                </div>
-              )}
             </div>
           </div>
         </FormControl>

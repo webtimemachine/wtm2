@@ -1,21 +1,16 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import { IsNotEmpty, IsOptional, Matches } from 'class-validator';
-import { SignUpRequestDto } from './signup-request.dto';
+import { IsNotEmpty, IsOptional, MinLength } from 'class-validator';
 
 export class RestorePasswordDto {
   @ApiProperty()
   @IsNotEmpty()
-  @Matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[^\s]{8,20}$/, {
-    message: SignUpRequestDto.validationErrorMessage,
-  })
+  @MinLength(3)
   password: string;
 
   @ApiProperty()
   @IsNotEmpty()
-  @Matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[^\s]{8,20}$/, {
-    message: SignUpRequestDto.validationErrorMessage,
-  })
+  @MinLength(3)
   verificationPassword: string;
 
   @ApiProperty()
