@@ -17,18 +17,18 @@ export const SettingsScreen: React.FC<object> = () => {
 
   return (
     <>
-      <div className='flex flex-col px-5 py-3 bg-slate-100 items-center w-full'>
+      <div className='flex flex-col px-5 py-3 items-center w-full'>
         <div className='flex w-full justify-start pb-4 gap-4 items-center'>
           <IconButton aria-label='Settings icon' onClick={() => navigateBack()}>
             <ArrowBackIcon boxSize={5} />
           </IconButton>
           <div className='flex w-full justify-center pr-[40px]'>
-            <Text fontSize='xx-large' fontWeight='bold'>
+            <Text fontSize={'xx-large'} fontWeight='bold'>
               Settings
             </Text>
           </div>
         </div>
-        <div className='flex flex-col gap-3 w-full min-h-[400px]'>
+        <div className='flex flex-col gap-3 w-full h-full'>
           <div
             className='flex gap-2 items-center w-full p-2 select-none bg-white rounded-lg cursor-pointer'
             onClick={() => navigateTo('preferences')}
