@@ -6,6 +6,7 @@ import { useNavigation } from '../store';
 
 export const PreferencesScreen: React.FC<object> = () => {
   const [enabled, setEnabled] = useState(false);
+  const [imageEncodingEnabled, setImageEncodingEnabled] = useState(false);
   const [days, setDays] = useState<number | null>(null);
   const { navigateBack } = useNavigation();
   const { userPreferencesQuery } = useGetPreferences();
@@ -22,12 +23,14 @@ export const PreferencesScreen: React.FC<object> = () => {
       setEnabled(true);
       setDays(userPreferencesQuery.data?.navigationEntryExpirationInDays);
     }
+    setImageEncodingEnabled(userPreferencesQuery.data?.enableImageEncoding || false)
   }, [userPreferencesQuery.data]);
 
   const handleSavePreferences = async () => {
     updatePreferencesMutation.mutate({
       enableNavigationEntryExpiration: enabled,
       navigationEntryExpirationInDays: days || 0,
+      enableImageEncoding: imageEncodingEnabled
     });
   };
 
@@ -45,6 +48,16 @@ export const PreferencesScreen: React.FC<object> = () => {
           </div>
         </div>
         <div className='flex flex-col w-full min-h-[400px]'>
+        <div className='flex w-full py-2 justify-between items-center'>
+            <Text fontSize={'medium'}>
+              Enable image captioning and encoding
+            </Text>
+            <Switch
+              size='md'
+              isChecked={imageEncodingEnabled}
+              onChange={(e) => setImageEncodingEnabled(e.target.checked)}
+            />
+          </div>
           <div className='flex w-full py-2 justify-between items-center'>
             <Text fontSize={'medium'}>
               Enable expirantion date on History entries
