@@ -66,7 +66,17 @@ export class IndexerService {
       })) > 0;
     if (!exist) {
       let extraDocuments: Document[] = [];
-      if (appEnv.ALLOW_IMAGE_ENCODING) {
+      const userPreference = await this.prismaService.userPreferences.findFirst(
+        {
+          where: {
+            userId,
+          },
+          select: {
+            enableImageEncoding: true,
+          },
+        },
+      );
+      if (userPreference?.enableImageEncoding) {
         this.logger.debug('Getting text embeddings of images');
         extraDocuments = await Promise.all(
           images.map(async (image) => {

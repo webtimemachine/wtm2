@@ -11,4 +11,9 @@ export class UpdateUserPreferencesInput {
   @IsOptional()
   @IsNumber()
   navigationEntryExpirationInDays?: number | null;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsBoolean()
+  enableImageEncoding: boolean;
 }
