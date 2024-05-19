@@ -1,0 +1,21 @@
+.button-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.twitter-button {
+    display: inline-block;
+    background-color: #1DA1F2;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.twitter-button:hover {
+    background-color: #0d95e8;
+}
