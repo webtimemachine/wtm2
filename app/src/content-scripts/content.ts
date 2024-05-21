@@ -1,18 +1,15 @@
 import { apiClient } from '../utils/api.client';
 import { DOMtoString } from '../utils';
-
-interface CreateNavigationEntry {
-  url: string;
-  navigationDate: string;
-  title: string;
-  content: string;
-}
+import { CreateNavigationEntry } from '../interfaces/navigation-entry.interface';
 
 export const postNavigationEntry = async () => {
   try {
     const url = window.location.href;
 
-    const { accessToken } = await chrome.storage.local.get(['accessToken']);
+    const { accessToken, enabledLiteMode } = await chrome.storage.local.get([
+      'accessToken',
+      'enabledLiteMode',
+    ]);
     if (
       accessToken &&
       url &&
@@ -26,10 +23,12 @@ export const postNavigationEntry = async () => {
         navigationDate: new Date().toISOString(),
         title: document.title || '',
         // Removes remaining HTML tags, more than 2 contiguous spaces, more than 2 contiguous line breaks, and HTML entities
-        content: htmlContent.replace(
-          /(<[^>]*>)|(\s{2,})|(\n{2,})||(&\w+;)/g,
-          '',
-        ),
+        ...((enabledLiteMode === undefined || !enabledLiteMode) && {
+          content: htmlContent.replace(
+            /(<[^>]*>)|(\s{2,})|(\n{2,})||(&\w+;)/g,
+            '',
+          ),
+        }),
       };
 
       await apiClient.securedFetch('/api/navigation-entry', {

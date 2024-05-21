@@ -1,16 +1,13 @@
+import { CreateNavigationEntry } from '../interfaces/navigation-entry.interface';
 import { DOMtoString } from '../utils';
 import { apiClient } from '../utils/api.client';
 
-interface CreateNavigationEntry {
-  url: string;
-  navigationDate: string;
-  title: string;
-  content: string;
-}
-
 chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
   try {
-    const { accessToken } = await chrome.storage.local.get(['accessToken']);
+    const { accessToken, enabledLiteMode } = await chrome.storage.local.get([
+      'accessToken',
+      'enabledLiteMode',
+    ]);
     if (accessToken && changeInfo.status === 'complete' && tabId) {
       if (
         tab.url &&
@@ -20,18 +17,20 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
         let htmlContent = '';
 
         let results;
-        try {
-          results = await chrome.scripting.executeScript({
-            target: { tabId: tabId },
-            func: DOMtoString,
-            args: ['body'],
-          });
-        } catch (error) {
-          return;
-        }
+        if (!enabledLiteMode) {
+          try {
+            results = await chrome.scripting.executeScript({
+              target: { tabId: tabId },
+              func: DOMtoString,
+              args: ['body'],
+            });
+          } catch (error) {
+            return;
+          }
 
-        if (results.length) {
-          htmlContent = results?.[0]?.result || '';
+          if (results.length) {
+            htmlContent = results?.[0]?.result || '';
+          }
         }
 
         const navigationEntry: CreateNavigationEntry = {
@@ -39,13 +38,14 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
           navigationDate: new Date().toISOString(),
           title: tab?.title || '',
           // Removes remaining HTML tags, more than 2 contiguous spaces, more than 2 contiguous line breaks, and HTML entities
-          content: htmlContent.replace(
-            /(<[^>]*>)|(\s{2,})|(\n{2,})||(&\w+;)/g,
-            '',
-          ),
+          ...((enabledLiteMode === undefined || !enabledLiteMode) && {
+            content: htmlContent.replace(
+              /(<[^>]*>)|(\s{2,})|(\n{2,})||(&\w+;)/g,
+              '',
+            ),
+          }),
         };
 
-        console.log('handleUpdated', { navigationEntry });
         await apiClient.securedFetch('/api/navigation-entry', {
           method: 'POST',
           body: JSON.stringify(navigationEntry),
