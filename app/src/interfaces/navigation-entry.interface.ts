@@ -4,6 +4,7 @@ export interface CompleteNavigationEntryDto {
   id: number;
   url: string;
   title: string;
+  liteMode: string;
   navigationDate: Date;
   userId: number;
   userDeviceId: number;
