@@ -29,3 +29,10 @@ export interface GetNavigationEntriesData {
 export interface DeleteNavigationEntriesData {
   id: number;
 }
+
+export interface CreateNavigationEntry {
+  url: string;
+  navigationDate: string;
+  title: string;
+  content?: string;
+}
