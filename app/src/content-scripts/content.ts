@@ -10,12 +10,7 @@ export const postNavigationEntry = async () => {
       'accessToken',
       'enabledLiteMode',
     ]);
-    if (
-      accessToken &&
-      url &&
-      !url.startsWith('chrome://') &&
-      !url.startsWith('https://www.google.com/search?q')
-    ) {
+    if (accessToken && url && !url.startsWith('chrome://')) {
       const htmlContent = DOMtoString('body');
 
       const navigationEntry: CreateNavigationEntry = {
