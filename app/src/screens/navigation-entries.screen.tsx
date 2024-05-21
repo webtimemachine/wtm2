@@ -36,7 +36,7 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
   const LIMIT = 16;
   const [page, setPage] = useState<number>(0);
   const [query, setQuery] = useState<string>('');
-  const [isSemantic, setIsSemantic] = useState<boolean>(false);
+  const [isSemantic, setIsSemantic] = useState<boolean>(true);
 
   const offset = page * LIMIT;
   const limit = LIMIT;
