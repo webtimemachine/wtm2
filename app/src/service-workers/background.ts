@@ -9,11 +9,7 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
       'enabledLiteMode',
     ]);
     if (accessToken && changeInfo.status === 'complete' && tabId) {
-      if (
-        tab.url &&
-        !tab.url.startsWith('chrome://') &&
-        !tab.url.startsWith('https://www.google.com/search?q')
-      ) {
+      if (tab.url && !tab.url.startsWith('chrome://')) {
         let htmlContent = '';
 
         let results;
