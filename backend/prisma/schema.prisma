@@ -45,6 +45,8 @@ model UserPreferences {
 
   enableNavigationEntryExpiration Boolean @default(false)
   navigationEntryExpirationInDays Int?
+  enableImageEncoding Boolean? @default(false)
+  
 
   createdAt DateTime  @default(now()) @db.Timestamptz(0)
   updateAt  DateTime? @updatedAt @db.Timestamptz(0)

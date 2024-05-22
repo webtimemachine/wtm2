@@ -31,6 +31,8 @@ export const DOMtoString = (selector: string): string => {
     const styleNodes = selectedNode.querySelectorAll('style');
     const scriptNodes = selectedNode.querySelectorAll('script');
     const linkNodes = selectedNode.querySelectorAll('link');
+    const imgNodes = selectedNode.querySelectorAll('img');
+    const anchors = selectedNode.querySelectorAll('a');
 
     styleNodes.forEach((styleNode) => {
       styleNode.parentNode?.removeChild(styleNode);
@@ -41,6 +43,23 @@ export const DOMtoString = (selector: string): string => {
     linkNodes.forEach((linkNode) => {
       linkNode.parentNode?.removeChild(linkNode);
     });
+    // images are removed here to avoid huge returned content due to base64 encoding
+    imgNodes.forEach((imgNode) => {
+      imgNode.parentNode?.removeChild(imgNode);
+    });
+    // sites' links have no relevant content
+    anchors.forEach((anchor) => {
+      anchor.parentNode?.removeChild(anchor);
+    });
+    // Generally, the header and footer nodes contain presentation data, not the main content itself
+    const header = selectedNode.querySelector('header');
+    if (header) {
+      header.parentNode?.removeChild(header);
+    }
+    const footer = selectedNode.querySelector('footer');
+    if (footer) {
+      footer.parentNode?.removeChild(footer);
+    }
   } else {
     selectedNode = document.documentElement;
   }
@@ -52,3 +71,14 @@ export const DOMtoString = (selector: string): string => {
     return '';
   }
 };
+
+
+/**
+ * Return the sources of existing images that meet the size threshold
+ *
+ * Note that sources can be HTTP URLs or base64 encoded images
+ * @returns {string[]}
+ */
+export const getImages = (): string[] => Array.from(document.querySelectorAll('img'))
+  .filter(img => img.height > 500)
+  .map(img => img.src);
