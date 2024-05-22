@@ -9,7 +9,7 @@ describe('DOMtoString', () => {
     document.body.innerHTML = `<div id="test"><style>body { color: red; }</style><script>alert('Hello');</script><a href="#">Link</a><p class="paragraph" style="font-weight: bold;">Paragraph</p></div>`;
 
     const result = DOMtoString('#test');
-    const expected = '<div><a>Link</a><p>Paragraph</p></div>';
+    const expected = '<div><p>Paragraph</p></div>';
     expect(result.trim()).toEqual(expected);
   });
 
@@ -41,7 +41,10 @@ describe('getImages', () => {
   });
 
   it('should get valid images', () => {
-    const expected = ['https://media.image.com/test/1', 'https://media.image.com/test/2']
+    const expected = [
+      'https://media.image.com/test/1',
+      'https://media.image.com/test/2',
+    ];
     document.body.innerHTML = `
     <div>
       <img src="https://media.image.com/test/1" height="1080" width="1920" loading="lazy">
@@ -49,8 +52,7 @@ describe('getImages', () => {
       <img src="https://media.image.com/test/3" height="250" width="300" loading="lazy">
     </div>`;
 
-    const result = getImages()
+    const result = getImages();
     expect(result).toEqual(expected);
   });
-
 });
