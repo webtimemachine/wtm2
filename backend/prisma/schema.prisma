@@ -106,9 +106,10 @@ model Session {
 }
 
 model NavigationEntry {
-  id    BigInt @id @default(autoincrement())
-  url   String @db.VarChar()
-  title String @db.VarChar()
+  id       BigInt  @id @default(autoincrement())
+  url      String  @db.VarChar()
+  title    String  @db.VarChar()
+  liteMode Boolean @default(false)
 
   userId BigInt
   user   User   @relation(fields: [userId], references: [id])

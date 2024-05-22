@@ -114,10 +114,15 @@ export class NavigationEntryService {
   ): Promise<CompleteNavigationEntryDto> {
     const { content, images, ...entryData } = createNavigationEntryInputDto;
 
-    await this.explicitFilter.filter(
-      content!,
-      createNavigationEntryInputDto.url,
-    );
+    const liteMode = !content;
+
+    if (!liteMode) {
+      await this.explicitFilter.filter(
+        content!,
+        createNavigationEntryInputDto.url,
+      );
+    }
+
     const lastEntry = await this.prismaService.navigationEntry.findFirst({
       where: {
         userId: jwtContext.user.id,
@@ -148,6 +153,7 @@ export class NavigationEntryService {
             id: lastEntry.id,
           },
           data: {
+            liteMode,
             userDeviceId: jwtContext.session.userDeviceId,
             ...entryData,
           },
@@ -158,6 +164,7 @@ export class NavigationEntryService {
       completeNavigationEntry = await this.prismaService.navigationEntry.create(
         {
           data: {
+            liteMode,
             userId: jwtContext.user.id,
             userDeviceId: jwtContext.session.userDeviceId,
             ...entryData,

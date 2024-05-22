@@ -26,4 +26,11 @@ export const manifestFirefox: ManifestV3Export = {
     scripts: ['src/service-workers/background.ts'],
     type: 'module',
   },
+  web_accessible_resources: [
+    {
+      resources: ['*.png', '*.jpg', '*.jpeg', '*.svg', '*.webp'],
+      matches: ['*://*/*'],
+      use_dynamic_url: true,
+    },
+  ],
 } as ManifestV3Export;

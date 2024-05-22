@@ -20,8 +20,8 @@ export const useNavigationEntries = (params: GetNavigationEntriesData) => {
       new URLSearchParams({
         offset: offset.toString(),
         limit: limit.toString(),
-        query: query,
         isSemantic: String(isSemantic),
+        ...(query && { query: query }),
       }).toString();
 
     try {

@@ -36,7 +36,7 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
   const LIMIT = 16;
   const [page, setPage] = useState<number>(0);
   const [query, setQuery] = useState<string>('');
-  const [isSemantic, setIsSemantic] = useState<boolean>(false);
+  const [isSemantic, setIsSemantic] = useState<boolean>(true);
 
   const offset = page * LIMIT;
   const limit = LIMIT;
@@ -152,11 +152,27 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
                         isExternal
                         className='overflow-hidden truncate'
                       >
-                        <Text className='' fontSize={'small'}>
+                        <Text
+                          className=''
+                          fontSize={'small'}
+                          {...(element.liteMode && {
+                            fontWeight: 'bold',
+                            fontStyle: 'italic',
+                          })}
+                        >
                           {truncateString(element.title, 40)}
                         </Text>
-                        <Text className='text-slate-600' fontSize={'smaller'}>
+                        <Text
+                          className='text-slate-600'
+                          fontSize={'smaller'}
+                          {...(element.liteMode && {
+                            fontStyle: 'italic',
+                          })}
+                        >
                           {new Date(element.navigationDate).toLocaleString()}
+                          {element.liteMode && (
+                            <span className='italic'> - Lite Mode</span>
+                          )}
                         </Text>
                       </Link>
                     </div>
