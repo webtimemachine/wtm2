@@ -27,4 +27,11 @@ export const manifestChrome: ManifestV3Export = {
   content_security_policy: {
     extension_pages: "script-src 'self'; object-src 'self'",
   },
+  web_accessible_resources: [
+    {
+      resources: ['*.png', '*.jpg', '*.jpeg', '*.svg', '*.webp'],
+      matches: ['*://*/*'],
+      use_dynamic_url: true,
+    },
+  ],
 };
