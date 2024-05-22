@@ -36,4 +36,5 @@ export interface CreateNavigationEntry {
   navigationDate: string;
   title: string;
   content?: string;
+  images?: string[];
 }
