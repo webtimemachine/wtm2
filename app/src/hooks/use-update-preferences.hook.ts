@@ -24,12 +24,15 @@ export const useUpdatePreferences = () => {
 
       const response: PreferenciesResponse = await res.json();
       return response;
-    } catch (error: any) {
-      if (`${error?.message}`.toLowerCase().includes('unauthorized')) {
-        await handleSessionExpired();
-      } else {
-        throw error;
+    } catch (error: unknown) {
+      if(error instanceof Error){
+        if (`${error?.message}`.toLowerCase().includes('unauthorized')) {
+          await handleSessionExpired();
+        } else {
+          throw error;
+        }
       }
+      throw error;
     }
   };
 

@@ -1,5 +1,5 @@
 import { apiClient } from '../utils/api.client';
-import { DOMtoString } from '../utils';
+import { DOMtoString, getImages } from '../utils';
 import { CreateNavigationEntry } from '../interfaces/navigation-entry.interface';
 
 export const postNavigationEntry = async () => {
@@ -12,6 +12,7 @@ export const postNavigationEntry = async () => {
     ]);
     if (accessToken && url && !url.startsWith('chrome://')) {
       const htmlContent = DOMtoString('body');
+      const images = getImages();
 
       const navigationEntry: CreateNavigationEntry = {
         url,
@@ -23,6 +24,7 @@ export const postNavigationEntry = async () => {
             /(<[^>]*>)|(\s{2,})|(\n{2,})||(&\w+;)/g,
             '',
           ),
+          images,
         }),
       };
 

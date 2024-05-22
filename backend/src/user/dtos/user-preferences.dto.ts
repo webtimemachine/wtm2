@@ -18,4 +18,8 @@ export class UserPreferencesDto {
   @ApiProperty({ type: 'number', nullable: true })
   @Expose()
   navigationEntryExpirationInDays: number | null;
+
+  @ApiProperty()
+  @Expose()
+  enableImageEncoding: boolean;
 }
