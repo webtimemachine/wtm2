@@ -1,4 +1,4 @@
-import { DOMtoString } from '../utils';
+import { DOMtoString, getImages } from '../utils';
 import { apiClient } from '../utils/api.client';
 
 interface CreateNavigationEntry {
@@ -6,6 +6,7 @@ interface CreateNavigationEntry {
   navigationDate: string;
   title: string;
   content: string;
+  images: string[];
 }
 
 chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
@@ -17,7 +18,10 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
         !tab.url.startsWith('chrome://') &&
         !tab.url.startsWith('https://www.google.com/search?q')
       ) {
-        let htmlContent = '';
+        const images = await chrome.scripting.executeScript({
+          target: { tabId: tabId },
+          func: getImages
+        });
 
         let results;
         try {
@@ -30,19 +34,16 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
           return;
         }
 
-        if (results.length) {
-          htmlContent = results?.[0]?.result || '';
-        }
-
         const navigationEntry: CreateNavigationEntry = {
           url: tab.url,
           navigationDate: new Date().toISOString(),
           title: tab?.title || '',
           // Removes remaining HTML tags, more than 2 contiguous spaces, more than 2 contiguous line breaks, and HTML entities
-          content: htmlContent.replace(
+          content: results ? results[0].result!.replace(
             /(<[^>]*>)|(\s{2,})|(\n{2,})||(&\w+;)/g,
             '',
-          ),
+          ) : '',
+          images: images ? images[0].result! : []
         };
 
         console.log('handleUpdated', { navigationEntry });

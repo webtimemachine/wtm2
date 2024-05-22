@@ -5,7 +5,8 @@ import { PrismaClient } from '@prisma/client';
 import { WeaviateStore } from '@langchain/weaviate';
 import { Document } from '@langchain/core/documents';
 import { OpenAIEmbeddings } from '@langchain/openai';
-import { SemanticProcessor } from '../../semanticSearch/services';
+import { IndexerService } from '.';
+import * as utils from '../utils';
 
 jest.mock('weaviate-ts-client', () => ({
   __esModule: true,
@@ -40,9 +41,9 @@ import weaviate from 'weaviate-ts-client';
 
 jest.mock('../../common/services/prisma.service');
 
-describe('SemanticProcessor', () => {
+describe('Indexer service', () => {
   let prismaService: PrismaService;
-  let semanticProcessor: SemanticProcessor;
+  let indexerService: IndexerService;
 
   const prismaClient = new PrismaClient();
 
@@ -56,19 +57,19 @@ describe('SemanticProcessor', () => {
     const commonTestModule = CommonTestingModule.forTest(prismaClient);
     const module: TestingModule = await Test.createTestingModule({
       imports: [commonTestModule],
-      providers: [SemanticProcessor],
+      providers: [IndexerService],
     }).compile();
 
     prismaService = module.get<PrismaService>(PrismaService);
-    semanticProcessor = module.get<SemanticProcessor>(SemanticProcessor);
+    indexerService = module.get<IndexerService>(IndexerService);
   });
 
   it('prismaService should be defined', () => {
     expect(prismaService).toBeDefined();
   });
 
-  it('semanticProcessor should be defined', () => {
-    expect(semanticProcessor).toBeDefined();
+  it('indexerService should be defined', () => {
+    expect(indexerService).toBeDefined();
   });
 
   describe('Index data', () => {
@@ -85,15 +86,44 @@ describe('SemanticProcessor', () => {
         .mockImplementation();
 
       prismaService.navigationEntry.count = jest.fn().mockResolvedValue(0);
+      prismaService.userPreferences.findFirst = jest.fn().mockResolvedValue({
+        enableImageEncoding: true,
+      });
 
-      await semanticProcessor.index('Test.Content', 'example.com', 1n);
+      const mockCaption = jest
+        .spyOn(utils, 'caption')
+        .mockImplementation()
+        .mockResolvedValueOnce('image caption 1')
+        .mockResolvedValueOnce('image caption 2');
 
+      await indexerService.index(
+        'Test.Content',
+        ['imageURL 1', 'imageURL 2'],
+        'example.com',
+        1n,
+      );
+
+      expect(mockCaption).toHaveBeenCalledTimes(2);
+      expect(mockCaption).toHaveBeenCalledWith('imageURL 1');
+      expect(mockCaption).toHaveBeenCalledWith('imageURL 2');
       expect(mockWeaviate).toHaveBeenCalledWith(
         [
           new Document({
             pageContent: 'Test.Content',
             metadata: {
               loc: { lines: { from: 1, to: 1 } },
+              source: 'example.com',
+            },
+          }),
+          new Document({
+            pageContent: 'image caption 1',
+            metadata: {
+              source: 'example.com',
+            },
+          }),
+          new Document({
+            pageContent: 'image caption 2',
+            metadata: {
               source: 'example.com',
             },
           }),
@@ -111,7 +141,7 @@ describe('SemanticProcessor', () => {
 
       prismaService.navigationEntry.count = jest.fn().mockResolvedValue(1);
 
-      await semanticProcessor.index('Test.Content', 'example.com', 1n);
+      await indexerService.index('Test.Content', [], 'example.com', 1n);
 
       expect(mockWeaviate).not.toHaveBeenCalled();
     });
@@ -143,7 +173,7 @@ describe('SemanticProcessor', () => {
         tenant: `Tenant-1`,
       };
 
-      const results = await semanticProcessor.search('Test query', 1n);
+      const results = await indexerService.search('Test query', 1n);
       expect(results).toEqual(new Set(['source1', 'source2']));
       expect(mockRetriever.getRelevantDocuments).toHaveBeenCalledWith(
         'Test query',
@@ -176,7 +206,7 @@ describe('SemanticProcessor', () => {
 
       prismaService.navigationEntry.count = jest.fn().mockResolvedValue(1);
 
-      await semanticProcessor.delete('example.com', 1n);
+      await indexerService.delete('example.com', 1n);
 
       expect(mockWeaviate).toHaveBeenCalledWith(
         expect.any(OpenAIEmbeddings),
@@ -202,7 +232,7 @@ describe('SemanticProcessor', () => {
 
       prismaService.navigationEntry.count = jest.fn().mockResolvedValue(2);
 
-      await semanticProcessor.delete('example.com', 1n);
+      await indexerService.delete('example.com', 1n);
 
       expect(mockFromExistingIndex).not.toHaveBeenCalled();
       mockWeaviate.mockRestore();

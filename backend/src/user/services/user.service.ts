@@ -98,8 +98,11 @@ export class UserService {
     jwtContext: JwtContext,
     updateUserPreferencesInput: UpdateUserPreferencesInput,
   ): Promise<UserPreferencesDto> {
-    const { enableNavigationEntryExpiration, navigationEntryExpirationInDays } =
-      updateUserPreferencesInput;
+    const {
+      enableNavigationEntryExpiration,
+      navigationEntryExpirationInDays,
+      enableImageEncoding,
+    } = updateUserPreferencesInput;
 
     const updatedUserPreferences =
       await this.prismaService.userPreferences.update({
@@ -109,6 +112,7 @@ export class UserService {
         data: {
           enableNavigationEntryExpiration,
           navigationEntryExpirationInDays,
+          enableImageEncoding,
         },
       });
 
