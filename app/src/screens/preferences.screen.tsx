@@ -6,6 +6,7 @@ import { useNavigation } from '../store';
 
 export const PreferencesScreen: React.FC<object> = () => {
   const [enabled, setEnabled] = useState(false);
+  const [enabledLiteMode, setEnabledLiteMode] = useState(false);
   const [imageEncodingEnabled, setImageEncodingEnabled] = useState(false);
   const [days, setDays] = useState<number | null>(null);
   const { navigateBack } = useNavigation();
@@ -34,7 +35,22 @@ export const PreferencesScreen: React.FC<object> = () => {
       navigationEntryExpirationInDays: days || 0,
       enableImageEncoding: imageEncodingEnabled,
     });
+
+    await chrome.storage.local.set({
+      enabledLiteMode,
+    });
   };
+
+  useEffect(() => {
+    const getLiteModeSettings = async () => {
+      const { enabledLiteMode: isEnableLiteMode } =
+        await chrome.storage.local.get(['enabledLiteMode']);
+
+      setEnabledLiteMode(isEnableLiteMode);
+    };
+
+    getLiteModeSettings();
+  }, []);
 
   return (
     <>
@@ -58,6 +74,14 @@ export const PreferencesScreen: React.FC<object> = () => {
               size='md'
               isChecked={imageEncodingEnabled}
               onChange={(e) => setImageEncodingEnabled(e.target.checked)}
+            />
+          </div>
+          <div className='flex w-full py-2 justify-between items-center'>
+            <Text fontSize={'medium'}>Enable Lite Mode</Text>
+            <Switch
+              size='md'
+              isChecked={enabledLiteMode}
+              onChange={(e) => setEnabledLiteMode(e.target.checked)}
             />
           </div>
           <div className='flex w-full py-2 justify-between items-center'>

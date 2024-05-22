@@ -18,6 +18,10 @@ export class CompleteNavigationEntryDto {
 
   @ApiProperty()
   @Expose()
+  liteMode: boolean;
+
+  @ApiProperty()
+  @Expose()
   navigationDate: Date;
 
   @ApiProperty()
