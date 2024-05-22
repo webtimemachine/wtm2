@@ -5,6 +5,7 @@ import { WeaviateStore, WeaviateLibArgs } from '@langchain/weaviate';
 import { OpenAIEmbeddings } from '@langchain/openai';
 import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
 import { appEnv } from '../../config';
+import { SemanticSearchResult } from '../types';
 
 const textSplitter = new RecursiveCharacterTextSplitter({
   chunkSize: 1000,
@@ -79,14 +80,26 @@ export class SemanticProcessor {
     } else this.logger.debug(`'${url}' was already indexed. Ignoring...`);
   }
 
-  async search(query: string, userId: bigint): Promise<Set<string>> {
+  async search(query: string, userId: bigint): Promise<SemanticSearchResult> {
     const store = await WeaviateStore.fromExistingIndex(
       new OpenAIEmbeddings({ openAIApiKey: appEnv.OPENAI_ACCESS_TOKEN }),
       await this.vectorStoreArgs(userId),
     );
     const retriever = store.asRetriever({ k: 5 });
+    const mostRelevantResults = new Map<string, string>();
+    const urls = new Set<string>();
     const relevantChunks = await retriever.getRelevantDocuments(query);
-    return new Set(relevantChunks.map((chunk) => chunk.metadata['source']));
+
+    relevantChunks.forEach((chunk) => {
+      urls.add(chunk.metadata['source']);
+      if (!mostRelevantResults.has(chunk.metadata['source'])) {
+        mostRelevantResults.set(chunk.metadata['source'], chunk.pageContent);
+      }
+    });
+    return {
+      urls,
+      mostRelevantResults,
+    };
   }
 
   async delete(url: string, userId: bigint) {

@@ -62,6 +62,7 @@ export class NavigationEntryService {
   static completeNavigationEntryToDto(
     jwtContext: JwtContext,
     completeNavigationEntry: CompleteNavigationEntry,
+    relevantSegment?: string,
   ): CompleteNavigationEntryDto {
     const userDeviceDto = UserService.userDeviceToDto(
       jwtContext,
@@ -79,6 +80,7 @@ export class NavigationEntryService {
           jwtContext.user,
           completeNavigationEntry,
         ),
+        relevantSegment,
       },
     );
     completeNavigationEntryDto.userDevice = userDeviceDto;
@@ -88,11 +90,13 @@ export class NavigationEntryService {
   static completeNavigationEntriesToDtos(
     jwtContext: JwtContext,
     completeNavigationEntries: CompleteNavigationEntry[],
+    relevantSegments?: Map<string, string>,
   ): CompleteNavigationEntryDto[] {
     return completeNavigationEntries.map((completeNavigationEntry) =>
       NavigationEntryService.completeNavigationEntryToDto(
         jwtContext,
         completeNavigationEntry,
+        relevantSegments?.get(completeNavigationEntry.url || ''),
       ),
     );
   }
@@ -188,15 +192,17 @@ export class NavigationEntryService {
         expirationThreshold.getDate() - navigationEntryExpirationInDays,
       );
     }
-    let whereQuery: Prisma.NavigationEntryWhereInput;
+    let whereQuery: Prisma.NavigationEntryWhereInput = {};
+    let mostRelevantResults: Map<string, string> | undefined = undefined;
     if (isSemantic) {
-      let urls: Set<string> | undefined;
       if (query) {
-        urls = await this.semanticProcessor.search(query, jwtContext.user.id);
+        const searchResults = await this.semanticProcessor.search(
+          query,
+          jwtContext.user.id,
+        );
+        whereQuery = { url: { in: [...searchResults.urls!] } };
+        mostRelevantResults = searchResults.mostRelevantResults;
       }
-      whereQuery = {
-        ...(query !== undefined ? { url: { in: [...urls!] } } : {}),
-      };
     } else {
       const queryFilter: Prisma.StringFilter<'NavigationEntry'> = {
         contains: query,
@@ -242,6 +248,7 @@ export class NavigationEntryService {
       NavigationEntryService.completeNavigationEntriesToDtos(
         jwtContext,
         completeNavigationEntries,
+        mostRelevantResults,
       );
 
     if (query && count > 0 && isSemantic)
