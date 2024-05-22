@@ -35,4 +35,8 @@ export class CompleteNavigationEntryDto {
   @ApiProperty({ required: false })
   @Expose()
   expirationDate?: Date;
+
+  @ApiProperty({ required: false })
+  @Expose()
+  relevantSegment?: string;
 }
