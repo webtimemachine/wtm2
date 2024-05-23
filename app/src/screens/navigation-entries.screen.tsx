@@ -15,6 +15,8 @@ import {
   SmallCloseIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
+  ChevronUpIcon,
+  ChevronDownIcon,
 } from '@chakra-ui/icons';
 import { BsStars } from 'react-icons/bs';
 
@@ -25,10 +27,78 @@ import { useNavigation } from '../store';
 import { getBrowserIconFromDevice } from '../utils';
 
 import clsx from 'clsx';
+import { IconType } from 'react-icons';
 
 const truncateString = (str: string, maxLength: number) => {
   return str.length <= maxLength ? str : str.slice(0, maxLength) + '...';
 };
+
+
+const RelevantSegment = ({ relevantSegment }: { relevantSegment: string }) => {
+  return (
+    <div>
+      <p className='font-semibold mb-4'>Most relevant match</p>
+      <p className='text-xs'>{relevantSegment}</p>
+    </div>
+  )
+}
+
+const NavigationEntry = ({ element, BrowserIcon, deleteNavEntry, isSemantic }: { element: CompleteNavigationEntryDto, BrowserIcon: IconType, deleteNavEntry: ({ id }: { id: number }) => void, isSemantic: boolean }) => {
+  const [visible, setVisible] = useState<boolean>(false)
+
+  return (
+    <div className='flex flex-col w-full bg-white px-2 py-1 rounded-lg mb-1 gap-3'>
+      <div
+        key={element.id}
+        className='flex items-center justify-between'
+      >
+        <div className='flex gap-2'>
+          <div className='flex justify-center items-center'>
+            <Icon as={BrowserIcon} boxSize={6} color='gray.600' />
+          </div>
+          <div className='flex flex-col w-full'>
+            <Link
+              href={element.url}
+              isExternal
+              className='overflow-hidden truncate'
+            >
+              <Text className='' fontSize={'small'}>
+                {truncateString(element.title, 40)}
+              </Text>
+              <Text className='text-slate-600' fontSize={'smaller'}>
+                {new Date(element.navigationDate).toLocaleString()}
+              </Text>
+            </Link>
+          </div>
+        </div>
+        <div className='space-x-2'>
+          {element.relevantSegment &&
+            <IconButton
+              aria-label={visible ? 'hide relevant result' : 'show relevant result'}
+              size='xs'
+              icon={visible ? <ChevronUpIcon /> : <ChevronDownIcon />}
+              onClick={() => setVisible(!visible)}
+            />
+          }
+          <IconButton
+            aria-label='delete navigation entry'
+            size='xs'
+            icon={<SmallCloseIcon />}
+            onClick={() => {
+              deleteNavEntry({
+                id: element.id,
+              });
+            }}
+          />
+        </div>
+      </div>
+      {isSemantic && element.relevantSegment && visible &&
+        <RelevantSegment relevantSegment={element.relevantSegment} />
+      }
+    </div>
+  )
+}
+
 
 export const NavigationEntriesScreen: React.FC<object> = () => {
   const { navigateTo } = useNavigation();
@@ -137,42 +207,11 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
                 element.userDevice.device,
               );
 
-              return (
-                <div
-                  key={element.id}
-                  className='flex w-full bg-white px-2 py-1 rounded-lg mb-1 items-center justify-between'
-                >
-                  <div className='flex gap-2'>
-                    <div className='flex justify-center items-center'>
-                      <Icon as={BrowserIcon} boxSize={6} color='gray.600' />
-                    </div>
-                    <div className='flex flex-col w-full'>
-                      <Link
-                        href={element.url}
-                        isExternal
-                        className='overflow-hidden truncate'
-                      >
-                        <Text className='' fontSize={'small'}>
-                          {truncateString(element.title, 40)}
-                        </Text>
-                        <Text className='text-slate-600' fontSize={'smaller'}>
-                          {new Date(element.navigationDate).toLocaleString()}
-                        </Text>
-                      </Link>
-                    </div>
-                  </div>
-                  <IconButton
-                    aria-label='delete navigation entry'
-                    size='xs'
-                    icon={<SmallCloseIcon />}
-                    onClick={() => {
-                      deleteNavigationEntryMutation.mutate({
-                        id: element.id,
-                      });
-                    }}
-                  />
-                </div>
-              );
+              return <NavigationEntry
+                BrowserIcon={BrowserIcon}
+                deleteNavEntry={deleteNavigationEntryMutation.mutate}
+                element={element}
+                isSemantic={isSemantic} />
             })
           ) : !navigationEntriesQuery.isLoading ? (
             <div>
