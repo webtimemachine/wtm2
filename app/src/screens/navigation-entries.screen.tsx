@@ -4,7 +4,6 @@ import {
   Input,
   Text,
   IconButton,
-  Link,
   Icon,
   Switch,
   Spinner,
@@ -64,6 +63,15 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
 
   const prev = () => page > 0 && setPage(page - 1);
   const next = () => !(offset + limit >= count) && setPage(page + 1);
+
+  const processOpenLink = async (url: string) => {
+    const result = await chrome.tabs.query({ url });
+    if (result.length && result[0].id) {
+      chrome.tabs.update(result[0].id, { active: true });
+    } else {
+      window.open(url, '_blank');
+    }
+  };
 
   return (
     <>
@@ -147,34 +155,29 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
                       <Icon as={BrowserIcon} boxSize={6} color='gray.600' />
                     </div>
                     <div className='flex flex-col w-full'>
-                      <Link
-                        href={element.url}
-                        isExternal
-                        className='overflow-hidden truncate'
+                      <Text
+                        className='cursor-pointer hover:underline'
+                        fontSize={'small'}
+                        {...(element.liteMode && {
+                          fontWeight: 'bold',
+                          fontStyle: 'italic',
+                        })}
+                        onClick={() => processOpenLink(element.url)}
                       >
-                        <Text
-                          className=''
-                          fontSize={'small'}
-                          {...(element.liteMode && {
-                            fontWeight: 'bold',
-                            fontStyle: 'italic',
-                          })}
-                        >
-                          {truncateString(element.title, 40)}
-                        </Text>
-                        <Text
-                          className='text-slate-600'
-                          fontSize={'smaller'}
-                          {...(element.liteMode && {
-                            fontStyle: 'italic',
-                          })}
-                        >
-                          {new Date(element.navigationDate).toLocaleString()}
-                          {element.liteMode && (
-                            <span className='italic'> - Lite Mode</span>
-                          )}
-                        </Text>
-                      </Link>
+                        {truncateString(element.title, 40)}
+                      </Text>
+                      <Text
+                        className='text-slate-600'
+                        fontSize={'smaller'}
+                        {...(element.liteMode && {
+                          fontStyle: 'italic',
+                        })}
+                      >
+                        {new Date(element.navigationDate).toLocaleString()}
+                        {element.liteMode && (
+                          <span className='italic'> - Lite Mode</span>
+                        )}
+                      </Text>
                     </div>
                   </div>
                   <IconButton
