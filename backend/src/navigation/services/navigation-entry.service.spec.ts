@@ -102,6 +102,7 @@ const createdNavigationEntry: CompleteNavigationEntryDto = {
   id: 1,
   url: 'example.com',
   title: 'Example Title',
+  liteMode: false,
   userId: 1,
   userDeviceId: 1,
   userDevice: {
@@ -145,6 +146,7 @@ const mockedEntry = {
   url: 'example1.com',
   title: 'Example Title 1',
   content: 'Content 1',
+  liteMode: false,
   navigationDate: new Date('2024-02-09T12:00:00Z'),
   userId: BigInt(1),
   userDeviceId: BigInt(1),
