@@ -125,6 +125,19 @@ export class NavigationEntryService {
         content!,
         createNavigationEntryInputDto.url,
       );
+
+      try {
+        await this.indexerService.index(
+          content!,
+          images,
+          createNavigationEntryInputDto.url,
+          jwtContext.user.id,
+        );
+      } catch (error) {
+        this.logger.error(
+          `An error occurred indexing '${createNavigationEntryInputDto.url}'. Cause: ${error.message}`,
+        );
+      }
     }
 
     const lastEntry = await this.prismaService.navigationEntry.findFirst({
@@ -136,18 +149,6 @@ export class NavigationEntryService {
         navigationDate: 'desc',
       },
     });
-    try {
-      await this.indexerService.index(
-        content!,
-        images,
-        createNavigationEntryInputDto.url,
-        jwtContext.user.id,
-      );
-    } catch (error) {
-      this.logger.error(
-        `An error occurred indexing '${createNavigationEntryInputDto.url}'. Cause: ${error.message}`,
-      );
-    }
 
     let completeNavigationEntry: CompleteNavigationEntry;
     if (lastEntry?.url === createNavigationEntryInputDto.url) {
