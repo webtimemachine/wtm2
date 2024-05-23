@@ -1,9 +1,11 @@
+import { IconType } from 'react-icons';
 import { UserDevice } from './user-device.interface';
 
 export interface CompleteNavigationEntryDto {
   id: number;
   url: string;
   title: string;
+  liteMode: string;
   navigationDate: Date;
   userId: number;
   userDeviceId: number;
@@ -29,4 +31,21 @@ export interface GetNavigationEntriesData {
 
 export interface DeleteNavigationEntriesData {
   id: number;
+}
+
+export interface CreateNavigationEntry {
+  url: string;
+  navigationDate: string;
+  title: string;
+  content?: string;
+  images?: string[];
+}
+
+
+export interface NavEntryProps {
+  element: CompleteNavigationEntryDto
+  BrowserIcon: IconType
+  deleteNavEntry: ({ id }: { id: number }) => void
+  processOpenLink: (url: string) => Promise<void>
+  isSemantic: boolean
 }

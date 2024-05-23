@@ -1,10 +1,12 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { PrismaService } from '../../common/services';
-import weaviate from 'weaviate-ts-client';
-import { WeaviateStore, WeaviateLibArgs } from '@langchain/weaviate';
 import { OpenAIEmbeddings } from '@langchain/openai';
+import { WeaviateLibArgs, WeaviateStore } from '@langchain/weaviate';
+import { Document } from '@langchain/core/documents';
+import { Injectable, Logger } from '@nestjs/common';
 import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
+import weaviate from 'weaviate-ts-client';
+import { PrismaService } from '../../common/services';
 import { appEnv } from '../../config';
+import { caption } from '../utils';
 import { SemanticSearchResult } from '../types';
 
 const textSplitter = new RecursiveCharacterTextSplitter({
@@ -22,8 +24,8 @@ const client = weaviate.client({
 });
 
 @Injectable()
-export class SemanticProcessor {
-  private readonly logger = new Logger(SemanticProcessor.name);
+export class IndexerService {
+  private readonly logger = new Logger(IndexerService.name);
   private readonly multitenantCollection = 'MultiTenancyCollection';
 
   constructor(private readonly prismaService: PrismaService) {}
@@ -58,12 +60,35 @@ export class SemanticProcessor {
     };
   }
 
-  async index(content: string, url: string, userId: bigint) {
+  async index(content: string, images: string[], url: string, userId: bigint) {
     const exist =
       (await this.prismaService.navigationEntry.count({
         where: { url: url, userId: userId },
       })) > 0;
     if (!exist) {
+      let extraDocuments: Document[] = [];
+      const userPreference = await this.prismaService.userPreferences.findFirst(
+        {
+          where: {
+            userId,
+          },
+          select: {
+            enableImageEncoding: true,
+          },
+        },
+      );
+      if (userPreference?.enableImageEncoding) {
+        this.logger.debug('Getting text embeddings of images');
+        extraDocuments = await Promise.all(
+          images.map(async (image) => {
+            const captionResult = await caption(image);
+            return new Document({
+              pageContent: captionResult,
+              metadata: { source: url },
+            });
+          }),
+        );
+      }
       this.logger.debug(`Indexing chunks of '${url}'`);
       const documents = await textSplitter.createDocuments(
         [content],
@@ -72,7 +97,7 @@ export class SemanticProcessor {
       const documentChunks = await textSplitter.splitDocuments(documents);
 
       await WeaviateStore.fromDocuments(
-        documentChunks,
+        [...documentChunks, ...extraDocuments],
         new OpenAIEmbeddings({ openAIApiKey: appEnv.OPENAI_ACCESS_TOKEN }),
         await this.vectorStoreArgs(userId),
       );
