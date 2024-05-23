@@ -150,8 +150,8 @@ describe('Indexer service', () => {
   describe('Search data', () => {
     it('should return URLs', async () => {
       const mockRelevantDocuments = [
-        { metadata: { source: 'source1' } },
-        { metadata: { source: 'source2' } },
+        { metadata: { source: 'source1' }, pageContent: 'relevant content 1' },
+        { metadata: { source: 'source2' }, pageContent: 'relevant content 2' },
       ];
       const mockRetriever = {
         getRelevantDocuments: jest
@@ -174,7 +174,14 @@ describe('Indexer service', () => {
       };
 
       const results = await indexerService.search('Test query', 1n);
-      expect(results).toEqual(new Set(['source1', 'source2']));
+      const expectedSearchResult = {
+        urls: new Set(['source1', 'source2']),
+        mostRelevantResults: new Map<string, string>([
+          ['source1', 'relevant content 1'],
+          ['source2', 'relevant content 2'],
+        ]),
+      };
+      expect(results).toEqual(expectedSearchResult);
       expect(mockRetriever.getRelevantDocuments).toHaveBeenCalledWith(
         'Test query',
       );
