@@ -9,6 +9,7 @@ export interface CompleteNavigationEntryDto {
   userDeviceId: number;
   userDevice: UserDevice;
   expirationDate?: Date;
+  relevantSegment?: string;
 }
 
 export interface GetNavigationEntriesResponse {
