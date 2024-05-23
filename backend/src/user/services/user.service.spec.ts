@@ -33,6 +33,7 @@ const existingUser = {
     userId: BigInt(1),
     enableNavigationEntryExpiration: false,
     navigationEntryExpirationInDays: 120,
+    enableImageEncoding: true,
     createdAt: new Date(),
     updateAt: new Date(),
   },

@@ -1,33 +1,31 @@
-import React, { useEffect, useState } from 'react';
 import {
   Button,
-  Input,
-  Text,
-  IconButton,
-  Link,
   Icon,
-  Switch,
+  IconButton,
+  Input,
   Spinner,
+  Switch,
+  Text
 } from '@chakra-ui/react';
+import React, { useEffect, useState } from 'react';
 
 import {
-  SettingsIcon,
-  SmallCloseIcon,
+  ChevronDownIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
   ChevronUpIcon,
-  ChevronDownIcon,
+  SettingsIcon,
+  SmallCloseIcon,
 } from '@chakra-ui/icons';
 import { BsStars } from 'react-icons/bs';
 
-import { CompleteNavigationEntryDto } from '../interfaces/navigation-entry.interface';
 import { useDeleteNavigationEntry, useNavigationEntries } from '../hooks';
+import { CompleteNavigationEntryDto, NavEntryProps } from '../interfaces/navigation-entry.interface';
 
 import { useNavigation } from '../store';
 import { getBrowserIconFromDevice } from '../utils';
 
 import clsx from 'clsx';
-import { IconType } from 'react-icons';
 
 const truncateString = (str: string, maxLength: number) => {
   return str.length <= maxLength ? str : str.slice(0, maxLength) + '...';
@@ -43,7 +41,7 @@ const RelevantSegment = ({ relevantSegment }: { relevantSegment: string }) => {
   )
 }
 
-const NavigationEntry = ({ element, BrowserIcon, deleteNavEntry, isSemantic }: { element: CompleteNavigationEntryDto, BrowserIcon: IconType, deleteNavEntry: ({ id }: { id: number }) => void, isSemantic: boolean }) => {
+const NavigationEntry = ({ element, BrowserIcon, deleteNavEntry, processOpenLink, isSemantic }: NavEntryProps) => {
   const [visible, setVisible] = useState<boolean>(false)
 
   return (
@@ -57,18 +55,29 @@ const NavigationEntry = ({ element, BrowserIcon, deleteNavEntry, isSemantic }: {
             <Icon as={BrowserIcon} boxSize={6} color='gray.600' />
           </div>
           <div className='flex flex-col w-full'>
-            <Link
-              href={element.url}
-              isExternal
-              className='overflow-hidden truncate'
+            <Text
+              className='cursor-pointer hover:underline'
+              fontSize={'small'}
+              {...(element.liteMode && {
+                fontWeight: 'bold',
+                fontStyle: 'italic',
+              })}
+              onClick={() => processOpenLink(element.url)}
             >
-              <Text className='' fontSize={'small'}>
-                {truncateString(element.title, 40)}
-              </Text>
-              <Text className='text-slate-600' fontSize={'smaller'}>
-                {new Date(element.navigationDate).toLocaleString()}
-              </Text>
-            </Link>
+              {truncateString(element.title, 40)}
+            </Text>
+            <Text
+              className='text-slate-600'
+              fontSize={'smaller'}
+              {...(element.liteMode && {
+                fontStyle: 'italic',
+              })}
+            >
+              {new Date(element.navigationDate).toLocaleString()}
+              {element.liteMode && (
+                <span className='italic'> - Lite Mode</span>
+              )}
+            </Text>
           </div>
         </div>
         <div className='space-x-2'>
@@ -106,7 +115,7 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
   const LIMIT = 16;
   const [page, setPage] = useState<number>(0);
   const [query, setQuery] = useState<string>('');
-  const [isSemantic, setIsSemantic] = useState<boolean>(false);
+  const [isSemantic, setIsSemantic] = useState<boolean>(true);
 
   const offset = page * LIMIT;
   const limit = LIMIT;
@@ -134,6 +143,15 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
 
   const prev = () => page > 0 && setPage(page - 1);
   const next = () => !(offset + limit >= count) && setPage(page + 1);
+
+  const processOpenLink = async (url: string) => {
+    const result = await chrome.tabs.query({ url });
+    if (result.length && result[0].id) {
+      chrome.tabs.update(result[0].id, { active: true });
+    } else {
+      window.open(url, '_blank');
+    }
+  };
 
   return (
     <>
@@ -210,6 +228,7 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
               return <NavigationEntry
                 BrowserIcon={BrowserIcon}
                 deleteNavEntry={deleteNavigationEntryMutation.mutate}
+                processOpenLink={processOpenLink}
                 element={element}
                 isSemantic={isSemantic} />
             })
