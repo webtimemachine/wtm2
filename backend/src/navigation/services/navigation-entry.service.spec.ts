@@ -104,6 +104,7 @@ const createdNavigationEntry: CompleteNavigationEntryDto = {
   title: 'Example Title',
   userId: 1,
   userDeviceId: 1,
+  liteMode: true,
   userDevice: {
     id: 1,
     userId: 1,
@@ -140,11 +141,11 @@ const createdNavigationEntry: CompleteNavigationEntryDto = {
   navigationDate,
 };
 
-const mockedEntry = {
+const mockedEntry: CompleteNavigationEntry = {
   id: BigInt(1),
   url: 'example1.com',
   title: 'Example Title 1',
-  content: 'Content 1',
+  liteMode: true,
   navigationDate: new Date('2024-02-09T12:00:00Z'),
   userId: BigInt(1),
   userDeviceId: BigInt(1),
@@ -317,11 +318,18 @@ describe('NavigationEntryService', () => {
 
   describe('getNavigationEntry', () => {
     it('should get navigation entries successfully', async () => {
+      const mockSearchReturnValue = {
+        urls: new Set(['example1', 'example2']),
+        mostRelevantResults: new Map<string, string>([
+          ['example1', 'example2 relevant segment'],
+          ['example1', 'example2 relevant segment'],
+        ]),
+      };
       const mockSearch = jest
         .spyOn(indexerService, 'search')
         .mockImplementation()
         .mockReturnValue(
-          new Promise((resolve) => resolve(new Set(['example1', 'example2']))),
+          new Promise((resolve) => resolve(mockSearchReturnValue)),
         );
 
       const mockNewEntry = jest.fn();
