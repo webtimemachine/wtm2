@@ -25,7 +25,7 @@ jobs:
       - name: Create ZIP files
         run: |
           zip -r chrome-extension.zip ./app_chrome
-          zip -r -j firefox-extension.zip ./app_firefox
+          cd app_firefox && zip -r ../firefox-extension.zip . && cd ..
 
       - name: Build iOS app from Chrome code
         run: npm run app:build:ios
