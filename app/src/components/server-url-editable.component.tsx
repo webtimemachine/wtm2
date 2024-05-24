@@ -26,9 +26,9 @@ const EditableControls = () => {
   return isEditing ? (
     <ButtonGroup justifyContent='center' size='sm'>
       <IconButton
+        {...getSubmitButtonProps()}
         aria-label='Save'
         icon={<CheckIcon />}
-        {...getSubmitButtonProps()}
       />
       <IconButton
         aria-label='Cancel'
