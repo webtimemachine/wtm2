@@ -40,9 +40,19 @@ export class IndexerService {
         })
         .do();
       this.logger.log('Creating main multitenancy collection');
-    } catch (e) {
+    } catch (e: unknown) {
       // The main multitenant collection can only be created once; otherwise, an error is thrown
-      if (!e.message.includes('already exists')) throw e;
+      if (e instanceof Error) {
+        if (
+          !(
+            e.message.includes('class') &&
+            (e.message.includes('already exists') ||
+              // possible typo from library
+              e.message.includes('already exits'))
+          )
+        )
+          throw e;
+      } else throw e;
     }
 
     await client.schema
