@@ -2,6 +2,8 @@ import { CreateNavigationEntry } from '../interfaces/navigation-entry.interface'
 import { DOMtoString, getImages } from '../utils';
 import { apiClient } from '../utils/api.client';
 
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
 chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
   try {
     const { accessToken, enabledLiteMode } = await chrome.storage.local.get([
@@ -10,6 +12,9 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
     ]);
     if (accessToken && changeInfo.status === 'complete' && tabId) {
       if (tab.url && !tab.url.startsWith('chrome://')) {
+        await sleep(300);
+        tab = await chrome.tabs.get(tabId);
+
         const images = await chrome.scripting.executeScript({
           target: { tabId: tabId },
           func: getImages,
@@ -28,7 +33,7 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
           }
 
           const navigationEntry: CreateNavigationEntry = {
-            url: tab.url,
+            url: tab.url!,
             navigationDate: new Date().toISOString(),
             title: tab?.title || '',
             // Removes remaining HTML tags, more than 2 contiguous spaces, more than 2 contiguous line breaks, and HTML entities

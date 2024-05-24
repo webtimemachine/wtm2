@@ -2,6 +2,19 @@ import { apiClient } from '../utils/api.client';
 import { DOMtoString, getImages } from '../utils';
 import { CreateNavigationEntry } from '../interfaces/navigation-entry.interface';
 
+function onUrlChange(callback: () => void) {
+  let lastUrl = location.href;
+  new MutationObserver(() => {
+    const currentUrl = location.href;
+    if (currentUrl !== lastUrl) {
+      lastUrl = currentUrl;
+      callback();
+    }
+  }).observe(document, { subtree: true, childList: true });
+}
+
+onUrlChange(() => postNavigationEntry());
+
 export const postNavigationEntry = async () => {
   try {
     const url = window.location.href;
