@@ -62,6 +62,7 @@ export class NavigationEntryService {
   static completeNavigationEntryToDto(
     jwtContext: JwtContext,
     completeNavigationEntry: CompleteNavigationEntry,
+    relevantSegment?: string,
   ): CompleteNavigationEntryDto {
     const userDeviceDto = UserService.userDeviceToDto(
       jwtContext,
@@ -79,6 +80,7 @@ export class NavigationEntryService {
           jwtContext.user,
           completeNavigationEntry,
         ),
+        relevantSegment,
       },
     );
     completeNavigationEntryDto.userDevice = userDeviceDto;
@@ -88,11 +90,13 @@ export class NavigationEntryService {
   static completeNavigationEntriesToDtos(
     jwtContext: JwtContext,
     completeNavigationEntries: CompleteNavigationEntry[],
+    relevantSegments?: Map<string, string>,
   ): CompleteNavigationEntryDto[] {
     return completeNavigationEntries.map((completeNavigationEntry) =>
       NavigationEntryService.completeNavigationEntryToDto(
         jwtContext,
         completeNavigationEntry,
+        relevantSegments?.get(completeNavigationEntry.url || ''),
       ),
     );
   }
@@ -121,6 +125,19 @@ export class NavigationEntryService {
         content!,
         createNavigationEntryInputDto.url,
       );
+
+      try {
+        await this.indexerService.index(
+          content!,
+          images,
+          createNavigationEntryInputDto.url,
+          jwtContext.user.id,
+        );
+      } catch (error) {
+        this.logger.error(
+          `An error occurred indexing '${createNavigationEntryInputDto.url}'. Cause: ${error.message}`,
+        );
+      }
     }
 
     const lastEntry = await this.prismaService.navigationEntry.findFirst({
@@ -132,18 +149,6 @@ export class NavigationEntryService {
         navigationDate: 'desc',
       },
     });
-    try {
-      await this.indexerService.index(
-        content!,
-        images,
-        createNavigationEntryInputDto.url,
-        jwtContext.user.id,
-      );
-    } catch (error) {
-      this.logger.error(
-        `An error occurred indexing '${createNavigationEntryInputDto.url}'. Cause: ${error.message}`,
-      );
-    }
 
     let completeNavigationEntry: CompleteNavigationEntry;
     if (lastEntry?.url === createNavigationEntryInputDto.url) {
@@ -197,11 +202,24 @@ export class NavigationEntryService {
       );
     }
     let whereQuery: Prisma.NavigationEntryWhereInput = {};
+    let mostRelevantResults: Map<string, string> | undefined = undefined;
     if (isSemantic) {
-      let urls: Set<string> | undefined;
       if (query) {
-        urls = await this.indexerService.search(query, jwtContext.user.id);
-        whereQuery = { url: { in: [...urls!] } };
+        try {
+          const searchResults = await this.indexerService.search(
+            query,
+            jwtContext.user.id,
+          );
+          whereQuery = { url: { in: [...searchResults.urls!] } };
+          mostRelevantResults = searchResults.mostRelevantResults;
+        } catch (error: unknown) {
+          if (
+            error instanceof Error &&
+            error.message.includes('Cannot query field')
+          ) {
+            this.logger.warn(`Ignoring AI search, schema does not exist yet`);
+          } else throw error;
+        }
       }
     } else {
       const queryFilter: Prisma.StringFilter<'NavigationEntry'> = {
@@ -248,6 +266,7 @@ export class NavigationEntryService {
       NavigationEntryService.completeNavigationEntriesToDtos(
         jwtContext,
         completeNavigationEntries,
+        mostRelevantResults,
       );
 
     if (query && count > 0 && isSemantic)
