@@ -1,24 +1,26 @@
-import React, { useEffect, useState } from 'react';
 import {
   Button,
-  Input,
-  Text,
-  IconButton,
   Icon,
-  Switch,
+  IconButton,
+  Input,
   Spinner,
+  Switch,
+  Text
 } from '@chakra-ui/react';
+import React, { useEffect, useState } from 'react';
 
 import {
-  SettingsIcon,
-  SmallCloseIcon,
+  ChevronDownIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
+  ChevronUpIcon,
+  SettingsIcon,
+  SmallCloseIcon,
 } from '@chakra-ui/icons';
 import { BsStars } from 'react-icons/bs';
 
-import { CompleteNavigationEntryDto } from '../interfaces/navigation-entry.interface';
 import { useDeleteNavigationEntry, useNavigationEntries } from '../hooks';
+import { CompleteNavigationEntryDto, NavEntryProps } from '../interfaces/navigation-entry.interface';
 
 import { useNavigation } from '../store';
 import { getBrowserIconFromDevice } from '../utils';
@@ -28,6 +30,84 @@ import clsx from 'clsx';
 const truncateString = (str: string, maxLength: number) => {
   return str.length <= maxLength ? str : str.slice(0, maxLength) + '...';
 };
+
+
+const RelevantSegment = ({ relevantSegment }: { relevantSegment: string }) => {
+  return (
+    <div>
+      <p className='font-semibold mb-4'>Most relevant match</p>
+      <p className='text-xs'>{relevantSegment}</p>
+    </div>
+  )
+}
+
+const NavigationEntry = ({ element, BrowserIcon, deleteNavEntry, processOpenLink, isSemantic }: NavEntryProps) => {
+  const [visible, setVisible] = useState<boolean>(false)
+
+  return (
+    <div className='flex flex-col w-full bg-white px-2 py-1 rounded-lg mb-1 gap-3'>
+      <div
+        key={element.id}
+        className='flex items-center justify-between'
+      >
+        <div className='flex gap-2'>
+          <div className='flex justify-center items-center'>
+            <Icon as={BrowserIcon} boxSize={6} color='gray.600' />
+          </div>
+          <div className='flex flex-col w-full'>
+            <Text
+              className='cursor-pointer hover:underline'
+              fontSize={'small'}
+              {...(element.liteMode && {
+                fontWeight: 'bold',
+                fontStyle: 'italic',
+              })}
+              onClick={() => processOpenLink(element.url)}
+            >
+              {truncateString(element.title, 40)}
+            </Text>
+            <Text
+              className='text-slate-600'
+              fontSize={'smaller'}
+              {...(element.liteMode && {
+                fontStyle: 'italic',
+              })}
+            >
+              {new Date(element.navigationDate).toLocaleString()}
+              {element.liteMode && (
+                <span className='italic'> - Lite Mode</span>
+              )}
+            </Text>
+          </div>
+        </div>
+        <div className='space-x-2'>
+          {element.relevantSegment &&
+            <IconButton
+              aria-label={visible ? 'hide relevant result' : 'show relevant result'}
+              size='xs'
+              icon={visible ? <ChevronUpIcon /> : <ChevronDownIcon />}
+              onClick={() => setVisible(!visible)}
+            />
+          }
+          <IconButton
+            aria-label='delete navigation entry'
+            size='xs'
+            icon={<SmallCloseIcon />}
+            onClick={() => {
+              deleteNavEntry({
+                id: element.id,
+              });
+            }}
+          />
+        </div>
+      </div>
+      {isSemantic && element.relevantSegment && visible &&
+        <RelevantSegment relevantSegment={element.relevantSegment} />
+      }
+    </div>
+  )
+}
+
 
 export const NavigationEntriesScreen: React.FC<object> = () => {
   const { navigateTo } = useNavigation();
@@ -145,53 +225,12 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
                 element.userDevice.device,
               );
 
-              return (
-                <div
-                  key={element.id}
-                  className='flex w-full bg-white px-2 py-1 rounded-lg mb-1 items-center justify-between'
-                >
-                  <div className='flex gap-2'>
-                    <div className='flex justify-center items-center'>
-                      <Icon as={BrowserIcon} boxSize={6} color='gray.600' />
-                    </div>
-                    <div className='flex flex-col w-full'>
-                      <Text
-                        className='cursor-pointer hover:underline'
-                        fontSize={'small'}
-                        {...(element.liteMode && {
-                          fontWeight: 'bold',
-                          fontStyle: 'italic',
-                        })}
-                        onClick={() => processOpenLink(element.url)}
-                      >
-                        {truncateString(element.title, 40)}
-                      </Text>
-                      <Text
-                        className='text-slate-600'
-                        fontSize={'smaller'}
-                        {...(element.liteMode && {
-                          fontStyle: 'italic',
-                        })}
-                      >
-                        {new Date(element.navigationDate).toLocaleString()}
-                        {element.liteMode && (
-                          <span className='italic'> - Lite Mode</span>
-                        )}
-                      </Text>
-                    </div>
-                  </div>
-                  <IconButton
-                    aria-label='delete navigation entry'
-                    size='xs'
-                    icon={<SmallCloseIcon />}
-                    onClick={() => {
-                      deleteNavigationEntryMutation.mutate({
-                        id: element.id,
-                      });
-                    }}
-                  />
-                </div>
-              );
+              return <NavigationEntry
+                BrowserIcon={BrowserIcon}
+                deleteNavEntry={deleteNavigationEntryMutation.mutate}
+                processOpenLink={processOpenLink}
+                element={element}
+                isSemantic={isSemantic} />
             })
           ) : !navigationEntriesQuery.isLoading ? (
             <div>
