@@ -7,6 +7,7 @@ import weaviate from 'weaviate-ts-client';
 import { PrismaService } from '../../common/services';
 import { appEnv } from '../../config';
 import { caption } from '../utils';
+import { SemanticSearchResult } from '../types';
 
 const textSplitter = new RecursiveCharacterTextSplitter({
   chunkSize: 1000,
@@ -39,9 +40,19 @@ export class IndexerService {
         })
         .do();
       this.logger.log('Creating main multitenancy collection');
-    } catch (e) {
+    } catch (e: unknown) {
       // The main multitenant collection can only be created once; otherwise, an error is thrown
-      if (!e.message.includes('already exists')) throw e;
+      if (e instanceof Error) {
+        if (
+          !(
+            e.message.includes('class') &&
+            (e.message.includes('already exists') ||
+              // possible typo from library
+              e.message.includes('already exits'))
+          )
+        )
+          throw e;
+      } else throw e;
     }
 
     await client.schema
@@ -104,14 +115,26 @@ export class IndexerService {
     } else this.logger.debug(`'${url}' was already indexed. Ignoring...`);
   }
 
-  async search(query: string, userId: bigint): Promise<Set<string>> {
+  async search(query: string, userId: bigint): Promise<SemanticSearchResult> {
     const store = await WeaviateStore.fromExistingIndex(
       new OpenAIEmbeddings({ openAIApiKey: appEnv.OPENAI_ACCESS_TOKEN }),
       await this.vectorStoreArgs(userId),
     );
     const retriever = store.asRetriever({ k: 5 });
+    const mostRelevantResults = new Map<string, string>();
+    const urls = new Set<string>();
     const relevantChunks = await retriever.getRelevantDocuments(query);
-    return new Set(relevantChunks.map((chunk) => chunk.metadata['source']));
+
+    relevantChunks.forEach((chunk) => {
+      urls.add(chunk.metadata['source']);
+      if (!mostRelevantResults.has(chunk.metadata['source'])) {
+        mostRelevantResults.set(chunk.metadata['source'], chunk.pageContent);
+      }
+    });
+    return {
+      urls,
+      mostRelevantResults,
+    };
   }
 
   async delete(url: string, userId: bigint) {
