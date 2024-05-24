@@ -45,6 +45,8 @@ model UserPreferences {
 
   enableNavigationEntryExpiration Boolean @default(false)
   navigationEntryExpirationInDays Int?
+  enableImageEncoding Boolean? @default(false)
+  
 
   createdAt DateTime  @default(now()) @db.Timestamptz(0)
   updateAt  DateTime? @updatedAt @db.Timestamptz(0)
@@ -104,9 +106,10 @@ model Session {
 }
 
 model NavigationEntry {
-  id    BigInt @id @default(autoincrement())
-  url   String @db.VarChar()
-  title String @db.VarChar()
+  id       BigInt  @id @default(autoincrement())
+  url      String  @db.VarChar()
+  title    String  @db.VarChar()
+  liteMode Boolean @default(false)
 
   userId BigInt
   user   User   @relation(fields: [userId], references: [id])

@@ -1,6 +1,7 @@
 export interface UpdatePreferenciesData {
   enableNavigationEntryExpiration: boolean;
   navigationEntryExpirationInDays: number;
+  enableImageEncoding: boolean;
 }
 
 export interface PreferenciesResponse {
@@ -8,4 +9,5 @@ export interface PreferenciesResponse {
   userId: number;
   enableNavigationEntryExpiration: boolean;
   navigationEntryExpirationInDays: number;
+  enableImageEncoding: boolean;
 }

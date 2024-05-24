@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { CommonModule } from '../common/common.module';
-import { SemanticSearchModule } from '../semanticSearch/semanticSearch.module';
+import { EncoderModule } from '../encoder/encoder.module';
 import { QueryModule } from '../query/query.module';
 import { ExplicitFilterModule } from '../filter/filter.module';
 
@@ -10,7 +10,7 @@ import { NavigationEntryService } from './services';
 @Module({
   imports: [
     CommonModule,
-    SemanticSearchModule,
+    EncoderModule,
     ExplicitFilterModule,
     QueryModule,
   ],
