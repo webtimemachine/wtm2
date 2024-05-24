@@ -205,12 +205,21 @@ export class NavigationEntryService {
     let mostRelevantResults: Map<string, string> | undefined = undefined;
     if (isSemantic) {
       if (query) {
-        const searchResults = await this.indexerService.search(
-          query,
-          jwtContext.user.id,
-        );
-        whereQuery = { url: { in: [...searchResults.urls!] } };
-        mostRelevantResults = searchResults.mostRelevantResults;
+        try {
+          const searchResults = await this.indexerService.search(
+            query,
+            jwtContext.user.id,
+          );
+          whereQuery = { url: { in: [...searchResults.urls!] } };
+          mostRelevantResults = searchResults.mostRelevantResults;
+        } catch (error: unknown) {
+          if (
+            error instanceof Error &&
+            error.message.includes('Cannot query field')
+          ) {
+            this.logger.warn(`Ignoring AI search, schema does not exist yet`);
+          } else throw error;
+        }
       }
     } else {
       const queryFilter: Prisma.StringFilter<'NavigationEntry'> = {
