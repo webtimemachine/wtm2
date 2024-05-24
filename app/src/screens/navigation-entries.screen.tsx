@@ -146,10 +146,10 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
 
   const processOpenLink = async (url: string) => {
     const result = await chrome.tabs.query({ url });
-    if (result.length && result[0].id) {
+    if (result?.length >= 1 && result[0].id) {
       chrome.tabs.update(result[0].id, { active: true });
     } else {
-      window.open(url, '_blank');
+      chrome.tabs.create({ url, active: true });
     }
   };
 
