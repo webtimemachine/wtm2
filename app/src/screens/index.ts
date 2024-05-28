@@ -8,3 +8,4 @@ export { ValidateEmailScreen } from './validate-email.screen';
 export { ForgotPasswordScreen } from './forgot-password.screen';
 export { ValidateRecoveryCode } from './validate-recovery-code.screen';
 export { RecoveryNewPassword } from './recovery-new-password.screen';
+export { AboutWTMScreen } from './about-wtm.screen';

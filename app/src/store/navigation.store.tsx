@@ -10,6 +10,7 @@ import {
   ForgotPasswordScreen,
   ValidateRecoveryCode,
   RecoveryNewPassword,
+  AboutWTMScreen,
 } from '../screens';
 
 import { last } from '../utils';
@@ -28,7 +29,8 @@ export type ScreenName =
   | 'confirm-delete-account'
   | 'forgot-password'
   | 'validate-recovery-code'
-  | 'recovery-new-password';
+  | 'recovery-new-password'
+  | 'about-wtm';
 
 interface NavigationStore {
   CurrentScreen: () => JSX.Element;
@@ -61,6 +63,8 @@ const mapScreenName = (screenName: ScreenName): JSX.Element => {
       return <ValidateRecoveryCode />;
     case 'recovery-new-password':
       return <RecoveryNewPassword />;
+    case 'about-wtm':
+      return <AboutWTMScreen />;
   }
   return <></>;
 };
