@@ -103,6 +103,12 @@ To see the Open API Specification navigate to / of your API running on the port 
 
 <br/>
 
+## Installation Walkthrough
+
+To see the full installation walkthrough with and step by step video look at this guide [Installation Guide](/guides/installation-walkthrough.md)
+
+<br/>
+
 ## Deploy WTM backend on Vercel
 
 Deploy [this repository](https://github.com/webtimemachine/wtm2) into your vercel account using the following button. After the deploy is complete you will need to go to the project settings and change the root folder to `backend` and also set the env variables.
