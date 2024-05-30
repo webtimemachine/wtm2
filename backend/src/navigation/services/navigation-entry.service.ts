@@ -138,19 +138,18 @@ export class NavigationEntryService {
           createNavigationEntryInputDto.url,
         );
       }
-      if (userPreference?.enableImageEncoding) {
-        try {
-          await this.indexerService.index(
-            content!,
-            images,
-            createNavigationEntryInputDto.url,
-            jwtContext.user.id,
-          );
-        } catch (error) {
-          this.logger.error(
-            `An error occurred indexing '${createNavigationEntryInputDto.url}'. Cause: ${error.message}`,
-          );
-        }
+      try {
+        await this.indexerService.index(
+          content!,
+          images,
+          createNavigationEntryInputDto.url,
+          jwtContext.user.id,
+          userPreference?.enableImageEncoding || false,
+        );
+      } catch (error) {
+        this.logger.error(
+          `An error occurred indexing '${createNavigationEntryInputDto.url}'. Cause: ${error.message}`,
+        );
       }
     }
 
