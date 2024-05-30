@@ -1,0 +1,990 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		54CE6EBC2C089C7800FDEED2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54CE6EBB2C089C7800FDEED2 /* AppDelegate.swift */; };
+		54CE6EBE2C089C7800FDEED2 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54CE6EBD2C089C7800FDEED2 /* SceneDelegate.swift */; };
+		54CE6EC12C089C7800FDEED2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 54CE6EBF2C089C7800FDEED2 /* LaunchScreen.storyboard */; };
+		54CE6EC42C089C7800FDEED2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 54CE6EC22C089C7800FDEED2 /* Main.storyboard */; };
+		54CE6ECD2C089C7800FDEED2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54CE6ECC2C089C7800FDEED2 /* AppDelegate.swift */; };
+		54CE6ED02C089C7800FDEED2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 54CE6ECE2C089C7800FDEED2 /* Main.storyboard */; };
+		54CE6ED82C089C7800FDEED2 /* wtm Extension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 54CE6ED72C089C7800FDEED2 /* wtm Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		54CE6EE22C089C7800FDEED2 /* wtm Extension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 54CE6EE12C089C7800FDEED2 /* wtm Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		54CE6EE82C089C7800FDEED2 /* Main.html in Resources */ = {isa = PBXBuildFile; fileRef = 54CE6EAB2C089C7700FDEED2 /* Main.html */; };
+		54CE6EE92C089C7800FDEED2 /* Main.html in Resources */ = {isa = PBXBuildFile; fileRef = 54CE6EAB2C089C7700FDEED2 /* Main.html */; };
+		54CE6EEA2C089C7800FDEED2 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 54CE6EAD2C089C7700FDEED2 /* Icon.png */; };
+		54CE6EEB2C089C7800FDEED2 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 54CE6EAD2C089C7700FDEED2 /* Icon.png */; };
+		54CE6EEC2C089C7800FDEED2 /* Style.css in Resources */ = {isa = PBXBuildFile; fileRef = 54CE6EAE2C089C7700FDEED2 /* Style.css */; };
+		54CE6EED2C089C7800FDEED2 /* Style.css in Resources */ = {isa = PBXBuildFile; fileRef = 54CE6EAE2C089C7700FDEED2 /* Style.css */; };
+		54CE6EEE2C089C7800FDEED2 /* Script.js in Resources */ = {isa = PBXBuildFile; fileRef = 54CE6EAF2C089C7700FDEED2 /* Script.js */; };
+		54CE6EEF2C089C7800FDEED2 /* Script.js in Resources */ = {isa = PBXBuildFile; fileRef = 54CE6EAF2C089C7700FDEED2 /* Script.js */; };
+		54CE6EF02C089C7800FDEED2 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54CE6EB02C089C7700FDEED2 /* ViewController.swift */; };
+		54CE6EF12C089C7800FDEED2 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54CE6EB02C089C7700FDEED2 /* ViewController.swift */; };
+		54CE6EF22C089C7800FDEED2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 54CE6EB12C089C7800FDEED2 /* Assets.xcassets */; };
+		54CE6EF32C089C7800FDEED2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 54CE6EB12C089C7800FDEED2 /* Assets.xcassets */; };
+		54CE6EF42C089C7800FDEED2 /* SafariWebExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54CE6EB32C089C7800FDEED2 /* SafariWebExtensionHandler.swift */; };
+		54CE6EF52C089C7800FDEED2 /* SafariWebExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54CE6EB32C089C7800FDEED2 /* SafariWebExtensionHandler.swift */; };
+		54CE6F102C089C7800FDEED2 /* popup.js in Resources */ = {isa = PBXBuildFile; fileRef = 54CE6F072C089C7800FDEED2 /* popup.js */; };
+		54CE6F112C089C7800FDEED2 /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = 54CE6F082C089C7800FDEED2 /* index.html */; };
+		54CE6F122C089C7800FDEED2 /* background.js in Resources */ = {isa = PBXBuildFile; fileRef = 54CE6F092C089C7800FDEED2 /* background.js */; };
+		54CE6F132C089C7800FDEED2 /* index.css in Resources */ = {isa = PBXBuildFile; fileRef = 54CE6F0A2C089C7800FDEED2 /* index.css */; };
+		54CE6F142C089C7800FDEED2 /* chunks in Resources */ = {isa = PBXBuildFile; fileRef = 54CE6F0B2C089C7800FDEED2 /* chunks */; };
+		54CE6F152C089C7800FDEED2 /* app-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 54CE6F0C2C089C7800FDEED2 /* app-icon.png */; };
+		54CE6F162C089C7800FDEED2 /* manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = 54CE6F0D2C089C7800FDEED2 /* manifest.json */; };
+		54CE6F172C089C7800FDEED2 /* content.js in Resources */ = {isa = PBXBuildFile; fileRef = 54CE6F0E2C089C7800FDEED2 /* content.js */; };
+		54CE6F182C089C7800FDEED2 /* content.ts-loader.js in Resources */ = {isa = PBXBuildFile; fileRef = 54CE6F0F2C089C7800FDEED2 /* content.ts-loader.js */; };
+		54CE6F192C089C7800FDEED2 /* popup.js in Resources */ = {isa = PBXBuildFile; fileRef = 54CE6F072C089C7800FDEED2 /* popup.js */; };
+		54CE6F1A2C089C7800FDEED2 /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = 54CE6F082C089C7800FDEED2 /* index.html */; };
+		54CE6F1B2C089C7800FDEED2 /* background.js in Resources */ = {isa = PBXBuildFile; fileRef = 54CE6F092C089C7800FDEED2 /* background.js */; };
+		54CE6F1C2C089C7800FDEED2 /* index.css in Resources */ = {isa = PBXBuildFile; fileRef = 54CE6F0A2C089C7800FDEED2 /* index.css */; };
+		54CE6F1D2C089C7800FDEED2 /* chunks in Resources */ = {isa = PBXBuildFile; fileRef = 54CE6F0B2C089C7800FDEED2 /* chunks */; };
+		54CE6F1E2C089C7800FDEED2 /* app-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 54CE6F0C2C089C7800FDEED2 /* app-icon.png */; };
+		54CE6F1F2C089C7800FDEED2 /* manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = 54CE6F0D2C089C7800FDEED2 /* manifest.json */; };
+		54CE6F202C089C7800FDEED2 /* content.js in Resources */ = {isa = PBXBuildFile; fileRef = 54CE6F0E2C089C7800FDEED2 /* content.js */; };
+		54CE6F212C089C7800FDEED2 /* content.ts-loader.js in Resources */ = {isa = PBXBuildFile; fileRef = 54CE6F0F2C089C7800FDEED2 /* content.ts-loader.js */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		54CE6ED92C089C7800FDEED2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 54CE6EA52C089C7700FDEED2 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 54CE6ED62C089C7800FDEED2;
+			remoteInfo = "wtm Extension (iOS)";
+		};
+		54CE6EE32C089C7800FDEED2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 54CE6EA52C089C7700FDEED2 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 54CE6EE02C089C7800FDEED2;
+			remoteInfo = "wtm Extension (macOS)";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		54CE6EFB2C089C7800FDEED2 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				54CE6ED82C089C7800FDEED2 /* wtm Extension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		54CE6F022C089C7800FDEED2 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				54CE6EE22C089C7800FDEED2 /* wtm Extension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		54CE6EAC2C089C7700FDEED2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = Base; path = ../Base.lproj/Main.html; sourceTree = "<group>"; };
+		54CE6EAD2C089C7700FDEED2 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
+		54CE6EAE2C089C7700FDEED2 /* Style.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = Style.css; sourceTree = "<group>"; };
+		54CE6EAF2C089C7700FDEED2 /* Script.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = Script.js; sourceTree = "<group>"; };
+		54CE6EB02C089C7700FDEED2 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		54CE6EB12C089C7800FDEED2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		54CE6EB32C089C7800FDEED2 /* SafariWebExtensionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariWebExtensionHandler.swift; sourceTree = "<group>"; };
+		54CE6EB82C089C7800FDEED2 /* wtm.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = wtm.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		54CE6EBB2C089C7800FDEED2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		54CE6EBD2C089C7800FDEED2 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		54CE6EC02C089C7800FDEED2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		54CE6EC32C089C7800FDEED2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		54CE6EC52C089C7800FDEED2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		54CE6ECA2C089C7800FDEED2 /* wtm.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = wtm.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		54CE6ECC2C089C7800FDEED2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		54CE6ECF2C089C7800FDEED2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		54CE6ED12C089C7800FDEED2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		54CE6ED22C089C7800FDEED2 /* wtm.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = wtm.entitlements; sourceTree = "<group>"; };
+		54CE6ED72C089C7800FDEED2 /* wtm Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "wtm Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		54CE6EDC2C089C7800FDEED2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		54CE6EE12C089C7800FDEED2 /* wtm Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "wtm Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		54CE6EE62C089C7800FDEED2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		54CE6EE72C089C7800FDEED2 /* wtm.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = wtm.entitlements; sourceTree = "<group>"; };
+		54CE6F072C089C7800FDEED2 /* popup.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = popup.js; path = ../../../app_chrome/popup.js; sourceTree = "<group>"; };
+		54CE6F082C089C7800FDEED2 /* index.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = index.html; path = ../../../app_chrome/index.html; sourceTree = "<group>"; };
+		54CE6F092C089C7800FDEED2 /* background.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = background.js; path = ../../../app_chrome/background.js; sourceTree = "<group>"; };
+		54CE6F0A2C089C7800FDEED2 /* index.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; name = index.css; path = ../../../app_chrome/index.css; sourceTree = "<group>"; };
+		54CE6F0B2C089C7800FDEED2 /* chunks */ = {isa = PBXFileReference; lastKnownFileType = folder; name = chunks; path = ../../../app_chrome/chunks; sourceTree = "<group>"; };
+		54CE6F0C2C089C7800FDEED2 /* app-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "app-icon.png"; path = "../../../app_chrome/app-icon.png"; sourceTree = "<group>"; };
+		54CE6F0D2C089C7800FDEED2 /* manifest.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = manifest.json; path = ../../../app_chrome/manifest.json; sourceTree = "<group>"; };
+		54CE6F0E2C089C7800FDEED2 /* content.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = content.js; path = ../../../app_chrome/content.js; sourceTree = "<group>"; };
+		54CE6F0F2C089C7800FDEED2 /* content.ts-loader.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = "content.ts-loader.js"; path = "../../../app_chrome/content.ts-loader.js"; sourceTree = "<group>"; };
+		54E216FF2C089E11001E99D7 /* wtm (iOS).entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "wtm (iOS).entitlements"; sourceTree = "<group>"; };
+		54E217002C089E49001E99D7 /* wtm Extension (iOS).entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "wtm Extension (iOS).entitlements"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		54CE6EB52C089C7800FDEED2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		54CE6EC72C089C7800FDEED2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		54CE6ED42C089C7800FDEED2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		54CE6EDE2C089C7800FDEED2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		54CE6EA42C089C7700FDEED2 = {
+			isa = PBXGroup;
+			children = (
+				54E217002C089E49001E99D7 /* wtm Extension (iOS).entitlements */,
+				54E216FF2C089E11001E99D7 /* wtm (iOS).entitlements */,
+				54CE6EA92C089C7700FDEED2 /* Shared (App) */,
+				54CE6EB22C089C7800FDEED2 /* Shared (Extension) */,
+				54CE6EBA2C089C7800FDEED2 /* iOS (App) */,
+				54CE6ECB2C089C7800FDEED2 /* macOS (App) */,
+				54CE6EDB2C089C7800FDEED2 /* iOS (Extension) */,
+				54CE6EE52C089C7800FDEED2 /* macOS (Extension) */,
+				54CE6EB92C089C7800FDEED2 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		54CE6EA92C089C7700FDEED2 /* Shared (App) */ = {
+			isa = PBXGroup;
+			children = (
+				54CE6EB02C089C7700FDEED2 /* ViewController.swift */,
+				54CE6EB12C089C7800FDEED2 /* Assets.xcassets */,
+				54CE6EAA2C089C7700FDEED2 /* Resources */,
+			);
+			path = "Shared (App)";
+			sourceTree = "<group>";
+		};
+		54CE6EAA2C089C7700FDEED2 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				54CE6EAB2C089C7700FDEED2 /* Main.html */,
+				54CE6EAD2C089C7700FDEED2 /* Icon.png */,
+				54CE6EAE2C089C7700FDEED2 /* Style.css */,
+				54CE6EAF2C089C7700FDEED2 /* Script.js */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		54CE6EB22C089C7800FDEED2 /* Shared (Extension) */ = {
+			isa = PBXGroup;
+			children = (
+				54CE6F062C089C7800FDEED2 /* Resources */,
+				54CE6EB32C089C7800FDEED2 /* SafariWebExtensionHandler.swift */,
+			);
+			path = "Shared (Extension)";
+			sourceTree = "<group>";
+		};
+		54CE6EB92C089C7800FDEED2 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				54CE6EB82C089C7800FDEED2 /* wtm.app */,
+				54CE6ECA2C089C7800FDEED2 /* wtm.app */,
+				54CE6ED72C089C7800FDEED2 /* wtm Extension.appex */,
+				54CE6EE12C089C7800FDEED2 /* wtm Extension.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		54CE6EBA2C089C7800FDEED2 /* iOS (App) */ = {
+			isa = PBXGroup;
+			children = (
+				54CE6EBB2C089C7800FDEED2 /* AppDelegate.swift */,
+				54CE6EBD2C089C7800FDEED2 /* SceneDelegate.swift */,
+				54CE6EBF2C089C7800FDEED2 /* LaunchScreen.storyboard */,
+				54CE6EC22C089C7800FDEED2 /* Main.storyboard */,
+				54CE6EC52C089C7800FDEED2 /* Info.plist */,
+			);
+			path = "iOS (App)";
+			sourceTree = "<group>";
+		};
+		54CE6ECB2C089C7800FDEED2 /* macOS (App) */ = {
+			isa = PBXGroup;
+			children = (
+				54CE6ECC2C089C7800FDEED2 /* AppDelegate.swift */,
+				54CE6ECE2C089C7800FDEED2 /* Main.storyboard */,
+				54CE6ED12C089C7800FDEED2 /* Info.plist */,
+				54CE6ED22C089C7800FDEED2 /* wtm.entitlements */,
+			);
+			path = "macOS (App)";
+			sourceTree = "<group>";
+		};
+		54CE6EDB2C089C7800FDEED2 /* iOS (Extension) */ = {
+			isa = PBXGroup;
+			children = (
+				54CE6EDC2C089C7800FDEED2 /* Info.plist */,
+			);
+			path = "iOS (Extension)";
+			sourceTree = "<group>";
+		};
+		54CE6EE52C089C7800FDEED2 /* macOS (Extension) */ = {
+			isa = PBXGroup;
+			children = (
+				54CE6EE62C089C7800FDEED2 /* Info.plist */,
+				54CE6EE72C089C7800FDEED2 /* wtm.entitlements */,
+			);
+			path = "macOS (Extension)";
+			sourceTree = "<group>";
+		};
+		54CE6F062C089C7800FDEED2 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				54CE6F072C089C7800FDEED2 /* popup.js */,
+				54CE6F082C089C7800FDEED2 /* index.html */,
+				54CE6F092C089C7800FDEED2 /* background.js */,
+				54CE6F0A2C089C7800FDEED2 /* index.css */,
+				54CE6F0B2C089C7800FDEED2 /* chunks */,
+				54CE6F0C2C089C7800FDEED2 /* app-icon.png */,
+				54CE6F0D2C089C7800FDEED2 /* manifest.json */,
+				54CE6F0E2C089C7800FDEED2 /* content.js */,
+				54CE6F0F2C089C7800FDEED2 /* content.ts-loader.js */,
+			);
+			name = Resources;
+			path = "Shared (Extension)";
+			sourceTree = SOURCE_ROOT;
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		54CE6EB72C089C7800FDEED2 /* wtm (iOS) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 54CE6EFC2C089C7800FDEED2 /* Build configuration list for PBXNativeTarget "wtm (iOS)" */;
+			buildPhases = (
+				54CE6EB42C089C7800FDEED2 /* Sources */,
+				54CE6EB52C089C7800FDEED2 /* Frameworks */,
+				54CE6EB62C089C7800FDEED2 /* Resources */,
+				54CE6EFB2C089C7800FDEED2 /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				54CE6EDA2C089C7800FDEED2 /* PBXTargetDependency */,
+			);
+			name = "wtm (iOS)";
+			productName = "wtm (iOS)";
+			productReference = 54CE6EB82C089C7800FDEED2 /* wtm.app */;
+			productType = "com.apple.product-type.application";
+		};
+		54CE6EC92C089C7800FDEED2 /* wtm (macOS) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 54CE6F032C089C7800FDEED2 /* Build configuration list for PBXNativeTarget "wtm (macOS)" */;
+			buildPhases = (
+				54CE6EC62C089C7800FDEED2 /* Sources */,
+				54CE6EC72C089C7800FDEED2 /* Frameworks */,
+				54CE6EC82C089C7800FDEED2 /* Resources */,
+				54CE6F022C089C7800FDEED2 /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				54CE6EE42C089C7800FDEED2 /* PBXTargetDependency */,
+			);
+			name = "wtm (macOS)";
+			productName = "wtm (macOS)";
+			productReference = 54CE6ECA2C089C7800FDEED2 /* wtm.app */;
+			productType = "com.apple.product-type.application";
+		};
+		54CE6ED62C089C7800FDEED2 /* wtm Extension (iOS) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 54CE6EF82C089C7800FDEED2 /* Build configuration list for PBXNativeTarget "wtm Extension (iOS)" */;
+			buildPhases = (
+				54CE6ED32C089C7800FDEED2 /* Sources */,
+				54CE6ED42C089C7800FDEED2 /* Frameworks */,
+				54CE6ED52C089C7800FDEED2 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "wtm Extension (iOS)";
+			productName = "wtm Extension (iOS)";
+			productReference = 54CE6ED72C089C7800FDEED2 /* wtm Extension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		54CE6EE02C089C7800FDEED2 /* wtm Extension (macOS) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 54CE6EFF2C089C7800FDEED2 /* Build configuration list for PBXNativeTarget "wtm Extension (macOS)" */;
+			buildPhases = (
+				54CE6EDD2C089C7800FDEED2 /* Sources */,
+				54CE6EDE2C089C7800FDEED2 /* Frameworks */,
+				54CE6EDF2C089C7800FDEED2 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "wtm Extension (macOS)";
+			productName = "wtm Extension (macOS)";
+			productReference = 54CE6EE12C089C7800FDEED2 /* wtm Extension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		54CE6EA52C089C7700FDEED2 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					54CE6EB72C089C7800FDEED2 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+					54CE6EC92C089C7800FDEED2 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+					54CE6ED62C089C7800FDEED2 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+					54CE6EE02C089C7800FDEED2 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
+			};
+			buildConfigurationList = 54CE6EA82C089C7700FDEED2 /* Build configuration list for PBXProject "wtm" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 54CE6EA42C089C7700FDEED2;
+			productRefGroup = 54CE6EB92C089C7800FDEED2 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				54CE6EB72C089C7800FDEED2 /* wtm (iOS) */,
+				54CE6EC92C089C7800FDEED2 /* wtm (macOS) */,
+				54CE6ED62C089C7800FDEED2 /* wtm Extension (iOS) */,
+				54CE6EE02C089C7800FDEED2 /* wtm Extension (macOS) */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		54CE6EB62C089C7800FDEED2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				54CE6EEA2C089C7800FDEED2 /* Icon.png in Resources */,
+				54CE6EC12C089C7800FDEED2 /* LaunchScreen.storyboard in Resources */,
+				54CE6EE82C089C7800FDEED2 /* Main.html in Resources */,
+				54CE6EEE2C089C7800FDEED2 /* Script.js in Resources */,
+				54CE6EF22C089C7800FDEED2 /* Assets.xcassets in Resources */,
+				54CE6EC42C089C7800FDEED2 /* Main.storyboard in Resources */,
+				54CE6EEC2C089C7800FDEED2 /* Style.css in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		54CE6EC82C089C7800FDEED2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				54CE6EEB2C089C7800FDEED2 /* Icon.png in Resources */,
+				54CE6EED2C089C7800FDEED2 /* Style.css in Resources */,
+				54CE6ED02C089C7800FDEED2 /* Main.storyboard in Resources */,
+				54CE6EEF2C089C7800FDEED2 /* Script.js in Resources */,
+				54CE6EF32C089C7800FDEED2 /* Assets.xcassets in Resources */,
+				54CE6EE92C089C7800FDEED2 /* Main.html in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		54CE6ED52C089C7800FDEED2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				54CE6F202C089C7800FDEED2 /* content.js in Resources */,
+				54CE6F1D2C089C7800FDEED2 /* chunks in Resources */,
+				54CE6F1F2C089C7800FDEED2 /* manifest.json in Resources */,
+				54CE6F1C2C089C7800FDEED2 /* index.css in Resources */,
+				54CE6F1E2C089C7800FDEED2 /* app-icon.png in Resources */,
+				54CE6F192C089C7800FDEED2 /* popup.js in Resources */,
+				54CE6F212C089C7800FDEED2 /* content.ts-loader.js in Resources */,
+				54CE6F1B2C089C7800FDEED2 /* background.js in Resources */,
+				54CE6F1A2C089C7800FDEED2 /* index.html in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		54CE6EDF2C089C7800FDEED2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				54CE6F172C089C7800FDEED2 /* content.js in Resources */,
+				54CE6F142C089C7800FDEED2 /* chunks in Resources */,
+				54CE6F162C089C7800FDEED2 /* manifest.json in Resources */,
+				54CE6F132C089C7800FDEED2 /* index.css in Resources */,
+				54CE6F152C089C7800FDEED2 /* app-icon.png in Resources */,
+				54CE6F102C089C7800FDEED2 /* popup.js in Resources */,
+				54CE6F182C089C7800FDEED2 /* content.ts-loader.js in Resources */,
+				54CE6F122C089C7800FDEED2 /* background.js in Resources */,
+				54CE6F112C089C7800FDEED2 /* index.html in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		54CE6EB42C089C7800FDEED2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				54CE6EF02C089C7800FDEED2 /* ViewController.swift in Sources */,
+				54CE6EBC2C089C7800FDEED2 /* AppDelegate.swift in Sources */,
+				54CE6EBE2C089C7800FDEED2 /* SceneDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		54CE6EC62C089C7800FDEED2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				54CE6EF12C089C7800FDEED2 /* ViewController.swift in Sources */,
+				54CE6ECD2C089C7800FDEED2 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		54CE6ED32C089C7800FDEED2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				54CE6EF42C089C7800FDEED2 /* SafariWebExtensionHandler.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		54CE6EDD2C089C7800FDEED2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				54CE6EF52C089C7800FDEED2 /* SafariWebExtensionHandler.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		54CE6EDA2C089C7800FDEED2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 54CE6ED62C089C7800FDEED2 /* wtm Extension (iOS) */;
+			targetProxy = 54CE6ED92C089C7800FDEED2 /* PBXContainerItemProxy */;
+		};
+		54CE6EE42C089C7800FDEED2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 54CE6EE02C089C7800FDEED2 /* wtm Extension (macOS) */;
+			targetProxy = 54CE6EE32C089C7800FDEED2 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		54CE6EAB2C089C7700FDEED2 /* Main.html */ = {
+			isa = PBXVariantGroup;
+			children = (
+				54CE6EAC2C089C7700FDEED2 /* Base */,
+			);
+			name = Main.html;
+			sourceTree = "<group>";
+		};
+		54CE6EBF2C089C7800FDEED2 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				54CE6EC02C089C7800FDEED2 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		54CE6EC22C089C7800FDEED2 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				54CE6EC32C089C7800FDEED2 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		54CE6ECE2C089C7800FDEED2 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				54CE6ECF2C089C7800FDEED2 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		54CE6EF62C089C7800FDEED2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		54CE6EF72C089C7800FDEED2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		54CE6EF92C089C7800FDEED2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "wtm Extension (iOS).entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2858MX5336;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "iOS (Extension)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "wtm Extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.ttt246llc.wtm.Extension;
+				PRODUCT_NAME = "wtm Extension";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		54CE6EFA2C089C7800FDEED2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "wtm Extension (iOS).entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2858MX5336;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "iOS (Extension)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "wtm Extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.ttt246llc.wtm.Extension;
+				PRODUCT_NAME = "wtm Extension";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		54CE6EFD2C089C7800FDEED2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "wtm (iOS).entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2858MX5336;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "iOS (App)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = wtm;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+					"-framework",
+					WebKit,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.ttt246llc.wtm;
+				PRODUCT_NAME = wtm;
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		54CE6EFE2C089C7800FDEED2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "wtm (iOS).entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2858MX5336;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "iOS (App)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = wtm;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+					"-framework",
+					WebKit,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.ttt246llc.wtm;
+				PRODUCT_NAME = wtm;
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		54CE6F002C089C7800FDEED2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "macOS (Extension)/wtm.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2858MX5336;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "macOS (Extension)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "wtm Extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.ttt246llc.wtm.Extension;
+				PRODUCT_NAME = "wtm Extension";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		54CE6F012C089C7800FDEED2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "macOS (Extension)/wtm.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2858MX5336;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "macOS (Extension)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "wtm Extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.ttt246llc.wtm.Extension;
+				PRODUCT_NAME = "wtm Extension";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		54CE6F042C089C7800FDEED2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "macOS (App)/wtm.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2858MX5336;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "macOS (App)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = wtm;
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+					"-framework",
+					WebKit,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.ttt246llc.wtm;
+				PRODUCT_NAME = wtm;
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		54CE6F052C089C7800FDEED2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "macOS (App)/wtm.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2858MX5336;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "macOS (App)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = wtm;
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+					"-framework",
+					WebKit,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.ttt246llc.wtm;
+				PRODUCT_NAME = wtm;
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		54CE6EA82C089C7700FDEED2 /* Build configuration list for PBXProject "wtm" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				54CE6EF62C089C7800FDEED2 /* Debug */,
+				54CE6EF72C089C7800FDEED2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		54CE6EF82C089C7800FDEED2 /* Build configuration list for PBXNativeTarget "wtm Extension (iOS)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				54CE6EF92C089C7800FDEED2 /* Debug */,
+				54CE6EFA2C089C7800FDEED2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		54CE6EFC2C089C7800FDEED2 /* Build configuration list for PBXNativeTarget "wtm (iOS)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				54CE6EFD2C089C7800FDEED2 /* Debug */,
+				54CE6EFE2C089C7800FDEED2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		54CE6EFF2C089C7800FDEED2 /* Build configuration list for PBXNativeTarget "wtm Extension (macOS)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				54CE6F002C089C7800FDEED2 /* Debug */,
+				54CE6F012C089C7800FDEED2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		54CE6F032C089C7800FDEED2 /* Build configuration list for PBXNativeTarget "wtm (macOS)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				54CE6F042C089C7800FDEED2 /* Debug */,
+				54CE6F052C089C7800FDEED2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 54CE6EA52C089C7700FDEED2 /* Project object */;
+}
