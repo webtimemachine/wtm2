@@ -8,6 +8,7 @@ export const PreferencesScreen: React.FC<object> = () => {
   const [enabled, setEnabled] = useState(false);
   const [enabledLiteMode, setEnabledLiteMode] = useState(false);
   const [imageEncodingEnabled, setImageEncodingEnabled] = useState(false);
+  const [explicitContentFilterEnabled, setExplicitContentFilterEnabled] = useState(false);
   const [days, setDays] = useState<number | null>(null);
   const { navigateBack } = useNavigation();
   const { userPreferencesQuery } = useGetPreferences();
@@ -27,6 +28,9 @@ export const PreferencesScreen: React.FC<object> = () => {
     setImageEncodingEnabled(
       userPreferencesQuery.data?.enableImageEncoding || false,
     );
+    setExplicitContentFilterEnabled(
+      userPreferencesQuery.data?.enableExplicitContentFilter || false,
+    )
   }, [userPreferencesQuery.data]);
 
   const handleSavePreferences = async () => {
@@ -34,6 +38,7 @@ export const PreferencesScreen: React.FC<object> = () => {
       enableNavigationEntryExpiration: enabled,
       navigationEntryExpirationInDays: days || 0,
       enableImageEncoding: imageEncodingEnabled,
+      enableExplicitContentFilter: explicitContentFilterEnabled
     });
 
     await chrome.storage.local.set({
@@ -74,6 +79,16 @@ export const PreferencesScreen: React.FC<object> = () => {
               size='md'
               isChecked={imageEncodingEnabled}
               onChange={(e) => setImageEncodingEnabled(e.target.checked)}
+            />
+          </div>
+          <div className='flex w-full py-2 justify-between items-center'>
+            <Text fontSize={'medium'}>
+              Enable explicit content filter
+            </Text>
+            <Switch
+              size='md'
+              isChecked={explicitContentFilterEnabled}
+              onChange={(e) => setExplicitContentFilterEnabled(e.target.checked)}
             />
           </div>
           <div className='flex w-full py-2 justify-between items-center'>
