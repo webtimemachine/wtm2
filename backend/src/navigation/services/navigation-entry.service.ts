@@ -121,22 +121,36 @@ export class NavigationEntryService {
     const liteMode = !content;
 
     if (!liteMode) {
-      await this.explicitFilter.filter(
-        content!,
-        createNavigationEntryInputDto.url,
+      const userPreference = await this.prismaService.userPreferences.findFirst(
+        {
+          where: {
+            userId: jwtContext.user.id,
+          },
+          select: {
+            enableImageEncoding: true,
+            enableExplicitContentFilter: true,
+          },
+        },
       );
-
-      try {
-        await this.indexerService.index(
+      if (userPreference?.enableExplicitContentFilter) {
+        await this.explicitFilter.filter(
           content!,
-          images,
           createNavigationEntryInputDto.url,
-          jwtContext.user.id,
         );
-      } catch (error) {
-        this.logger.error(
-          `An error occurred indexing '${createNavigationEntryInputDto.url}'. Cause: ${error.message}`,
-        );
+      }
+      if (userPreference?.enableImageEncoding) {
+        try {
+          await this.indexerService.index(
+            content!,
+            images,
+            createNavigationEntryInputDto.url,
+            jwtContext.user.id,
+          );
+        } catch (error) {
+          this.logger.error(
+            `An error occurred indexing '${createNavigationEntryInputDto.url}'. Cause: ${error.message}`,
+          );
+        }
       }
     }
 
