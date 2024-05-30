@@ -16,4 +16,9 @@ export class UpdateUserPreferencesInput {
   @IsOptional()
   @IsBoolean()
   enableImageEncoding: boolean;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsBoolean()
+  enableExplicitContentFilter: boolean;
 }
