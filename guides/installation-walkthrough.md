@@ -59,3 +59,7 @@
 ```
 
 - Now you should be able to connect to your local backend using `http://localhost:<PORT>` as your server url
+
+## Video Walkthrough
+
+[![WTM Installation Walkthrough](https://img.youtube.com/vi/sGA4V-fGf4I/0.jpg)](https://www.youtube.com/watch?v=sGA4V-fGf4I)
