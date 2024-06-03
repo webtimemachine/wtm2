@@ -64,7 +64,10 @@ export const ServerUrlEditable = () => {
         onChange={(e) => setValue(e)}
         onSubmit={() => {
           try {
-            const url = new URL(value).origin;
+            let url = new URL(value).href;
+            if (url[url.length - 1] === '/') {
+              url = url.substring(0, url.length - 1);
+            }
             setServerUrl(url);
             setValue(url);
           } catch (error) {
