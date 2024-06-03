@@ -43,6 +43,7 @@ const existingUser = {
     enableNavigationEntryExpiration: false,
     navigationEntryExpirationInDays: 120,
     enableImageEncoding: true,
+    enableExplicitContentFilter: true,
     createdAt: new Date(),
     updateAt: new Date(),
   },

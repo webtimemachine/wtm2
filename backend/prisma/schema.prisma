@@ -43,10 +43,10 @@ model UserPreferences {
   userId BigInt @unique()
   user   User   @relation(fields: [userId], references: [id])
 
-  enableNavigationEntryExpiration Boolean @default(false)
+  enableNavigationEntryExpiration Boolean  @default(false)
   navigationEntryExpirationInDays Int?
-  enableImageEncoding Boolean? @default(false)
-  
+  enableImageEncoding             Boolean? @default(false)
+  enableExplicitContentFilter     Boolean? @default(true)
 
   createdAt DateTime  @default(now()) @db.Timestamptz(0)
   updateAt  DateTime? @updatedAt @db.Timestamptz(0)
