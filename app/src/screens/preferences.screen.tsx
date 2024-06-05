@@ -148,7 +148,7 @@ export const PreferencesScreen: React.FC<object> = () => {
           {enabled && (
             <div className='flex w-full py-2 items-center justify-between pb-2'>
               <div className='flex pr-4'>
-                <Text>
+                <Text fontSize={14}>
                   Set the number of days before history entries expire.
                 </Text>
               </div>
