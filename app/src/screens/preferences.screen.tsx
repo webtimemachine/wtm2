@@ -146,7 +146,7 @@ export const PreferencesScreen: React.FC<object> = () => {
           </div>
 
           {enabled && (
-            <div className='flex w-full py-2 items-center justify-between'>
+            <div className='flex w-full py-2 items-center justify-between pb-2'>
               <div className='flex pr-4'>
                 <Text>
                   Set the number of days before history entries expire.
@@ -165,7 +165,7 @@ export const PreferencesScreen: React.FC<object> = () => {
           )}
           <Divider />
         </div>
-        <div className='pb-8'>
+        <div className='pb-8 pt-4'>
           <Button
             colorScheme='blue'
             isDisabled={enabled && !days}
