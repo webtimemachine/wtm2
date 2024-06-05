@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Text, IconButton, Switch, Input, Button } from '@chakra-ui/react';
+import {
+  Text,
+  IconButton,
+  Switch,
+  Input,
+  Button,
+  Divider,
+} from '@chakra-ui/react';
 import { ArrowBackIcon } from '@chakra-ui/icons';
 import { useGetPreferences, useUpdatePreferences } from '../hooks';
 import { useNavigation } from '../store';
@@ -8,7 +15,8 @@ export const PreferencesScreen: React.FC<object> = () => {
   const [enabled, setEnabled] = useState(false);
   const [enabledLiteMode, setEnabledLiteMode] = useState(false);
   const [imageEncodingEnabled, setImageEncodingEnabled] = useState(false);
-  const [explicitContentFilterEnabled, setExplicitContentFilterEnabled] = useState(false);
+  const [explicitContentFilterEnabled, setExplicitContentFilterEnabled] =
+    useState(false);
   const [days, setDays] = useState<number | null>(null);
   const { navigateBack } = useNavigation();
   const { userPreferencesQuery } = useGetPreferences();
@@ -30,7 +38,7 @@ export const PreferencesScreen: React.FC<object> = () => {
     );
     setExplicitContentFilterEnabled(
       userPreferencesQuery.data?.enableExplicitContentFilter || false,
-    )
+    );
   }, [userPreferencesQuery.data]);
 
   const handleSavePreferences = async () => {
@@ -38,7 +46,7 @@ export const PreferencesScreen: React.FC<object> = () => {
       enableNavigationEntryExpiration: enabled,
       navigationEntryExpirationInDays: days || 0,
       enableImageEncoding: imageEncodingEnabled,
-      enableExplicitContentFilter: explicitContentFilterEnabled
+      enableExplicitContentFilter: explicitContentFilterEnabled,
     });
 
     await chrome.storage.local.set({
@@ -71,56 +79,91 @@ export const PreferencesScreen: React.FC<object> = () => {
           </div>
         </div>
         <div className='flex flex-col w-full min-h-[400px]'>
-          <div className='flex w-full py-2 justify-between items-center'>
-            <Text fontSize={'medium'}>
-              Enable image captioning and encoding
+          <div className='flex flex-col w-full py-2'>
+            <div className='flex flex-row w-full justify-between pb-2'>
+              <Text fontSize={'medium'} fontWeight={700}>
+                AI Search on Images
+              </Text>
+              <Switch
+                size='md'
+                isChecked={imageEncodingEnabled}
+                onChange={(e) => setImageEncodingEnabled(e.target.checked)}
+              />
+            </div>
+            <Text fontSize={14}>
+              Enable to automatically generate captions and encode images.
             </Text>
-            <Switch
-              size='md'
-              isChecked={imageEncodingEnabled}
-              onChange={(e) => setImageEncodingEnabled(e.target.checked)}
-            />
           </div>
-          <div className='flex w-full py-2 justify-between items-center'>
-            <Text fontSize={'medium'}>
-              Enable explicit content filter
+          <Divider />
+          <div className='flex flex-col w-full py-2'>
+            <div className='flex flex-row w-full justify-between pb-2'>
+              <Text fontSize={'medium'} fontWeight={700}>
+                Explicit Filter
+              </Text>
+              <Switch
+                size='md'
+                isChecked={explicitContentFilterEnabled}
+                onChange={(e) =>
+                  setExplicitContentFilterEnabled(e.target.checked)
+                }
+              />
+            </div>
+            <Text fontSize={14}>Enable to filter out explicit content.</Text>
+          </div>
+          <Divider />
+          <div className='flex flex-col w-full py-2'>
+            <div className='flex flex-row w-full justify-between pb-2'>
+              <Text fontSize={'medium'} fontWeight={700}>
+                Lite Mode
+              </Text>
+              <Switch
+                size='md'
+                isChecked={enabledLiteMode}
+                onChange={(e) => setEnabledLiteMode(e.target.checked)}
+              />
+            </div>
+            <Text fontSize={14}>
+              Enable to reduce data usage and enhance performance. This records
+              are not going to be included on the AI search results.
             </Text>
-            <Switch
-              size='md'
-              isChecked={explicitContentFilterEnabled}
-              onChange={(e) => setExplicitContentFilterEnabled(e.target.checked)}
-            />
           </div>
-          <div className='flex w-full py-2 justify-between items-center'>
-            <Text fontSize={'medium'}>Enable Lite Mode</Text>
-            <Switch
-              size='md'
-              isChecked={enabledLiteMode}
-              onChange={(e) => setEnabledLiteMode(e.target.checked)}
-            />
-          </div>
-          <div className='flex w-full py-2 justify-between items-center'>
-            <Text fontSize={'medium'}>
-              Enable expirantion date on History entries
+          <Divider />
+          <div className='flex flex-col w-full py-2'>
+            <div className='flex flex-row w-full justify-between pb-2'>
+              <Text fontSize={'medium'} fontWeight={700}>
+                History Entries Expiration
+              </Text>
+              <Switch
+                size='md'
+                isChecked={enabled}
+                onChange={(e) => setEnabled(e.target.checked)}
+              />
+            </div>
+            <Text fontSize={14}>
+              Enable to automatically remove history entries after a specified
+              number of days.
             </Text>
-            <Switch
-              size='md'
-              isChecked={enabled}
-              onChange={(e) => setEnabled(e.target.checked)}
-            />
           </div>
-          <div className='flex w-full py-2 justify-between items-center'>
-            <Text fontSize={'medium'}>Expiration time in days:</Text>
-            <Input
-              type='number'
-              name='days'
-              backgroundColor={'white'}
-              width={75}
-              value={days || ''}
-              isDisabled={!enabled}
-              onChange={(e) => setDays(parseInt(e.target.value))}
-            />
-          </div>
+
+          {enabled && (
+            <div className='flex w-full py-2 items-center justify-between'>
+              <div className='flex pr-4'>
+                <Text>
+                  Set the number of days before history entries expire.
+                </Text>
+              </div>
+              <Input
+                type='number'
+                name='days'
+                backgroundColor={'white'}
+                width={75}
+                value={days || ''}
+                isDisabled={!enabled}
+                onChange={(e) => setDays(parseInt(e.target.value))}
+              />
+            </div>
+          )}
+          <Divider />
         </div>
         <div className='pb-8'>
           <Button
@@ -128,7 +171,7 @@ export const PreferencesScreen: React.FC<object> = () => {
             isDisabled={enabled && !days}
             onClick={handleSavePreferences}
           >
-            Save
+            Save Changes
           </Button>
         </div>
       </div>
