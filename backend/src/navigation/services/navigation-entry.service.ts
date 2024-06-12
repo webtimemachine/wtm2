@@ -121,17 +121,30 @@ export class NavigationEntryService {
     const liteMode = !content;
 
     if (!liteMode) {
-      await this.explicitFilter.filter(
-        content!,
-        createNavigationEntryInputDto.url,
+      const userPreference = await this.prismaService.userPreferences.findFirst(
+        {
+          where: {
+            userId: jwtContext.user.id,
+          },
+          select: {
+            enableImageEncoding: true,
+            enableExplicitContentFilter: true,
+          },
+        },
       );
-
+      if (userPreference?.enableExplicitContentFilter) {
+        await this.explicitFilter.filter(
+          content!,
+          createNavigationEntryInputDto.url,
+        );
+      }
       try {
         await this.indexerService.index(
           content!,
           images,
           createNavigationEntryInputDto.url,
           jwtContext.user.id,
+          userPreference?.enableImageEncoding || false,
         );
       } catch (error) {
         this.logger.error(
