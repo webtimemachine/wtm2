@@ -32,6 +32,8 @@
 
 - Now you should see the app install on you browser and you will le able to login to a cloud instance and start using the WTM
 
+![App build and load](/gif-and-videos/app-build-and-load.gif)
+
 ## Backend instalation and development
 
 - Set the correct node version using nvm and install the backend dependencies
@@ -60,6 +62,8 @@
 
 - Now you should be able to connect to your local backend using `http://localhost:<PORT>` as your server url
 
-## Video Walkthrough
+![Backend build and usage](/gif-and-videos/backend-build-and-usage.gif)
+
+## Complete Video Walkthrough
 
 [![WTM Installation Walkthrough](https://img.youtube.com/vi/sGA4V-fGf4I/0.jpg)](https://www.youtube.com/watch?v=sGA4V-fGf4I)
