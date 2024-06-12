@@ -50,6 +50,7 @@ const existingUser = {
     enableNavigationEntryExpiration: false,
     navigationEntryExpirationInDays: 120,
     enableImageEncoding: true,
+    enableExplicitContentFilter: true,
     createdAt: new Date(),
     updateAt: new Date(),
   },
@@ -267,6 +268,10 @@ describe('NavigationEntryService', () => {
         .mockReturnValue(createdNavigationEntry);
 
       prismaService.navigationEntry.count = jest.fn().mockReturnValue(1);
+      prismaService.userPreferences.findFirst = jest.fn().mockResolvedValue({
+        enableImageEncoding: true,
+        enableExplicitContentFilter: true,
+      });
 
       const result = await navigationEntryService.createNavigationEntry(
         jwtContext,
@@ -280,6 +285,7 @@ describe('NavigationEntryService', () => {
         [],
         'example.com',
         1n,
+        true,
       );
       expect(mockFilter).toHaveBeenCalledWith('Test content', 'example.com');
     });
@@ -298,6 +304,10 @@ describe('NavigationEntryService', () => {
       prismaService.navigationEntry.update = jest
         .fn()
         .mockReturnValue(createdNavigationEntry);
+      prismaService.userPreferences.findFirst = jest.fn().mockResolvedValue({
+        enableImageEncoding: true,
+        enableExplicitContentFilter: true,
+      });
 
       const result = await navigationEntryService.createNavigationEntry(
         jwtContext,
@@ -311,6 +321,7 @@ describe('NavigationEntryService', () => {
         [],
         'example.com',
         1n,
+        true,
       );
       expect(mockFilter).toHaveBeenCalledWith('Test content', 'example.com');
     });

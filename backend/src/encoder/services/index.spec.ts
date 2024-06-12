@@ -86,9 +86,6 @@ describe('Indexer service', () => {
         .mockImplementation();
 
       prismaService.navigationEntry.count = jest.fn().mockResolvedValue(0);
-      prismaService.userPreferences.findFirst = jest.fn().mockResolvedValue({
-        enableImageEncoding: true,
-      });
 
       const mockCaption = jest
         .spyOn(utils, 'caption')
@@ -101,6 +98,7 @@ describe('Indexer service', () => {
         ['imageURL 1', 'imageURL 2'],
         'example.com',
         1n,
+        true,
       );
 
       expect(mockCaption).toHaveBeenCalledTimes(2);
@@ -141,7 +139,7 @@ describe('Indexer service', () => {
 
       prismaService.navigationEntry.count = jest.fn().mockResolvedValue(1);
 
-      await indexerService.index('Test.Content', [], 'example.com', 1n);
+      await indexerService.index('Test.Content', [], 'example.com', 1n, true);
 
       expect(mockWeaviate).not.toHaveBeenCalled();
     });

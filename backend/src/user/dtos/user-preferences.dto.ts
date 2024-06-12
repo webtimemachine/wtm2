@@ -22,4 +22,8 @@ export class UserPreferencesDto {
   @ApiProperty()
   @Expose()
   enableImageEncoding: boolean;
+
+  @ApiProperty()
+  @Expose()
+  enableExplicitContentFilter: boolean;
 }

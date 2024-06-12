@@ -70,24 +70,20 @@ export class IndexerService {
     };
   }
 
-  async index(content: string, images: string[], url: string, userId: bigint) {
+  async index(
+    content: string,
+    images: string[],
+    url: string,
+    userId: bigint,
+    enableImageEncoding: boolean,
+  ) {
     const exist =
       (await this.prismaService.navigationEntry.count({
         where: { url: url, userId: userId },
       })) > 0;
     if (!exist) {
       let extraDocuments: Document[] = [];
-      const userPreference = await this.prismaService.userPreferences.findFirst(
-        {
-          where: {
-            userId,
-          },
-          select: {
-            enableImageEncoding: true,
-          },
-        },
-      );
-      if (userPreference?.enableImageEncoding) {
+      if (enableImageEncoding) {
         this.logger.debug('Getting text embeddings of images');
         extraDocuments = await Promise.all(
           images.map(async (image) => {
