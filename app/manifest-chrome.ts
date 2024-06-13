@@ -12,10 +12,10 @@ export const manifestChrome: ManifestV3Export = {
   },
   host_permissions: ['<all_urls>'],
   icons: {
-    '16': 'app-icon.png',
-    '32': 'app-icon.png',
-    '48': 'app-icon.png',
-    '128': 'app-icon.png',
+    '16': 'app-icon-16.png',
+    '32': 'app-icon-32.png',
+    '48': 'app-icon-48.png',
+    '128': 'app-icon-128.png',
   },
   content_scripts: [
     {
