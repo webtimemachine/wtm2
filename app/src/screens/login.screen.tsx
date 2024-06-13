@@ -14,10 +14,13 @@ import { useAuthStore, useNavigation } from '../store';
 import { isLoginRes } from '../interfaces/login.interface';
 
 import clsx from 'clsx';
+import { updateIcon } from '../utils/updateIcon';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export const LoginScreen: React.FC<{}> = () => {
+  updateIcon(false);
+
   const deviceKey = useAuthStore((state) => state.deviceKey);
 
   const { loginMutation } = useLogin();
