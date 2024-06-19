@@ -24,6 +24,13 @@ jest.mock('../../store', () => ({
 // Mock de clsx
 jest.mock('clsx');
 
+global.chrome = {
+  action: {
+    setIcon: jest.fn(),
+  },
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+} as any;
+
 const mockLoginMutation = {
   mutate: jest.fn(),
   isSuccess: false,
