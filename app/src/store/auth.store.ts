@@ -4,6 +4,7 @@ import { persist } from 'zustand/middleware';
 import { getRandomToken } from '../utils';
 
 import { ScreenName } from './navigation.store';
+import { updateIcon } from '../utils/updateIcon';
 
 interface AuthState {
   deviceKey: string;
@@ -109,6 +110,7 @@ export const authStore = createStore<AuthStore>()(
             recoveryToken: '',
           });
 
+          updateIcon(true);
           return {
             persistedScreen: '',
             recoveryEmail: '',
@@ -125,6 +127,7 @@ export const authStore = createStore<AuthStore>()(
             recoveryToken: '',
           });
 
+          updateIcon(false);
           return {
             persistedScreen: '',
             recoveryEmail: '',

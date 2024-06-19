@@ -3,7 +3,7 @@ import { ManifestV3Export } from '@crxjs/vite-plugin';
 export const manifestFirefox: ManifestV3Export = {
   manifest_version: 3,
   name: 'WebTM',
-  version: '1.5.6',
+  version: '1.5.7',
   description:
     'WebTM is a cross-platform solution to integrate the navigation history between desktop and mobile web browsers.',
   browser_specific_settings: {
@@ -17,10 +17,10 @@ export const manifestFirefox: ManifestV3Export = {
   },
   host_permissions: ['<all_urls>'],
   icons: {
-    '16': 'app-icon.png',
-    '32': 'app-icon.png',
-    '48': 'app-icon.png',
-    '128': 'app-icon.png',
+    '16': 'app-icon-16.png',
+    '32': 'app-icon-32.png',
+    '48': 'app-icon-48.png',
+    '128': 'app-icon-128.png',
   },
   background: {
     scripts: ['src/service-workers/background.ts'],
