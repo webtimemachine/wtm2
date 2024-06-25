@@ -86,6 +86,7 @@ export const PreferencesScreen: React.FC<object> = () => {
               </Text>
               <Switch
                 size='md'
+                aria-label='AI Search on Images'
                 isChecked={imageEncodingEnabled}
                 onChange={(e) => setImageEncodingEnabled(e.target.checked)}
               />
@@ -103,6 +104,7 @@ export const PreferencesScreen: React.FC<object> = () => {
               <Switch
                 size='md'
                 isChecked={explicitContentFilterEnabled}
+                aria-label='Explicit Filter'
                 onChange={(e) =>
                   setExplicitContentFilterEnabled(e.target.checked)
                 }
@@ -119,6 +121,7 @@ export const PreferencesScreen: React.FC<object> = () => {
               <Switch
                 size='md'
                 isChecked={enabledLiteMode}
+                aria-label='Lite Mode'
                 onChange={(e) => setEnabledLiteMode(e.target.checked)}
               />
             </div>
@@ -136,6 +139,7 @@ export const PreferencesScreen: React.FC<object> = () => {
               <Switch
                 size='md'
                 isChecked={enabled}
+                aria-label='History Entries Expiration'
                 onChange={(e) => setEnabled(e.target.checked)}
               />
             </div>
