@@ -41,3 +41,6 @@ db.env
 # Node Libraries
 extensions/Chrome Web/node_modules
 extensions/Chrome Web/coverage
+
+# Sentry Config File
+.sentryclirc
