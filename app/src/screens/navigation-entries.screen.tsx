@@ -201,6 +201,7 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
           <div className='flex py-1'>
             <div
               className='flex items-center gap-1 p-1 h-[32px] select-none cursor-pointer hover:bg-white rounded-lg'
+              data-testid='ia-search-container'
               onClick={() => setIsSemantic((value) => !value)}
             >
               <Icon
@@ -215,6 +216,7 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
               </Text>
               <Switch
                 size='sm'
+                aria-label='AI Search'
                 isChecked={isSemantic}
                 onChange={() => setIsSemantic((value) => !value)}
               />
