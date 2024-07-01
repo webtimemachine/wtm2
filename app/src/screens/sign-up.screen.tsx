@@ -99,8 +99,8 @@ export const SignUpScreen: React.FC<{}> = () => {
     <>
       <div className='flex flex-col p-8 pt-10 items-center w-full'>
         <div className='flex w-full justify-start pb-4 gap-4 items-center'>
-          <IconButton aria-label='Back icon'>
-            <ArrowBackIcon boxSize={5} onClick={() => navigateBack()} />
+          <IconButton aria-label='Back icon' onClick={() => navigateBack()}>
+            <ArrowBackIcon boxSize={5} />
           </IconButton>
           <div className='flex w-full justify-center pr-[40px]'>
             <Text fontSize={'xx-large'} fontWeight={'bold'}>
@@ -168,13 +168,12 @@ export const SignUpScreen: React.FC<{}> = () => {
                     label={passwordRegexMessage}
                     isOpen={passTooltipIsOpen}
                     hasArrow
+                    data-testid='info-icon'
+                    onMouseEnter={passTooltipOnOpen}
+                    onMouseLeave={passTooltipOnClose}
+                    onClick={passTooltipOnToggle}
                   >
-                    <InfoIcon
-                      color='red.600'
-                      onMouseEnter={passTooltipOnOpen}
-                      onMouseLeave={passTooltipOnClose}
-                      onClick={passTooltipOnToggle}
-                    />
+                    <InfoIcon color='red.600' />
                   </Tooltip>
                 </div>
               )}
