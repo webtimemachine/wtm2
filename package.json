@@ -1,6 +1,6 @@
 {
   "name": "wtm",
-  "version": "1.0.0",
+  "version": "1.5.8",
   "description": "",
   "scripts": {
     "app:install": "npm --prefix app install",
