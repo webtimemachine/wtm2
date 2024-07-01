@@ -39,10 +39,6 @@ const customRender = (ui: React.ReactElement) => {
 };
 
 describe('SignUpScreen', () => {
-  // beforeEach(() => {
-  //   jest.clearAllMocks();
-  // });
-
   test('renders the component with initial state', () => {
     customRender(<SignUpScreen />);
 
