@@ -150,15 +150,6 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
   const prev = () => page > 0 && setPage(page - 1);
   const next = () => !(offset + limit >= count) && setPage(page + 1);
 
-  // const processOpenLink = async (url: string) => {
-  //   const result = await chrome.tabs.query({ url });
-  //   if (result?.length >= 1 && result[0].id) {
-  //     chrome.tabs.update(result[0].id, { active: true });
-  //   } else {
-  //     chrome.tabs.create({ url, active: true });
-  //   }
-  // };
-
   return (
     <>
       <div className='flex flex-col px-5 py-3 items-center w-full min-h-[600px] h-screen'>

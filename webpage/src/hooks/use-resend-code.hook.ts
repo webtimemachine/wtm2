@@ -3,12 +3,14 @@ import { useToast } from '@chakra-ui/react';
 
 import { apiClient } from '../utils/api.client';
 import { ResendCodeResponse, ResendCodeErrorResponse } from '../interfaces';
+import { authStore } from '@/store';
 
 export const useResendCode = () => {
   const toast = useToast();
 
   const resendCode = async () => {
-    const { partialToken } = await chrome.storage.local.get(['partialToken']);
+    const { partialToken } = authStore.getState();
+
     if (!partialToken) throw new Error('partialToken is missing');
 
     const res = await apiClient.fetch('/api/auth/verify/resend', {

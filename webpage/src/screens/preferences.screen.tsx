@@ -55,19 +55,9 @@ export const PreferencesScreen: React.FC<object> = () => {
     authStore.setState({
       enabledLiteMode,
     });
-    // await chrome.storage.local.set({
-    //   enabledLiteMode,
-    // });
   };
 
   useEffect(() => {
-    // const getLiteModeSettings = async () => {
-    //   const { enabledLiteMode: isEnableLiteMode } =
-    //     await chrome.storage.local.get(['enabledLiteMode']);
-
-    //   };
-
-    //   getLiteModeSettings();
     setEnabledLiteMode(isEnableLiteMode);
   }, []);
 
