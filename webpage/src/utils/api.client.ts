@@ -9,7 +9,6 @@ import {
 class ApiClient {
   async fetch(endpoint: string, init: RequestInit = {}): Promise<Response> {
     const { serverUrl } = authStore.getState();
-    // const { serverUrl } = await chrome.storage.local.get(['serverUrl']);
     init = {
       ...init,
       headers: {
@@ -27,10 +26,6 @@ class ApiClient {
     init: RequestInit = {},
   ): Promise<Response> {
     const { serverUrl, accessToken } = authStore.getState();
-    // const { serverUrl, accessToken } = await chrome.storage.local.get([
-    //   'serverUrl',
-    //   'accessToken',
-    // ]);
 
     init = {
       ...init,
@@ -73,7 +68,7 @@ class ApiClient {
 
   async login(data: LoginData): Promise<LoginResponse | VerifyEmailResponse> {
     const { serverUrl } = authStore.getState();
-    // const { serverUrl } = await chrome.storage.local.get(['serverUrl']);
+
     try {
       const res = await fetch(new URL('/api/auth/login', serverUrl), {
         method: 'POST',
@@ -97,18 +92,11 @@ class ApiClient {
           accessToken,
           refreshToken,
         });
-        // await chrome.storage.local.set({
-        //   accessToken,
-        //   refreshToken,
-        // });
       } else {
         const { partialToken } = loginResponse;
         authStore.setState({
           partialToken,
         });
-        // await chrome.storage.local.set({
-        //   partialToken,
-        // });
       }
 
       return loginResponse;
@@ -120,11 +108,6 @@ class ApiClient {
 
   async refresh(): Promise<void> {
     const { serverUrl, refreshToken } = authStore.getState();
-
-    // const { serverUrl, refreshToken } = await chrome.storage.local.get([
-    //   'serverUrl',
-    //   'refreshToken',
-    // ]);
 
     try {
       const res = await fetch(new URL('/api/auth/refresh', serverUrl), {
@@ -144,10 +127,6 @@ class ApiClient {
         accessToken: data.accessToken,
         refreshToken: data.refreshToken,
       });
-      // await chrome.storage.local.set({
-      //   accessToken: data.accessToken,
-      //   refreshToken: data.refreshToken,
-      // });
     } catch (error) {
       console.error('ApiClient Refresh Error', error);
       throw error;

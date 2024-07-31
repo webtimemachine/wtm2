@@ -12,11 +12,6 @@ export const AboutWTMScreen: React.FC<object> = () => {
 
   useEffect(() => {
     setBackendURL(serverUrl);
-    // const getBackendVersion = async () => {
-    //   const { serverUrl } = await chrome.storage.local.get(['serverUrl']);
-    // };
-
-    // getBackendVersion();
   }, []);
 
   return (
@@ -37,7 +32,6 @@ export const AboutWTMScreen: React.FC<object> = () => {
             <Text fontSize='medium'>
               <span className='font-bold'>Version:</span>{' '}
               {/* TODO: INCLUDE VERSION */}
-              {/* {chrome.runtime.getManifest().version} */}
             </Text>
           </div>
           <div className='flex gap-2 items-center w-full p-2 select-none bg-white rounded-lg'>

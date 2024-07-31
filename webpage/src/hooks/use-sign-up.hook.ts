@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import { useToast } from '@chakra-ui/react';
-import { useAuthStore, useNavigation } from '../store';
+import { authStore, useAuthStore, useNavigation } from '../store';
 
 import { apiClient } from '../utils/api.client';
 import { SignUpData, SignUpResponse, SignUpErrorResponse } from '../interfaces';
@@ -21,7 +21,9 @@ export const useSignUp = () => {
     if (res.status === 200) {
       const response: SignUpResponse = await res.json();
       const { partialToken } = response;
-      await chrome.storage.local.set({ partialToken });
+      authStore.setState({
+        partialToken,
+      });
       return response;
     } else {
       const errorRes: SignUpErrorResponse = await res.json();

@@ -29,14 +29,6 @@ interface AuthStore extends AuthState {
   updateServerUrl: (serverUrl: string) => void;
 }
 
-// export const readAuthStateFromLocal = (): AuthState | undefined => {
-//   const authVanillaStoreData = localStorage.getItem('auth-vanilla-store');
-//   if (authVanillaStoreData && JSON.parse(authVanillaStoreData)?.state) {
-//     const state: AuthState = JSON.parse(authVanillaStoreData)?.state;
-//     return state;
-//   }
-// };
-
 export const authStore = createStore<AuthStore>()(
   persist(
     (set) => ({
@@ -45,17 +37,14 @@ export const authStore = createStore<AuthStore>()(
       persistedScreen: '',
       recoveryEmail: '',
       isLoggedIn: false,
+      accessToken: '',
+      refreshToken: '',
+      partialToken: '',
+      recoveryToken: '',
+      enabledLiteMode: false,
 
       updateServerUrl: (serverUrl: string) =>
         set(() => {
-          // chrome.storage.local.set({
-          //   serverUrl,
-          //   accessToken: '',
-          //   refreshToken: '',
-          //   partialToken: '',
-          //   recoveryToken: '',
-          // });
-
           return {
             serverUrl,
             persistedScreen: '',
@@ -70,13 +59,6 @@ export const authStore = createStore<AuthStore>()(
 
       notifyRecoveryCodeSent: (recoveryEmail: string) =>
         set(() => {
-          // chrome.storage.local.set({
-          //   accessToken: '',
-          //   refreshToken: '',
-          //   partialToken: '',
-          //   recoveryToken: '',
-          // });
-
           return {
             persistedScreen: 'validate-recovery-code',
             recoveryEmail,
@@ -90,12 +72,6 @@ export const authStore = createStore<AuthStore>()(
 
       notifyRecoveryCodeValidated: () =>
         set(() => {
-          // chrome.storage.local.set({
-          //   accessToken: '',
-          //   refreshToken: '',
-          //   partialToken: '',
-          // });
-
           return {
             persistedScreen: 'recovery-new-password',
             isLoggedIn: false,
@@ -107,12 +83,6 @@ export const authStore = createStore<AuthStore>()(
 
       notifyEmailValidation: () =>
         set(() => {
-          // chrome.storage.local.set({
-          //   accessToken: '',
-          //   refreshToken: '',
-          //   recoveryToken: '',
-          // });
-
           return {
             persistedScreen: 'validate-email',
             recoveryEmail: '',
@@ -125,10 +95,6 @@ export const authStore = createStore<AuthStore>()(
 
       notifyLogin: () =>
         set(() => {
-          // chrome.storage.local.set({
-          //   partialToken: '',
-          //   recoveryToken: '',
-          // });
           return {
             persistedScreen: '',
             recoveryEmail: '',
@@ -140,12 +106,6 @@ export const authStore = createStore<AuthStore>()(
 
       notifyLogout: () =>
         set(() => {
-          // chrome.storage.local.set({
-          //   accessToken: '',
-          //   refreshToken: '',
-          //   partialToken: '',
-          //   recoveryToken: '',
-          // });
           return {
             persistedScreen: '',
             recoveryEmail: '',
@@ -165,20 +125,3 @@ export const authStore = createStore<AuthStore>()(
 
 export const useAuthStore = <T>(selector?: (state: AuthStore) => T) =>
   useStore(authStore, selector!);
-
-// const initStorage = async () => {
-//   const { serverUrl } = await chrome.storage.local.get(['serverUrl']);
-//   if (!serverUrl) {
-//     await chrome.storage.local.set({
-//       serverUrl: authStore.getState().serverUrl,
-//     });
-//   }
-
-//   const { deviceKey } = await chrome.storage.local.get(['deviceKey']);
-//   if (!deviceKey) {
-//     await chrome.storage.local.set({
-//       deviceKey: authStore.getState().deviceKey,
-//     });
-//   }
-// };
-// initStorage();

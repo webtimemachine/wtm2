@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import { useToast } from '@chakra-ui/react';
-import { useAuthStore } from '../store';
+import { authStore, useAuthStore } from '../store';
 
 import { apiClient } from '../utils/api.client';
 import {
@@ -12,9 +12,9 @@ import {
 export const useRestorePassword = () => {
   const toast = useToast();
   const notifyLogin = useAuthStore((state) => state.notifyLogin);
+  const { recoveryToken } = authStore.getState();
 
   const restorePassword = async (data: RestorePasswordData) => {
-    const { recoveryToken } = await chrome.storage.local.get(['recoveryToken']);
     if (!recoveryToken) throw new Error('recoveryToken is missing');
 
     const res = await apiClient.fetch('/api/auth/password/restore', {
@@ -28,10 +28,12 @@ export const useRestorePassword = () => {
     if (res.status === 200) {
       const response: LoginResponse = await res.json();
       const { accessToken, refreshToken } = response;
-      await chrome.storage.local.set({
+
+      authStore.setState({
         accessToken,
         refreshToken,
       });
+
       return response;
     } else {
       const errorRes: RestorePasswordErrorResponse = await res.json();

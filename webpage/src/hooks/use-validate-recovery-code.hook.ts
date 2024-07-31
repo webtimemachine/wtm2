@@ -7,6 +7,7 @@ import {
   ValidateRecoveryCodeErrorResponse,
   ValidateRecoveryCodeResponse,
 } from '../interfaces';
+import { authStore } from '@/store';
 
 export const useValidateRecoveryCode = () => {
   const toast = useToast();
@@ -23,7 +24,9 @@ export const useValidateRecoveryCode = () => {
     if (res.status === 200) {
       const response: ValidateRecoveryCodeResponse = await res.json();
       const { recoveryToken } = response;
-      await chrome.storage.local.set({ recoveryToken });
+      authStore.setState({
+        recoveryToken,
+      });
       return response;
     } else {
       const errorRes: ValidateRecoveryCodeErrorResponse = await res.json();

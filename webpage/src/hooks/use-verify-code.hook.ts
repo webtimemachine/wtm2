@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import { useToast } from '@chakra-ui/react';
 
-import { useAuthStore } from '../store';
+import { authStore, useAuthStore } from '../store';
 import { apiClient } from '../utils/api.client';
 import { VerifyCodeData, VerifyCodeErrorResponse } from '../interfaces';
 import { LoginResponse } from '../interfaces/login.interface';
@@ -11,7 +11,8 @@ export const useVerifyCode = () => {
   const notifyLogin = useAuthStore((state) => state.notifyLogin);
 
   const verificationCode = async (data: VerifyCodeData) => {
-    const { partialToken } = await chrome.storage.local.get(['partialToken']);
+    const { partialToken } = authStore.getState();
+
     if (!partialToken) throw new Error('partialToken is missing');
 
     const res = await apiClient.fetch('/api/auth/verify', {
@@ -25,7 +26,8 @@ export const useVerifyCode = () => {
     if (res.status === 200) {
       const response: LoginResponse = await res.json();
       const { accessToken, refreshToken } = response;
-      await chrome.storage.local.set({
+
+      authStore.setState({
         accessToken,
         refreshToken,
       });
