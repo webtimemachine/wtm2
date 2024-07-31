@@ -71,12 +71,12 @@ const mapScreenName = (screenName: ScreenName): JSX.Element => {
 
 let initialScreen: ScreenName = 'login';
 
-// const authState = readAuthStateFromLocal();
-// if (authState && authState.persistedScreen) {
-//   initialScreen = authState.persistedScreen;
-// } else if (authState && authState.isLoggedIn) {
-//   initialScreen = 'navigation-entries';
-// }
+const authState = readAuthStateFromLocal();
+if (authState && authState.persistedScreen) {
+  initialScreen = authState.persistedScreen;
+} else if (authState && authState.isLoggedIn) {
+  initialScreen = 'navigation-entries';
+}
 
 const useNavigationStore = create<NavigationStore>()((set) => ({
   CurrentScreen: () => mapScreenName(initialScreen),
