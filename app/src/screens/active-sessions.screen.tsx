@@ -150,6 +150,7 @@ export const ActiveSessionsScreen: React.FC<object> = () => {
                 type='text'
                 value={editingSessionName}
                 onChange={(e) => setEditingSessionName(e.target.value)}
+                autoFocus
               />
               <div className='flex gap-1 pl-4'>
                 <IconButton
