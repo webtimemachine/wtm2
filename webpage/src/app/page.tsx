@@ -1,14 +1,21 @@
-"use client"
+'use client';
 
-import { Button } from "@chakra-ui/react";
+import { useNavigation } from '@/store';
+import clsx from 'clsx';
 
 export default function Home() {
+  const { CurrentScreen } = useNavigation();
   return (
-    <div className="flex flex-col items-center p-5 gap-5">
-      <h1 className="text-3xl">Hello world 🌎</h1>
-      <Button onClick={()=>{
-        alert('AAAAAAAA')
-      }}>Test</Button>
+    <div className='flex w-full min-h-screen bg-slate-100'>
+      <div
+        className={clsx([
+          'flex w-full min-h-screen',
+          'mx-[auto] max-w-[1080px]',
+          'min-w-[500px]',
+        ])}
+      >
+        <CurrentScreen />
+      </div>
     </div>
   );
 }
