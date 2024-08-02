@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Text, IconButton, Input, Divider } from '@chakra-ui/react';
 import {
   ArrowBackIcon,
@@ -72,7 +72,7 @@ export const ActiveSessionsScreen: React.FC<object> = () => {
 
   const ActiveSessionRow: React.FC<ActiveSessionRowProps> = ({ session }) => {
     const deviceAlias = session.userDevice.deviceAlias;
-
+    
     const osName = session.userDevice.device.uaResult?.os.name;
     const deviceModel = session.userDevice.device.uaResult?.device.model;
     const browserName = getSupportedBrowserFromDevice(
@@ -108,7 +108,7 @@ export const ActiveSessionsScreen: React.FC<object> = () => {
 
     const BrowserIcon = getBrowserIconFromDevice(session.userDevice.device);
     const OSIcon = getOSIconFromDevice(session.userDevice.device);
-
+    
     return (
       <div key={session.id}>
         <div className='flex w-full justify-between items-center bg-white px-2 py-1 rounded-lg'>
@@ -152,6 +152,7 @@ export const ActiveSessionsScreen: React.FC<object> = () => {
                 type='text'
                 value={editingSessionName}
                 onChange={(e) => setEditingSessionName(e.target.value)}
+                autoFocus
               />
               <div className='flex gap-1 pl-4'>
                 <IconButton

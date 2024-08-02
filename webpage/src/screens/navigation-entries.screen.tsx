@@ -149,6 +149,13 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
 
   const prev = () => page > 0 && setPage(page - 1);
   const next = () => !(offset + limit >= count) && setPage(page + 1);
+  // Callback used for onClick Navigation Entry that redirects to te current element url.
+  const processOpenLinkCallback = async (url: string): Promise<void> => {
+    return new Promise((resolve) => {
+      window.open(url, '_blank');
+      resolve();
+    });
+  }
 
   return (
     <>
@@ -223,14 +230,12 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
               const BrowserIcon = getBrowserIconFromDevice(
                 element.userDevice.device,
               );
-
               return (
                 <NavigationEntry
                   key={i}
                   BrowserIcon={BrowserIcon}
                   deleteNavEntry={deleteNavigationEntryMutation.mutate}
-                  // processOpenLink={processOpenLink}
-                  processOpenLink={() => Promise.resolve()}
+                  processOpenLink={processOpenLinkCallback}
                   element={element}
                   isSemantic={isSemantic}
                 />
