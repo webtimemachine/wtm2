@@ -20,7 +20,7 @@ interface AuthState {
   enabledLiteMode: boolean;
 }
 
-interface AuthStore extends AuthState {
+export interface AuthStore extends AuthState {
   notifyLogin: () => void;
   notifyLogout: () => void;
   notifyEmailValidation: () => void;
