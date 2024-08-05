@@ -5,7 +5,7 @@ import { createStore } from 'zustand/vanilla';
 import { persist } from 'zustand/middleware';
 import { getRandomToken } from '../utils';
 
-import { ScreenName } from './navigation.store';
+import { ScreenName } from './use-screen-navigation';
 
 interface AuthState {
   deviceKey: string;
@@ -127,7 +127,7 @@ export const useAuthStore = <T>(selector?: (state: AuthStore) => T) =>
   useStore(authStore, selector!);
 
 export const readAuthStateFromLocal = (): AuthState | undefined => {
-  if(typeof window !== 'undefined' && localStorage){
+  if (typeof window !== 'undefined' && localStorage) {
     const authVanillaStoreData = localStorage.getItem('auth-vanilla-store');
     if (authVanillaStoreData && JSON.parse(authVanillaStoreData)?.state) {
       const state: AuthState = JSON.parse(authVanillaStoreData)?.state;
@@ -135,5 +135,4 @@ export const readAuthStateFromLocal = (): AuthState | undefined => {
     }
   }
   return undefined;
-  
 };

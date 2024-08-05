@@ -11,18 +11,18 @@ import {
 } from '@chakra-ui/icons';
 import { MdLogout } from 'react-icons/md';
 
-import { useNavigation } from '../store';
-import { ActiveSession } from '../interfaces/active-sessons.interface';
+import { useNavigation } from '@/store';
+import { ActiveSession } from '@/interfaces/active-sessons.interface';
 import {
   useCloseActiveSession,
   useGetActiveSessions,
   useUpdateDeviceAlias,
-} from '../hooks';
+} from '@/hooks';
 import {
   getBrowserIconFromDevice,
   getOSIconFromDevice,
   getSupportedBrowserFromDevice,
-} from '../utils';
+} from '@/utils';
 
 const moveCurrentSessionToFirst = (arr: ActiveSession[]) => {
   const currentIndex = arr.findIndex(
@@ -36,7 +36,7 @@ const moveCurrentSessionToFirst = (arr: ActiveSession[]) => {
   return arr;
 };
 
-export const ActiveSessionsScreen: React.FC<object> = () => {
+const ActiveSessionsScreen: React.FC<object> = () => {
   const { navigateBack } = useNavigation();
   const { getActiveSessionsQuery } = useGetActiveSessions();
   const { closeActiveSessionMutation } = useCloseActiveSession();
@@ -72,7 +72,7 @@ export const ActiveSessionsScreen: React.FC<object> = () => {
 
   const ActiveSessionRow: React.FC<ActiveSessionRowProps> = ({ session }) => {
     const deviceAlias = session.userDevice.deviceAlias;
-    
+
     const osName = session.userDevice.device.uaResult?.os.name;
     const deviceModel = session.userDevice.device.uaResult?.device.model;
     const browserName = getSupportedBrowserFromDevice(
@@ -108,7 +108,7 @@ export const ActiveSessionsScreen: React.FC<object> = () => {
 
     const BrowserIcon = getBrowserIconFromDevice(session.userDevice.device);
     const OSIcon = getOSIconFromDevice(session.userDevice.device);
-    
+
     return (
       <div key={session.id}>
         <div className='flex w-full justify-between items-center bg-white px-2 py-1 rounded-lg'>
@@ -217,3 +217,4 @@ export const ActiveSessionsScreen: React.FC<object> = () => {
     </>
   );
 };
+export default ActiveSessionsScreen;

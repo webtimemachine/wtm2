@@ -4,15 +4,15 @@ import React from 'react';
 import { Text, IconButton, Button, Icon } from '@chakra-ui/react';
 import { ArrowBackIcon } from '@chakra-ui/icons';
 
-import { useLogout } from '../hooks';
-import { useNavigation } from '../store';
+import { useLogout } from '@/hooks';
+import { useNavigation } from '@/store';
 
 import { LuSettings2 } from 'react-icons/lu';
 import { BsPersonLock, BsInfoCircle } from 'react-icons/bs';
 import { FaRegTrashAlt, FaSignOutAlt } from 'react-icons/fa';
 import { PiTabs } from 'react-icons/pi';
 
-export const SettingsScreen: React.FC<object> = () => {
+const SettingsScreen: React.FC<object> = () => {
   const { navigateBack, navigateTo } = useNavigation();
   const { logout } = useLogout();
 
@@ -81,3 +81,4 @@ export const SettingsScreen: React.FC<object> = () => {
     </>
   );
 };
+export default SettingsScreen;

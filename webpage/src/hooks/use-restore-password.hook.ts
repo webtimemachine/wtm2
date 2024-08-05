@@ -2,12 +2,12 @@ import { useMutation } from '@tanstack/react-query';
 import { useToast } from '@chakra-ui/react';
 import { authStore, useAuthStore } from '../store';
 
-import { apiClient } from '../utils/api.client';
+import { apiClient } from '@/utils/api.client';
 import {
   LoginResponse,
   RestorePasswordData,
   RestorePasswordErrorResponse,
-} from '../interfaces';
+} from '@/interfaces';
 
 export const useRestorePassword = () => {
   const toast = useToast();
@@ -44,7 +44,6 @@ export const useRestorePassword = () => {
   const restorePasswordMutation = useMutation({
     mutationFn: restorePassword,
     onSuccess: (loginRes) => {
-      console.log(loginRes);
       notifyLogin();
       toast({
         title: 'Welcome!',

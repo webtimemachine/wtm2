@@ -10,16 +10,16 @@ import {
   FormControl,
   FormErrorMessage,
 } from '@chakra-ui/react';
-import { ServerUrlEditable } from '../components';
-import { useLogin } from '../hooks';
-import { useAuthStore, useNavigation } from '../store';
-import { isLoginRes } from '../interfaces/login.interface';
+import { ServerUrlEditable } from '@/components';
+import { useLogin } from '@/hooks';
+import { useAuthStore, useNavigation } from '@/store';
+import { isLoginRes } from '@/interfaces/login.interface';
 
 import clsx from 'clsx';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-export const LoginScreen: React.FC<{}> = () => {
+const LoginScreen: React.FC<{}> = () => {
   const deviceKey = useAuthStore((state) => state.deviceKey);
 
   const { loginMutation } = useLogin();
@@ -159,3 +159,4 @@ export const LoginScreen: React.FC<{}> = () => {
     </>
   );
 };
+export default LoginScreen;
