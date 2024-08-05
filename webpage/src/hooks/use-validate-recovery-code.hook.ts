@@ -6,7 +6,7 @@ import {
   ValidateRecoveryCodeData,
   ValidateRecoveryCodeErrorResponse,
   ValidateRecoveryCodeResponse,
-} from '../interfaces';
+} from '@/interfaces';
 import { authStore } from '@/store';
 
 export const useValidateRecoveryCode = () => {

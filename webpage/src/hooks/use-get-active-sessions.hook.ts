@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 
 import { apiClient } from '../utils/api.client';
-import { ActiveSession } from '../interfaces';
+import { ActiveSession } from '@/interfaces';
 import { useHandleSessionExpired } from '.';
 
 export const useGetActiveSessions = () => {

@@ -3,9 +3,9 @@
 import React, { useEffect, useState } from 'react';
 import { Text, IconButton } from '@chakra-ui/react';
 import { ArrowBackIcon } from '@chakra-ui/icons';
-import { authStore, useNavigation } from '../store';
+import { authStore, useNavigation } from '@/store';
 import { manifestWeb } from '@/manifest-web';
-export const AboutWTMScreen: React.FC<object> = () => {
+const AboutWTMScreen: React.FC<object> = () => {
   const [backendURL, setBackendURL] = useState<string>('');
   const { navigateBack } = useNavigation();
   const { serverUrl } = authStore.getState();
@@ -23,19 +23,15 @@ export const AboutWTMScreen: React.FC<object> = () => {
           </IconButton>
           <div className='flex flex-col w-full items-center justify-center pr-[40px] gap-5'>
             <Text fontSize={'xx-large'} fontWeight={'bold'}>
-              About WTM
+              About
             </Text>
-            <Text>
-              {manifestWeb.description}
-            </Text>
+            <Text>{manifestWeb.description}</Text>
           </div>
-          
         </div>
         <div className='flex flex-col w-full min-h-[400px] gap-3'>
           <div className='flex gap-2 items-center w-full p-2 select-none bg-white rounded-lg'>
             <Text fontSize='medium'>
-              <span className='font-bold'>Version:</span>{' '}
-              {manifestWeb.version}
+              <span className='font-bold'>Version:</span> {manifestWeb.version}
             </Text>
           </div>
           <div className='flex gap-2 items-center w-full p-2 select-none bg-white rounded-lg'>
@@ -71,3 +67,4 @@ export const AboutWTMScreen: React.FC<object> = () => {
     </>
   );
 };
+export default AboutWTMScreen;

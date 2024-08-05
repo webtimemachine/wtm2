@@ -1,10 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { apiClient } from '../utils/api.client';
+import { apiClient } from '@/utils/api.client';
 import {
   GetNavigationEntriesData,
   GetNavigationEntriesResponse,
-} from '../interfaces';
+} from '@/interfaces';
 import { useHandleSessionExpired } from '.';
 
 export const useNavigationEntries = (params: GetNavigationEntriesData) => {
