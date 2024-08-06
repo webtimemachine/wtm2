@@ -1,17 +1,17 @@
 import React from 'react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { ChakraProvider } from '@chakra-ui/react';
-import { useAuthStore, useNavigation } from '../../store';
-import { useGetPreferences, useUpdatePreferences } from '../../hooks';
-import { PreferencesScreen } from '../preferences.screen';
+import { useAuthStore, useNavigation } from '../../../store';
+import { useGetPreferences, useUpdatePreferences } from '../../../hooks';
+import PreferencesScreen from '../page';
 
 // Mock de useNavigation, useGetPreferences y useUpdatePreferences
-jest.mock('../../store', () => ({
+jest.mock('../../../store', () => ({
   useNavigation: jest.fn(),
   useAuthStore: jest.fn(),
 }));
 
-jest.mock('../../hooks', () => ({
+jest.mock('../../../hooks', () => ({
   useGetPreferences: jest.fn(),
   useUpdatePreferences: jest.fn(),
 }));

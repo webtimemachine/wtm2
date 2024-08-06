@@ -1,22 +1,22 @@
 import React from 'react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { ChakraProvider } from '@chakra-ui/react';
-import { useLogin } from '../../hooks';
-import { useAuthStore, useNavigation } from '../../store';
-import { LoginScreen } from '../login.screen';
+import { useLogin } from '../../../hooks';
+import { useAuthStore, useNavigation } from '../../../store';
+import LoginScreen from '../page';
 
 // Mock de ServerUrlEditable
-jest.mock('../../components', () => ({
+jest.mock('../../../components', () => ({
   ServerUrlEditable: jest.fn(() => <div>ServerUrlEditable Mock</div>),
 }));
 
 // Mock del hook useLogin
-jest.mock('../../hooks', () => ({
+jest.mock('../../../hooks', () => ({
   useLogin: jest.fn(),
 }));
 
 // Mock de useAuthStore
-jest.mock('../../store', () => ({
+jest.mock('../../../store', () => ({
   useAuthStore: jest.fn(),
   useNavigation: jest.fn(),
 }));

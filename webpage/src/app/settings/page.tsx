@@ -4,15 +4,15 @@ import React from 'react';
 import { Text, IconButton, Button, Icon } from '@chakra-ui/react';
 import { ArrowBackIcon } from '@chakra-ui/icons';
 
-import { useLogout } from '../hooks';
-import { useNavigation } from '../store';
+import { useLogout } from '@/hooks';
+import { useNavigation } from '@/store';
 
 import { LuSettings2 } from 'react-icons/lu';
 import { BsPersonLock, BsInfoCircle } from 'react-icons/bs';
 import { FaRegTrashAlt, FaSignOutAlt } from 'react-icons/fa';
 import { PiTabs } from 'react-icons/pi';
 
-export const SettingsScreen: React.FC<object> = () => {
+const SettingsScreen: React.FC<object> = () => {
   const { navigateBack, navigateTo } = useNavigation();
   const { logout } = useLogout();
 
@@ -53,10 +53,10 @@ export const SettingsScreen: React.FC<object> = () => {
           </div>
           <div
             className='flex gap-2 items-center w-full p-2 select-none bg-white rounded-lg cursor-pointer'
-            onClick={() => navigateTo('about-wtm')}
+            onClick={() => navigateTo('about')}
           >
             <Icon as={BsInfoCircle} boxSize={5} color='gray.600' />
-            <Text fontSize='medium'>About WTM</Text>
+            <Text fontSize='medium'>About</Text>
           </div>
           <div
             className='flex gap-2 items-center w-full p-2 select-none bg-white rounded-lg cursor-pointer'
@@ -68,7 +68,7 @@ export const SettingsScreen: React.FC<object> = () => {
             </Text>
           </div>
         </div>
-        <div className='pb-8'>
+        <div className='pb-8 m-5'>
           <Button
             rightIcon={<FaSignOutAlt />}
             colorScheme='blue'
@@ -81,3 +81,4 @@ export const SettingsScreen: React.FC<object> = () => {
     </>
   );
 };
+export default SettingsScreen;

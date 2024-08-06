@@ -1,10 +1,16 @@
 'use client';
 
-import { useNavigation } from '../store';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import clsx from 'clsx';
 
 export default function Home() {
-  const { CurrentScreen } = useNavigation();
+  const router = useRouter();
+
+  useEffect(() => {
+    router.push('/login');
+  }, [router]);
+
   return (
     <div className='flex w-full min-h-screen bg-slate-100'>
       <div
@@ -14,7 +20,7 @@ export default function Home() {
           'min-w-[500px]',
         ])}
       >
-        <CurrentScreen />
+        {/* Puedes añadir contenido adicional aquí */}
       </div>
     </div>
   );

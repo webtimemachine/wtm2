@@ -16,14 +16,14 @@ import {
 import { Icon, InfoIcon } from '@chakra-ui/icons';
 import { LuLogIn } from 'react-icons/lu';
 
-import { useAuthStore, useNavigation } from '../store';
-import { useRestorePassword } from '../hooks';
+import { useAuthStore, useNavigation } from '@/store';
+import { useRestorePassword } from '@/hooks';
 
 const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[^\s]{8,20}$/;
 const passwordRegexMessage =
   'Password must be between 8 and 20 characters long and contain at least one uppercase letter, one lowercase letter, and one digit. Spaces are not allowed.';
 
-export const RecoveryNewPassword: React.FC<{}> = () => {
+const RecoveryNewPassword: React.FC<{}> = () => {
   const { navigateTo } = useNavigation();
   const { recoveryEmail, deviceKey } = useAuthStore((state) => state);
   const { restorePasswordMutation } = useRestorePassword();
@@ -219,3 +219,4 @@ export const RecoveryNewPassword: React.FC<{}> = () => {
     </>
   );
 };
+export default RecoveryNewPassword;

@@ -3,9 +3,10 @@
 import React, { useEffect, useState } from 'react';
 import { Text, IconButton } from '@chakra-ui/react';
 import { ArrowBackIcon } from '@chakra-ui/icons';
-import { useAuthStore, useNavigation } from '../store';
-import { manifestWeb } from '@/manifest-web';
-export const AboutWTMScreen: React.FC<object> = () => {
+import { useAuthStore, useNavigation } from '../../store';
+import { manifestWeb } from '../../manifest-web';
+
+const AboutWTMScreen: React.FC<object> = () => {
   const [backendURL, setBackendURL] = useState<string>('');
   const { navigateBack } = useNavigation();
 
@@ -24,7 +25,7 @@ export const AboutWTMScreen: React.FC<object> = () => {
           </IconButton>
           <div className='flex flex-col w-full items-center justify-center pr-[40px] gap-5'>
             <Text fontSize={'xx-large'} fontWeight={'bold'}>
-              About WTM
+              About
             </Text>
             <Text>{manifestWeb.description}</Text>
           </div>
@@ -68,3 +69,4 @@ export const AboutWTMScreen: React.FC<object> = () => {
     </>
   );
 };
+export default AboutWTMScreen;

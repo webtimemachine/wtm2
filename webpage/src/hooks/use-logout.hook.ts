@@ -1,4 +1,4 @@
-import { useAuthStore, useNavigation } from '../store';
+import { useAuthStore, useNavigation } from '@/store';
 
 export const useLogout = () => {
   const { navigateTo } = useNavigation();
