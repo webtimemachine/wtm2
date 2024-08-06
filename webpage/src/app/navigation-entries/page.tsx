@@ -20,16 +20,13 @@ import {
   SmallCloseIcon,
 } from '@chakra-ui/icons';
 import { BsStars } from 'react-icons/bs';
-
-import { useDeleteNavigationEntry, useNavigationEntries } from '@/hooks';
+import { useDeleteNavigationEntry, useNavigationEntries } from '../../hooks';
 import {
   CompleteNavigationEntryDto,
   NavEntryProps,
-} from '@/interfaces/navigation-entry.interface';
-
-import { useNavigation } from '@/store';
-import { getBrowserIconFromDevice } from '@/utils';
-
+} from '../../interfaces/navigation-entry.interface';
+import { useNavigation } from '../../store';
+import { getBrowserIconFromDevice } from '../../utils';
 import clsx from 'clsx';
 
 const truncateString = (str: string, maxLength: number) => {
