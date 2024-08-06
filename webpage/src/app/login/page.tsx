@@ -9,6 +9,7 @@ import {
   Text,
   FormControl,
   FormErrorMessage,
+  InputLeftAddon,
 } from '@chakra-ui/react';
 import { ServerUrlEditable } from '../../components';
 import { useLogin } from '../../hooks';
@@ -17,6 +18,7 @@ import { isLoginRes } from '../../interfaces/login.interface';
 
 import clsx from 'clsx';
 import { readAuthStateFromLocal } from '../../store/auth.store';
+import { AtSignIcon, LockIcon } from '@chakra-ui/icons';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -83,10 +85,14 @@ const LoginScreen: React.FC<{}> = () => {
   }, [authState]);
 
   return (
-    <>
-      <div className='flex flex-col p-8 pt-10 items-center w-full'>
+    <div className='flex justify-center items-center h-screen'>
+      <div className='flex flex-col p-8 pt-10 items-center h-1/2 w-1/3 bg-white rounded-md  shadow-2xl transition-shadow filter drop-shadow'>
         <div className='pb-4'>
-          <Text fontSize={'xx-large'} fontWeight={'bold'}>
+          <Text
+            fontSize={'xx-large'}
+            fontWeight={'bold'}
+            className='animate-text bg-gradient-to-br from-gray-200 via-gray-500 to-black bg-clip-text text-transparent text-5xl font-black'
+          >
             WebTM
           </Text>
         </div>
@@ -98,18 +104,23 @@ const LoginScreen: React.FC<{}> = () => {
           <div
             className={clsx(['flex flex-col w-full', !emailError && 'pb-4'])}
           >
-            <Input
-              type='text'
-              name='email'
-              placeholder='Email'
-              value={email}
-              autoCapitalize='false'
-              onChange={(event) => {
-                setEmail(event.target.value);
-                if (emailError) setEmailError('');
-              }}
-              backgroundColor={'white'}
-            />
+            <InputGroup>
+              <InputLeftAddon>
+                <AtSignIcon />
+              </InputLeftAddon>
+              <Input
+                type='text'
+                name='email'
+                placeholder='Email'
+                value={email}
+                autoCapitalize='false'
+                onChange={(event) => {
+                  setEmail(event.target.value);
+                  if (emailError) setEmailError('');
+                }}
+                backgroundColor={'white'}
+              />
+            </InputGroup>
             <div className='[&>div]:mt-1 [&>div]:mb-1'>
               <FormErrorMessage>{emailError}</FormErrorMessage>
             </div>
@@ -118,6 +129,9 @@ const LoginScreen: React.FC<{}> = () => {
 
         <div className='flex flex-col w-full pb-4'>
           <InputGroup size='md'>
+            <InputLeftAddon>
+              <LockIcon />
+            </InputLeftAddon>
             <Input
               pr='4.5rem'
               type={showPass ? 'text' : 'password'}
@@ -166,7 +180,7 @@ const LoginScreen: React.FC<{}> = () => {
           </Button>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 export default LoginScreen;
