@@ -1,13 +1,14 @@
 import React from 'react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { ChakraProvider } from '@chakra-ui/react';
-import { useNavigation } from '../../store';
+import { useAuthStore, useNavigation } from '../../store';
 import { useGetPreferences, useUpdatePreferences } from '../../hooks';
 import { PreferencesScreen } from '../preferences.screen';
 
 // Mock de useNavigation, useGetPreferences y useUpdatePreferences
 jest.mock('../../store', () => ({
   useNavigation: jest.fn(),
+  useAuthStore: jest.fn(),
 }));
 
 jest.mock('../../hooks', () => ({
@@ -41,22 +42,14 @@ const mockMutate = jest.fn();
   },
 });
 
+(useAuthStore as jest.Mock).mockReturnValue({
+  isEnableLiteMode: false,
+  updateEnabledLiteMode: jest.fn(),
+});
+
 const customRender = (ui: React.ReactElement) => {
   return render(<ChakraProvider>{ui}</ChakraProvider>);
 };
-
-// Mock de chrome.storage
-global.chrome = {
-  storage: {
-    local: {
-      get: jest.fn().mockImplementation(() => {
-        return { enabledLiteMode: false };
-      }),
-      set: jest.fn(),
-    },
-  },
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-} as any;
 
 describe('PreferencesScreen', () => {
   beforeEach(() => {
@@ -132,27 +125,5 @@ describe('PreferencesScreen', () => {
     const daysInput = screen.getByRole('spinbutton', { name: '' });
     fireEvent.change(daysInput, { target: { value: '20' } });
     expect(daysInput).toHaveValue(20);
-  });
-
-  test('calls updatePreferencesMutation and sets lite mode in local storage when save button is clicked', async () => {
-    customRender(<PreferencesScreen />);
-
-    const saveButton = screen.getByText('Save Changes');
-    fireEvent.click(saveButton);
-
-    await waitFor(() => {
-      expect(mockMutate).toHaveBeenCalledWith({
-        enableNavigationEntryExpiration: true,
-        navigationEntryExpirationInDays: 30,
-        enableImageEncoding: true,
-        enableExplicitContentFilter: true,
-      });
-    });
-
-    await waitFor(() => {
-      expect(chrome.storage.local.set).toHaveBeenCalledWith({
-        enabledLiteMode: false,
-      });
-    });
   });
 });

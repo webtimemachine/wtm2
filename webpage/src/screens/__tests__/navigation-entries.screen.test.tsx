@@ -31,13 +31,6 @@ const mockRefetch = jest.fn();
   },
 });
 
-global.chrome = {
-  action: {
-    setIcon: jest.fn(),
-  },
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-} as any;
-
 const mockNavigationEntries: CompleteNavigationEntryDto[] = [
   {
     id: 1,

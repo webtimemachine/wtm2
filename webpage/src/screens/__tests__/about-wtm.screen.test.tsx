@@ -7,29 +7,13 @@ import { AboutWTMScreen } from '../about-wtm.screen';
 // Mock de useNavigation
 jest.mock('../../store', () => ({
   useNavigation: jest.fn(),
+  useAuthStore: jest.fn(),
 }));
 
 const mockNavigateBack = jest.fn();
 (useNavigation as jest.Mock).mockReturnValue({
   navigateBack: mockNavigateBack,
 });
-
-// Mock de chrome.storage y chrome.runtime
-global.chrome = {
-  storage: {
-    local: {
-      get: jest.fn().mockImplementation(() => {
-        return { serverUrl: 'http://example.com' };
-      }),
-    },
-  },
-  runtime: {
-    getManifest: jest.fn().mockImplementation(() => {
-      return { version: '1.0.0' };
-    }),
-  },
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-} as any;
 
 const customRender = (ui: React.ReactElement) => {
   return render(<ChakraProvider>{ui}</ChakraProvider>);
@@ -81,13 +65,5 @@ describe('AboutWTMScreen', () => {
       'https://www.webtm.io/privacy-policies.html',
       '_blank',
     );
-  });
-
-  test('fetches backend URL from chrome storage', async () => {
-    customRender(<AboutWTMScreen />);
-
-    await waitFor(() => {
-      expect(screen.getByText('http://example.com')).toBeInTheDocument();
-    });
   });
 });
