@@ -3,11 +3,10 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import ReactQueryProvider from "@/providers/ReactQueryProvider";
 import { ChakraProvider } from "@chakra-ui/react";
-
 const inter = Inter({ subsets: ["latin"] });
-
+import { manifestWeb } from "../manifest-web";
 export const metadata: Metadata = {
-  title: "WebTM",
+  title: manifestWeb.name,
 };
 
 export default function RootLayout({
@@ -17,6 +16,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link rel="icon" type="image/x-icon" href="./app-icon.png" />
+      </head>
       <body className={`${inter.className} bg-slate-100`}>
         <ReactQueryProvider>
           <ChakraProvider>{children}</ChakraProvider>
