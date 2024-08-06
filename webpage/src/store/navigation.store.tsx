@@ -1,7 +1,10 @@
 // import { create } from 'zustand';
 // import { last } from '@/utils';
 import { useAuthStore } from './auth.store';
-import { useScreenNavigation, ScreenName } from '@/store/use-screen-navigation';
+import {
+  useScreenNavigation,
+  ScreenName,
+} from '../store/use-screen-navigation';
 /* 
 **************************IMPORTANT**************************
 The reason of commented code is that, maybe it helps for some development, or something. 
