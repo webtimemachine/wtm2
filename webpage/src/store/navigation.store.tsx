@@ -2,6 +2,12 @@
 // import { last } from '@/utils';
 import { useAuthStore } from './auth.store';
 import { useScreenNavigation, ScreenName } from '@/store/use-screen-navigation';
+/* 
+**************************IMPORTANT**************************
+The reason of commented code is that, maybe it helps for some development, or something. 
+This file needs to be relocated, since it's no more a store.
+**************************IMPORTANT**************************
+*/
 
 // interface NavigationStore {
 //   CurrentScreen: ScreenName;
