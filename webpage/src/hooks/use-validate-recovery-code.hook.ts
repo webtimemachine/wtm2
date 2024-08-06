@@ -6,8 +6,8 @@ import {
   ValidateRecoveryCodeData,
   ValidateRecoveryCodeErrorResponse,
   ValidateRecoveryCodeResponse,
-} from '@/interfaces';
-import { authStore } from '@/store';
+} from '../interfaces';
+import { authStore } from '../store';
 
 export const useValidateRecoveryCode = () => {
   const toast = useToast();

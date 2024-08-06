@@ -1,4 +1,4 @@
-import { authStore } from '@/store';
+import { authStore } from '../store';
 import {
   LoginData,
   LoginResponse,
@@ -54,7 +54,6 @@ class ApiClient {
       }
 
       return res;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       if (error?.message === 'Unauthorized') {
         await this.refresh();
