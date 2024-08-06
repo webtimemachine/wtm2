@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Text, IconButton, Input, Divider } from '@chakra-ui/react';
+import { Text, IconButton, Input, Divider, Badge } from '@chakra-ui/react';
 import {
   ArrowBackIcon,
   EditIcon,
@@ -80,8 +80,6 @@ export const ActiveSessionsScreen: React.FC<object> = () => {
 
     let name = deviceAlias || `${browserName} - ${deviceModel || osName} `;
 
-    if (session.userDevice.isCurrentDevice) name = `${name} (current)`;
-
     const handleCloseActiveSession = () => {
       closeActiveSessionMutation.mutate({
         sessionIds: [session.id] as number[],
@@ -115,7 +113,12 @@ export const ActiveSessionsScreen: React.FC<object> = () => {
               <div className='flex gap-2 items-center'>
                 <Icon as={BrowserIcon} boxSize={8} color='gray.600' />
                 <div className='flex flex-col'>
-                  <Text fontSize='medium'>{name}</Text>
+                  <Text fontSize='medium'>
+                    {name}{' '}
+                    {session.userDevice.isCurrentDevice && (
+                      <Badge colorScheme='green'>current</Badge>
+                    )}
+                  </Text>
                   <div className='flex gap-1 items-center'>
                     <Icon as={OSIcon} boxSize={3} color='gray.600' />
                     <Text fontSize='small' color='gray.600'>
