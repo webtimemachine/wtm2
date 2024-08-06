@@ -10,13 +10,13 @@ import {
   FormControl,
   FormErrorMessage,
 } from '@chakra-ui/react';
-import { ServerUrlEditable } from '@/components';
-import { useLogin } from '@/hooks';
-import { useAuthStore, useNavigation } from '@/store';
-import { isLoginRes } from '@/interfaces/login.interface';
+import { ServerUrlEditable } from '../../components';
+import { useLogin } from '../../hooks';
+import { useAuthStore, useNavigation } from '../../store';
+import { isLoginRes } from '../../interfaces/login.interface';
 
 import clsx from 'clsx';
-import { readAuthStateFromLocal } from '@/store/auth.store';
+import { readAuthStateFromLocal } from '../../store/auth.store';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
