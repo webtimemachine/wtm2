@@ -9,28 +9,9 @@ global.fetch = jest.fn(() => {
       refreshToken: 'mockRefreshToken',
     })),
   });
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 }) as any;
 
 describe('ApiClient', () => {
-  beforeAll(() => {
-    // Mocking the chrome storage local API
-    global.chrome = {
-      storage: {
-        local: {
-          get: jest.fn().mockImplementation(() => {
-            return {
-              accessToken: 'mockAccessToken',
-              serverUrl: 'https://test.com',
-            };
-          }),
-          set: jest.fn(),
-        },
-      },
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } as any;
-  });
-
   afterAll(() => {
     jest.restoreAllMocks(); // Restore all mocks after tests are done
   });
@@ -53,23 +34,6 @@ describe('ApiClient', () => {
 
   describe('login', () => {
     it('should call fetch with the correct URL, options, and handle successful login', async () => {
-      // Mock fetch to return a resolved promise with a dummy response
-      global.chrome = {
-        storage: {
-          local: {
-            get: jest.fn().mockImplementation(() => {
-              return {
-                accessToken: 'mockAccessToken',
-                refreshToken: 'mockRefreshToken',
-                serverUrl: 'https://test.com/',
-              };
-            }),
-            set: jest.fn(),
-          },
-        },
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } as any;
-
       const loginData: LoginData = {
         email: 'test@mail.com',
         password: 'pass123',
