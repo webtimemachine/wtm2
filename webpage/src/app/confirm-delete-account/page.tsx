@@ -30,8 +30,8 @@ const ConfirmDeleteAccountScreen: React.FC<object> = () => {
           </div>
         </div>
         <div className='flex justify-center items-center w-full h-max rounded'>
-          <div className='flex flex-col justify-center items-center bg-gray-200 w-1/3'>
-            <div className='flex flex-col justify-center items-center m-5 gap-5'>
+          <div className='flex flex-col justify-center items-center bg-white w-full max-w-[600px] mx-auto rounded-lg'>
+            <div className='flex flex-col justify-center items-center m-5 gap-2'>
               <Text
                 fontWeight={600}
                 fontSize={'medium'}
@@ -40,16 +40,17 @@ const ConfirmDeleteAccountScreen: React.FC<object> = () => {
               >
                 Do you confirm that you want to delete your account data?
               </Text>
-              <Text fontWeight={700}>
+              <Text align={'center'}>
                 Once this information is deleted, it cannot be recovered again.
               </Text>
             </div>
             <div className='flex justify-center gap-5 w-100 p-8'>
-              <Button colorScheme='red' onClick={() => navigateBack()}>
+              <Button onClick={() => navigateBack()} colorScheme='blue'>
                 Cancel
               </Button>
               <Button
-                colorScheme='blue'
+                colorScheme='red'
+                variant={'outline'}
                 onClick={() => confirmDeleteAccountMutation.mutate()}
               >
                 Confirm
