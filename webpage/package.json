@@ -7,8 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "jest --passWithNoTests",
-    "test:cov": "jest --passWithNoTests --coverage"
+    "test": "jest --passWithNoTests --detectOpenHandles",
+    "test:cov": "jest --passWithNoTests --detectOpenHandles --coverage"
   },
   "dependencies": {
     "@chakra-ui/icons": "^2.1.1",

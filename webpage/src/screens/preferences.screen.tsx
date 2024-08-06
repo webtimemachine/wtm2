@@ -11,7 +11,7 @@ import {
 } from '@chakra-ui/react';
 import { ArrowBackIcon } from '@chakra-ui/icons';
 import { useGetPreferences, useUpdatePreferences } from '../hooks';
-import { authStore, useNavigation } from '../store';
+import { useAuthStore, useNavigation } from '../store';
 
 export const PreferencesScreen: React.FC<object> = () => {
   const [enabled, setEnabled] = useState(false);
@@ -23,7 +23,11 @@ export const PreferencesScreen: React.FC<object> = () => {
   const { navigateBack } = useNavigation();
   const { userPreferencesQuery } = useGetPreferences();
   const { updatePreferencesMutation } = useUpdatePreferences();
-  const { enabledLiteMode: isEnableLiteMode } = authStore.getState();
+
+  const isEnableLiteMode = useAuthStore((state) => state.enabledLiteMode);
+  const setIsEnabledLiteMode = useAuthStore(
+    (state) => state.updateEnabledLiteMode,
+  );
 
   useEffect(() => {
     if (!enabled) {
@@ -51,10 +55,7 @@ export const PreferencesScreen: React.FC<object> = () => {
       enableImageEncoding: imageEncodingEnabled,
       enableExplicitContentFilter: explicitContentFilterEnabled,
     });
-
-    authStore.setState({
-      enabledLiteMode,
-    });
+    setIsEnabledLiteMode(enabledLiteMode);
   };
 
   useEffect(() => {

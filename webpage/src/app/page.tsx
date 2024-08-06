@@ -1,6 +1,6 @@
 'use client';
 
-import { useNavigation } from '@/store';
+import { useNavigation } from '../store';
 import clsx from 'clsx';
 
 export default function Home() {
