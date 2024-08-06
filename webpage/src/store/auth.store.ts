@@ -135,9 +135,13 @@ export const useAuthStore = <T>(selector?: (state: AuthStore) => T) =>
   useStore(authStore, selector!);
 
 export const readAuthStateFromLocal = (): AuthState | undefined => {
-  const authVanillaStoreData = localStorage.getItem('auth-vanilla-store');
-  if (authVanillaStoreData && JSON.parse(authVanillaStoreData)?.state) {
-    const state: AuthState = JSON.parse(authVanillaStoreData)?.state;
-    return state;
+  if(typeof window !== 'undefined' && localStorage){
+    const authVanillaStoreData = localStorage.getItem('auth-vanilla-store');
+    if (authVanillaStoreData && JSON.parse(authVanillaStoreData)?.state) {
+      const state: AuthState = JSON.parse(authVanillaStoreData)?.state;
+      return state;
+    }
   }
+  return undefined;
+  
 };
