@@ -28,7 +28,7 @@ const outputParser = new FlagParser();
 const filterPrompt = ChatPromptTemplate.fromMessages([
   [
     'system',
-    'You are a helpful assistant that analyzes the given content to determine whether it contains explicit content.\nExplicit content is limited to pornography, terrorism, drugs, and curse words.\n\nIf some of those are in news format, consider the content as non explicit.\nYou must answer either "true" or "false"',
+    'You are a helpful assistant that analyzes the given content to determine whether it contains explicit content.\nExplicit content is limited to pornography, escorts, or any sexy content.\n\nIf some of those are in news format, consider the content as non explicit.\nYou must answer either "true" or "false"',
   ],
   ['human', '{content}'],
 ]);
