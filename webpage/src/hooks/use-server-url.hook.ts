@@ -1,4 +1,4 @@
-import { useAuthStore } from '../store';
+import { useAuthStore } from '@/store';
 
 export const useServerUrl = () => {
   const serverUrl = useAuthStore((state) => state.serverUrl);

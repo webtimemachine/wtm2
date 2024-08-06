@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useMemo, useState } from 'react';
-import { Text, IconButton, Input, Divider } from '@chakra-ui/react';
+import { Text, IconButton, Input, Divider, Badge } from '@chakra-ui/react';
 import {
   ArrowBackIcon,
   EditIcon,
@@ -11,18 +11,18 @@ import {
 } from '@chakra-ui/icons';
 import { MdLogout } from 'react-icons/md';
 
-import { useNavigation } from '../store';
-import { ActiveSession } from '../interfaces/active-sessons.interface';
+import { useNavigation } from '@/store';
+import { ActiveSession } from '@/interfaces/active-sessons.interface';
 import {
   useCloseActiveSession,
   useGetActiveSessions,
   useUpdateDeviceAlias,
-} from '../hooks';
+} from '@/hooks';
 import {
   getBrowserIconFromDevice,
   getOSIconFromDevice,
   getSupportedBrowserFromDevice,
-} from '../utils';
+} from '@/utils';
 
 const moveCurrentSessionToFirst = (arr: ActiveSession[]) => {
   const currentIndex = arr.findIndex(
@@ -36,7 +36,7 @@ const moveCurrentSessionToFirst = (arr: ActiveSession[]) => {
   return arr;
 };
 
-export const ActiveSessionsScreen: React.FC<object> = () => {
+const ActiveSessionsScreen: React.FC<object> = () => {
   const { navigateBack } = useNavigation();
   const { getActiveSessionsQuery } = useGetActiveSessions();
   const { closeActiveSessionMutation } = useCloseActiveSession();
@@ -72,7 +72,7 @@ export const ActiveSessionsScreen: React.FC<object> = () => {
 
   const ActiveSessionRow: React.FC<ActiveSessionRowProps> = ({ session }) => {
     const deviceAlias = session.userDevice.deviceAlias;
-    
+
     const osName = session.userDevice.device.uaResult?.os.name;
     const deviceModel = session.userDevice.device.uaResult?.device.model;
     const browserName = getSupportedBrowserFromDevice(
@@ -81,8 +81,6 @@ export const ActiveSessionsScreen: React.FC<object> = () => {
     const isCurrentDevice = session.userDevice.isCurrentDevice;
 
     let name = deviceAlias || `${browserName} - ${deviceModel || osName} `;
-
-    if (session.userDevice.isCurrentDevice) name = `${name} (current)`;
 
     const handleCloseActiveSession = () => {
       closeActiveSessionMutation.mutate({
@@ -108,7 +106,7 @@ export const ActiveSessionsScreen: React.FC<object> = () => {
 
     const BrowserIcon = getBrowserIconFromDevice(session.userDevice.device);
     const OSIcon = getOSIconFromDevice(session.userDevice.device);
-    
+
     return (
       <div key={session.id}>
         <div className='flex w-full justify-between items-center bg-white px-2 py-1 rounded-lg'>
@@ -117,7 +115,12 @@ export const ActiveSessionsScreen: React.FC<object> = () => {
               <div className='flex gap-2 items-center'>
                 <Icon as={BrowserIcon} boxSize={8} color='gray.600' />
                 <div className='flex flex-col'>
-                  <Text fontSize='medium'>{name}</Text>
+                  <Text fontSize='medium'>
+                    {name}{' '}
+                    {session.userDevice.isCurrentDevice && (
+                      <Badge colorScheme='green'>current</Badge>
+                    )}
+                  </Text>{' '}
                   <div className='flex gap-1 items-center'>
                     <Icon as={OSIcon} boxSize={3} color='gray.600' />
                     <Text fontSize='small' color='gray.600'>
@@ -217,3 +220,4 @@ export const ActiveSessionsScreen: React.FC<object> = () => {
     </>
   );
 };
+export default ActiveSessionsScreen;

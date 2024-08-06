@@ -7,7 +7,7 @@ import {
   RecoverPasswordData,
   RecoverPasswordResponse,
   VerifyCodeErrorResponse,
-} from '../interfaces';
+} from '@/interfaces';
 
 export const useRecoverPassword = () => {
   const toast = useToast();
@@ -34,7 +34,6 @@ export const useRecoverPassword = () => {
   const recoverPasswordMutation = useMutation({
     mutationFn: recoverPassword,
     onSuccess: (res) => {
-      console.log(res);
       toast({
         status: 'success',
         title: 'Recovery code sent!',

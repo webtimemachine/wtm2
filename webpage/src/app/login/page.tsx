@@ -10,16 +10,17 @@ import {
   FormControl,
   FormErrorMessage,
 } from '@chakra-ui/react';
-import { ServerUrlEditable } from '../components';
-import { useLogin } from '../hooks';
-import { useAuthStore, useNavigation } from '../store';
-import { isLoginRes } from '../interfaces/login.interface';
+import { ServerUrlEditable } from '../../components';
+import { useLogin } from '../../hooks';
+import { useAuthStore, useNavigation } from '../../store';
+import { isLoginRes } from '../../interfaces/login.interface';
 
 import clsx from 'clsx';
+import { readAuthStateFromLocal } from '../../store/auth.store';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-export const LoginScreen: React.FC<{}> = () => {
+const LoginScreen: React.FC<{}> = () => {
   const deviceKey = useAuthStore((state) => state.deviceKey);
 
   const { loginMutation } = useLogin();
@@ -30,6 +31,9 @@ export const LoginScreen: React.FC<{}> = () => {
   const [showPass, setShowPass] = useState(false);
 
   const [emailError, setEmailError] = useState('');
+
+  const authState = readAuthStateFromLocal();
+  const { navigateTo: navigateToScreen } = useNavigation();
 
   const validateInputs = () => {
     let emailErrorFound = false;
@@ -71,6 +75,12 @@ export const LoginScreen: React.FC<{}> = () => {
         navigateTo('validate-email');
       }
   }, [loginMutation.isSuccess, loginMutation.data]);
+  // For redirection if user is logged in.
+  useEffect(() => {
+    if (authState && authState.isLoggedIn) {
+      navigateToScreen('navigation-entries');
+    }
+  }, [authState]);
 
   return (
     <>
@@ -159,3 +169,4 @@ export const LoginScreen: React.FC<{}> = () => {
     </>
   );
 };
+export default LoginScreen;

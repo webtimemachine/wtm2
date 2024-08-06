@@ -5,10 +5,10 @@ import { Button, IconButton, Input, Text } from '@chakra-ui/react';
 import { Icon } from '@chakra-ui/icons';
 import { LuLogIn } from 'react-icons/lu';
 
-import { useValidateRecoveryCode } from '../hooks';
-import { useAuthStore, useNavigation } from '../store';
+import { useValidateRecoveryCode } from '@/hooks';
+import { useAuthStore, useNavigation } from '@/store';
 
-export const ValidateRecoveryCode: React.FC<{}> = () => {
+const ValidateRecoveryCode: React.FC<{}> = () => {
   const [recoveryCode, setRecoveryCode] = useState('');
 
   const { navigateTo } = useNavigation();
@@ -86,3 +86,4 @@ export const ValidateRecoveryCode: React.FC<{}> = () => {
     </>
   );
 };
+export default ValidateRecoveryCode;

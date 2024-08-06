@@ -5,11 +5,11 @@ import { Button, IconButton, Input, Text } from '@chakra-ui/react';
 import { RepeatIcon, Icon } from '@chakra-ui/icons';
 import { LuLogIn } from 'react-icons/lu';
 
-import { useAuthStore, useNavigation } from '../store';
-import { ServerUrlEditable } from '../components';
-import { useResendCode, useVerifyCode } from '../hooks';
+import { useAuthStore, useNavigation } from '@/store';
+import { ServerUrlEditable } from '@/components';
+import { useResendCode, useVerifyCode } from '@/hooks';
 
-export const ValidateEmailScreen: React.FC<{}> = () => {
+const ValidateEmailScreen: React.FC<{}> = () => {
   const { deviceKey } = useAuthStore((state) => state);
 
   const { navigateTo } = useNavigation();
@@ -100,3 +100,4 @@ export const ValidateEmailScreen: React.FC<{}> = () => {
     </>
   );
 };
+export default ValidateEmailScreen;

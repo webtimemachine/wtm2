@@ -13,14 +13,14 @@ import {
 } from '@chakra-ui/react';
 import { ArrowBackIcon } from '@chakra-ui/icons';
 
-import { useAuthStore, useNavigation } from '../store';
-import { ServerUrlEditable } from '../components';
+import { useAuthStore, useNavigation } from '@/store';
+import { ServerUrlEditable } from '@/components';
 import clsx from 'clsx';
-import { useRecoverPassword } from '../hooks';
+import { useRecoverPassword } from '@/hooks';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-export const ForgotPasswordScreen: React.FC<{}> = () => {
+const ForgotPasswordScreen: React.FC<{}> = () => {
   const { navigateTo } = useNavigation();
 
   const notifyRecoveryCodeSent = useAuthStore(
@@ -133,3 +133,4 @@ export const ForgotPasswordScreen: React.FC<{}> = () => {
     </>
   );
 };
+export default ForgotPasswordScreen;

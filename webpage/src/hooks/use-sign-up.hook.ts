@@ -2,8 +2,8 @@ import { useMutation } from '@tanstack/react-query';
 import { useToast } from '@chakra-ui/react';
 import { authStore, useAuthStore, useNavigation } from '../store';
 
-import { apiClient } from '../utils/api.client';
-import { SignUpData, SignUpResponse, SignUpErrorResponse } from '../interfaces';
+import { apiClient } from '@/utils/api.client';
+import { SignUpData, SignUpResponse, SignUpErrorResponse } from '@/interfaces';
 
 export const useSignUp = () => {
   const toast = useToast();

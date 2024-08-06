@@ -2,9 +2,9 @@ import { useMutation } from '@tanstack/react-query';
 import { useToast } from '@chakra-ui/react';
 
 import { authStore, useAuthStore } from '../store';
-import { apiClient } from '../utils/api.client';
-import { VerifyCodeData, VerifyCodeErrorResponse } from '../interfaces';
-import { LoginResponse } from '../interfaces/login.interface';
+import { apiClient } from '@/utils/api.client';
+import { VerifyCodeData, VerifyCodeErrorResponse } from '@/interfaces';
+import { LoginResponse } from '@/interfaces/login.interface';
 
 export const useVerifyCode = () => {
   const toast = useToast();

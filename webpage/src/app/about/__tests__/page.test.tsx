@@ -1,11 +1,11 @@
 import React from 'react';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { ChakraProvider } from '@chakra-ui/react';
-import { useNavigation } from '../../store';
-import { AboutWTMScreen } from '../about-wtm.screen';
+import { useNavigation } from '../../../store';
+import AboutWTMScreen from '../../about/page';
 
 // Mock de useNavigation
-jest.mock('../../store', () => ({
+jest.mock('../../../store', () => ({
   useNavigation: jest.fn(),
   useAuthStore: jest.fn(),
 }));
@@ -27,7 +27,7 @@ describe('AboutWTMScreen', () => {
   test('renders the component with initial state', () => {
     customRender(<AboutWTMScreen />);
 
-    expect(screen.getByText('About WTM')).toBeInTheDocument();
+    expect(screen.getByText('About')).toBeInTheDocument();
     expect(screen.getByText('Version:')).toBeInTheDocument();
     expect(screen.getByText('Backend URL:')).toBeInTheDocument();
     expect(screen.getByText('Report an Issue')).toBeInTheDocument();

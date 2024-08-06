@@ -1,17 +1,17 @@
 import React from 'react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { ChakraProvider } from '@chakra-ui/react';
-import { useNavigation } from '../../store';
-import { useDeleteNavigationEntry, useNavigationEntries } from '../../hooks';
-import { CompleteNavigationEntryDto } from '../../interfaces/navigation-entry.interface';
-import { NavigationEntriesScreen } from '../navigation-entries.screen';
+import { useNavigation } from '../../../store';
+import { useDeleteNavigationEntry, useNavigationEntries } from '../../../hooks';
+import { CompleteNavigationEntryDto } from '../../../interfaces/navigation-entry.interface';
+import NavigationEntriesScreen from '../page';
 
 // Mock de useNavigation, useDeleteNavigationEntry y useNavigationEntries
-jest.mock('../../store', () => ({
+jest.mock('../../../store', () => ({
   useNavigation: jest.fn(),
 }));
 
-jest.mock('../../hooks', () => ({
+jest.mock('../../../hooks', () => ({
   useDeleteNavigationEntry: jest.fn(),
   useNavigationEntries: jest.fn(),
 }));

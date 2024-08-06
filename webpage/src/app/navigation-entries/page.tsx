@@ -20,16 +20,13 @@ import {
   SmallCloseIcon,
 } from '@chakra-ui/icons';
 import { BsStars } from 'react-icons/bs';
-
-import { useDeleteNavigationEntry, useNavigationEntries } from '../hooks';
+import { useDeleteNavigationEntry, useNavigationEntries } from '../../hooks';
 import {
   CompleteNavigationEntryDto,
   NavEntryProps,
-} from '../interfaces/navigation-entry.interface';
-
-import { useNavigation } from '../store';
-import { getBrowserIconFromDevice } from '../utils';
-
+} from '../../interfaces/navigation-entry.interface';
+import { useNavigation } from '../../store';
+import { getBrowserIconFromDevice } from '../../utils';
 import clsx from 'clsx';
 
 const truncateString = (str: string, maxLength: number) => {
@@ -114,8 +111,7 @@ const NavigationEntry = ({
     </div>
   );
 };
-
-export const NavigationEntriesScreen: React.FC<object> = () => {
+const NavigationEntriesScreen: React.FC<object> = () => {
   const { navigateTo } = useNavigation();
 
   const LIMIT = 16;
@@ -155,7 +151,7 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
       window.open(url, '_blank');
       resolve();
     });
-  }
+  };
 
   return (
     <>
@@ -294,3 +290,4 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
     </>
   );
 };
+export default NavigationEntriesScreen;

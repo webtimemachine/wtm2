@@ -15,10 +15,10 @@ import {
 } from '@chakra-ui/react';
 import { ArrowBackIcon, InfoIcon } from '@chakra-ui/icons';
 
-import { ServerUrlEditable } from '../components';
-import { useSignUp } from '../hooks';
+import { ServerUrlEditable } from '@/components';
+import { useSignUp } from '@/hooks';
 
-import { useNavigation } from '../store';
+import { useNavigation } from '@/store';
 
 import clsx from 'clsx';
 
@@ -27,7 +27,7 @@ const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[^\s]{8,20}$/;
 const passwordRegexMessage =
   'Password must be between 8 and 20 characters long and contain at least one uppercase letter, one lowercase letter, and one digit. Spaces are not allowed.';
 
-export const SignUpScreen: React.FC<{}> = () => {
+const SignUpScreen: React.FC<{}> = () => {
   const { signUpMutation } = useSignUp();
   const { navigateBack } = useNavigation();
 
@@ -235,3 +235,4 @@ export const SignUpScreen: React.FC<{}> = () => {
     </>
   );
 };
+export default SignUpScreen;

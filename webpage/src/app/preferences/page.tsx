@@ -10,10 +10,10 @@ import {
   Divider,
 } from '@chakra-ui/react';
 import { ArrowBackIcon } from '@chakra-ui/icons';
-import { useGetPreferences, useUpdatePreferences } from '../hooks';
-import { useAuthStore, useNavigation } from '../store';
+import { useGetPreferences, useUpdatePreferences } from '../../hooks';
+import { useAuthStore, useNavigation } from '../../store';
 
-export const PreferencesScreen: React.FC<object> = () => {
+const PreferencesScreen: React.FC<object> = () => {
   const [enabled, setEnabled] = useState(false);
   const [enabledLiteMode, setEnabledLiteMode] = useState(false);
   const [imageEncodingEnabled, setImageEncodingEnabled] = useState(false);
@@ -179,3 +179,4 @@ export const PreferencesScreen: React.FC<object> = () => {
     </>
   );
 };
+export default PreferencesScreen;

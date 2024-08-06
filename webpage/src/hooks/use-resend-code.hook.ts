@@ -32,7 +32,6 @@ export const useResendCode = () => {
   const resendCodeMutation = useMutation({
     mutationFn: resendCode,
     onSuccess: (res) => {
-      console.log(res);
       toast({
         status: 'success',
         title: 'Validation code successfully sent!',

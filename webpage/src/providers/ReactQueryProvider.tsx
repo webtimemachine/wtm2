@@ -1,16 +1,16 @@
-'use client';
-
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { useState } from 'react';
+import { ReactNode } from 'react';
 
-function ReactQueryProvider({ children }: React.PropsWithChildren) {
-  const [client] = useState(new QueryClient());
+const queryClient = new QueryClient();
+
+type QueryProviderProps = {
+  children: ReactNode;
+};
+
+export const QueryProvider = ({ children }: QueryProviderProps) => {
+  console.log('QueryProvider children:', children); // Verifica los children
 
   return (
-    <QueryClientProvider client={client}>
-      {children}
-    </QueryClientProvider>
+    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
   );
-}
-
-export default ReactQueryProvider;
+};
