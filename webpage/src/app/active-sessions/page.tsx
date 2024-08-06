@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from 'react';
+'use client';
+
+import React, { useEffect, useMemo, useState } from 'react';
 import { Text, IconButton, Input, Divider, Badge } from '@chakra-ui/react';
 import {
   ArrowBackIcon,
@@ -9,18 +11,18 @@ import {
 } from '@chakra-ui/icons';
 import { MdLogout } from 'react-icons/md';
 
-import { useNavigation } from '../store';
-import { ActiveSession } from '../interfaces/active-sessons.interface';
+import { useNavigation } from '@/store';
+import { ActiveSession } from '@/interfaces/active-sessons.interface';
 import {
   useCloseActiveSession,
   useGetActiveSessions,
   useUpdateDeviceAlias,
-} from '../hooks';
+} from '@/hooks';
 import {
   getBrowserIconFromDevice,
   getOSIconFromDevice,
   getSupportedBrowserFromDevice,
-} from '../utils';
+} from '@/utils';
 
 const moveCurrentSessionToFirst = (arr: ActiveSession[]) => {
   const currentIndex = arr.findIndex(
@@ -34,7 +36,7 @@ const moveCurrentSessionToFirst = (arr: ActiveSession[]) => {
   return arr;
 };
 
-export const ActiveSessionsScreen: React.FC<object> = () => {
+const ActiveSessionsScreen: React.FC<object> = () => {
   const { navigateBack } = useNavigation();
   const { getActiveSessionsQuery } = useGetActiveSessions();
   const { closeActiveSessionMutation } = useCloseActiveSession();
@@ -118,7 +120,7 @@ export const ActiveSessionsScreen: React.FC<object> = () => {
                     {session.userDevice.isCurrentDevice && (
                       <Badge colorScheme='green'>current</Badge>
                     )}
-                  </Text>
+                  </Text>{' '}
                   <div className='flex gap-1 items-center'>
                     <Icon as={OSIcon} boxSize={3} color='gray.600' />
                     <Text fontSize='small' color='gray.600'>
@@ -209,8 +211,8 @@ export const ActiveSessionsScreen: React.FC<object> = () => {
           <Divider className='my-2' />
           <div className='flex flex-col gap-2 w-full h-full overflow-y-auto scrollbar pr-1'>
             {restSessions &&
-              restSessions.map((session) => (
-                <ActiveSessionRow session={session} />
+              restSessions.map((session, i) => (
+                <ActiveSessionRow session={session} key={i} />
               ))}
           </div>
         </div>
@@ -218,3 +220,4 @@ export const ActiveSessionsScreen: React.FC<object> = () => {
     </>
   );
 };
+export default ActiveSessionsScreen;
