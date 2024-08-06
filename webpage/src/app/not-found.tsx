@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { Button, Text } from '@chakra-ui/react';
-
+0;
 export default function NotFound() {
   return (
     <div style={{ textAlign: 'center', padding: '50px' }}>

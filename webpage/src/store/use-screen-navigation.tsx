@@ -16,13 +16,14 @@ export type ScreenName =
   | 'forgot-password'
   | 'validate-recovery-code'
   | 'recovery-new-password'
-  | 'about-wtm'
+  | 'about'
   | '404';
 
 export function useScreenNavigation() {
   const router = useRouter();
   const [isMounted, setIsMounted] = useState(false);
 
+  //El router se monta post useEffect, cuando termina el useEffect de correr, el router esta listo para usarse.
   useEffect(() => {
     setIsMounted(true);
   }, []);
@@ -40,7 +41,7 @@ export function useScreenNavigation() {
     'forgot-password': () => router.push('/forgot-password'),
     'validate-recovery-code': () => router.push('/validate-recovery-code'),
     'recovery-new-password': () => router.push('/recovery-new-password'),
-    'about-wtm': () => router.push('/about-wtm'),
+    about: () => router.push('/about'),
     '404': () => router.push('/404'),
   };
 
@@ -50,9 +51,13 @@ export function useScreenNavigation() {
     if (navigate) {
       navigate();
     } else {
-      mappedScreensToRouter['404'];
+      mappedScreensToRouter['404']();
     }
   }
 
-  return { navigateTo };
+  function navigateBack() {
+    router.back();
+  }
+
+  return { navigateTo, navigateBack };
 }

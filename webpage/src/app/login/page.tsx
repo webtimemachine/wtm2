@@ -16,6 +16,7 @@ import { useAuthStore, useNavigation } from '@/store';
 import { isLoginRes } from '@/interfaces/login.interface';
 
 import clsx from 'clsx';
+import { readAuthStateFromLocal } from '@/store/auth.store';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -30,6 +31,9 @@ const LoginScreen: React.FC<{}> = () => {
   const [showPass, setShowPass] = useState(false);
 
   const [emailError, setEmailError] = useState('');
+
+  const authState = readAuthStateFromLocal();
+  const { navigateTo: navigateToScreen } = useNavigation();
 
   const validateInputs = () => {
     let emailErrorFound = false;
@@ -71,6 +75,12 @@ const LoginScreen: React.FC<{}> = () => {
         navigateTo('validate-email');
       }
   }, [loginMutation.isSuccess, loginMutation.data]);
+  // For redirection if user is logged in.
+  useEffect(() => {
+    if (authState && authState.isLoggedIn) {
+      navigateToScreen('navigation-entries');
+    }
+  }, [authState]);
 
   return (
     <>
