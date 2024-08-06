@@ -1,4 +1,4 @@
-export default {
+const config = {
   rootDir: 'src',
   preset: 'ts-jest',
   testEnvironment: 'jsdom',
@@ -27,3 +27,5 @@ export default {
   ],
   modulePaths: ['<rootDir>/src'],
 };
+
+export default config;

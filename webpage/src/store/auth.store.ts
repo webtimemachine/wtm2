@@ -27,6 +27,7 @@ export interface AuthStore extends AuthState {
   notifyRecoveryCodeSent: (email: string) => void;
   notifyRecoveryCodeValidated: () => void;
   updateServerUrl: (serverUrl: string) => void;
+  updateEnabledLiteMode: (enabledLiteMode: boolean) => void;
 }
 
 export const authStore = createStore<AuthStore>()(
@@ -42,6 +43,13 @@ export const authStore = createStore<AuthStore>()(
       partialToken: '',
       recoveryToken: '',
       enabledLiteMode: false,
+
+      updateEnabledLiteMode: (enabledLiteMode: boolean) =>
+        set(() => {
+          return {
+            enabledLiteMode,
+          };
+        }),
 
       updateServerUrl: (serverUrl: string) =>
         set(() => {
