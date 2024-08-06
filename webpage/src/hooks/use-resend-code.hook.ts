@@ -1,9 +1,9 @@
 import { useMutation } from '@tanstack/react-query';
 import { useToast } from '@chakra-ui/react';
 
-import { apiClient } from '@/utils/api.client';
-import { ResendCodeResponse, ResendCodeErrorResponse } from '@/interfaces';
-import { authStore } from '@/store';
+import { apiClient } from '../utils/api.client';
+import { ResendCodeResponse, ResendCodeErrorResponse } from '../interfaces';
+import { authStore } from '../store';
 
 export const useResendCode = () => {
   const toast = useToast();

@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useRouter } from 'next/navigation'; // Asegúrate de que 'next/navigation' es la ruta correcta para tu versión de Next.js
+import { useRouter } from 'next/navigation';
 import clsx from 'clsx';
 
 export default function Home() {

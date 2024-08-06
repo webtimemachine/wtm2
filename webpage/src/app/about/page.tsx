@@ -3,12 +3,13 @@
 import React, { useEffect, useState } from 'react';
 import { Text, IconButton } from '@chakra-ui/react';
 import { ArrowBackIcon } from '@chakra-ui/icons';
-import { authStore, useNavigation } from '@/store';
+import { useAuthStore, useNavigation } from '../../store';
 import { manifestWeb } from '@/manifest-web';
 const AboutWTMScreen: React.FC<object> = () => {
   const [backendURL, setBackendURL] = useState<string>('');
   const { navigateBack } = useNavigation();
-  const { serverUrl } = authStore.getState();
+
+  const serverUrl = useAuthStore((state) => state.serverUrl);
 
   useEffect(() => {
     setBackendURL(serverUrl);
