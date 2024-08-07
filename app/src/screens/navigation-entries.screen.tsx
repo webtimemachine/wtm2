@@ -31,6 +31,8 @@ import { getBrowserIconFromDevice } from '../utils';
 import clsx from 'clsx';
 import { updateIcon } from '../utils/updateIcon';
 
+import { useTest } from 'wtm-lib/hooks';
+
 const truncateString = (str: string, maxLength: number) => {
   return str.length <= maxLength ? str : str.slice(0, maxLength) + '...';
 };
@@ -52,6 +54,9 @@ const NavigationEntry = ({
   isSemantic,
 }: NavEntryProps) => {
   const [visible, setVisible] = useState<boolean>(false);
+
+  const { superPrint } = useTest();
+  superPrint();
 
   return (
     <div className='flex flex-col w-full bg-white px-2 py-1 rounded-lg mb-1 gap-3'>
