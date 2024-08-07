@@ -74,11 +74,14 @@ export class ApiClient {
     this.setRecoveryToken = options.setRecoveryToken;
   }
 
-  setHandleSessionExpired(handleSessionExpired: () => Promise<never>) {
+  setHandleSessionExpired = (handleSessionExpired: () => Promise<never>) => {
     this.handleSessionExpired = handleSessionExpired;
-  }
+  };
 
-  async fetch(endpoint: string, init: RequestInit = {}): Promise<Response> {
+  fetch = async (
+    endpoint: string,
+    init: RequestInit = {},
+  ): Promise<Response> => {
     const serverUrl = await this.getServerUrl();
     init = {
       ...init,
@@ -90,12 +93,12 @@ export class ApiClient {
 
     const res = await fetch(new URL(endpoint, serverUrl), init);
     return res;
-  }
+  };
 
-  async securedFetch(
+  securedFetch = async (
     endpoint: string,
     init: RequestInit = {},
-  ): Promise<Response> {
+  ): Promise<Response> => {
     const serverUrl = await this.getServerUrl();
     const accessToken = await this.getAccessToken();
 
@@ -136,9 +139,11 @@ export class ApiClient {
         throw error;
       }
     }
-  }
+  };
 
-  async login(data: LoginData): Promise<LoginResponse | VerifyEmailResponse> {
+  login = async (
+    data: LoginData,
+  ): Promise<LoginResponse | VerifyEmailResponse> => {
     const serverUrl = await this.getServerUrl();
     try {
       const res = await fetch(new URL('/api/auth/login', serverUrl), {
@@ -172,9 +177,9 @@ export class ApiClient {
       console.error('ApiClient login', error);
       throw error;
     }
-  }
+  };
 
-  async refresh(): Promise<void> {
+  refresh = async (): Promise<void> => {
     const serverUrl = await this.getServerUrl();
     const refreshToken = await this.getRefreshToken();
 
@@ -200,7 +205,7 @@ export class ApiClient {
       console.error('ApiClient Refresh Error', error);
       throw error;
     }
-  }
+  };
 
   closeActiveSession = async (data: CloseActiveSessionsData) => {
     try {
