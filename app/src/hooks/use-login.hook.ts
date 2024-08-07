@@ -2,28 +2,15 @@ import { useToast } from '@chakra-ui/react';
 import { useMutation } from '@tanstack/react-query';
 import { useAuthStore } from '../store';
 
-import {
-  LoginData,
-  LoginResponse,
-  VerifyEmailResponse,
-  isLoginRes,
-} from 'wtm-lib/interfaces';
-
 import { apiClient } from '../utils/api.client';
+import { isLoginRes } from 'wtm-lib/interfaces';
 
 export const useLogin = () => {
   const toast = useToast();
   const { notifyLogin, notifyEmailValidation } = useAuthStore((state) => state);
 
-  const login = async (
-    data: LoginData,
-  ): Promise<LoginResponse | VerifyEmailResponse> => {
-    const loginResponse = await apiClient.login(data);
-    return loginResponse;
-  };
-
   const loginMutation = useMutation({
-    mutationFn: login,
+    mutationFn: apiClient.login,
     onSuccess: (loginRes) => {
       if (isLoginRes(loginRes)) {
         notifyLogin();

@@ -2,19 +2,12 @@ import { useToast } from '@chakra-ui/react';
 import { useMutation } from '@tanstack/react-query';
 
 import { apiClient } from '../utils/api.client';
-import { GetVersionResponse } from 'wtm-lib/interfaces';
 
 export const useGetVersion = () => {
   const toast = useToast();
 
-  const gerVersion = async () => {
-    const res = await apiClient.fetch('/api/version');
-    const versionResponse: GetVersionResponse = await res.json();
-    return versionResponse;
-  };
-
   const getVersionMutation = useMutation({
-    mutationFn: gerVersion,
+    mutationFn: apiClient.gerVersion,
     onSuccess: ({ version }) => {
       toast({
         title: 'Version Response',
