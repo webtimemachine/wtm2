@@ -40,12 +40,3 @@ export interface CreateNavigationEntry {
   content?: string;
   images?: string[];
 }
-
-
-export interface NavEntryProps {
-  element: CompleteNavigationEntryDto
-  BrowserIcon: IconType
-  deleteNavEntry: ({ id }: { id: number }) => void
-  processOpenLink: (url: string) => Promise<void>
-  isSemantic: boolean
-}

@@ -18,17 +18,16 @@ import {
   SmallCloseIcon,
 } from '@chakra-ui/icons';
 import { BsStars } from 'react-icons/bs';
+import { IconType } from 'react-icons';
 
 import { useDeleteNavigationEntry, useNavigationEntries } from '../hooks';
-import {
-  CompleteNavigationEntryDto,
-  NavEntryProps,
-} from '../interfaces/navigation-entry.interface';
+import { CompleteNavigationEntryDto } from '../interfaces/navigation-entry.interface';
 
 import { useNavigation } from '../store';
 import { getBrowserIconFromDevice } from '../utils';
 
 import clsx from 'clsx';
+
 import { updateIcon } from '../utils/updateIcon';
 
 import { useTest } from 'wtm-lib/hooks';
@@ -45,6 +44,14 @@ const RelevantSegment = ({ relevantSegment }: { relevantSegment: string }) => {
     </div>
   );
 };
+
+export interface NavEntryProps {
+  element: CompleteNavigationEntryDto;
+  BrowserIcon: IconType;
+  deleteNavEntry: ({ id }: { id: number }) => void;
+  processOpenLink: (url: string) => Promise<void>;
+  isSemantic: boolean;
+}
 
 const NavigationEntry = ({
   element,
