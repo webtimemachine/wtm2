@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "postinstall": "cd ../lib && npm link && cd ../app && npm link wtm-lib",
     "dev": "vite",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.tsx\" \"test/**/*.ts\"",
     "build": "concurrently \"npm run build:chrome\" \"npm run build:firefox\" --names chrome,firefox",
