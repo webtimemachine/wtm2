@@ -2,7 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useToast } from '@chakra-ui/react';
 
 import { apiClient } from '../utils/api.client';
-import { BasicResponse } from '../interfaces';
+import { BasicResponse } from 'wtm-lib/interfaces';
 import { useHandleSessionExpired } from '.';
 
 export const useConfirmDeleteAccount = () => {

@@ -3,8 +3,11 @@ import { useToast } from '@chakra-ui/react';
 
 import { useAuthStore } from '../store';
 import { apiClient } from '../utils/api.client';
-import { VerifyCodeData, VerifyCodeErrorResponse } from '../interfaces';
-import { LoginResponse } from '../interfaces/login.interface';
+import {
+  VerifyCodeData,
+  VerifyCodeErrorResponse,
+  LoginResponse,
+} from 'wtm-lib/interfaces';
 
 export const useVerifyCode = () => {
   const toast = useToast();

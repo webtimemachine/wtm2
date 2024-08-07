@@ -2,7 +2,10 @@ import { useMutation } from '@tanstack/react-query';
 import { useToast } from '@chakra-ui/react';
 
 import { apiClient } from '../utils/api.client';
-import { ResendCodeResponse, ResendCodeErrorResponse } from '../interfaces';
+import {
+  ResendCodeResponse,
+  ResendCodeErrorResponse,
+} from 'wtm-lib/interfaces';
 
 export const useResendCode = () => {
   const toast = useToast();

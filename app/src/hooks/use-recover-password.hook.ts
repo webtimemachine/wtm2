@@ -7,7 +7,7 @@ import {
   RecoverPasswordData,
   RecoverPasswordResponse,
   VerifyCodeErrorResponse,
-} from '../interfaces';
+} from 'wtm-lib/interfaces';
 
 export const useRecoverPassword = () => {
   const toast = useToast();

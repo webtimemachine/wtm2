@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 
 import { apiClient } from '../utils/api.client';
-import { PreferenciesResponse } from '../interfaces';
+import { PreferenciesResponse } from 'wtm-lib/interfaces';
 import { useHandleSessionExpired } from '.';
 
 export const useGetPreferences = () => {
