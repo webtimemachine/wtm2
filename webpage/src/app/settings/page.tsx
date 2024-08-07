@@ -17,8 +17,8 @@ const SettingsScreen: React.FC<object> = () => {
   const { logout } = useLogout();
 
   return (
-    <>
-      <div className='flex flex-col px-5 py-3 items-center w-full'>
+    <div className='flex justify-center items-center  w-full h-1/2'>
+      <div className='flex flex-col px-5 py-3 items-center max-w-6xl min-w-[360px] w-3/4 min-h-[600px] h-screen'>
         <div className='flex w-full justify-start pb-4 gap-4 items-center'>
           <IconButton aria-label='Settings icon' onClick={() => navigateBack()}>
             <ArrowBackIcon boxSize={5} />
@@ -78,7 +78,7 @@ const SettingsScreen: React.FC<object> = () => {
           </Button>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 export default SettingsScreen;

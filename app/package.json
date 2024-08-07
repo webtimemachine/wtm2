@@ -9,6 +9,7 @@
     "build": "concurrently \"npm run build:chrome\" \"npm run build:firefox\" --names chrome,firefox",
     "build:chrome": "tsc && export BROWSER='chrome' && vite build && rm -rf ../app_chrome && mv chrome ../app_chrome",
     "build:firefox": "tsc && export BROWSER='firefox' && vite build && rm -rf ../app_firefox && mv firefox ../app_firefox",
+    "build:chrome:agus": "tsc && vite build",
     "nodemon": "concurrently \"npm run nodemon:chrome\" \"npm run nodemon:firefox\" --names chrome,firefox",
     "nodemon:chrome": "nodemon --exec npm run build:chrome",
     "nodemon:firefox": "nodemon --exec npm run build:firefox",

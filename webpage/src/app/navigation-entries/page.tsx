@@ -28,7 +28,6 @@ import {
 import { useNavigation } from '../../store';
 import { getBrowserIconFromDevice } from '../../utils';
 import clsx from 'clsx';
-
 const truncateString = (str: string, maxLength: number) => {
   return str.length <= maxLength ? str : str.slice(0, maxLength) + '...';
 };
@@ -154,8 +153,8 @@ const NavigationEntriesScreen: React.FC<object> = () => {
   };
 
   return (
-    <>
-      <div className='flex flex-col px-5 py-3 items-center w-full min-h-[600px] h-screen'>
+    <div className='flex justify-center items-center  w-full h-1/2'>
+      <div className='flex flex-col px-5 py-3 items-center max-w-6xl min-w-[360px] w-3/4 min-h-[600px] h-screen'>
         <div className='flex flex-col w-full'>
           <div className='flex w-full justify-start pb-4 gap-4 items-center'>
             <div className='flex w-full justify-center pl-[40px]'>
@@ -287,7 +286,7 @@ const NavigationEntriesScreen: React.FC<object> = () => {
           />
         </div>
       </div>
-    </>
+    </div>
   );
 };
 export default NavigationEntriesScreen;
