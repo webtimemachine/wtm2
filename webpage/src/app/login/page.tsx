@@ -86,13 +86,9 @@ const LoginScreen: React.FC<{}> = () => {
 
   return (
     <div className='flex justify-center items-center h-screen'>
-      <div className='flex flex-col p-8 pt-10 items-center h-1/2 w-1/3 bg-white rounded-md  shadow-2xl transition-shadow filter drop-shadow'>
+      <div className='flex flex-col p-8 pt-10 items-center h-1/3 max-w-6xl min-w-[360px] w-1/3 min-h-[500px] bg-white rounded-md shadow-2xl transition-shadow filter drop-shadow'>
         <div className='pb-4'>
-          <Text
-            fontSize={'xx-large'}
-            fontWeight={'bold'}
-            className='animate-text bg-gradient-to-br from-gray-200 via-gray-500 to-black bg-clip-text text-transparent text-5xl font-black'
-          >
+          <Text fontSize={'xx-large'} fontWeight={'bold'}>
             WebTM
           </Text>
         </div>
