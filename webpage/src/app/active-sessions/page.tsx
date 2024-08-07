@@ -108,7 +108,7 @@ const ActiveSessionsScreen: React.FC<object> = () => {
     const OSIcon = getOSIconFromDevice(session.userDevice.device);
 
     return (
-      <div key={session.id}>
+      <div key={session.id} className='transition-all hover:translate-y-[-2px]'>
         <div className='flex w-full justify-between items-center bg-white px-2 py-1 rounded-lg'>
           {!editingSession || editingSession.id !== session.id ? (
             <>
@@ -186,8 +186,8 @@ const ActiveSessionsScreen: React.FC<object> = () => {
   const [currentSession, ...restSessions] = sessions;
 
   return (
-    <>
-      <div className='flex flex-col px-5 py-3 items-center w-full'>
+    <div className='flex justify-center items-center  w-full h-1/2'>
+      <div className='flex flex-col px-5 py-3 items-center max-w-6xl min-w-[360px] w-3/4 min-h-[600px]'>
         <div className='flex w-full justify-start pb-4 gap-4 items-center'>
           <IconButton aria-label='Back icon' onClick={() => navigateBack()}>
             <ArrowBackIcon boxSize={5} />
@@ -204,7 +204,7 @@ const ActiveSessionsScreen: React.FC<object> = () => {
           </Text>
 
           {currentSession && (
-            <div className='pt-5 pr-3'>
+            <div className='pt-5 pr-3 w-full'>
               <ActiveSessionRow session={currentSession} />
             </div>
           )}
@@ -217,7 +217,7 @@ const ActiveSessionsScreen: React.FC<object> = () => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 export default ActiveSessionsScreen;
