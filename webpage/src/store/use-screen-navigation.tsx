@@ -56,7 +56,12 @@ export function useScreenNavigation() {
   }
 
   function navigateBack() {
-    router.back();
+    const prevLen = window.history.length;
+    if (prevLen <= 2) {
+      navigateTo('navigation-entries');
+    } else {
+      router.back();
+    }
   }
 
   return { navigateTo, navigateBack };
