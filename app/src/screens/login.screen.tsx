@@ -15,7 +15,6 @@ import { isLoginRes } from 'wtm-lib/interfaces';
 
 import clsx from 'clsx';
 import { updateIcon } from '../utils/updateIcon';
-import { apiClient } from '../utils/api.client';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -24,7 +23,7 @@ export const LoginScreen: React.FC<{}> = () => {
 
   const deviceKey = useAuthStore((state) => state.deviceKey);
 
-  const { loginMutation } = useLogin(apiClient);
+  const { loginMutation } = useLogin();
   const { navigateTo } = useNavigation();
 
   const [email, setEmail] = useState('');

@@ -2,8 +2,6 @@ import { useToast } from '@chakra-ui/react';
 import { useMutation } from '@tanstack/react-query';
 import { useAuthStore } from '../store';
 
-import { ApiClient } from 'wtm-lib/ApiClient';
-
 import {
   LoginData,
   LoginResponse,
@@ -11,7 +9,9 @@ import {
   isLoginRes,
 } from 'wtm-lib/interfaces';
 
-export const useLogin = (apiClient: ApiClient) => {
+import { apiClient } from '../utils/api.client';
+
+export const useLogin = () => {
   const toast = useToast();
   const { notifyLogin, notifyEmailValidation } = useAuthStore((state) => state);
 
