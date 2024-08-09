@@ -18,18 +18,19 @@ import {
   SmallCloseIcon,
 } from '@chakra-ui/icons';
 import { BsStars } from 'react-icons/bs';
+import { IconType } from 'react-icons';
 
+import { CompleteNavigationEntryDto } from 'wtm-lib/interfaces';
 import { useDeleteNavigationEntry, useNavigationEntries } from '../hooks';
-import {
-  CompleteNavigationEntryDto,
-  NavEntryProps,
-} from '../interfaces/navigation-entry.interface';
 
 import { useNavigation } from '../store';
 import { getBrowserIconFromDevice } from '../utils';
 
 import clsx from 'clsx';
+
 import { updateIcon } from '../utils/updateIcon';
+
+import { useTest } from 'wtm-lib/hooks';
 
 const truncateString = (str: string, maxLength: number) => {
   return str.length <= maxLength ? str : str.slice(0, maxLength) + '...';
@@ -44,6 +45,14 @@ const RelevantSegment = ({ relevantSegment }: { relevantSegment: string }) => {
   );
 };
 
+export interface NavEntryProps {
+  element: CompleteNavigationEntryDto;
+  BrowserIcon: IconType;
+  deleteNavEntry: ({ id }: { id: number }) => void;
+  processOpenLink: (url: string) => Promise<void>;
+  isSemantic: boolean;
+}
+
 const NavigationEntry = ({
   element,
   BrowserIcon,
@@ -52,6 +61,9 @@ const NavigationEntry = ({
   isSemantic,
 }: NavEntryProps) => {
   const [visible, setVisible] = useState<boolean>(false);
+
+  const { superPrint } = useTest();
+  superPrint();
 
   return (
     <div className='flex flex-col w-full bg-white px-2 py-1 rounded-lg mb-1 gap-3'>
