@@ -2,7 +2,7 @@ import { useToast } from '@chakra-ui/react';
 import { useMutation } from '@tanstack/react-query';
 
 import { apiClient } from '../utils/api.client';
-import { GetVersionResponse } from '../interfaces';
+import { GetVersionResponse } from 'wtm-lib/interfaces';
 
 export const useGetVersion = () => {
   const toast = useToast();

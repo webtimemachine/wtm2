@@ -2,7 +2,10 @@ import { useMutation } from '@tanstack/react-query';
 import { useToast } from '@chakra-ui/react';
 
 import { apiClient } from '../utils/api.client';
-import { PreferenciesResponse, UpdatePreferenciesData } from '../interfaces';
+import {
+  PreferenciesResponse,
+  UpdatePreferenciesData,
+} from 'wtm-lib/interfaces';
 import { useHandleSessionExpired } from '.';
 
 export const useUpdatePreferences = () => {
@@ -25,7 +28,7 @@ export const useUpdatePreferences = () => {
       const response: PreferenciesResponse = await res.json();
       return response;
     } catch (error: unknown) {
-      if(error instanceof Error){
+      if (error instanceof Error) {
         if (`${error?.message}`.toLowerCase().includes('unauthorized')) {
           await handleSessionExpired();
         } else {

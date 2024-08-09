@@ -6,7 +6,7 @@ import {
   ValidateRecoveryCodeData,
   ValidateRecoveryCodeErrorResponse,
   ValidateRecoveryCodeResponse,
-} from '../interfaces';
+} from 'wtm-lib/interfaces';
 
 export const useValidateRecoveryCode = () => {
   const toast = useToast();

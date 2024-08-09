@@ -9,7 +9,7 @@ import {
   LoginResponse,
   VerifyEmailResponse,
   isLoginRes,
-} from '../interfaces';
+} from 'wtm-lib/interfaces';
 
 export const useLogin = (apiClient: ApiClient) => {
   const toast = useToast();

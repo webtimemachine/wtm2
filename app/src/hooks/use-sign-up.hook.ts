@@ -3,7 +3,11 @@ import { useToast } from '@chakra-ui/react';
 import { useAuthStore, useNavigation } from '../store';
 
 import { apiClient } from '../utils/api.client';
-import { SignUpData, SignUpResponse, SignUpErrorResponse } from '../interfaces';
+import {
+  SignUpData,
+  SignUpResponse,
+  SignUpErrorResponse,
+} from 'wtm-lib/interfaces';
 
 export const useSignUp = () => {
   const toast = useToast();
