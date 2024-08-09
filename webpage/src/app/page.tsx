@@ -19,9 +19,7 @@ export default function Home() {
           'mx-[auto] max-w-[1080px]',
           'min-w-[500px]',
         ])}
-      >
-        {/* Puedes añadir contenido adicional aquí */}
-      </div>
+      ></div>
     </div>
   );
 }

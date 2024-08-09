@@ -18,6 +18,7 @@ export const useLogin = () => {
     data: LoginData,
   ): Promise<LoginResponse | VerifyEmailResponse> => {
     const loginResponse = await apiClient.login(data);
+    localStorage.setItem('mail', data.email);
     return loginResponse;
   };
 
