@@ -3,27 +3,14 @@ import { useMutation } from '@tanstack/react-query';
 import { useAuthStore } from '@/store';
 
 import { apiClient } from '@/utils/api.client';
-import {
-  LoginData,
-  LoginResponse,
-  VerifyEmailResponse,
-  isLoginRes,
-} from '@/interfaces';
+import { isLoginRes } from '@/interfaces';
 
 export const useLogin = () => {
   const toast = useToast();
   const { notifyLogin, notifyEmailValidation } = useAuthStore((state) => state);
 
-  const login = async (
-    data: LoginData,
-  ): Promise<LoginResponse | VerifyEmailResponse> => {
-    const loginResponse = await apiClient.login(data);
-    localStorage.setItem('mail', data.email);
-    return loginResponse;
-  };
-
   const loginMutation = useMutation({
-    mutationFn: login,
+    mutationFn: apiClient.login,
     onSuccess: (loginRes) => {
       if (isLoginRes(loginRes)) {
         notifyLogin();

@@ -3,7 +3,6 @@ import { useToast } from '@chakra-ui/react';
 import { useAuthStore, useNavigation } from '../store';
 
 import { apiClient } from '../utils/api.client';
-import { SignUpData, SignUpResponse, SignUpErrorResponse } from '../interfaces';
 
 export const useSignUp = () => {
   const toast = useToast();
@@ -12,25 +11,8 @@ export const useSignUp = () => {
     (state) => state.notifyEmailValidation,
   );
 
-  const signUp = async (data: SignUpData) => {
-    const res = await apiClient.securedFetch('/api/auth/signup', {
-      method: 'POST',
-      body: JSON.stringify(data),
-    });
-
-    if (res.status === 200) {
-      const response: SignUpResponse = await res.json();
-      const { partialToken } = response;
-      await chrome.storage.local.set({ partialToken });
-      return response;
-    } else {
-      const errorRes: SignUpErrorResponse = await res.json();
-      throw new Error(errorRes?.error || errorRes?.message?.toString());
-    }
-  };
-
   const signUpMutation = useMutation({
-    mutationFn: signUp,
+    mutationFn: apiClient.signUp,
     onSuccess: (res) => {
       if (res.partialToken) {
         notifyEmailValidation();

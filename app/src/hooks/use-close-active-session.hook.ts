@@ -2,40 +2,16 @@ import { useMutation } from '@tanstack/react-query';
 import { useToast } from '@chakra-ui/react';
 
 import { apiClient } from '../utils/api.client';
-import { BasicResponse, CloseActiveSessionsData } from '../interfaces';
-
 import { useHandleSessionExpired } from '.';
 
 export const useCloseActiveSession = () => {
   const toast = useToast();
 
   const { handleSessionExpired } = useHandleSessionExpired();
-
-  const closeActiveSession = async (data: CloseActiveSessionsData) => {
-    try {
-      const res = await apiClient.securedFetch('/api/auth/session/logout', {
-        method: 'POST',
-        body: JSON.stringify(data),
-      });
-
-      if (res.status !== 200) {
-        const errorJson = await res.json();
-        throw new Error(errorJson?.message || 'POST Update Preferences Error');
-      }
-
-      const response: BasicResponse = await res.json();
-      return response;
-    } catch (error: any) {
-      if (`${error?.message}`.toLowerCase().includes('unauthorized')) {
-        await handleSessionExpired();
-      } else {
-        throw error;
-      }
-    }
-  };
+  apiClient.setHandleSessionExpired(handleSessionExpired);
 
   const closeActiveSessionMutation = useMutation({
-    mutationFn: closeActiveSession,
+    mutationFn: apiClient.closeActiveSession,
     onSuccess: () => {
       toast({
         title: 'Success',
