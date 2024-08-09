@@ -23,5 +23,8 @@
 			</array>
 		</dict>
 	</dict>
+    <key>NSContactsUsageDescription</key>
+    <string>This app requires access to your contacts to help you connect with your friends and family easily.</string>
+
 </dict>
 </plist>
