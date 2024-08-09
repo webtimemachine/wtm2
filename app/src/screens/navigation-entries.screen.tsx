@@ -20,8 +20,8 @@ import {
 import { BsStars } from 'react-icons/bs';
 import { IconType } from 'react-icons';
 
+import { CompleteNavigationEntryDto } from 'wtm-lib/interfaces';
 import { useDeleteNavigationEntry, useNavigationEntries } from '../hooks';
-import { CompleteNavigationEntryDto } from '../interfaces/navigation-entry.interface';
 
 import { useNavigation } from '../store';
 import { getBrowserIconFromDevice } from '../utils';

@@ -1,4 +1,4 @@
-import { CreateNavigationEntry } from '../interfaces/navigation-entry.interface';
+import { CreateNavigationEntry } from 'wtm-lib/interfaces';
 import { DOMtoString, getImages } from '../utils';
 import { apiClient } from '../utils/api.client';
 

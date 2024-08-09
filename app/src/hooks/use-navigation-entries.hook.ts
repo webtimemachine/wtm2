@@ -4,7 +4,7 @@ import { apiClient } from '../utils/api.client';
 import {
   GetNavigationEntriesData,
   GetNavigationEntriesResponse,
-} from '../interfaces';
+} from 'wtm-lib/interfaces';
 import { useHandleSessionExpired } from '.';
 
 export const useNavigationEntries = (params: GetNavigationEntriesData) => {

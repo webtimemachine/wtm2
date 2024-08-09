@@ -2,7 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useToast } from '@chakra-ui/react';
 
 import { apiClient } from '../utils/api.client';
-import { BasicResponse, DeleteNavigationEntriesData } from '../interfaces';
+import { BasicResponse, DeleteNavigationEntriesData } from 'wtm-lib/interfaces';
 import { useHandleSessionExpired } from '.';
 
 export const useDeleteNavigationEntry = () => {
