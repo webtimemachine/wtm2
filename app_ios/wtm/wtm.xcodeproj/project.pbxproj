@@ -1,0 +1,1040 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		ED65F68A2C667500002564E2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED65F6892C667500002564E2 /* AppDelegate.swift */; };
+		ED65F68C2C667500002564E2 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED65F68B2C667500002564E2 /* SceneDelegate.swift */; };
+		ED65F68F2C667500002564E2 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = ED65F68E2C667500002564E2 /* Base */; };
+		ED65F6922C667500002564E2 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = ED65F6912C667500002564E2 /* Base */; };
+		ED65F69B2C667500002564E2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED65F69A2C667500002564E2 /* AppDelegate.swift */; };
+		ED65F69E2C667500002564E2 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = ED65F69D2C667500002564E2 /* Base */; };
+		ED65F6A62C667500002564E2 /* wtm Extension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = ED65F6A52C667500002564E2 /* wtm Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		ED65F6B02C667500002564E2 /* wtm Extension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = ED65F6AF2C667500002564E2 /* wtm Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		ED65F6B62C667500002564E2 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = ED65F67A2C6674FD002564E2 /* Base */; };
+		ED65F6B72C667500002564E2 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = ED65F67A2C6674FD002564E2 /* Base */; };
+		ED65F6B82C667500002564E2 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = ED65F67B2C6674FD002564E2 /* Icon.png */; };
+		ED65F6B92C667500002564E2 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = ED65F67B2C6674FD002564E2 /* Icon.png */; };
+		ED65F6BA2C667500002564E2 /* Style.css in Resources */ = {isa = PBXBuildFile; fileRef = ED65F67C2C6674FD002564E2 /* Style.css */; };
+		ED65F6BB2C667500002564E2 /* Style.css in Resources */ = {isa = PBXBuildFile; fileRef = ED65F67C2C6674FD002564E2 /* Style.css */; };
+		ED65F6BC2C667500002564E2 /* Script.js in Resources */ = {isa = PBXBuildFile; fileRef = ED65F67D2C6674FD002564E2 /* Script.js */; };
+		ED65F6BD2C667500002564E2 /* Script.js in Resources */ = {isa = PBXBuildFile; fileRef = ED65F67D2C6674FD002564E2 /* Script.js */; };
+		ED65F6BE2C667500002564E2 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED65F67E2C6674FD002564E2 /* ViewController.swift */; };
+		ED65F6BF2C667500002564E2 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED65F67E2C6674FD002564E2 /* ViewController.swift */; };
+		ED65F6C02C667500002564E2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ED65F67F2C667500002564E2 /* Assets.xcassets */; };
+		ED65F6C12C667500002564E2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ED65F67F2C667500002564E2 /* Assets.xcassets */; };
+		ED65F6C22C667500002564E2 /* SafariWebExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED65F6812C667500002564E2 /* SafariWebExtensionHandler.swift */; };
+		ED65F6C32C667500002564E2 /* SafariWebExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED65F6812C667500002564E2 /* SafariWebExtensionHandler.swift */; };
+		ED65F6E92C667500002564E2 /* app-icon-grayscale-64.png in Resources */ = {isa = PBXBuildFile; fileRef = ED65F6D52C667500002564E2 /* app-icon-grayscale-64.png */; };
+		ED65F6EA2C667500002564E2 /* app-icon-48.png in Resources */ = {isa = PBXBuildFile; fileRef = ED65F6D62C667500002564E2 /* app-icon-48.png */; };
+		ED65F6EB2C667500002564E2 /* popup.js in Resources */ = {isa = PBXBuildFile; fileRef = ED65F6D72C667500002564E2 /* popup.js */; };
+		ED65F6EC2C667500002564E2 /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = ED65F6D82C667500002564E2 /* index.html */; };
+		ED65F6ED2C667500002564E2 /* app-icon-64.png in Resources */ = {isa = PBXBuildFile; fileRef = ED65F6D92C667500002564E2 /* app-icon-64.png */; };
+		ED65F6EE2C667500002564E2 /* app-icon-grayscale-48.png in Resources */ = {isa = PBXBuildFile; fileRef = ED65F6DA2C667500002564E2 /* app-icon-grayscale-48.png */; };
+		ED65F6EF2C667500002564E2 /* background.js in Resources */ = {isa = PBXBuildFile; fileRef = ED65F6DB2C667500002564E2 /* background.js */; };
+		ED65F6F02C667500002564E2 /* app-icon-128.png in Resources */ = {isa = PBXBuildFile; fileRef = ED65F6DC2C667500002564E2 /* app-icon-128.png */; };
+		ED65F6F12C667500002564E2 /* app-icon-16.png in Resources */ = {isa = PBXBuildFile; fileRef = ED65F6DD2C667500002564E2 /* app-icon-16.png */; };
+		ED65F6F22C667500002564E2 /* app-icon-grayscale-16.png in Resources */ = {isa = PBXBuildFile; fileRef = ED65F6DE2C667500002564E2 /* app-icon-grayscale-16.png */; };
+		ED65F6F32C667500002564E2 /* index.css in Resources */ = {isa = PBXBuildFile; fileRef = ED65F6DF2C667500002564E2 /* index.css */; };
+		ED65F6F42C667500002564E2 /* chunks in Resources */ = {isa = PBXBuildFile; fileRef = ED65F6E02C667500002564E2 /* chunks */; };
+		ED65F6F52C667500002564E2 /* app-icon-grayscale-32.png in Resources */ = {isa = PBXBuildFile; fileRef = ED65F6E12C667500002564E2 /* app-icon-grayscale-32.png */; };
+		ED65F6F62C667500002564E2 /* app-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = ED65F6E22C667500002564E2 /* app-icon.png */; };
+		ED65F6F72C667500002564E2 /* app-icon-32.png in Resources */ = {isa = PBXBuildFile; fileRef = ED65F6E32C667500002564E2 /* app-icon-32.png */; };
+		ED65F6F82C667500002564E2 /* manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = ED65F6E42C667500002564E2 /* manifest.json */; };
+		ED65F6F92C667500002564E2 /* app-icon-grayscale.png in Resources */ = {isa = PBXBuildFile; fileRef = ED65F6E52C667500002564E2 /* app-icon-grayscale.png */; };
+		ED65F6FA2C667500002564E2 /* app-icon-grayscale-128.png in Resources */ = {isa = PBXBuildFile; fileRef = ED65F6E62C667500002564E2 /* app-icon-grayscale-128.png */; };
+		ED65F6FB2C667500002564E2 /* content.js in Resources */ = {isa = PBXBuildFile; fileRef = ED65F6E72C667500002564E2 /* content.js */; };
+		ED65F6FC2C667500002564E2 /* content.ts-loader.js in Resources */ = {isa = PBXBuildFile; fileRef = ED65F6E82C667500002564E2 /* content.ts-loader.js */; };
+		ED65F6FD2C667500002564E2 /* app-icon-grayscale-64.png in Resources */ = {isa = PBXBuildFile; fileRef = ED65F6D52C667500002564E2 /* app-icon-grayscale-64.png */; };
+		ED65F6FE2C667500002564E2 /* app-icon-48.png in Resources */ = {isa = PBXBuildFile; fileRef = ED65F6D62C667500002564E2 /* app-icon-48.png */; };
+		ED65F6FF2C667500002564E2 /* popup.js in Resources */ = {isa = PBXBuildFile; fileRef = ED65F6D72C667500002564E2 /* popup.js */; };
+		ED65F7002C667500002564E2 /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = ED65F6D82C667500002564E2 /* index.html */; };
+		ED65F7012C667500002564E2 /* app-icon-64.png in Resources */ = {isa = PBXBuildFile; fileRef = ED65F6D92C667500002564E2 /* app-icon-64.png */; };
+		ED65F7022C667500002564E2 /* app-icon-grayscale-48.png in Resources */ = {isa = PBXBuildFile; fileRef = ED65F6DA2C667500002564E2 /* app-icon-grayscale-48.png */; };
+		ED65F7032C667500002564E2 /* background.js in Resources */ = {isa = PBXBuildFile; fileRef = ED65F6DB2C667500002564E2 /* background.js */; };
+		ED65F7042C667500002564E2 /* app-icon-128.png in Resources */ = {isa = PBXBuildFile; fileRef = ED65F6DC2C667500002564E2 /* app-icon-128.png */; };
+		ED65F7052C667500002564E2 /* app-icon-16.png in Resources */ = {isa = PBXBuildFile; fileRef = ED65F6DD2C667500002564E2 /* app-icon-16.png */; };
+		ED65F7062C667500002564E2 /* app-icon-grayscale-16.png in Resources */ = {isa = PBXBuildFile; fileRef = ED65F6DE2C667500002564E2 /* app-icon-grayscale-16.png */; };
+		ED65F7072C667500002564E2 /* index.css in Resources */ = {isa = PBXBuildFile; fileRef = ED65F6DF2C667500002564E2 /* index.css */; };
+		ED65F7082C667500002564E2 /* chunks in Resources */ = {isa = PBXBuildFile; fileRef = ED65F6E02C667500002564E2 /* chunks */; };
+		ED65F7092C667500002564E2 /* app-icon-grayscale-32.png in Resources */ = {isa = PBXBuildFile; fileRef = ED65F6E12C667500002564E2 /* app-icon-grayscale-32.png */; };
+		ED65F70A2C667500002564E2 /* app-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = ED65F6E22C667500002564E2 /* app-icon.png */; };
+		ED65F70B2C667500002564E2 /* app-icon-32.png in Resources */ = {isa = PBXBuildFile; fileRef = ED65F6E32C667500002564E2 /* app-icon-32.png */; };
+		ED65F70C2C667500002564E2 /* manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = ED65F6E42C667500002564E2 /* manifest.json */; };
+		ED65F70D2C667500002564E2 /* app-icon-grayscale.png in Resources */ = {isa = PBXBuildFile; fileRef = ED65F6E52C667500002564E2 /* app-icon-grayscale.png */; };
+		ED65F70E2C667500002564E2 /* app-icon-grayscale-128.png in Resources */ = {isa = PBXBuildFile; fileRef = ED65F6E62C667500002564E2 /* app-icon-grayscale-128.png */; };
+		ED65F70F2C667500002564E2 /* content.js in Resources */ = {isa = PBXBuildFile; fileRef = ED65F6E72C667500002564E2 /* content.js */; };
+		ED65F7102C667500002564E2 /* content.ts-loader.js in Resources */ = {isa = PBXBuildFile; fileRef = ED65F6E82C667500002564E2 /* content.ts-loader.js */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		ED65F6A72C667500002564E2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = ED65F6732C6674FD002564E2 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = ED65F6A42C667500002564E2;
+			remoteInfo = "wtm Extension (iOS)";
+		};
+		ED65F6B12C667500002564E2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = ED65F6732C6674FD002564E2 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = ED65F6AE2C667500002564E2;
+			remoteInfo = "wtm Extension (macOS)";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		ED65F6C92C667500002564E2 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				ED65F6A62C667500002564E2 /* wtm Extension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		ED65F6D02C667500002564E2 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				ED65F6B02C667500002564E2 /* wtm Extension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		ED65F67A2C6674FD002564E2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = Base; path = ../Base.lproj/Main.html; sourceTree = "<group>"; };
+		ED65F67B2C6674FD002564E2 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
+		ED65F67C2C6674FD002564E2 /* Style.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = Style.css; sourceTree = "<group>"; };
+		ED65F67D2C6674FD002564E2 /* Script.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = Script.js; sourceTree = "<group>"; };
+		ED65F67E2C6674FD002564E2 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		ED65F67F2C667500002564E2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		ED65F6812C667500002564E2 /* SafariWebExtensionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariWebExtensionHandler.swift; sourceTree = "<group>"; };
+		ED65F6862C667500002564E2 /* wtm.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = wtm.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		ED65F6892C667500002564E2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		ED65F68B2C667500002564E2 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		ED65F68E2C667500002564E2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		ED65F6912C667500002564E2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		ED65F6932C667500002564E2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		ED65F6982C667500002564E2 /* wtm.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = wtm.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		ED65F69A2C667500002564E2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		ED65F69D2C667500002564E2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		ED65F69F2C667500002564E2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		ED65F6A02C667500002564E2 /* wtm.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = wtm.entitlements; sourceTree = "<group>"; };
+		ED65F6A52C667500002564E2 /* wtm Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "wtm Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		ED65F6AA2C667500002564E2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		ED65F6AF2C667500002564E2 /* wtm Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "wtm Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		ED65F6B42C667500002564E2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		ED65F6B52C667500002564E2 /* wtm.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = wtm.entitlements; sourceTree = "<group>"; };
+		ED65F6D52C667500002564E2 /* app-icon-grayscale-64.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "app-icon-grayscale-64.png"; path = "../../../app_chrome/app-icon-grayscale-64.png"; sourceTree = "<group>"; };
+		ED65F6D62C667500002564E2 /* app-icon-48.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "app-icon-48.png"; path = "../../../app_chrome/app-icon-48.png"; sourceTree = "<group>"; };
+		ED65F6D72C667500002564E2 /* popup.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = popup.js; path = ../../../app_chrome/popup.js; sourceTree = "<group>"; };
+		ED65F6D82C667500002564E2 /* index.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = index.html; path = ../../../app_chrome/index.html; sourceTree = "<group>"; };
+		ED65F6D92C667500002564E2 /* app-icon-64.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "app-icon-64.png"; path = "../../../app_chrome/app-icon-64.png"; sourceTree = "<group>"; };
+		ED65F6DA2C667500002564E2 /* app-icon-grayscale-48.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "app-icon-grayscale-48.png"; path = "../../../app_chrome/app-icon-grayscale-48.png"; sourceTree = "<group>"; };
+		ED65F6DB2C667500002564E2 /* background.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = background.js; path = ../../../app_chrome/background.js; sourceTree = "<group>"; };
+		ED65F6DC2C667500002564E2 /* app-icon-128.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "app-icon-128.png"; path = "../../../app_chrome/app-icon-128.png"; sourceTree = "<group>"; };
+		ED65F6DD2C667500002564E2 /* app-icon-16.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "app-icon-16.png"; path = "../../../app_chrome/app-icon-16.png"; sourceTree = "<group>"; };
+		ED65F6DE2C667500002564E2 /* app-icon-grayscale-16.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "app-icon-grayscale-16.png"; path = "../../../app_chrome/app-icon-grayscale-16.png"; sourceTree = "<group>"; };
+		ED65F6DF2C667500002564E2 /* index.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; name = index.css; path = ../../../app_chrome/index.css; sourceTree = "<group>"; };
+		ED65F6E02C667500002564E2 /* chunks */ = {isa = PBXFileReference; lastKnownFileType = folder; name = chunks; path = ../../../app_chrome/chunks; sourceTree = "<group>"; };
+		ED65F6E12C667500002564E2 /* app-icon-grayscale-32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "app-icon-grayscale-32.png"; path = "../../../app_chrome/app-icon-grayscale-32.png"; sourceTree = "<group>"; };
+		ED65F6E22C667500002564E2 /* app-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "app-icon.png"; path = "../../../app_chrome/app-icon.png"; sourceTree = "<group>"; };
+		ED65F6E32C667500002564E2 /* app-icon-32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "app-icon-32.png"; path = "../../../app_chrome/app-icon-32.png"; sourceTree = "<group>"; };
+		ED65F6E42C667500002564E2 /* manifest.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = manifest.json; path = ../../../app_chrome/manifest.json; sourceTree = "<group>"; };
+		ED65F6E52C667500002564E2 /* app-icon-grayscale.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "app-icon-grayscale.png"; path = "../../../app_chrome/app-icon-grayscale.png"; sourceTree = "<group>"; };
+		ED65F6E62C667500002564E2 /* app-icon-grayscale-128.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "app-icon-grayscale-128.png"; path = "../../../app_chrome/app-icon-grayscale-128.png"; sourceTree = "<group>"; };
+		ED65F6E72C667500002564E2 /* content.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = content.js; path = ../../../app_chrome/content.js; sourceTree = "<group>"; };
+		ED65F6E82C667500002564E2 /* content.ts-loader.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = "content.ts-loader.js"; path = "../../../app_chrome/content.ts-loader.js"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		ED65F6832C667500002564E2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		ED65F6952C667500002564E2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		ED65F6A22C667500002564E2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		ED65F6AC2C667500002564E2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		ED65F6722C6674FD002564E2 = {
+			isa = PBXGroup;
+			children = (
+				ED65F6772C6674FD002564E2 /* Shared (App) */,
+				ED65F6802C667500002564E2 /* Shared (Extension) */,
+				ED65F6882C667500002564E2 /* iOS (App) */,
+				ED65F6992C667500002564E2 /* macOS (App) */,
+				ED65F6A92C667500002564E2 /* iOS (Extension) */,
+				ED65F6B32C667500002564E2 /* macOS (Extension) */,
+				ED65F6872C667500002564E2 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		ED65F6772C6674FD002564E2 /* Shared (App) */ = {
+			isa = PBXGroup;
+			children = (
+				ED65F67E2C6674FD002564E2 /* ViewController.swift */,
+				ED65F67F2C667500002564E2 /* Assets.xcassets */,
+				ED65F6782C6674FD002564E2 /* Resources */,
+			);
+			path = "Shared (App)";
+			sourceTree = "<group>";
+		};
+		ED65F6782C6674FD002564E2 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				ED65F6792C6674FD002564E2 /* Main.html */,
+				ED65F67B2C6674FD002564E2 /* Icon.png */,
+				ED65F67C2C6674FD002564E2 /* Style.css */,
+				ED65F67D2C6674FD002564E2 /* Script.js */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		ED65F6802C667500002564E2 /* Shared (Extension) */ = {
+			isa = PBXGroup;
+			children = (
+				ED65F6D42C667500002564E2 /* Resources */,
+				ED65F6812C667500002564E2 /* SafariWebExtensionHandler.swift */,
+			);
+			path = "Shared (Extension)";
+			sourceTree = "<group>";
+		};
+		ED65F6872C667500002564E2 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				ED65F6862C667500002564E2 /* wtm.app */,
+				ED65F6982C667500002564E2 /* wtm.app */,
+				ED65F6A52C667500002564E2 /* wtm Extension.appex */,
+				ED65F6AF2C667500002564E2 /* wtm Extension.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		ED65F6882C667500002564E2 /* iOS (App) */ = {
+			isa = PBXGroup;
+			children = (
+				ED65F6892C667500002564E2 /* AppDelegate.swift */,
+				ED65F68B2C667500002564E2 /* SceneDelegate.swift */,
+				ED65F68D2C667500002564E2 /* LaunchScreen.storyboard */,
+				ED65F6902C667500002564E2 /* Main.storyboard */,
+				ED65F6932C667500002564E2 /* Info.plist */,
+			);
+			path = "iOS (App)";
+			sourceTree = "<group>";
+		};
+		ED65F6992C667500002564E2 /* macOS (App) */ = {
+			isa = PBXGroup;
+			children = (
+				ED65F69A2C667500002564E2 /* AppDelegate.swift */,
+				ED65F69C2C667500002564E2 /* Main.storyboard */,
+				ED65F69F2C667500002564E2 /* Info.plist */,
+				ED65F6A02C667500002564E2 /* wtm.entitlements */,
+			);
+			path = "macOS (App)";
+			sourceTree = "<group>";
+		};
+		ED65F6A92C667500002564E2 /* iOS (Extension) */ = {
+			isa = PBXGroup;
+			children = (
+				ED65F6AA2C667500002564E2 /* Info.plist */,
+			);
+			path = "iOS (Extension)";
+			sourceTree = "<group>";
+		};
+		ED65F6B32C667500002564E2 /* macOS (Extension) */ = {
+			isa = PBXGroup;
+			children = (
+				ED65F6B42C667500002564E2 /* Info.plist */,
+				ED65F6B52C667500002564E2 /* wtm.entitlements */,
+			);
+			path = "macOS (Extension)";
+			sourceTree = "<group>";
+		};
+		ED65F6D42C667500002564E2 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				ED65F6D52C667500002564E2 /* app-icon-grayscale-64.png */,
+				ED65F6D62C667500002564E2 /* app-icon-48.png */,
+				ED65F6D72C667500002564E2 /* popup.js */,
+				ED65F6D82C667500002564E2 /* index.html */,
+				ED65F6D92C667500002564E2 /* app-icon-64.png */,
+				ED65F6DA2C667500002564E2 /* app-icon-grayscale-48.png */,
+				ED65F6DB2C667500002564E2 /* background.js */,
+				ED65F6DC2C667500002564E2 /* app-icon-128.png */,
+				ED65F6DD2C667500002564E2 /* app-icon-16.png */,
+				ED65F6DE2C667500002564E2 /* app-icon-grayscale-16.png */,
+				ED65F6DF2C667500002564E2 /* index.css */,
+				ED65F6E02C667500002564E2 /* chunks */,
+				ED65F6E12C667500002564E2 /* app-icon-grayscale-32.png */,
+				ED65F6E22C667500002564E2 /* app-icon.png */,
+				ED65F6E32C667500002564E2 /* app-icon-32.png */,
+				ED65F6E42C667500002564E2 /* manifest.json */,
+				ED65F6E52C667500002564E2 /* app-icon-grayscale.png */,
+				ED65F6E62C667500002564E2 /* app-icon-grayscale-128.png */,
+				ED65F6E72C667500002564E2 /* content.js */,
+				ED65F6E82C667500002564E2 /* content.ts-loader.js */,
+			);
+			name = Resources;
+			path = "Shared (Extension)";
+			sourceTree = SOURCE_ROOT;
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		ED65F6852C667500002564E2 /* wtm (iOS) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = ED65F6CA2C667500002564E2 /* Build configuration list for PBXNativeTarget "wtm (iOS)" */;
+			buildPhases = (
+				ED65F6822C667500002564E2 /* Sources */,
+				ED65F6832C667500002564E2 /* Frameworks */,
+				ED65F6842C667500002564E2 /* Resources */,
+				ED65F6C92C667500002564E2 /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				ED65F6A82C667500002564E2 /* PBXTargetDependency */,
+			);
+			name = "wtm (iOS)";
+			productName = "wtm (iOS)";
+			productReference = ED65F6862C667500002564E2 /* wtm.app */;
+			productType = "com.apple.product-type.application";
+		};
+		ED65F6972C667500002564E2 /* wtm (macOS) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = ED65F6D12C667500002564E2 /* Build configuration list for PBXNativeTarget "wtm (macOS)" */;
+			buildPhases = (
+				ED65F6942C667500002564E2 /* Sources */,
+				ED65F6952C667500002564E2 /* Frameworks */,
+				ED65F6962C667500002564E2 /* Resources */,
+				ED65F6D02C667500002564E2 /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				ED65F6B22C667500002564E2 /* PBXTargetDependency */,
+			);
+			name = "wtm (macOS)";
+			productName = "wtm (macOS)";
+			productReference = ED65F6982C667500002564E2 /* wtm.app */;
+			productType = "com.apple.product-type.application";
+		};
+		ED65F6A42C667500002564E2 /* wtm Extension (iOS) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = ED65F6C62C667500002564E2 /* Build configuration list for PBXNativeTarget "wtm Extension (iOS)" */;
+			buildPhases = (
+				ED65F6A12C667500002564E2 /* Sources */,
+				ED65F6A22C667500002564E2 /* Frameworks */,
+				ED65F6A32C667500002564E2 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "wtm Extension (iOS)";
+			productName = "wtm Extension (iOS)";
+			productReference = ED65F6A52C667500002564E2 /* wtm Extension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		ED65F6AE2C667500002564E2 /* wtm Extension (macOS) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = ED65F6CD2C667500002564E2 /* Build configuration list for PBXNativeTarget "wtm Extension (macOS)" */;
+			buildPhases = (
+				ED65F6AB2C667500002564E2 /* Sources */,
+				ED65F6AC2C667500002564E2 /* Frameworks */,
+				ED65F6AD2C667500002564E2 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "wtm Extension (macOS)";
+			productName = "wtm Extension (macOS)";
+			productReference = ED65F6AF2C667500002564E2 /* wtm Extension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		ED65F6732C6674FD002564E2 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1540;
+				LastUpgradeCheck = 1540;
+				TargetAttributes = {
+					ED65F6852C667500002564E2 = {
+						CreatedOnToolsVersion = 15.4;
+					};
+					ED65F6972C667500002564E2 = {
+						CreatedOnToolsVersion = 15.4;
+					};
+					ED65F6A42C667500002564E2 = {
+						CreatedOnToolsVersion = 15.4;
+					};
+					ED65F6AE2C667500002564E2 = {
+						CreatedOnToolsVersion = 15.4;
+					};
+				};
+			};
+			buildConfigurationList = ED65F6762C6674FD002564E2 /* Build configuration list for PBXProject "wtm" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = ED65F6722C6674FD002564E2;
+			productRefGroup = ED65F6872C667500002564E2 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				ED65F6852C667500002564E2 /* wtm (iOS) */,
+				ED65F6972C667500002564E2 /* wtm (macOS) */,
+				ED65F6A42C667500002564E2 /* wtm Extension (iOS) */,
+				ED65F6AE2C667500002564E2 /* wtm Extension (macOS) */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		ED65F6842C667500002564E2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				ED65F6B82C667500002564E2 /* Icon.png in Resources */,
+				ED65F68F2C667500002564E2 /* Base in Resources */,
+				ED65F6B62C667500002564E2 /* Base in Resources */,
+				ED65F6BC2C667500002564E2 /* Script.js in Resources */,
+				ED65F6C02C667500002564E2 /* Assets.xcassets in Resources */,
+				ED65F6922C667500002564E2 /* Base in Resources */,
+				ED65F6BA2C667500002564E2 /* Style.css in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		ED65F6962C667500002564E2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				ED65F6B92C667500002564E2 /* Icon.png in Resources */,
+				ED65F6BB2C667500002564E2 /* Style.css in Resources */,
+				ED65F69E2C667500002564E2 /* Base in Resources */,
+				ED65F6BD2C667500002564E2 /* Script.js in Resources */,
+				ED65F6C12C667500002564E2 /* Assets.xcassets in Resources */,
+				ED65F6B72C667500002564E2 /* Base in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		ED65F6A32C667500002564E2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				ED65F70E2C667500002564E2 /* app-icon-grayscale-128.png in Resources */,
+				ED65F6FE2C667500002564E2 /* app-icon-48.png in Resources */,
+				ED65F7092C667500002564E2 /* app-icon-grayscale-32.png in Resources */,
+				ED65F7102C667500002564E2 /* content.ts-loader.js in Resources */,
+				ED65F7012C667500002564E2 /* app-icon-64.png in Resources */,
+				ED65F7072C667500002564E2 /* index.css in Resources */,
+				ED65F70D2C667500002564E2 /* app-icon-grayscale.png in Resources */,
+				ED65F7042C667500002564E2 /* app-icon-128.png in Resources */,
+				ED65F7032C667500002564E2 /* background.js in Resources */,
+				ED65F7002C667500002564E2 /* index.html in Resources */,
+				ED65F7082C667500002564E2 /* chunks in Resources */,
+				ED65F6FF2C667500002564E2 /* popup.js in Resources */,
+				ED65F7022C667500002564E2 /* app-icon-grayscale-48.png in Resources */,
+				ED65F70F2C667500002564E2 /* content.js in Resources */,
+				ED65F7062C667500002564E2 /* app-icon-grayscale-16.png in Resources */,
+				ED65F6FD2C667500002564E2 /* app-icon-grayscale-64.png in Resources */,
+				ED65F70C2C667500002564E2 /* manifest.json in Resources */,
+				ED65F70A2C667500002564E2 /* app-icon.png in Resources */,
+				ED65F7052C667500002564E2 /* app-icon-16.png in Resources */,
+				ED65F70B2C667500002564E2 /* app-icon-32.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		ED65F6AD2C667500002564E2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				ED65F6FA2C667500002564E2 /* app-icon-grayscale-128.png in Resources */,
+				ED65F6EA2C667500002564E2 /* app-icon-48.png in Resources */,
+				ED65F6F52C667500002564E2 /* app-icon-grayscale-32.png in Resources */,
+				ED65F6FC2C667500002564E2 /* content.ts-loader.js in Resources */,
+				ED65F6ED2C667500002564E2 /* app-icon-64.png in Resources */,
+				ED65F6F32C667500002564E2 /* index.css in Resources */,
+				ED65F6F92C667500002564E2 /* app-icon-grayscale.png in Resources */,
+				ED65F6F02C667500002564E2 /* app-icon-128.png in Resources */,
+				ED65F6EF2C667500002564E2 /* background.js in Resources */,
+				ED65F6EC2C667500002564E2 /* index.html in Resources */,
+				ED65F6F42C667500002564E2 /* chunks in Resources */,
+				ED65F6EB2C667500002564E2 /* popup.js in Resources */,
+				ED65F6EE2C667500002564E2 /* app-icon-grayscale-48.png in Resources */,
+				ED65F6FB2C667500002564E2 /* content.js in Resources */,
+				ED65F6F22C667500002564E2 /* app-icon-grayscale-16.png in Resources */,
+				ED65F6E92C667500002564E2 /* app-icon-grayscale-64.png in Resources */,
+				ED65F6F82C667500002564E2 /* manifest.json in Resources */,
+				ED65F6F62C667500002564E2 /* app-icon.png in Resources */,
+				ED65F6F12C667500002564E2 /* app-icon-16.png in Resources */,
+				ED65F6F72C667500002564E2 /* app-icon-32.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		ED65F6822C667500002564E2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				ED65F6BE2C667500002564E2 /* ViewController.swift in Sources */,
+				ED65F68A2C667500002564E2 /* AppDelegate.swift in Sources */,
+				ED65F68C2C667500002564E2 /* SceneDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		ED65F6942C667500002564E2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				ED65F6BF2C667500002564E2 /* ViewController.swift in Sources */,
+				ED65F69B2C667500002564E2 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		ED65F6A12C667500002564E2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				ED65F6C22C667500002564E2 /* SafariWebExtensionHandler.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		ED65F6AB2C667500002564E2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				ED65F6C32C667500002564E2 /* SafariWebExtensionHandler.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		ED65F6A82C667500002564E2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = ED65F6A42C667500002564E2 /* wtm Extension (iOS) */;
+			targetProxy = ED65F6A72C667500002564E2 /* PBXContainerItemProxy */;
+		};
+		ED65F6B22C667500002564E2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = ED65F6AE2C667500002564E2 /* wtm Extension (macOS) */;
+			targetProxy = ED65F6B12C667500002564E2 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		ED65F6792C6674FD002564E2 /* Main.html */ = {
+			isa = PBXVariantGroup;
+			children = (
+				ED65F67A2C6674FD002564E2 /* Base */,
+			);
+			name = Main.html;
+			sourceTree = "<group>";
+		};
+		ED65F68D2C667500002564E2 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				ED65F68E2C667500002564E2 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		ED65F6902C667500002564E2 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				ED65F6912C667500002564E2 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		ED65F69C2C667500002564E2 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				ED65F69D2C667500002564E2 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		ED65F6C42C667500002564E2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		ED65F6C52C667500002564E2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		ED65F6C72C667500002564E2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "iOS (Extension)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "wtm Extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.ttt246llc.wtm.Extension;
+				PRODUCT_NAME = "wtm Extension";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		ED65F6C82C667500002564E2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "iOS (Extension)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "wtm Extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.ttt246llc.wtm.Extension;
+				PRODUCT_NAME = "wtm Extension";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		ED65F6CB2C667500002564E2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "iOS (App)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = wtm;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+					"-framework",
+					WebKit,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.ttt246llc.wtm;
+				PRODUCT_NAME = wtm;
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		ED65F6CC2C667500002564E2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "iOS (App)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = wtm;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+					"-framework",
+					WebKit,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.ttt246llc.wtm;
+				PRODUCT_NAME = wtm;
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		ED65F6CE2C667500002564E2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "macOS (Extension)/wtm.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "macOS (Extension)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "wtm Extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.ttt246llc.wtm.Extension;
+				PRODUCT_NAME = "wtm Extension";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		ED65F6CF2C667500002564E2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "macOS (Extension)/wtm.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "macOS (Extension)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "wtm Extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.ttt246llc.wtm.Extension;
+				PRODUCT_NAME = "wtm Extension";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		ED65F6D22C667500002564E2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "macOS (App)/wtm.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "macOS (App)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = wtm;
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+					"-framework",
+					WebKit,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.ttt246llc.wtm;
+				PRODUCT_NAME = wtm;
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		ED65F6D32C667500002564E2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "macOS (App)/wtm.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "macOS (App)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = wtm;
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+					"-framework",
+					WebKit,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.ttt246llc.wtm;
+				PRODUCT_NAME = wtm;
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		ED65F6762C6674FD002564E2 /* Build configuration list for PBXProject "wtm" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				ED65F6C42C667500002564E2 /* Debug */,
+				ED65F6C52C667500002564E2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		ED65F6C62C667500002564E2 /* Build configuration list for PBXNativeTarget "wtm Extension (iOS)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				ED65F6C72C667500002564E2 /* Debug */,
+				ED65F6C82C667500002564E2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		ED65F6CA2C667500002564E2 /* Build configuration list for PBXNativeTarget "wtm (iOS)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				ED65F6CB2C667500002564E2 /* Debug */,
+				ED65F6CC2C667500002564E2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		ED65F6CD2C667500002564E2 /* Build configuration list for PBXNativeTarget "wtm Extension (macOS)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				ED65F6CE2C667500002564E2 /* Debug */,
+				ED65F6CF2C667500002564E2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		ED65F6D12C667500002564E2 /* Build configuration list for PBXNativeTarget "wtm (macOS)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				ED65F6D22C667500002564E2 /* Debug */,
+				ED65F6D32C667500002564E2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = ED65F6732C6674FD002564E2 /* Project object */;
+}
