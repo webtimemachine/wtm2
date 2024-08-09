@@ -1,6 +1,7 @@
 import { apiClient } from '../utils/api.client';
 import { DOMtoString, getImages } from '../utils';
-import { CreateNavigationEntry } from '../interfaces/navigation-entry.interface';
+
+import { CreateNavigationEntry } from 'wtm-lib/interfaces';
 
 function onUrlChange(callback: () => void) {
   let lastUrl = location.href;

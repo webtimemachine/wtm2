@@ -108,7 +108,7 @@ const ActiveSessionsScreen: React.FC<object> = () => {
     const OSIcon = getOSIconFromDevice(session.userDevice.device);
 
     return (
-      <div key={session.id}>
+      <div key={session.id} className='transition-all hover:translate-y-[-2px]'>
         <div className='flex w-full justify-between items-center bg-white px-2 py-1 rounded-lg'>
           {!editingSession || editingSession.id !== session.id ? (
             <>
@@ -184,40 +184,46 @@ const ActiveSessionsScreen: React.FC<object> = () => {
   };
 
   const [currentSession, ...restSessions] = sessions;
-
-  return (
-    <>
-      <div className='flex flex-col px-5 py-3 items-center w-full'>
-        <div className='flex w-full justify-start pb-4 gap-4 items-center'>
-          <IconButton aria-label='Back icon' onClick={() => navigateBack()}>
-            <ArrowBackIcon boxSize={5} />
-          </IconButton>
-          <div className='flex w-full justify-center pr-[40px]'>
-            <Text fontSize={'xx-large'} fontWeight={'bold'}>
-              Active Sessions
-            </Text>
-          </div>
-        </div>
-        <div className='flex flex-col w-full h-full'>
-          <Text fontSize={'medium'}>
-            Below you can see the complete list of active sessions:
-          </Text>
-
-          {currentSession && (
-            <div className='pt-5 pr-3'>
-              <ActiveSessionRow session={currentSession} />
+  if (currentSession || restSessions) {
+    return (
+      <div className='flex justify-center items-center  w-full h-1/2'>
+        <div className='flex flex-col px-5 py-3 items-center max-w-6xl min-w-[360px] w-3/4 min-h-[600px]'>
+          <div className='flex w-full justify-start pb-4 gap-4 items-center'>
+            <IconButton aria-label='Back icon' onClick={() => navigateBack()}>
+              <ArrowBackIcon boxSize={5} />
+            </IconButton>
+            <div className='flex w-full justify-center pr-[40px]'>
+              <Text fontSize={'xx-large'} fontWeight={'bold'}>
+                Active Sessions
+              </Text>
             </div>
-          )}
-          <Divider className='my-2' />
-          <div className='flex flex-col gap-2 w-full h-full overflow-y-auto scrollbar pr-1'>
-            {restSessions &&
-              restSessions.map((session, i) => (
-                <ActiveSessionRow session={session} key={i} />
-              ))}
+          </div>
+          <div className='flex flex-col w-full h-full'>
+            <Text fontSize={'medium'}>
+              Below you can see the complete list of active sessions:
+            </Text>
+
+            {currentSession && (
+              <div className='pt-5 pr-3 w-full'>
+                <ActiveSessionRow session={currentSession} />
+              </div>
+            )}
+            <Divider className='my-2' />
+            <div className='flex flex-col gap-2 w-full h-full overflow-y-auto scrollbar pr-1'>
+              {restSessions &&
+                restSessions.map((session, i) => (
+                  <ActiveSessionRow session={session} key={i} />
+                ))}
+            </div>
           </div>
         </div>
       </div>
-    </>
-  );
+    );
+  } else {
+    <div className='flex justify-center items-center  w-full h-1/2'>
+      Loading
+      {/**TODO: Hay que revisar si esto ayuda a renderear la pantalla y no dejar al usuario esperando. */}
+    </div>;
+  }
 };
 export default ActiveSessionsScreen;
