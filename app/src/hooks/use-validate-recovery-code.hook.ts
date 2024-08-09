@@ -2,37 +2,12 @@ import { useMutation } from '@tanstack/react-query';
 import { useToast } from '@chakra-ui/react';
 
 import { apiClient } from '../utils/api.client';
-import {
-  ValidateRecoveryCodeData,
-  ValidateRecoveryCodeErrorResponse,
-  ValidateRecoveryCodeResponse,
-} from 'wtm-lib/interfaces';
 
 export const useValidateRecoveryCode = () => {
   const toast = useToast();
 
-  const validateRecoveryCode = async (data: ValidateRecoveryCodeData) => {
-    const res = await apiClient.fetch(
-      '/api/auth/password/validate-recovery-code',
-      {
-        method: 'POST',
-        body: JSON.stringify(data),
-      },
-    );
-
-    if (res.status === 200) {
-      const response: ValidateRecoveryCodeResponse = await res.json();
-      const { recoveryToken } = response;
-      await chrome.storage.local.set({ recoveryToken });
-      return response;
-    } else {
-      const errorRes: ValidateRecoveryCodeErrorResponse = await res.json();
-      throw new Error(errorRes?.message?.toString());
-    }
-  };
-
   const validateRecoveryCodeMutation = useMutation({
-    mutationFn: validateRecoveryCode,
+    mutationFn: apiClient.validateRecoveryCode,
     onSuccess: (res) => {
       console.log(res);
       toast({
