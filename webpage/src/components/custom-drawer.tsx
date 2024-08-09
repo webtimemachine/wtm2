@@ -146,10 +146,10 @@ export const CustomDrawer = ({
               <MenuList>
                 <MenuGroup title='Not done yet!'>
                   <MenuItem>
-                    <Wrap>
-                      We are glad to inform you that this section will be here
-                      sooner than you think.
-                    </Wrap>
+                    <Text className='max-w-fit'>
+                      We are glad to inform you that this <br />
+                      section will be here sooner than you think.
+                    </Text>
                   </MenuItem>
                 </MenuGroup>
               </MenuList>
