@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "postinstall": "cd ../lib && npm link && cd ../webpage && npm link wtm-lib",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
