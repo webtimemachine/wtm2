@@ -33,13 +33,16 @@ class ContactsViewController: UIViewController {
     }
     
     override func updateContentUnavailableConfiguration(using state: UIContentUnavailableConfigurationState) {
-            contentUnavailableConfiguration = nil
-      
+        contentUnavailableConfiguration = nil
+        guard contacts.isEmpty else {
+            return
+        }
+        
         switch CNContactStore.authorizationStatus(for: .contacts) {
         case .authorized:
-            fetchContacts()
-        case .notDetermined:
             contentUnavailableConfiguration = getEmptyConfig()
+        case .notDetermined:
+            contentUnavailableConfiguration = getAuthorizationNotDeterminedConfig()
         case .denied, .restricted:
             contentUnavailableConfiguration = getDeniedConfig()
         @unknown default:
@@ -66,11 +69,10 @@ class ContactsViewController: UIViewController {
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
-}
+    }
     
     private func fetchContacts() {
         let request = CNContactFetchRequest(keysToFetch: keysToFetch)
-        
         DispatchQueue.global(qos: .userInitiated).async {
             do {
                 var fetchedContacts: [CNContact] = []
@@ -78,18 +80,39 @@ class ContactsViewController: UIViewController {
                     fetchedContacts.append(contact)
                 }
                 self.contacts = fetchedContacts
+                DispatchQueue.main.async {
+                    self.setNeedsUpdateContentUnavailableConfiguration()
+                }
             } catch {
                 print("Error fetching contacts: \(error)")
             }
         }
     }
     
-    private func didTapOnSync() {
+    private func didTapOnEnable() {
         self.store.requestAccess(for: .contacts) { _, _ in
             DispatchQueue.main.async {
                 self.setNeedsUpdateContentUnavailableConfiguration()
             }
         }
+    }
+    
+    private func didTapOnSync() {
+        fetchContacts()
+    }
+    
+    private func getAuthorizationNotDeterminedConfig() -> UIContentUnavailableConfiguration {
+        var config = UIContentUnavailableConfiguration.empty()
+        config.image = UIImage(systemName: "exclamationmark.circle.fill")
+        config.text = "We need access to your contacts to proceed."
+        config.secondaryText = "Please enable contact permissions."
+ 
+        var buttonConfig = UIButton.Configuration.borderless()
+        buttonConfig.title = "Enable"
+        config.button = buttonConfig
+        
+        config.buttonProperties.primaryAction = UIAction.init(handler: { _ in self.didTapOnEnable()})
+        return config
     }
     
     private func getEmptyConfig() -> UIContentUnavailableConfiguration {

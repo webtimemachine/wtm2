@@ -82,9 +82,8 @@ class ViewController: PlatformViewController, WKNavigationDelegate, WKScriptMess
 
 
     private var baseUrl: String = ""
-    private var email: String = ""
-    private var password: String = ""
-    
+    private let loginService = AuthService()
+
     private let baseUrlTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "Base URL"
@@ -108,11 +107,18 @@ class ViewController: PlatformViewController, WKNavigationDelegate, WKScriptMess
         return textField
     }()
     
-    private var button: UIButton = {
+    private let button: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Open URL", for: .normal)
         button.isEnabled = false
         return button
+    }()
+    
+    private let loadingIndicator: UIActivityIndicatorView = {
+        let view = UIActivityIndicatorView(style: .large)
+        view.startAnimating()
+        view.isHidden = true
+        return view
     }()
     
     private func setupUI() {
@@ -120,7 +126,8 @@ class ViewController: PlatformViewController, WKNavigationDelegate, WKScriptMess
         view.addSubview(emailTextField)
         view.addSubview(passwordTextField)
         view.addSubview(button)
-        
+        button.addSubview(loadingIndicator)
+
         setupConstraints()
         
         baseUrlTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
@@ -134,7 +141,8 @@ class ViewController: PlatformViewController, WKNavigationDelegate, WKScriptMess
         emailTextField.translatesAutoresizingMaskIntoConstraints = false
         passwordTextField.translatesAutoresizingMaskIntoConstraints = false
         button.translatesAutoresizingMaskIntoConstraints = false
-        
+        loadingIndicator.translatesAutoresizingMaskIntoConstraints = false
+
         NSLayoutConstraint.activate([
             baseUrlTextField.bottomAnchor.constraint(equalTo: emailTextField.topAnchor, constant: -32),
             baseUrlTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
@@ -149,7 +157,14 @@ class ViewController: PlatformViewController, WKNavigationDelegate, WKScriptMess
             passwordTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             
             button.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 32),
-            button.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+            button.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            button.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            button.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+
+            loadingIndicator.topAnchor.constraint(equalTo: button.centerYAnchor),
+            loadingIndicator.bottomAnchor.constraint(equalTo: button.centerYAnchor),
+            loadingIndicator.leadingAnchor.constraint(equalTo: button.leadingAnchor),
+            loadingIndicator.trailingAnchor.constraint(equalTo: button.trailingAnchor),
         ])
     }
     
@@ -165,8 +180,34 @@ class ViewController: PlatformViewController, WKNavigationDelegate, WKScriptMess
     
     @objc
     private func didTapGoToUrl() {
-        let contactsVC = ContactsViewController()
-        navigationController?.pushViewController(contactsVC, animated: true)
+        doLogin()
+    }
+    
+    private func doLogin() {
+        loadingIndicator.isHidden = false
+        button.isEnabled = false
+
+        let request = LoginRequest(email: emailTextField.text ?? "", password: passwordTextField.text ?? "")
+        loginService.doLogin(url: "\(baseUrl)/api/auth/login", request: request) { [weak self] result in
+            guard let self else { return }
+            
+            DispatchQueue.main.async {
+                switch result {
+                case .success:
+                    self.navigationController?.pushViewController(ContactsViewController(), animated: true)
+                case .failure(let error):
+                    self.showAlert(message: error.localizedDescription)
+                }
+                
+                self.loadingIndicator.isHidden = true
+                self.button.isEnabled = true
+            }
+        }
+    }
+    
+    private func showAlert(message: String) {
+        let alert = UIAlertController(title: "Alert", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        present(alert, animated: true, completion: nil)
     }
 }
-
