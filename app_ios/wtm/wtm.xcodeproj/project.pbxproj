@@ -11,6 +11,8 @@
 		544D8F3B2C668FFC00C4FBF8 /* ContactsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544D8F392C668FFC00C4FBF8 /* ContactsViewController.swift */; };
 		544D8F3D2C66921E00C4FBF8 /* ContactCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544D8F3C2C66921E00C4FBF8 /* ContactCell.swift */; };
 		544D8F3E2C66921E00C4FBF8 /* ContactCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544D8F3C2C66921E00C4FBF8 /* ContactCell.swift */; };
+		544D8F402C6ACBC700C4FBF8 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544D8F3F2C6ACBC700C4FBF8 /* WebViewController.swift */; };
+		544D8F412C6ACBC700C4FBF8 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544D8F3F2C6ACBC700C4FBF8 /* WebViewController.swift */; };
 		6AF7195C2C6A827F00D424B0 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF7195B2C6A827F00D424B0 /* AuthService.swift */; };
 		6AF7195F2C6A82B600D424B0 /* Login.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF7195E2C6A82B600D424B0 /* Login.swift */; };
 		ED65F68A2C667500002564E2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED65F6892C667500002564E2 /* AppDelegate.swift */; };
@@ -122,6 +124,7 @@
 /* Begin PBXFileReference section */
 		544D8F392C668FFC00C4FBF8 /* ContactsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsViewController.swift; sourceTree = "<group>"; };
 		544D8F3C2C66921E00C4FBF8 /* ContactCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactCell.swift; sourceTree = "<group>"; };
+		544D8F3F2C6ACBC700C4FBF8 /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 		6AF7195B2C6A827F00D424B0 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		6AF7195E2C6A82B600D424B0 /* Login.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Login.swift; sourceTree = "<group>"; };
 		ED65F67A2C6674FD002564E2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = Base; path = ../Base.lproj/Main.html; sourceTree = "<group>"; };
@@ -240,6 +243,7 @@
 				544D8F3C2C66921E00C4FBF8 /* ContactCell.swift */,
 				ED65F67F2C667500002564E2 /* Assets.xcassets */,
 				ED65F6782C6674FD002564E2 /* Resources */,
+				544D8F3F2C6ACBC700C4FBF8 /* WebViewController.swift */,
 			);
 			path = "Shared (App)";
 			sourceTree = "<group>";
@@ -559,6 +563,7 @@
 				6AF7195C2C6A827F00D424B0 /* AuthService.swift in Sources */,
 				544D8F3A2C668FFC00C4FBF8 /* ContactsViewController.swift in Sources */,
 				ED65F68C2C667500002564E2 /* SceneDelegate.swift in Sources */,
+				544D8F402C6ACBC700C4FBF8 /* WebViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -569,6 +574,7 @@
 				544D8F3E2C66921E00C4FBF8 /* ContactCell.swift in Sources */,
 				ED65F6BF2C667500002564E2 /* ViewController.swift in Sources */,
 				544D8F3B2C668FFC00C4FBF8 /* ContactsViewController.swift in Sources */,
+				544D8F412C6ACBC700C4FBF8 /* WebViewController.swift in Sources */,
 				ED65F69B2C667500002564E2 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
