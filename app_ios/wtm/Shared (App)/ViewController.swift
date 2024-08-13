@@ -96,6 +96,7 @@ class ViewController: PlatformViewController, WKNavigationDelegate, WKScriptMess
         let textField = UITextField()
         textField.placeholder = "Email"
         textField.borderStyle = .roundedRect
+        textField.keyboardType = .emailAddress
         return textField
     }()
     
@@ -193,8 +194,17 @@ class ViewController: PlatformViewController, WKNavigationDelegate, WKScriptMess
             
             DispatchQueue.main.async {
                 switch result {
-                case .success:
-                    self.navigationController?.pushViewController(ContactsViewController(), animated: true)
+                case .success(let loginResponse):
+                    let accessToken = loginResponse.accessToken
+                    UserDefaults.standard.set(accessToken, forKey: "access_token")
+
+                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                            if let tabBarController = storyboard.instantiateViewController(withIdentifier: "MainTabBarController") as? UITabBarController {
+                                // Presenta el TabBarController
+                                tabBarController.modalPresentationStyle = .fullScreen
+                                self.navigationController?.pushViewController(tabBarController, animated: true)
+                            }
+                    
                 case .failure(let error):
                     self.showAlert(message: error.localizedDescription)
                 }
