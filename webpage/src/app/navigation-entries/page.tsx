@@ -23,19 +23,16 @@ import {
   SmallCloseIcon,
 } from '@chakra-ui/icons';
 import { BsStars } from 'react-icons/bs';
-import {
-  useDeleteNavigationEntry,
-  useNavigationEntries,
-} from '../../hooks';
+import { useDeleteNavigationEntry, useNavigationEntries } from '../../hooks';
 import {
   CompleteNavigationEntryDto,
   NavEntryProps,
 } from '../../interfaces/navigation-entry.interface';
-import './markdown-styles.css'
+// import './markdown-styles.css'
 import { getBrowserIconFromDevice } from '../../utils';
 import clsx from 'clsx';
 
-import { CustomDrawer } from '@/components/custom-drawer';
+import { CustomDrawer } from '../../components/custom-drawer';
 import Markdown from 'react-markdown';
 const truncateString = (str: string, maxLength: number) => {
   return str.length <= maxLength ? str : str.slice(0, maxLength) + '...';
@@ -48,17 +45,16 @@ const getPreProcessedMarkDown = (relevantSegment: string) => {
     /\n\s*\*\*\n(\s*\*+\n)*/g, // matches lines with ** and *+ with spaces
     /- \*\n(\s*\*\n)*/g, // matches lines with - * and *+
     /\n\s*\*\n(\s*\*\n)*/g, // matches lines with * and *+ with spaces
-    /\n\s*-\n(\s*-\n)*/g // matches lines with - and -+ with spaces
+    /\n\s*-\n(\s*-\n)*/g, // matches lines with - and -+ with spaces
   ];
   let markdown = relevantSegment;
-  emptyListPatterns.forEach(pattern => {
+  emptyListPatterns.forEach((pattern) => {
     markdown = markdown.replace(pattern, '');
   });
   markdown = markdown.replace(/\n{2,}/g, '\n\n');
-  return markdown || "";
-}
+  return markdown || '';
+};
 const RelevantSegment = ({ relevantSegment }: { relevantSegment: string }) => {
-
   const markdown = getPreProcessedMarkDown(relevantSegment);
 
   return (
@@ -80,10 +76,10 @@ const NavigationEntry = ({
   isSemantic,
 }: NavEntryProps) => {
   const [visible, setVisible] = useState<boolean>(false);
-  
-  useEffect(()=>{
+
+  useEffect(() => {
     setVisible(false);
-  },[element])
+  }, [element]);
 
   return (
     <div className='flex flex-col w-full bg-white px-2 py-1 rounded-lg mb-1 gap-3'>

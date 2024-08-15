@@ -1,5 +1,5 @@
-import { useLogout } from '@/hooks';
-import { useNavigation } from '@/store';
+import { useLogout } from '../hooks';
+import { useNavigation } from '../store';
 import { ChevronDownIcon, SettingsIcon } from '@chakra-ui/icons';
 import {
   Drawer,
