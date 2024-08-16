@@ -18,6 +18,10 @@ jest.mock('../../utils/api.client', () => ({
   },
 }));
 
+jest.mock('@wcj/html-to-markdown', () => ({
+  htmlToMarkdown: jest.fn().mockResolvedValue(''),
+}));
+
 // Mocking the chrome storage local API
 global.chrome = {
   storage: {

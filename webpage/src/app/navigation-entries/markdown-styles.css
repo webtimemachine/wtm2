@@ -1,0 +1,80 @@
+.markdown-content * {
+  all: unset;
+  display: revert;
+  font-family: inherit;
+  color: inherit;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.markdown-content h1 {
+  font-size: 2em;
+  font-weight: bold;
+  margin: 0.67em 0;
+}
+
+.markdown-content h2 {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin: 0.75em 0;
+}
+
+.markdown-content h3 {
+  font-size: 1.17em;
+  font-weight: bold;
+  margin: 0.83em 0;
+}
+
+.markdown-content h4 {
+  font-size: 1em;
+  font-weight: bold;
+  margin: 1em 0;
+}
+
+.markdown-content h5 {
+  font-size: 0.83em;
+  font-weight: bold;
+  margin: 1.17em 0;
+}
+
+.markdown-content h6 {
+  font-size: 0.75em;
+  font-weight: bold;
+  margin: 1.33em 0;
+}
+
+.markdown-content p {
+  font-size: 1em;
+  margin: 1em 0;
+  line-height: 1.5;
+}
+
+.markdown-content ul, .markdown-content ol {
+  margin: 1em 0;
+  padding-left: 40px;
+}
+
+.markdown-content li {
+  margin: 0.5em 0;
+}
+
+.markdown-content a {
+  color: blue;
+  text-decoration: underline;
+}
+
+.markdown-content code {
+  font-family: monospace;
+  background-color: #f4f4f4;
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
+}
+
+.markdown-content pre {
+  font-family: monospace;
+  background-color: #f4f4f4;
+  padding: 1em;
+  border-radius: 3px;
+  overflow: auto;
+}
