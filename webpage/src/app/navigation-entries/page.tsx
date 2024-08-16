@@ -28,7 +28,6 @@ import {
   CompleteNavigationEntryDto,
   NavEntryProps,
 } from '../../interfaces/navigation-entry.interface';
-// import './markdown-styles.css'
 import { getBrowserIconFromDevice } from '../../utils';
 import clsx from 'clsx';
 
