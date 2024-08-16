@@ -15,40 +15,54 @@ import {
 import React, { useEffect, useState } from 'react';
 
 import {
-  ArrowLeftIcon,
-  ArrowRightIcon,
   ChevronDownIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
   ChevronUpIcon,
   HamburgerIcon,
-  SettingsIcon,
   SmallCloseIcon,
 } from '@chakra-ui/icons';
 import { BsStars } from 'react-icons/bs';
-import {
-  useDeleteNavigationEntry,
-  useLogout,
-  useNavigationEntries,
-} from '../../hooks';
+import { useDeleteNavigationEntry, useNavigationEntries } from '../../hooks';
 import {
   CompleteNavigationEntryDto,
   NavEntryProps,
 } from '../../interfaces/navigation-entry.interface';
-
 import { getBrowserIconFromDevice } from '../../utils';
 import clsx from 'clsx';
 
-import { CustomDrawer } from '@/components/custom-drawer';
+import { CustomDrawer } from '../../components/custom-drawer';
+import Markdown from 'react-markdown';
 const truncateString = (str: string, maxLength: number) => {
   return str.length <= maxLength ? str : str.slice(0, maxLength) + '...';
 };
-
+const getPreProcessedMarkDown = (relevantSegment: string) => {
+  const emptyListPatterns = [
+    /\*\n(\*\n)*/g, // matches lines with only *
+    /-\n(-\n)*/g, // matches lines with only -
+    /- \*\*\n(\*+\n)*/g, // matches lines with only - ** and *+
+    /\n\s*\*\*\n(\s*\*+\n)*/g, // matches lines with ** and *+ with spaces
+    /- \*\n(\s*\*\n)*/g, // matches lines with - * and *+
+    /\n\s*\*\n(\s*\*\n)*/g, // matches lines with * and *+ with spaces
+    /\n\s*-\n(\s*-\n)*/g, // matches lines with - and -+ with spaces
+  ];
+  let markdown = relevantSegment;
+  emptyListPatterns.forEach((pattern) => {
+    markdown = markdown.replace(pattern, '');
+  });
+  markdown = markdown.replace(/\n{2,}/g, '\n\n');
+  return markdown || '';
+};
 const RelevantSegment = ({ relevantSegment }: { relevantSegment: string }) => {
+  const markdown = getPreProcessedMarkDown(relevantSegment);
+
   return (
     <div>
       <p className='font-semibold mb-4'>Most relevant match</p>
-      <p className='text-xs'>{relevantSegment}</p>
+      <p className='text-xs'></p>
+      <div className='markdown-content'>
+        <Markdown>{markdown}</Markdown>
+      </div>
     </div>
   );
 };
@@ -61,6 +75,10 @@ const NavigationEntry = ({
   isSemantic,
 }: NavEntryProps) => {
   const [visible, setVisible] = useState<boolean>(false);
+
+  useEffect(() => {
+    setVisible(false);
+  }, [element]);
 
   return (
     <div className='flex flex-col w-full bg-white px-2 py-1 rounded-lg mb-1 gap-3'>
