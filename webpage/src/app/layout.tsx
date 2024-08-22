@@ -19,7 +19,7 @@ export default function RootLayout({
       <head>
         <link rel='icon' type='image/x-icon' href='/app-icon.png' />
       </head>
-      <body className={`${inter.className} bg-slate-100`}>
+      <body className={`${inter.className} bg-white`}>
         <ClientProviders>{children}</ClientProviders>
       </body>
     </html>
