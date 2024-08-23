@@ -18,8 +18,8 @@ jest.mock('../../utils/api.client', () => ({
   },
 }));
 
-jest.mock('@wcj/html-to-markdown', () => ({
-  htmlToMarkdown: jest.fn().mockResolvedValue(''),
+jest.mock('dom-to-semantic-markdown', () => ({
+  getSemanticMarkdownForLLM: jest.fn().mockResolvedValue(''),
 }));
 
 // Mocking the chrome storage local API
