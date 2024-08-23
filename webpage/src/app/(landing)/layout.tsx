@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { manifestWeb } from '@/manifest-web';
 import { Footer } from './components/footer';
+import { Box, Container } from '@chakra-ui/react';
 
 export const metadata: Metadata = {
   title: manifestWeb.name,
@@ -12,9 +13,28 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className='max-w-6xl mx-auto min-h-screen flex flex-col'>
-      <main className='flex-grow flex p-10'>{children}</main>
-      <Footer />
-    </div>
+    <Container
+      display={'flex'}
+      flexDirection={'column'}
+      justifyContent={'center'}
+      alignItems={'center'}
+      maxW={'6xl'}
+      minHeight={'100vh'}
+    >
+      <Box as='main' display={'flex'} flexDir={'column'} flexGrow={1}>
+        <Box as='main' padding={5} flexGrow={1} display={'flex'}>
+          <Box
+            bg={{ sm: 'white', base: 'none' }}
+            rounded={'xl'}
+            w='100%'
+            shadow={{ sm: 'xl', base: 'none' }}
+            padding={5}
+          >
+            {children}
+          </Box>
+        </Box>
+        <Footer />
+      </Box>
+    </Container>
   );
 }
