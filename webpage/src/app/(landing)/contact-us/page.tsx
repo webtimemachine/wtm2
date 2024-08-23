@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { Footer } from '../components/footer';
 import { ContactForm } from './contact-form';
+import { Heading, Stack } from '@chakra-ui/react';
 
 export const metadata: Metadata = {
   title: 'WebTM | Contact Us',
@@ -10,13 +11,19 @@ export const metadata: Metadata = {
 
 export default function ContactUsPage() {
   return (
-    <div className='flex-grow flex items-center justify-center'>
-      <div className='py-5 px-8 lg:px-20 flex flex-col items-center gap-6'>
-        <h1 className='text-4xl font-semibold'>Contact Us</h1>
-        <div className='flex justify-center'>
+    <Stack justifyContent={'center'} alignItems={'center'} h='100%'>
+      <Stack
+        paddingX={{ base: 0, md: 20 }}
+        paddingY={5}
+        className='py-5 px-8 lg:px-20 flex flex-col items-center gap-6'
+      >
+        <Heading as='h1' size={'xl'} fontWeight={'semibold'}>
+          Contact Us
+        </Heading>
+        <Stack justifyContent={'center'}>
           <ContactForm />
-        </div>
-      </div>
-    </div>
+        </Stack>
+      </Stack>
+    </Stack>
   );
 }
