@@ -22,6 +22,10 @@ jest.mock('dom-to-semantic-markdown', () => ({
   getSemanticMarkdownForLLM: jest.fn().mockResolvedValue(''),
 }));
 
+jest.mock('cheerio', () => ({
+  Cheerio: jest.fn().mockResolvedValue(''),
+}));
+
 // Mocking the chrome storage local API
 global.chrome = {
   storage: {
