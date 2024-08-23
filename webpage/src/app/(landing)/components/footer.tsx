@@ -14,7 +14,8 @@ enum Routes {
 export const Footer = () => {
   const pathname = usePathname();
 
-  const baseStyles = 'p-2 text-gray-600 hover:text-gray-900';
+  const baseStyles =
+    'px-2 text-xs sm:text-sm text-gray-600 hover:text-gray-900';
   const currentRouteStyle = 'text-gray-900 font-medium';
 
   return (
