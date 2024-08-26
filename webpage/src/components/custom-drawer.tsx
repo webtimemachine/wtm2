@@ -1,3 +1,4 @@
+import { useGetBasicUserIngormation } from '../hooks/use-get-user-basic-information.hook';
 import { useLogout } from '../hooks';
 import { useNavigation } from '../store';
 import { ChevronDownIcon, SettingsIcon } from '@chakra-ui/icons';
@@ -35,6 +36,7 @@ import { FcContacts } from 'react-icons/fc';
 import { LuSettings2 } from 'react-icons/lu';
 import { PiTabs } from 'react-icons/pi';
 import { RiNumber1, RiNumber2, RiNumber3 } from 'react-icons/ri';
+import { User } from '@/interfaces/user-basic-information.interface';
 
 export const CustomDrawer = ({
   isOpen,
@@ -47,9 +49,11 @@ export const CustomDrawer = ({
 }) => {
   const { logout } = useLogout();
   const { navigateTo } = useNavigation();
-  const getUserMail = () => {
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem('mail')?.split('@')[0];
+  const { basicUserInformationQuery } = useGetBasicUserIngormation();
+  const getUserMail = (basicUserInformationQuery: any) => {
+    if (basicUserInformationQuery && basicUserInformationQuery.data) {
+      const email: string = basicUserInformationQuery.data.email;
+      return email.split('@')[0];
     }
     return 'Loading...';
   };
@@ -70,7 +74,8 @@ export const CustomDrawer = ({
               leftIcon={<FaUser />}
               rightIcon={<ChevronDownIcon />}
             >
-              {getUserMail()}
+              {basicUserInformationQuery &&
+                getUserMail(basicUserInformationQuery)}
             </MenuButton>
             <MenuList>
               <MenuGroup title='Profile'>

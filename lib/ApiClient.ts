@@ -1,3 +1,4 @@
+import { User } from './interfaces/user-basic-information';
 import {
   BasicResponse,
   CloseActiveSessionsData,
@@ -526,6 +527,29 @@ export class ApiClient {
     } else {
       const errorRes: VerifyCodeErrorResponse = await res.json();
       throw new Error(errorRes?.message?.toString());
+    }
+  };
+  getBasicUserInformation = async () => {
+    try {
+      const res = await this.securedFetch('/api/user/me', {
+        method: 'GET',
+      });
+
+      if (res.status !== 200) {
+        const errorJson = await res.json();
+        throw new Error(
+          errorJson?.message || 'GET User Basic Information Error',
+        );
+      }
+
+      const response: User = await res.json();
+      return response;
+    } catch (error: any) {
+      if (`${error?.message}`.toLowerCase().includes('unauthorized')) {
+        if (this.handleSessionExpired) await this.handleSessionExpired();
+      } else {
+        throw error;
+      }
     }
   };
 }
