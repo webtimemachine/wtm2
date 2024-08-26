@@ -21,8 +21,20 @@ export default function RootLayout({
       maxW={'6xl'}
       minHeight={'100vh'}
     >
-      <Box as='main' display={'flex'} flexDir={'column'} flexGrow={1}>
-        <Box as='main' padding={5} flexGrow={1} display={'flex'}>
+      <Box
+        as='main'
+        display={'flex'}
+        flexDir={'column'}
+        flexGrow={1}
+        justifyContent={'space-between'}
+      >
+        <Box
+          as='main'
+          padding={5}
+          display={'flex'}
+          flexGrow={1}
+          alignItems={'center'}
+        >
           <Box
             bg={{ sm: 'white', base: 'none' }}
             rounded={'xl'}
