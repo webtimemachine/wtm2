@@ -12,9 +12,9 @@ export default function Home() {
   return (
     <Stack
       spacing={5}
-      h='100%'
       alignItems={'center'}
       direction={{ md: 'row', base: 'column' }}
+      gap={12}
     >
       <Box
         boxSize={'sm'}
@@ -27,7 +27,7 @@ export default function Home() {
       </Box>
       <Stack spacing={4}>
         <Stack spacing={1}>
-          <Heading as='h1' size='3xl'>
+          <Heading as='h1' size='3xl' paddingBottom={8}>
             WebTM
           </Heading>
           <Text as='p'>
@@ -48,7 +48,7 @@ export default function Home() {
           Use state of the art Machine Learning to query your browser history
         </Text>
 
-        <Stack spacing={2} direction={'row'} wrap={'wrap'}>
+        <Stack spacing={2} direction={'row'} wrap={'wrap'} paddingTop={4}>
           <Link
             href='https://chrome.google.com/webstore/detail/dfijieibikhpelmfhkjmihgfgpoeigch'
             target='_blank'
