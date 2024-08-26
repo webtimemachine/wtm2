@@ -1,4 +1,4 @@
-import { User } from 'interfaces/user-basic-information';
+import { User } from './interfaces/user-basic-information';
 import {
   BasicResponse,
   CloseActiveSessionsData,
