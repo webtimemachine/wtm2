@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import { ClientProviders } from '@/providers/ClientProvider';
 import { manifestWeb } from '@/manifest-web';
+
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
@@ -19,7 +20,7 @@ export default function RootLayout({
       <head>
         <link rel='icon' type='image/x-icon' href='/app-icon.png' />
       </head>
-      <body className={`${inter.className} bg-slate-100`}>
+      <body className={`${inter.className} bg-white sm:bg-gray-200`}>
         <ClientProviders>{children}</ClientProviders>
       </body>
     </html>

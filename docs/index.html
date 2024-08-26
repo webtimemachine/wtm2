@@ -1,86 +1,163 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <title>WebTM</title>
+    <link rel="icon" href="./assets/icon-512.png" />
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta
+      name="description"
+      content="WebTM - A time machine for your browser."
+    />
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+  </head>
 
-<head>
-  <title>WebTM</title>
-  <link rel="icon" href="./assets/icon-512.png">
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="WebTM - A time machine for your browser.">
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-</head>
+  <body style="height: 100vh">
+    <div
+      class="container h-100 d-flex align-content-between justify-content-between flex-column"
+    >
+      <div class="row h-100 align-content-center">
+        <div class="col-lg-4 d-flex justify-content-center align-self-center">
+          <img
+            class="m-4"
+            style="max-height: 250px"
+            src="./assets/icon-512.png"
+            alt="WebTM Icon"
+          />
+        </div>
+        <div class="col-lg-8 d-flex">
+          <div class="align-self-center">
+            <h1>WebTM</h1>
+            <p>
+              It's like a Time Machine for your browser. Search through
+              everything you've seen and find that thing you don't know where
+              you looked up.
+            </p>
+            <p>
+              It's totally open source and we tried to make it easy to run your
+              own.
+            </p>
+            <p>
+              Store your web history in one place, whether in IOS Safari,
+              Android Firefox, or Desktop Chrome
+            </p>
+            <p>
+              Use state of the art Machine Learning to query your browser
+              history
+            </p>
+            <p></p>
 
-<body style='height: 100vh;'>
-  <div class="container h-100 d-flex align-content-between justify-content-between flex-column">
-    <div class="row h-100 align-content-center">
-      <div class="col-lg-4 d-flex justify-content-center align-self-center">
-        <img class="m-4" style="max-height: 250px;" src="./assets/icon-512.png" alt="WebTM Icon" />
-      </div>
-      <div class="col-lg-8 d-flex">
-        <div class="align-self-center">
-          <h1>WebTM</h1>
-          <p>It's like a Time Machine for your browser. Search through everything you've seen and find that thing you
-            don't know where you looked up.</p>
-            <p>It's totally open source and we tried to make it easy to run your own.</p>
-            <p>Store your web history in one place, whether in IOS Safari, Android Firefox, or Desktop Chrome</p>
-            <p>Use state of the art Machine Learning to query your browser history</p>
-          <p></p>
-
-          <div class='row'>
-            <div class='mt-2 d-flex justify-content-center'>
-              <a href='https://chrome.google.com/webstore/detail/dfijieibikhpelmfhkjmihgfgpoeigch' target='_blank'><img
-                  src='./assets/chrome-badget.png' class='border border-secondary rounded ml-2 mr-2' alt="Chrome Web Store Badge" /></a>
-            </div>
-            <div class='mt-2 d-flex justify-content-center'>
-              <a href='https://apps.apple.com/ar/app/webtm/id6477404511' target='_blank'>
-                <img class="ml-2 mr-2" src="./assets/apple-store.svg" alt="Apple Store Badge" />
-              </a>
-            </div>
-            <div class='mt-2 d-flex justify-content-center'>
-              <a href='https://addons.mozilla.org/en-US/firefox/addon/webtm' target='_blank'>
-                <img class="ml-2 mr-2" src="./assets/firefox-add-ons.png" height='42px' alt="Firefox Add-ons Badge" />
-              </a>
-            </div>
-            <div class='mt-2 d-flex justify-content-center'>
-              <a href='https://discord.gg/JpR5Dn5jP5' target='_blank'><img class="ml-2 mr-2" src="./assets/discord.jpeg"
-                  width='110px' alt="Discord" /></a>
-            </div>
-            <div class='mt-2 d-flex justify-content-center'>
-              <a href="https://github.com/webtimemachine/wtm2" class="btn btn-dark btn-md ml-2 mr-2">Source
-                Code</a>
-            </div>
-            <div class='mt-2 d-flex justify-content-center'>
-              <a href="https://news.ycombinator.com/item?id=40379746#40380459" class="btn btn-primary btn-md ml-2 mr-2" target="_blank">Comment on Hacker News</a>
-            </div>
-            <div class="button-container">
-                <a href="https://x.com/webtmapp" class="twitter-button" target="_blank">
-                    Follow me on Twitter
+            <div class="row">
+              <div class="mt-2 d-flex justify-content-center">
+                <a
+                  href="https://chrome.google.com/webstore/detail/dfijieibikhpelmfhkjmihgfgpoeigch"
+                  target="_blank"
+                  ><img
+                    src="./assets/chrome-badget.png"
+                    class="border border-secondary rounded ml-2 mr-2"
+                    alt="Chrome Web Store Badge"
+                /></a>
+              </div>
+              <div class="mt-2 d-flex justify-content-center">
+                <a
+                  href="https://apps.apple.com/ar/app/webtm/id6477404511"
+                  target="_blank"
+                >
+                  <img
+                    class="ml-2 mr-2"
+                    src="./assets/apple-store.svg"
+                    alt="Apple Store Badge"
+                  />
                 </a>
+              </div>
+              <div class="mt-2 d-flex justify-content-center">
+                <a
+                  href="https://addons.mozilla.org/en-US/firefox/addon/webtm"
+                  target="_blank"
+                >
+                  <img
+                    class="ml-2 mr-2"
+                    src="./assets/firefox-add-ons.png"
+                    height="42px"
+                    alt="Firefox Add-ons Badge"
+                  />
+                </a>
+              </div>
+              <div class="mt-2 d-flex justify-content-center">
+                <a href="https://discord.gg/JpR5Dn5jP5" target="_blank"
+                  ><img
+                    class="ml-2 mr-2"
+                    src="./assets/discord.jpeg"
+                    width="110px"
+                    alt="Discord"
+                /></a>
+              </div>
+              <div class="mt-2 d-flex justify-content-center">
+                <a
+                  href="https://github.com/webtimemachine/wtm2"
+                  class="btn btn-dark btn-md ml-2 mr-2"
+                  >Source Code</a
+                >
+              </div>
+              <div class="mt-2 d-flex justify-content-center">
+                <a
+                  href="https://news.ycombinator.com/item?id=40379746#40380459"
+                  class="btn btn-primary btn-md ml-2 mr-2"
+                  target="_blank"
+                  >Comment on Hacker News</a
+                >
+              </div>
+              <div class="button-container">
+                <a
+                  href="https://x.com/webtmapp"
+                  class="twitter-button"
+                  target="_blank"
+                >
+                  Follow me on Twitter
+                </a>
+              </div>
             </div>
-          </div>
-          <div class='row'>
-
+            <div class="row"></div>
           </div>
         </div>
       </div>
+      <div class="pb-4 d-flex justify-content-end">
+        <a href="./contact-us.html" class="p-3 text-secondary">Contact Us</a>
+        <a href="./privacy-policies.html" class="float-right p-3 text-secondary"
+          >Privacy Policies</a
+        >
+        <a
+          href="https://webtm.vercel.app"
+          target="_blank"
+          class="float-right p-3 text-secondary"
+          >Login</a
+        >
+      </div>
     </div>
-    <div class="pb-4 d-flex justify-content-end">
-      <a href="./contact-us.html" class="p-3 text-secondary">Contact Us</a>
-      <a href="./privacy-policies.html" class="float-right p-3 text-secondary">Privacy Policies</a>
-    </div>
-  </div>
-  <!-- Bootstrap JS -->
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-    crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-    crossorigin="anonymous"></script>
-</body>
-
+    <!-- Bootstrap JS -->
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+      integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+      integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+      crossorigin="anonymous"
+    ></script>
+  </body>
 </html>
