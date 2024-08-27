@@ -80,15 +80,18 @@ export const CustomDrawer = ({
             <MenuList>
               <MenuGroup title='Profile'>
                 <MenuDivider />
-                <MenuItem icon={<RiNumber1 />}>
-                  <Text fontWeight={300}>Option 1</Text>
+                <MenuItem
+                  icon={<FaUser />}
+                  onClick={() => navigateTo('profile')}
+                >
+                  <Text fontWeight={300}>My profile</Text>
                 </MenuItem>
-                <MenuItem icon={<RiNumber2 />}>
+                {/* <MenuItem icon={<RiNumber2 />}>
                   <Text fontWeight={300}>Option 2</Text>
                 </MenuItem>
                 <MenuItem icon={<RiNumber3 />}>
                   <Text fontWeight={300}>Option 3</Text>
-                </MenuItem>
+                </MenuItem> */}
               </MenuGroup>
             </MenuList>
           </Menu>
