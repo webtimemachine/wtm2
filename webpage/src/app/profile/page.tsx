@@ -143,16 +143,6 @@ const ProfileScreen: React.FC<object> = () => {
         >
           <CustomInputBox
             width={'40%'}
-            label={'First Name'}
-            value={basicUserInformationQuery.data?.email || ''}
-          />
-          <CustomInputBox
-            width={'40%'}
-            label={'Last Name'}
-            value={basicUserInformationQuery.data?.email || ''}
-          />
-          <CustomInputBox
-            width={'40%'}
             label={'Email'}
             value={basicUserInformationQuery.data?.email || ''}
           />
@@ -228,16 +218,6 @@ const ProfileScreen: React.FC<object> = () => {
           flexWrap={'wrap'}
           gap={5}
         >
-          <CustomInputBox
-            width={'100%'}
-            label={'First Name'}
-            value={basicUserInformationQuery.data?.email || ''}
-          />
-          <CustomInputBox
-            width={'100%'}
-            label={'Last Name'}
-            value={basicUserInformationQuery.data?.email || ''}
-          />
           <CustomInputBox
             width={'100%'}
             label={'Email'}
