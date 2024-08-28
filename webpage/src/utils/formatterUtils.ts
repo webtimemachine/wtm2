@@ -27,7 +27,7 @@ const letterToColorMap: { [key: string]: string } = {
   z: 'bg-lime-500',
 };
 
-// Función para obtener el color basado en la primera letra del email para diversos usos
+// Function for getting a color by first character of mail
 export const getColorFromEmail = (email: string): string => {
   const firstLetter = email.charAt(0).toLowerCase();
   return letterToColorMap[firstLetter] || 'bg-gray-500'; // Default color if letter not mapped
