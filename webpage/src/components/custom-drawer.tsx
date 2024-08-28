@@ -80,12 +80,6 @@ export const CustomDrawer = ({
                     My profile
                   </Text>
                 </MenuItem>
-                {/* <MenuItem icon={<RiNumber2 />}>
-                  <Text fontWeight={300}>Option 2</Text>
-                </MenuItem>
-                <MenuItem icon={<RiNumber3 />}>
-                  <Text fontWeight={300}>Option 3</Text>
-                </MenuItem> */}
               </MenuGroup>
             </MenuList>
           </Menu>
