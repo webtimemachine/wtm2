@@ -38,32 +38,16 @@
             </objects>
             <point key="canvasLocation" x="53" y="375"/>
         </scene>
-        <!--Contacts-->
-        <scene sceneID="hc0-Te-bkV">
-            <objects>
-                <viewController storyboardIdentifier="ContactsViewController" id="XnJ-ES-Xmr" customClass="ContactsViewController" customModule="wtm" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="kBX-Aw-k4z">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <viewLayoutGuide key="safeArea" id="Pcg-eC-8Cp"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                    </view>
-                    <tabBarItem key="tabBarItem" title="Contacts" image="bookmark" catalog="system" selectedImage="bookmark.fill" id="gAB-Qe-clb"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="VcJ-Vp-k9B" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1642" y="569"/>
-        </scene>
         <!--Webpage-->
         <scene sceneID="gw2-SJ-eOq">
             <objects>
-                <viewController id="sAk-hv-ReQ" customClass="WebViewController" customModule="wtm" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="WebViewController" id="sAk-hv-ReQ" customClass="WebViewController" customModule="wtm" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="IxU-ZG-7zi">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Nzf-WD-9me">
-                                <rect key="frame" x="0.0" y="48" width="414" height="765"/>
+                                <rect key="frame" x="0.0" y="48" width="414" height="814"/>
                                 <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <wkWebViewConfiguration key="configuration">
                                     <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
@@ -87,25 +71,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="s8S-1r-I5a" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1706" y="1327"/>
-        </scene>
-        <!--Tab Bar Controller-->
-        <scene sceneID="R2I-nN-NP7">
-            <objects>
-                <tabBarController storyboardIdentifier="MainTabBarController" id="i6v-p4-DC6" sceneMemberID="viewController">
-                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="Uou-4D-arb">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="49"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    </tabBar>
-                    <connections>
-                        <segue destination="sAk-hv-ReQ" kind="relationship" relationship="viewControllers" id="qfO-fH-pSR"/>
-                        <segue destination="XnJ-ES-Xmr" kind="relationship" relationship="viewControllers" id="fcO-fw-259"/>
-                    </connections>
-                </tabBarController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="irq-lL-RwN" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="817" y="1023"/>
+            <point key="canvasLocation" x="886" y="375"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="Azu-iN-DMU">
@@ -129,8 +95,6 @@
     <resources>
         <image name="book.pages" catalog="system" width="107" height="128"/>
         <image name="book.pages.fill" catalog="system" width="107" height="128"/>
-        <image name="bookmark" catalog="system" width="110" height="128"/>
-        <image name="bookmark.fill" catalog="system" width="110" height="128"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
