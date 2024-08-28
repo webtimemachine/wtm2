@@ -12,8 +12,6 @@ import { CompleteNavigationEntryDto } from '../../../interfaces/navigation-entry
 import NavigationEntriesScreen from '../page';
 import { useQuery } from '@tanstack/react-query';
 
-// useHandleSessionExpired: jest.fn().mockReturnValue(() => Promise.resolve({})),
-// useGetBasicUserIngormation: jest.fn().mockReturnValue({}),
 // Mock de useNavigation, useDeleteNavigationEntry y useNavigationEntries
 jest.mock('../../../store', () => ({
   useNavigation: jest.fn(),

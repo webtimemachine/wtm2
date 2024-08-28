@@ -7,23 +7,19 @@ import {
   AbsoluteCenter,
   Badge,
   Box,
-  Button,
   Divider,
   IconButton,
   Spinner,
   Text,
   useDisclosure,
-  useToast,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import { BiCopy } from 'react-icons/bi';
 import { CustomDrawer } from '@/components/custom-drawer';
 import React from 'react';
 import CustomInputBox from './components/CustomInputBox';
 
 const ProfileScreen: React.FC<object> = () => {
   const { navigateBack } = useNavigation();
-  const toast = useToast();
   const { basicUserInformationQuery } = useGetBasicUserIngormation();
   const [isReady, setIsReady] = useState<boolean>(false);
   const btnRef = React.useRef<HTMLElement>(null);
