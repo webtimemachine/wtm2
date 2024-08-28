@@ -6,9 +6,11 @@ import {
   useDeleteNavigationEntry,
   useLogout,
   useNavigationEntries,
+  useHandleSessionExpired,
 } from '../../../hooks';
 import { CompleteNavigationEntryDto } from '../../../interfaces/navigation-entry.interface';
 import NavigationEntriesScreen from '../page';
+import { useQuery } from '@tanstack/react-query';
 
 // Mock de useNavigation, useDeleteNavigationEntry y useNavigationEntries
 jest.mock('../../../store', () => ({
@@ -19,8 +21,11 @@ jest.mock('../../../hooks', () => ({
   useDeleteNavigationEntry: jest.fn(),
   useNavigationEntries: jest.fn(),
   useLogout: jest.fn(),
+  useHandleSessionExpired: jest.fn(),
 }));
-
+jest.mock('@tanstack/react-query', () => ({
+  useQuery: jest.fn(),
+}));
 jest.mock('react-markdown', () => ({
   Markdown: jest.fn().mockReturnValue(<></>),
 }));
@@ -38,6 +43,10 @@ const mockRefetch = jest.fn();
     mutate: mockMutate,
     isSuccess: false,
   },
+});
+
+(useHandleSessionExpired as jest.Mock).mockResolvedValue({
+  handleSessionExpired: jest.fn(() => Promise<never>),
 });
 
 const mockNavigationEntries: CompleteNavigationEntryDto[] = [
