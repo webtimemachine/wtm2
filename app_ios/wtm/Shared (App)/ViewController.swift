@@ -197,12 +197,14 @@ class ViewController: PlatformViewController, WKNavigationDelegate, WKScriptMess
                 case .success(let loginResponse):
                     let accessToken = loginResponse.accessToken
                     UserDefaults.standard.set(accessToken, forKey: "access_token")
+                    
+                    let refreshToken = loginResponse.refreshToken
+                    UserDefaults.standard.set(refreshToken, forKey: "refresh_token")
 
                     let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                            if let tabBarController = storyboard.instantiateViewController(withIdentifier: "MainTabBarController") as? UITabBarController {
-                                // Presenta el TabBarController
-                                tabBarController.modalPresentationStyle = .fullScreen
-                                self.navigationController?.pushViewController(tabBarController, animated: true)
+                            if let vc = storyboard.instantiateViewController(withIdentifier: "WebViewController") as? WebViewController {
+                               
+                                self.navigationController?.pushViewController(vc, animated: true)
                             }
                     
                 case .failure(let error):
