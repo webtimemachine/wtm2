@@ -684,4 +684,38 @@ export class AuthService {
       throw new NotFoundException();
     }
   }
+
+  async updatePassword(
+    jwtContext: JwtContext,
+    newPassword: string,
+  ): Promise<void> {
+    const { user } = jwtContext;
+
+    const hashedPassword = bcrypt.hashSync(newPassword, appEnv.BCRYPT_SALT);
+    await this.prismaService.$transaction(async (prismaClient) => {
+      await prismaClient.session.deleteMany({
+        where: {
+          id: {
+            not: jwtContext.session.id,
+          },
+          userDevice: {
+            userId: user.id,
+          },
+        },
+      });
+
+      const updatedUser: CompleteUser = await prismaClient.user.update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          recoveryCode: null,
+          password: hashedPassword,
+        },
+        include: completeUserInclude,
+      });
+
+      return { updatedUser };
+    });
+  }
 }
