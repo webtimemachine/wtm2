@@ -1,7 +1,7 @@
 import React from 'react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { ChakraProvider } from '@chakra-ui/react';
-import { useNavigation } from '../../../store';
+import { useNavigation, useAuthStore } from '../../../store';
 import {
   useDeleteNavigationEntry,
   useLogout,
@@ -10,11 +10,11 @@ import {
 } from '../../../hooks';
 import { CompleteNavigationEntryDto } from '../../../interfaces/navigation-entry.interface';
 import NavigationEntriesScreen from '../page';
-import { useQuery } from '@tanstack/react-query';
 
 // Mock de useNavigation, useDeleteNavigationEntry y useNavigationEntries
 jest.mock('../../../store', () => ({
   useNavigation: jest.fn(),
+  useAuthStore: jest.fn(),
 }));
 
 jest.mock('../../../hooks', () => ({
@@ -33,9 +33,14 @@ jest.mock('react-markdown', () => ({
 const mockNavigateTo = jest.fn();
 const mockMutate = jest.fn();
 const mockRefetch = jest.fn();
+const mockSetSessionFromDevice = jest.fn();
 
 (useNavigation as jest.Mock).mockReturnValue({
   navigateTo: mockNavigateTo,
+});
+
+(useAuthStore as jest.Mock).mockReturnValue({
+  setSessionFromDevice: mockSetSessionFromDevice,
 });
 
 (useDeleteNavigationEntry as jest.Mock).mockReturnValue({

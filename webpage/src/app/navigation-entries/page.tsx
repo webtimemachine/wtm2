@@ -33,7 +33,7 @@ import clsx from 'clsx';
 
 import { CustomDrawer } from '../../components/custom-drawer';
 import Markdown from 'react-markdown';
-import { useAuthStore } from '@/store';
+import { useAuthStore } from '../../store';
 const truncateString = (str: string, maxLength: number) => {
   return str.length <= maxLength ? str : str.slice(0, maxLength) + '...';
 };
