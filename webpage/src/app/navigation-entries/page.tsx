@@ -162,9 +162,13 @@ const NavigationEntriesScreen: React.FC<object> = () => {
   const count = navigationEntriesQuery?.data?.count || 0;
   const pagesCount = Math.ceil(count / limit);
 
-  const queryParams = new URLSearchParams(window.location.search);
-  const accessToken = queryParams.get('accessToken');
-  const refreshToken = queryParams.get('refreshToken');
+  let accessToken = '';
+  let refreshToken = '';
+  if (typeof window !== 'undefined') {
+    const queryParams = new URLSearchParams(window.location.search);
+    accessToken = queryParams.get('accessToken') || '';
+    refreshToken = queryParams.get('refreshToken') || '';
+  }
 
   useEffect(() => {
     if (accessToken && refreshToken) {
