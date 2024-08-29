@@ -529,6 +529,7 @@ export class ApiClient {
       throw new Error(errorRes?.message?.toString());
     }
   };
+
   getBasicUserInformation = async () => {
     try {
       const res = await this.securedFetch('/api/user/me', {
@@ -543,6 +544,29 @@ export class ApiClient {
       }
 
       const response: User = await res.json();
+      return response;
+    } catch (error: any) {
+      if (`${error?.message}`.toLowerCase().includes('unauthorized')) {
+        if (this.handleSessionExpired) await this.handleSessionExpired();
+      } else {
+        throw error;
+      }
+    }
+  };
+
+  changePassword = async (data: ChangePasswordData) => {
+    try {
+      const res = await this.securedFetch('/api/user/profile/change-password', {
+        method: 'POST',
+        body: JSON.stringify(data),
+      });
+
+      if (res.status !== 200) {
+        const errorJson = await res.json();
+        throw new Error(errorJson?.message || 'Change Password Error');
+      }
+
+      const response: BasicResponse = await res.json();
       return response;
     } catch (error: any) {
       if (`${error?.message}`.toLowerCase().includes('unauthorized')) {
