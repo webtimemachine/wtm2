@@ -7,8 +7,21 @@ import {
   AbsoluteCenter,
   Badge,
   Box,
+  Button,
   Divider,
+  FormControl,
+  FormErrorMessage,
+  FormHelperText,
+  FormLabel,
   IconButton,
+  Input,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Spinner,
   Text,
   useDisclosure,
@@ -17,15 +30,17 @@ import { useEffect, useState } from 'react';
 import { CustomDrawer } from '@/components/custom-drawer';
 import React from 'react';
 import CustomInputBox from './components/CustomInputBox';
+import { useChangeUserPassword } from '@/hooks/use-change-user-password.hook';
+import { BsKey } from 'react-icons/bs';
 
 const ProfileScreen: React.FC<object> = () => {
   const { navigateBack } = useNavigation();
   const { basicUserInformationQuery } = useGetBasicUserIngormation();
+  const { changeUserPasswordMutation } = useChangeUserPassword();
   const [isReady, setIsReady] = useState<boolean>(false);
   const btnRef = React.useRef<HTMLElement>(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [windowSize, setWindowSize] = useState<[number, number]>();
-
   useEffect(() => {
     if (typeof window !== 'undefined') {
       setWindowSize([window?.innerWidth, window?.innerHeight]);
@@ -64,7 +79,117 @@ const ProfileScreen: React.FC<object> = () => {
       ? email.charAt(0).toUpperCase() + email.charAt(1).toUpperCase()
       : '';
   };
+  const ChangePasswordModal = () => {
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const [newPassword, setNewPassword] = useState('');
+    const [reNewPassword, setReNewPassword] = useState('');
+    const [oldPassword, setOldPassword] = useState('');
+    const handleNewPasswordChange = (e: {
+      target: { value: React.SetStateAction<string> };
+    }) => setNewPassword(e.target.value);
+    const handleOldPasswordChange = (e: {
+      target: { value: React.SetStateAction<string> };
+    }) => setOldPassword(e.target.value);
+    const handleReNewPasswordChange = (e: {
+      target: { value: React.SetStateAction<string> };
+    }) => setReNewPassword(e.target.value);
+    const isError = newPassword !== reNewPassword;
+    useEffect(() => {
+      if (!isOpen) {
+        setNewPassword('');
+        setOldPassword('');
+        setReNewPassword('');
+      }
+    }, [isOpen]);
+    const verifyFields = () => {
+      return (
+        newPassword &&
+        oldPassword &&
+        reNewPassword &&
+        newPassword.length > 3 &&
+        oldPassword.length > 3 &&
+        reNewPassword.length > 3
+      );
+    };
+    const handleSubmit = () => {
+      if (verifyFields()) {
+        changeUserPasswordMutation.mutate({
+          oldPassword: oldPassword,
+          newPassword: newPassword,
+        });
+      }
+    };
 
+    return (
+      <>
+        <Button
+          onClick={onOpen}
+          display={'flex'}
+          justifyContent={'space-between'}
+          alignItems={'center'}
+          gap={2}
+        >
+          <BsKey /> Change password
+        </Button>
+
+        <Modal isOpen={isOpen} onClose={onClose}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Change the password</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <FormControl isInvalid={isError}>
+                <FormLabel>Old Password</FormLabel>
+                <Input
+                  type='password'
+                  value={oldPassword}
+                  onChange={handleOldPasswordChange}
+                />{' '}
+                <FormHelperText>
+                  Please enter your password for change.
+                </FormHelperText>
+                <Divider my={2} />
+                <FormLabel>New Password</FormLabel>
+                <Input
+                  type='password'
+                  value={newPassword}
+                  onChange={handleNewPasswordChange}
+                />
+                <FormLabel pt={2}>Re-enter new Password</FormLabel>
+                <Input
+                  type='password'
+                  value={reNewPassword}
+                  onChange={handleReNewPasswordChange}
+                />
+                {!isError ? (
+                  <FormHelperText>
+                    Password must be between 4 to 8 characters, it must have a
+                    Symbol, an Uppercase and Lowercase.
+                  </FormHelperText>
+                ) : (
+                  <FormErrorMessage>Passwords don't match.</FormErrorMessage>
+                )}
+              </FormControl>
+            </ModalBody>
+
+            <ModalFooter>
+              <Button
+                colorScheme='blue'
+                mr={3}
+                onClick={handleSubmit}
+                disabled={isError}
+              >
+                Change
+              </Button>
+              <Button variant='ghost' onClick={onClose}>
+                Close
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+      </>
+    );
+  };
   const ProfileCard = () => {
     return (
       <Box className='bg-white p-6 rounded-lg shadow-lg w-full max-w-[80vw]'>
@@ -89,7 +214,7 @@ const ProfileScreen: React.FC<object> = () => {
         </Box>
         <Box
           display={'flex'}
-          justifyContent={'flex-start'}
+          justifyContent={'space-between'}
           width={'100%'}
           alignItems={'center'}
         >
@@ -123,6 +248,9 @@ const ProfileScreen: React.FC<object> = () => {
               </Badge>
             </Box>
           </Box>
+          <Box>
+            <ChangePasswordModal />
+          </Box>
         </Box>
 
         <Box position='relative' padding='10'>
@@ -150,10 +278,17 @@ const ProfileScreen: React.FC<object> = () => {
   const MobileProfileCard = () => {
     return (
       <Box className='flex flex-col  justify-around bg-white p-6 rounded-lg shadow-lg h-[90vh] w-full max-w-[80vw]'>
-        <Box>
+        <Box
+          display={'flex'}
+          justifyContent={'space-between'}
+          alignItems={'center'}
+        >
           <IconButton aria-label='Back icon' onClick={onOpen}>
             <HamburgerIcon boxSize={5} />
           </IconButton>
+          <Box>
+            <ChangePasswordModal />
+          </Box>
         </Box>
         <Box
           display={'flex'}
