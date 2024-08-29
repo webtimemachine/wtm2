@@ -29,6 +29,7 @@ import {
   ValidateRecoveryCodeResponse,
   VerifyCodeData,
 } from './interfaces';
+import { ChangeUserPassword } from 'interfaces/change-user-password.interface';
 
 interface ApiClientOptions {
   getServerUrl: () => Promise<string>;
@@ -532,7 +533,7 @@ export class ApiClient {
 
   getBasicUserInformation = async () => {
     try {
-      const res = await this.securedFetch('/api/user/me', {
+      const res = await this.securedFetch('/api/user/profile/me', {
         method: 'GET',
       });
 
@@ -553,17 +554,15 @@ export class ApiClient {
       }
     }
   };
-
-  changePassword = async (data: ChangePasswordData) => {
+  changeUserPassword = async (data: ChangeUserPassword) => {
     try {
       const res = await this.securedFetch('/api/user/profile/change-password', {
         method: 'POST',
         body: JSON.stringify(data),
       });
-
-      if (res.status !== 200) {
+      if (res.status !== 201) {
         const errorJson = await res.json();
-        throw new Error(errorJson?.message || 'Change Password Error');
+        throw new Error(errorJson?.message || 'POST Update Password Error');
       }
 
       const response: BasicResponse = await res.json();
