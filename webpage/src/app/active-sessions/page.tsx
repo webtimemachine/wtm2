@@ -48,6 +48,8 @@ const ActiveSessionsScreen: React.FC<object> = () => {
 
   useEffect(() => {
     if (getActiveSessionsQuery.isSuccess && getActiveSessionsQuery.data) {
+      console.log('getActiveSessionsQuery.data', getActiveSessionsQuery.data);
+
       setSessions(moveCurrentSessionToFirst(getActiveSessionsQuery.data));
     }
   }, [getActiveSessionsQuery]);
@@ -187,7 +189,7 @@ const ActiveSessionsScreen: React.FC<object> = () => {
   if (currentSession || restSessions) {
     return (
       <div className='flex justify-center items-center  w-full h-1/2'>
-        <div className='flex flex-col px-5 py-3 items-center max-w-6xl min-w-[360px] w-3/4 min-h-[600px]'>
+        <div className='flex flex-col md:px-5 py-3 items-center max-w-6xl min-w-[360px] w-3/4 min-h-[600px]'>
           <div className='flex w-full justify-start pb-4 gap-4 items-center'>
             <IconButton aria-label='Back icon' onClick={() => navigateBack()}>
               <ArrowBackIcon boxSize={5} />

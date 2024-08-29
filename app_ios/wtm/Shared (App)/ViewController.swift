@@ -187,8 +187,9 @@ class ViewController: PlatformViewController, WKNavigationDelegate, WKScriptMess
     private func doLogin() {
         loadingIndicator.isHidden = false
         button.isEnabled = false
-
-        let request = LoginRequest(email: emailTextField.text ?? "", password: passwordTextField.text ?? "")
+        let userAgent = WKWebView().value(forKey: "userAgent")
+        
+        let request = LoginRequest(email: emailTextField.text ?? "", password: passwordTextField.text ?? "", userAgent: userAgent as! String)
         loginService.doLogin(url: "\(baseUrl)/api/auth/login", request: request) { [weak self] result in
             guard let self else { return }
             

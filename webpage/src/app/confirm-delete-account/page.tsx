@@ -18,7 +18,7 @@ const ConfirmDeleteAccountScreen: React.FC<object> = () => {
 
   return (
     <>
-      <div className='flex flex-col px-5 py-3 min-h-screen items-center w-full'>
+      <div className='flex flex-col md:px-5 py-3 min-h-screen items-center w-full'>
         <div className='flex w-full justify-start pb-4 gap-4 items-center'>
           <IconButton aria-label='Back icon' onClick={() => navigateBack()}>
             <ArrowBackIcon boxSize={5} />
