@@ -40,7 +40,7 @@ export default function RootLayout({
           <Box
             rounded={'xl'}
             w='100%'
-            className='sm:bg-white sm:shadow-xl sm:p-8'
+            className='sm:bg-white sm:shadow-xl sm:p-8 pb-4'
           >
             {children}
           </Box>
