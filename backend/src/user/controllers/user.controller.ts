@@ -20,7 +20,6 @@ import { ApiInternalServerErrorMessageResponse } from '../../common/decorators';
 import {
   UpdateUserDeviceInput,
   UpdateUserPreferencesInput,
-  UserDto,
   UserPreferencesDto,
   UserDeviceDto,
 } from '../dtos';
@@ -31,16 +30,6 @@ import { UserService } from '../services';
 export class UserController {
   private readonly logger = new Logger(UserController.name);
   constructor(private readonly userService: UserService) {}
-
-  @ApiOkResponse({
-    status: 200,
-    type: UserDto,
-  })
-  @JwtAccessToken([])
-  @Get('/me')
-  getMe(@JwtRequestContext() context: JwtContext): Promise<UserDto> {
-    return this.userService.getMe(context);
-  }
 
   @ApiOkResponse({
     status: 200,
