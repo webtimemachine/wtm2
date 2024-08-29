@@ -1,7 +1,10 @@
 import { apiClient } from '../utils/api.client';
 import { DOMtoString, getImages } from '../utils';
-import { CreateNavigationEntry } from '../interfaces/navigation-entry.interface';
+import { CreateNavigationEntry } from 'wtm-lib/interfaces';
+import * as cheerio from 'cheerio';
+import { convertHtmlToMarkdown } from 'dom-to-semantic-markdown';
 
+import { AnyNode } from 'domhandler';
 function onUrlChange(callback: () => void) {
   let lastUrl = location.href;
   new MutationObserver(() => {
@@ -15,6 +18,37 @@ function onUrlChange(callback: () => void) {
 
 onUrlChange(() => postNavigationEntry());
 
+const getSemanticMarkdownForLLM = (
+  data: string | AnyNode | AnyNode[] | Buffer,
+) => {
+  const $ = cheerio.load(data);
+  $('script, style, nav, footer, header, .ads, .banner').remove();
+
+  $('code').each((_, elem) => {
+    const codeText = $(elem).html();
+    $(elem).html(`<code>${codeText}</code>`);
+  });
+
+  $('body *').each((_, elem) => {
+    if ($(elem).is('button') || $(elem).is('div[onclick]')) {
+      $(elem).remove();
+      return;
+    }
+    const text = $(elem).text().trim();
+    if (!text || text.length < 5) {
+      $(elem).remove();
+    }
+
+    // Unify links test in one line
+    if ($(elem).is('a')) {
+      let linkText = $(elem).text().replace(/\s+/g, ' ').trim(); // Replaces multiple spaces for an empty space.
+      $(elem).text(linkText); // Updates text content from an <a>
+    }
+  });
+  const content = $('body').html();
+  return convertHtmlToMarkdown(content || '');
+};
+
 export const postNavigationEntry = async () => {
   try {
     const url = window.location.href;
@@ -27,18 +61,17 @@ export const postNavigationEntry = async () => {
       const htmlContent = DOMtoString('body');
       const images = getImages();
 
+      const content =
+        enabledLiteMode == undefined || !enabledLiteMode
+          ? getSemanticMarkdownForLLM(htmlContent)
+          : '';
+
       const navigationEntry: CreateNavigationEntry = {
         url,
         navigationDate: new Date().toISOString(),
         title: document.title || '',
-        // Removes remaining HTML tags, more than 2 contiguous spaces, more than 2 contiguous line breaks, and HTML entities
-        ...((enabledLiteMode === undefined || !enabledLiteMode) && {
-          content: htmlContent.replace(
-            /(<[^>]*>)|(\s{2,})|(\n{2,})||(&\w+;)/g,
-            '',
-          ),
-          images,
-        }),
+        ...(content && { content }),
+        images,
       };
 
       await apiClient.securedFetch('/api/navigation-entry', {
@@ -50,5 +83,4 @@ export const postNavigationEntry = async () => {
     console.error(`Unexpected Error in tabs onUpdated:`, error);
   }
 };
-
 postNavigationEntry();

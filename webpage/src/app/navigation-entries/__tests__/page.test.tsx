@@ -2,9 +2,15 @@ import React from 'react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { ChakraProvider } from '@chakra-ui/react';
 import { useNavigation } from '../../../store';
-import { useDeleteNavigationEntry, useNavigationEntries } from '../../../hooks';
+import {
+  useDeleteNavigationEntry,
+  useLogout,
+  useNavigationEntries,
+  useHandleSessionExpired,
+} from '../../../hooks';
 import { CompleteNavigationEntryDto } from '../../../interfaces/navigation-entry.interface';
 import NavigationEntriesScreen from '../page';
+import { useQuery } from '@tanstack/react-query';
 
 // Mock de useNavigation, useDeleteNavigationEntry y useNavigationEntries
 jest.mock('../../../store', () => ({
@@ -14,6 +20,14 @@ jest.mock('../../../store', () => ({
 jest.mock('../../../hooks', () => ({
   useDeleteNavigationEntry: jest.fn(),
   useNavigationEntries: jest.fn(),
+  useLogout: jest.fn(),
+  useHandleSessionExpired: jest.fn(),
+}));
+jest.mock('@tanstack/react-query', () => ({
+  useQuery: jest.fn(),
+}));
+jest.mock('react-markdown', () => ({
+  Markdown: jest.fn().mockReturnValue(<></>),
 }));
 
 const mockNavigateTo = jest.fn();
@@ -29,6 +43,10 @@ const mockRefetch = jest.fn();
     mutate: mockMutate,
     isSuccess: false,
   },
+});
+
+(useHandleSessionExpired as jest.Mock).mockResolvedValue({
+  handleSessionExpired: jest.fn(() => Promise<never>),
 });
 
 const mockNavigationEntries: CompleteNavigationEntryDto[] = [
@@ -87,6 +105,10 @@ const mockNavigationEntries: CompleteNavigationEntryDto[] = [
   },
 });
 
+(useLogout as jest.Mock).mockReturnValue({
+  logout: jest.fn(),
+});
+
 const customRender = (ui: React.ReactElement) => {
   return render(<ChakraProvider>{ui}</ChakraProvider>);
 };
@@ -103,15 +125,6 @@ describe('NavigationEntriesScreen', () => {
     expect(screen.getByPlaceholderText('Search')).toBeInTheDocument();
     expect(screen.getByText('AI Search')).toBeInTheDocument();
     expect(screen.getAllByText(/Test Entry/i)).toHaveLength(2);
-  });
-
-  test('calls navigateTo settings when settings icon is clicked', () => {
-    customRender(<NavigationEntriesScreen />);
-
-    const settingsButton = screen.getByLabelText('Back icon');
-    fireEvent.click(settingsButton);
-
-    expect(mockNavigateTo).toHaveBeenCalledWith('settings');
   });
 
   test('search functionality updates the query and refetches data', async () => {

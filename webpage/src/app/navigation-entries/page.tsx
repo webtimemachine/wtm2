@@ -1,6 +1,7 @@
 'use client';
 
 import {
+  Badge,
   Button,
   Icon,
   IconButton,
@@ -8,6 +9,8 @@ import {
   Spinner,
   Switch,
   Text,
+  Tooltip,
+  useDisclosure,
 } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 
@@ -16,7 +19,7 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
   ChevronUpIcon,
-  SettingsIcon,
+  HamburgerIcon,
   SmallCloseIcon,
 } from '@chakra-ui/icons';
 import { BsStars } from 'react-icons/bs';
@@ -25,18 +28,41 @@ import {
   CompleteNavigationEntryDto,
   NavEntryProps,
 } from '../../interfaces/navigation-entry.interface';
-import { useNavigation } from '../../store';
 import { getBrowserIconFromDevice } from '../../utils';
 import clsx from 'clsx';
+
+import { CustomDrawer } from '../../components/custom-drawer';
+import Markdown from 'react-markdown';
 const truncateString = (str: string, maxLength: number) => {
   return str.length <= maxLength ? str : str.slice(0, maxLength) + '...';
 };
-
+const getPreProcessedMarkDown = (relevantSegment: string) => {
+  const emptyListPatterns = [
+    /\*\n(\*\n)*/g, // matches lines with only *
+    /-\n(-\n)*/g, // matches lines with only -
+    /- \*\*\n(\*+\n)*/g, // matches lines with only - ** and *+
+    /\n\s*\*\*\n(\s*\*+\n)*/g, // matches lines with ** and *+ with spaces
+    /- \*\n(\s*\*\n)*/g, // matches lines with - * and *+
+    /\n\s*\*\n(\s*\*\n)*/g, // matches lines with * and *+ with spaces
+    /\n\s*-\n(\s*-\n)*/g, // matches lines with - and -+ with spaces
+  ];
+  let markdown = relevantSegment;
+  emptyListPatterns.forEach((pattern) => {
+    markdown = markdown.replace(pattern, '');
+  });
+  markdown = markdown.replace(/\n{2,}/g, '\n\n');
+  return markdown || '';
+};
 const RelevantSegment = ({ relevantSegment }: { relevantSegment: string }) => {
+  const markdown = getPreProcessedMarkDown(relevantSegment);
+
   return (
     <div>
       <p className='font-semibold mb-4'>Most relevant match</p>
-      <p className='text-xs'>{relevantSegment}</p>
+      <p className='text-xs'></p>
+      <div className='markdown-content'>
+        <Markdown>{markdown}</Markdown>
+      </div>
     </div>
   );
 };
@@ -49,6 +75,10 @@ const NavigationEntry = ({
   isSemantic,
 }: NavEntryProps) => {
   const [visible, setVisible] = useState<boolean>(false);
+
+  useEffect(() => {
+    setVisible(false);
+  }, [element]);
 
   return (
     <div className='flex flex-col w-full bg-white px-2 py-1 rounded-lg mb-1 gap-3'>
@@ -63,22 +93,19 @@ const NavigationEntry = ({
               fontSize={'small'}
               {...(element.liteMode && {
                 fontWeight: 'bold',
-                fontStyle: 'italic',
               })}
               onClick={() => processOpenLink(element.url)}
             >
-              {truncateString(element.title, 40)}
+              <Tooltip label={element.title}>
+                {truncateString(element.title, 30)}
+              </Tooltip>
             </Text>
-            <Text
-              className='text-slate-600'
-              fontSize={'smaller'}
-              {...(element.liteMode && {
-                fontStyle: 'italic',
-              })}
-            >
+            <Text className='text-slate-600' fontSize={'smaller'}>
               {new Date(element.navigationDate).toLocaleString()}
-              {element.liteMode && <span className='italic'> - Lite Mode</span>}
             </Text>
+          </div>
+          <div className='flex justify-center items-center m-3'>
+            {element.liteMode && <Badge colorScheme='teal'>Lite Mode</Badge>}
           </div>
         </div>
         <div className='space-x-2'>
@@ -111,8 +138,8 @@ const NavigationEntry = ({
   );
 };
 const NavigationEntriesScreen: React.FC<object> = () => {
-  const { navigateTo } = useNavigation();
-
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const btnRef = React.useRef<HTMLElement>(null);
   const LIMIT = 16;
   const [page, setPage] = useState<number>(0);
   const [query, setQuery] = useState<string>('');
@@ -157,18 +184,17 @@ const NavigationEntriesScreen: React.FC<object> = () => {
       <div className='flex flex-col px-5 py-3 items-center max-w-6xl min-w-[360px] w-3/4 min-h-[600px] h-screen'>
         <div className='flex flex-col w-full'>
           <div className='flex w-full justify-start pb-4 gap-4 items-center'>
-            <div className='flex w-full justify-center pl-[40px]'>
+            <IconButton aria-label='Back icon' onClick={onOpen}>
+              <HamburgerIcon boxSize={5} />
+            </IconButton>
+            <div className='flex w-full justify-center pr-[40px]'>
               <Text fontSize={'xx-large'} fontWeight={'bold'}>
                 WebTM
               </Text>
             </div>
-            <IconButton
-              aria-label='Back icon'
-              onClick={() => navigateTo('settings')}
-            >
-              <SettingsIcon boxSize={5} />
-            </IconButton>
           </div>
+
+          <CustomDrawer isOpen={isOpen} onClose={onClose} btnRef={btnRef} />
 
           <div className='pt-4 flex w-full'>
             <Input
