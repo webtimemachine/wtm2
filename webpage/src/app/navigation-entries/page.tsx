@@ -33,6 +33,7 @@ import clsx from 'clsx';
 
 import { CustomDrawer } from '../../components/custom-drawer';
 import Markdown from 'react-markdown';
+import { useAuthStore } from '@/store';
 const truncateString = (str: string, maxLength: number) => {
   return str.length <= maxLength ? str : str.slice(0, maxLength) + '...';
 };
@@ -144,6 +145,7 @@ const NavigationEntriesScreen: React.FC<object> = () => {
   const [page, setPage] = useState<number>(0);
   const [query, setQuery] = useState<string>('');
   const [isSemantic, setIsSemantic] = useState<boolean>(true);
+  const { setSessionFromDevice } = useAuthStore((state) => state);
 
   const offset = page * LIMIT;
   const limit = LIMIT;
@@ -159,6 +161,16 @@ const NavigationEntriesScreen: React.FC<object> = () => {
   const navigationEntries = navigationEntriesQuery?.data?.items || [];
   const count = navigationEntriesQuery?.data?.count || 0;
   const pagesCount = Math.ceil(count / limit);
+
+  const queryParams = new URLSearchParams(window.location.search);
+  const accessToken = queryParams.get('accessToken');
+  const refreshToken = queryParams.get('refreshToken');
+
+  useEffect(() => {
+    if (accessToken && refreshToken) {
+      setSessionFromDevice(accessToken, refreshToken);
+    }
+  }, [accessToken, refreshToken]);
 
   useEffect(() => {
     navigationEntriesQuery.refetch();
