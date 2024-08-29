@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Post } from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 import { JwtContext } from '../../auth/interfaces';
@@ -28,6 +28,7 @@ export class ProfileController {
     type: MessageResponse,
   })
   @JwtAccessToken([])
+  @HttpCode(200)
   @Post('/change-password')
   changePassword(
     @JwtRequestContext() context: JwtContext,
