@@ -28,8 +28,8 @@ import {
   ValidateRecoveryCodeErrorResponse,
   ValidateRecoveryCodeResponse,
   VerifyCodeData,
+  ChangeUserPassword,
 } from './interfaces';
-import { ChangeUserPassword } from 'interfaces/change-user-password.interface';
 
 interface ApiClientOptions {
   getServerUrl: () => Promise<string>;
