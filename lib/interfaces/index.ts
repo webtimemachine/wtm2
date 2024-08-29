@@ -9,6 +9,8 @@ export {
   type DeleteNavigationEntriesData,
   type GetNavigationEntriesData,
   type GetNavigationEntriesResponse,
+  type CreateNavigationEntry,
+  type CompleteNavigationEntryDto,
 } from './navigation-entry.interface';
 export {
   type UpdatePreferenciesData,
@@ -19,6 +21,7 @@ export { type BasicResponse } from './basic-response';
 export {
   type UpdateDeviceAliasData,
   type UserDevice,
+  type Device,
 } from './user-device.interface';
 export {
   type SignUpData,

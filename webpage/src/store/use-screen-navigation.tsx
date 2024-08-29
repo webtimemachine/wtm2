@@ -17,7 +17,8 @@ export type ScreenName =
   | 'validate-recovery-code'
   | 'recovery-new-password'
   | 'about'
-  | '404';
+  | '404'
+  | 'profile';
 
 export function useScreenNavigation() {
   const router = useRouter();
@@ -43,6 +44,7 @@ export function useScreenNavigation() {
     'recovery-new-password': () => router.push('/recovery-new-password'),
     about: () => router.push('/about'),
     '404': () => router.push('/404'),
+    profile: () => router.push('profile'),
   };
 
   function navigateTo(screen: ScreenName) {
