@@ -11,6 +11,7 @@ import {
   Text,
   Tooltip,
   useDisclosure,
+  useToast,
 } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 
@@ -144,6 +145,7 @@ const NavigationEntriesScreen: React.FC<object> = () => {
   const [page, setPage] = useState<number>(0);
   const [query, setQuery] = useState<string>('');
   const [isSemantic, setIsSemantic] = useState<boolean>(true);
+  const toast = useToast();
 
   const offset = page * LIMIT;
   const limit = LIMIT;
@@ -163,6 +165,19 @@ const NavigationEntriesScreen: React.FC<object> = () => {
   useEffect(() => {
     navigationEntriesQuery.refetch();
   }, [page, isSemantic, deleteNavigationEntryMutation.isSuccess]);
+
+  useEffect(() => {
+    if (navigationEntriesQuery.isError) {
+      toast({
+        status: 'error',
+        title: 'An error has occurred!',
+        description:
+          'It may be that the service is temporarily disabled. Please try again later',
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  }, [navigationEntriesQuery.error]);
 
   const search = () => {
     setPage(0);
