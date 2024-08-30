@@ -9,29 +9,29 @@ export enum BROWSERS {
   UNKNOWN = 'Unknown',
 }
 
+const browserMap: { [key: string]: BROWSERS } = {
+  Firefox: BROWSERS.FIREFOX,
+  SamsungBrowser: BROWSERS.SAMSUNG,
+  OPR: BROWSERS.OPERA,
+  Opera: BROWSERS.OPERA,
+  Trident: BROWSERS.IE,
+  Edge: BROWSERS.EDGE,
+  Chrome: BROWSERS.CHROME,
+  Safari: BROWSERS.SAFARI,
+};
+
 export function getBrowser() {
   if (typeof navigator === 'undefined') {
     return BROWSERS.UNKNOWN;
   }
 
   const userAgent = navigator.userAgent;
-  let browserName = BROWSERS.UNKNOWN;
 
-  if (userAgent.indexOf('Firefox') > -1) {
-    browserName = BROWSERS.FIREFOX;
-  } else if (userAgent.indexOf('SamsungBrowser') > -1) {
-    browserName = BROWSERS.SAMSUNG;
-  } else if (userAgent.indexOf('Opera') > -1 || userAgent.indexOf('OPR') > -1) {
-    browserName = BROWSERS.OPERA;
-  } else if (userAgent.indexOf('Trident') > -1) {
-    browserName = BROWSERS.IE;
-  } else if (userAgent.indexOf('Edge') > -1) {
-    browserName = BROWSERS.EDGE;
-  } else if (userAgent.indexOf('Chrome') > -1) {
-    browserName = BROWSERS.CHROME;
-  } else if (userAgent.indexOf('Safari') > -1) {
-    browserName = BROWSERS.SAFARI;
+  for (const key in browserMap) {
+    if (userAgent.includes(key)) {
+      return browserMap[key];
+    }
   }
 
-  return browserName;
+  return BROWSERS.UNKNOWN;
 }
