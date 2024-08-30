@@ -12,6 +12,7 @@ export const useGetBasicUserIngormation = () => {
     queryKey: ['getBasicUserInformationQuery'],
     queryFn: () => apiClient.getBasicUserInformation(),
     enabled: true,
+    retry: false,
   });
 
   return { basicUserInformationQuery };

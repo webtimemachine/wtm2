@@ -144,7 +144,7 @@ const ProfileScreen: React.FC<object> = () => {
                   type='password'
                   value={oldPassword}
                   onChange={handleOldPasswordChange}
-                />{' '}
+                />
                 <FormHelperText>
                   Please enter your password for change.
                 </FormHelperText>
@@ -167,7 +167,9 @@ const ProfileScreen: React.FC<object> = () => {
                     Symbol, an Uppercase and Lowercase.
                   </FormHelperText>
                 ) : (
-                  <FormErrorMessage>Passwords don't match.</FormErrorMessage>
+                  <FormErrorMessage>
+                    {"Passwords don't match."}
+                  </FormErrorMessage>
                 )}
               </FormControl>
             </ModalBody>
