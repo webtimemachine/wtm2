@@ -44,6 +44,7 @@ const SignUpScreen: React.FC<{}> = () => {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [displayname, setDisplayname] = useState('');
   const [showPass, setShowPass] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showConfirmPass, setShowConfirmPass] = useState(false);
@@ -51,6 +52,7 @@ const SignUpScreen: React.FC<{}> = () => {
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [confirmPassError, setConfirmPassError] = useState('');
+  const [displayNameError, setDisplayNameError] = useState('');
 
   const [loadingGeneratePassword, setLoadingGeneratePassword] = useState(false);
   const [passwordTooltipIsOpen, setPasswordTooltipIsOpen] = useState(false);
@@ -68,6 +70,12 @@ const SignUpScreen: React.FC<{}> = () => {
     let emailErrorFound = false;
     let passwordErrorFound = false;
     let confirmPassErrorFound = false;
+    let displayNameErrorFound = false;
+
+    if (!displayname) {
+      setDisplayNameError('Full Name is required');
+      displayNameErrorFound = true;
+    }
 
     if (!email) {
       setEmailError('Email is required');
@@ -99,7 +107,12 @@ const SignUpScreen: React.FC<{}> = () => {
       }
     }
 
-    return emailErrorFound || passwordErrorFound || confirmPassErrorFound;
+    return (
+      emailErrorFound ||
+      passwordErrorFound ||
+      confirmPassErrorFound ||
+      displayNameErrorFound
+    );
   };
 
   const handleSignUp = () => {
@@ -108,6 +121,7 @@ const SignUpScreen: React.FC<{}> = () => {
       const signUpData = {
         email,
         password,
+        displayname,
       };
       signUpMutation.mutate(signUpData);
     }
@@ -153,10 +167,33 @@ const SignUpScreen: React.FC<{}> = () => {
             </Text>
           </div>
         </div>
-
         <div className='pb-4 flex w-full'>
           <ServerUrlEditable />
         </div>
+        <FormControl isInvalid={!!emailError}>
+          <div
+            className={clsx([
+              'flex flex-col w-full',
+              !displayNameError && 'pb-4',
+            ])}
+          >
+            <Input
+              type='text'
+              name='displayname'
+              placeholder='Display Name'
+              value={displayname}
+              autoCapitalize='false'
+              onChange={(event) => {
+                setDisplayname(event.target.value);
+                if (displayNameError) setDisplayNameError('');
+              }}
+              backgroundColor={'white'}
+            />
+            <div className='[&>div]:mt-1 [&>div]:mb-1 select-none'>
+              <FormErrorMessage>{displayNameError}</FormErrorMessage>
+            </div>
+          </div>
+        </FormControl>
         <FormControl isInvalid={!!emailError}>
           <div
             className={clsx(['flex flex-col w-full', !emailError && 'pb-4'])}
@@ -178,7 +215,6 @@ const SignUpScreen: React.FC<{}> = () => {
             </div>
           </div>
         </FormControl>
-
         <FormControl isInvalid={!!passwordError}>
           <div className='flex flex-col w-full pb-4 '>
             <InputGroup size='md'>
@@ -260,7 +296,6 @@ const SignUpScreen: React.FC<{}> = () => {
             </div>
           </div>
         </FormControl>
-
         <FormControl isInvalid={!!confirmPassError}>
           <div className='flex flex-col w-full pb-4 '>
             <InputGroup size='md'>
@@ -291,7 +326,6 @@ const SignUpScreen: React.FC<{}> = () => {
             </div>
           </div>
         </FormControl>
-
         <div className='flex gap-4'>
           <Button
             colorScheme='blue'

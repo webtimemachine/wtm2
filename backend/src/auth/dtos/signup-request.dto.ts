@@ -18,4 +18,8 @@ export class SignUpRequestDto {
     message: SignUpRequestDto.validationErrorMessage,
   })
   password: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  displayname: string;
 }

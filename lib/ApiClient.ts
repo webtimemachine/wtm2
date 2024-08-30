@@ -544,7 +544,13 @@ export class ApiClient {
         );
       }
 
-      const response: User = await res.json();
+      const jsonRes: any = await res.json();
+      const response: User = {
+        ...jsonRes,
+        passChangedAt: jsonRes.passChangedAt
+          ? new Date(jsonRes.passChangedAt)
+          : null,
+      };
       return response;
     } catch (error: any) {
       if (`${error?.message}`.toLowerCase().includes('unauthorized')) {
@@ -560,7 +566,7 @@ export class ApiClient {
         method: 'POST',
         body: JSON.stringify(data),
       });
-      if (res.status !== 201) {
+      if (res.status !== 200) {
         const errorJson = await res.json();
         throw new Error(errorJson?.message || 'POST Update Password Error');
       }
