@@ -24,6 +24,7 @@ import { FaSignOutAlt } from 'react-icons/fa';
 import { CgProfile } from 'react-icons/cg';
 import { LuHistory } from 'react-icons/lu';
 import { HamburgerIcon } from '@chakra-ui/icons';
+import { usePathname } from 'next/navigation';
 
 import { User } from 'wtm-lib/interfaces/user-basic-information';
 
@@ -79,26 +80,27 @@ export const MainLayout: React.FC<Props> = ({ children }) => {
   };
 
   const NavigationSection = () => {
+    const pathname = usePathname();
     return (
       <div className='flex flex-col gap-3 w-full h-full'>
         <NavigationOption
           NavIcon={() => <Icon as={LuHistory} boxSize={5} color='gray.600' />}
           title='Navigation History'
-          selected={window.location.href.includes('navigation-entries')}
+          selected={pathname?.includes('navigation-entries')}
           onClick={() => navigateTo('navigation-entries')}
         />
 
         <NavigationOption
           NavIcon={() => <Icon as={CgProfile} boxSize={5} color='gray.600' />}
           title='Profile'
-          selected={window.location.href.includes('profile')}
+          selected={pathname?.includes('profile')}
           onClick={() => navigateTo('profile')}
         />
 
         <NavigationOption
           NavIcon={() => <Icon as={LuSettings2} boxSize={5} color='gray.600' />}
           title='Preferences'
-          selected={window.location.href.includes('preferences')}
+          selected={pathname?.includes('preferences')}
           onClick={() => navigateTo('preferences')}
         />
 
@@ -107,7 +109,7 @@ export const MainLayout: React.FC<Props> = ({ children }) => {
             <Icon as={BsPersonLock} boxSize={5} color='gray.600' />
           )}
           title='Active Sessions'
-          selected={window.location.href.includes('active-sessions')}
+          selected={pathname?.includes('active-sessions')}
           onClick={() => navigateTo('active-sessions')}
         />
 
@@ -116,7 +118,7 @@ export const MainLayout: React.FC<Props> = ({ children }) => {
             <Icon as={BsInfoCircle} boxSize={5} color='gray.600' />
           )}
           title='About WebTM'
-          selected={window.location.href.includes('about')}
+          selected={pathname?.includes('about')}
           onClick={() => navigateTo('about')}
         />
       </div>
