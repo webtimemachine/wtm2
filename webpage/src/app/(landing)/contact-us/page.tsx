@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { Footer } from '../components/footer';
+import { Nav } from '../components/nav';
 import { ContactForm } from './contact-form';
 import { Heading, Stack } from '@chakra-ui/react';
 
