@@ -42,7 +42,7 @@ export const MainLayout: React.FC<Props> = ({ children }) => {
   const user: User | undefined = basicUserInformationQuery?.data;
 
   const ProfileSection = () => {
-    const username = user?.email?.split('@')?.[0];
+    const username = user?.displayname;
     return (
       <div className='flex w-full gap-2'>
         <Avatar name={user?.email} size='lg' bg='gray.400' />
