@@ -9,6 +9,7 @@ export {
   type DeleteNavigationEntriesData,
   type GetNavigationEntriesData,
   type GetNavigationEntriesResponse,
+  type CompleteNavigationEntryDto,
 } from './navigation-entry.interface';
 export {
   type UpdatePreferenciesData,

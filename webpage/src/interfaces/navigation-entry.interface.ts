@@ -1,4 +1,3 @@
-import { IconType } from 'react-icons';
 import { UserDevice } from './user-device.interface';
 
 export interface CompleteNavigationEntryDto {
@@ -39,13 +38,4 @@ export interface CreateNavigationEntry {
   title: string;
   content?: string;
   images?: string[];
-}
-
-
-export interface NavEntryProps {
-  element: CompleteNavigationEntryDto
-  BrowserIcon: IconType
-  deleteNavEntry: ({ id }: { id: number }) => void
-  processOpenLink: (url: string) => Promise<void>
-  isSemantic: boolean
 }

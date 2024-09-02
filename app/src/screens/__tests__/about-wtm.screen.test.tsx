@@ -43,7 +43,7 @@ describe('AboutWTMScreen', () => {
   test('renders the component with initial state', () => {
     customRender(<AboutWTMScreen />);
 
-    expect(screen.getByText('About WTM')).toBeInTheDocument();
+    expect(screen.getByText('About WebTM')).toBeInTheDocument();
     expect(screen.getByText('Version:')).toBeInTheDocument();
     expect(screen.getByText('Backend URL:')).toBeInTheDocument();
     expect(screen.getByText('Report an Issue')).toBeInTheDocument();
