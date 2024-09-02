@@ -1,14 +1,8 @@
 'use client';
 
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Text, IconButton, Input, Divider, Badge } from '@chakra-ui/react';
-import {
-  ArrowBackIcon,
-  EditIcon,
-  CheckIcon,
-  CloseIcon,
-  Icon,
-} from '@chakra-ui/icons';
+import { EditIcon, CheckIcon, CloseIcon, Icon } from '@chakra-ui/icons';
 import { MdLogout } from 'react-icons/md';
 
 import { useNavigation } from '@/store';
@@ -188,8 +182,11 @@ const ActiveSessionsScreen: React.FC<object> = () => {
     return (
       <div className='flex flex-col h-full'>
         <div className='flex w-full justify-start pb-4 gap-4 items-center'>
-          <div className='flex w-full justify-center px-[40px]'>
-            <Text fontSize={'xx-large'} fontWeight={'bold'}>
+          <div className='flex flex-col leading-none w-full justify-center items-center px-0 md:px-[40px] h-[40px]'>
+            <Text
+              fontSize={{ base: 'x-large', md: 'xx-large' }}
+              fontWeight={'bold'}
+            >
               Active Sessions
             </Text>
           </div>

@@ -9,7 +9,6 @@ import {
   Button,
   Divider,
 } from '@chakra-ui/react';
-import { ArrowBackIcon } from '@chakra-ui/icons';
 import { useGetPreferences, useUpdatePreferences } from '../../hooks';
 import { useAuthStore, useNavigation } from '../../store';
 
@@ -65,8 +64,11 @@ const PreferencesScreen: React.FC<object> = () => {
   return (
     <div className='flex flex-col tems-center h-full'>
       <div className='flex w-full justify-start pb-4 gap-4 items-center'>
-        <div className='flex w-full justify-center px-[40px]'>
-          <Text fontSize={'xx-large'} fontWeight={'bold'}>
+        <div className='flex flex-col leading-none w-full justify-center items-center px-0 md:px-[40px] h-[40px]'>
+          <Text
+            fontSize={{ base: 'x-large', md: 'xx-large' }}
+            fontWeight={'bold'}
+          >
             Preferences
           </Text>
         </div>

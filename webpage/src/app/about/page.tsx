@@ -1,14 +1,13 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { Text, IconButton, Badge } from '@chakra-ui/react';
-import { ArrowBackIcon } from '@chakra-ui/icons';
-import { useAuthStore, useNavigation } from '../../store';
+import { Text, Badge } from '@chakra-ui/react';
+
+import { useAuthStore } from '../../store';
 import { manifestWeb } from '../../manifest-web';
 
 const AboutWTMScreen: React.FC<object> = () => {
   const [backendURL, setBackendURL] = useState<string>('');
-  const { navigateBack } = useNavigation();
 
   const serverUrl = useAuthStore((state) => state.serverUrl);
 
@@ -19,8 +18,11 @@ const AboutWTMScreen: React.FC<object> = () => {
   return (
     <div className='flex flex-col h-full'>
       <div className='flex w-full justify-start pb-4 gap-4 items-center'>
-        <div className='flex flex-col w-full items-center justify-center px-[40px] gap-5'>
-          <Text fontSize={'xx-large'} fontWeight={'bold'}>
+        <div className='flex flex-col leading-none w-full justify-center items-center px-0 md:px-[40px] h-[40px]'>
+          <Text
+            fontSize={{ base: 'x-large', md: 'xx-large' }}
+            fontWeight={'bold'}
+          >
             About
           </Text>
         </div>
