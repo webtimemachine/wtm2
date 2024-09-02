@@ -25,7 +25,7 @@ export const AboutWTMScreen: React.FC<object> = () => {
           </IconButton>
           <div className='flex w-full justify-center pr-[40px]'>
             <Text fontSize={'xx-large'} fontWeight={'bold'}>
-              About WTM
+              About WebTM
             </Text>
           </div>
         </div>

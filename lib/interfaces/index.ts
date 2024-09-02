@@ -50,3 +50,4 @@ export {
   type RestorePasswordData,
   type RestorePasswordErrorResponse,
 } from './restore-password.interface';
+export { type ChangeUserPassword } from './change-user-password.interface';
