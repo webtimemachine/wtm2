@@ -16,13 +16,12 @@ class WebViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
                 
-        if let accessToken = UserDefaults.standard.value(forKey:"access_token"), let refreshToken = UserDefaults.standard.value(forKey:"refresh_token") {
-            let urlString = "https://webtm.vercel.app/navigation-entries?accessToken=\(String(describing: accessToken))&refreshToken=\(refreshToken)"
-            if let url = URL(string: urlString) {
-                let request = URLRequest(url: url)
-                webView.load(request)
-            }
+        let urlString = "https://webtm.vercel.app/login"
+        if let url = URL(string: urlString) {
+            let request = URLRequest(url: url)
+            webView.load(request)
         }
+        
     }
 }
 
