@@ -28,7 +28,6 @@ export interface AuthStore extends AuthState {
   notifyRecoveryCodeValidated: () => void;
   updateServerUrl: (serverUrl: string) => void;
   updateEnabledLiteMode: (enabledLiteMode: boolean) => void;
-  setSessionFromDevice: (accessToken: string, refreshToken: string) => void;
 }
 
 export const authStore = createStore<AuthStore>()(
@@ -123,14 +122,6 @@ export const authStore = createStore<AuthStore>()(
             refreshToken: '',
             partialToken: '',
             recoveryToken: '',
-          };
-        }),
-      setSessionFromDevice: (accessToken: string, refreshToken: string) =>
-        set(() => {
-          return {
-            isLoggedIn: true,
-            accessToken,
-            refreshToken,
           };
         }),
     }),

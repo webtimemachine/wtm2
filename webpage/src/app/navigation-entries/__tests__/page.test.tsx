@@ -1,7 +1,7 @@
 import React from 'react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { ChakraProvider } from '@chakra-ui/react';
-import { useNavigation, useAuthStore } from '../../../store';
+import { useNavigation } from '../../../store';
 import {
   useDeleteNavigationEntry,
   useLogout,
@@ -14,7 +14,6 @@ import NavigationEntriesScreen from '../page';
 // Mock de useNavigation, useDeleteNavigationEntry y useNavigationEntries
 jest.mock('../../../store', () => ({
   useNavigation: jest.fn(),
-  useAuthStore: jest.fn(),
 }));
 
 jest.mock('../../../hooks', () => ({
@@ -37,10 +36,6 @@ const mockSetSessionFromDevice = jest.fn();
 
 (useNavigation as jest.Mock).mockReturnValue({
   navigateTo: mockNavigateTo,
-});
-
-(useAuthStore as jest.Mock).mockReturnValue({
-  setSessionFromDevice: mockSetSessionFromDevice,
 });
 
 (useDeleteNavigationEntry as jest.Mock).mockReturnValue({
