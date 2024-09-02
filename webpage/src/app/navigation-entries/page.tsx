@@ -145,7 +145,6 @@ const NavigationEntriesScreen: React.FC<object> = () => {
   const [page, setPage] = useState<number>(0);
   const [query, setQuery] = useState<string>('');
   const [isSemantic, setIsSemantic] = useState<boolean>(true);
-  const { setSessionFromDevice } = useAuthStore((state) => state);
 
   const offset = page * LIMIT;
   const limit = LIMIT;
@@ -161,20 +160,6 @@ const NavigationEntriesScreen: React.FC<object> = () => {
   const navigationEntries = navigationEntriesQuery?.data?.items || [];
   const count = navigationEntriesQuery?.data?.count || 0;
   const pagesCount = Math.ceil(count / limit);
-
-  let accessToken = '';
-  let refreshToken = '';
-  if (typeof window !== 'undefined') {
-    const queryParams = new URLSearchParams(window.location.search);
-    accessToken = queryParams.get('accessToken') || '';
-    refreshToken = queryParams.get('refreshToken') || '';
-  }
-
-  useEffect(() => {
-    if (accessToken && refreshToken) {
-      setSessionFromDevice(accessToken, refreshToken);
-    }
-  }, [accessToken, refreshToken]);
 
   useEffect(() => {
     navigationEntriesQuery.refetch();
