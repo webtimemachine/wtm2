@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import { ClientProviders } from '@/providers/ClientProvider';
 import { manifestWeb } from '@/manifest-web';
+
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {

@@ -12,6 +12,16 @@ import {
   Tooltip,
   useDisclosure,
   IconButton,
+  Popover,
+  PopoverArrow,
+  PopoverBody,
+  PopoverCloseButton,
+  PopoverContent,
+  PopoverFooter,
+  PopoverHeader,
+  PopoverTrigger,
+  Portal,
+  useToast,
 } from '@chakra-ui/react';
 import { ArrowBackIcon, InfoIcon } from '@chakra-ui/icons';
 
@@ -21,6 +31,7 @@ import { useSignUp } from '@/hooks';
 import { useNavigation } from '@/store';
 
 import clsx from 'clsx';
+import { generateSecurePassword } from '@/utils/generateSecurePassword';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[^\s]{8,20}$/;
@@ -34,12 +45,17 @@ const SignUpScreen: React.FC<{}> = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPass, setShowPass] = useState(false);
-  const [confirmPassword, setConformPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [showConfirmPass, setShowConfirmPass] = useState(false);
 
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [confirmPassError, setConfirmPassError] = useState('');
+
+  const [loadingGeneratePassword, setLoadingGeneratePassword] = useState(false);
+  const [passwordTooltipIsOpen, setPasswordTooltipIsOpen] = useState(false);
+
+  const toast = useToast();
 
   const {
     isOpen: passTooltipIsOpen,
@@ -97,6 +113,33 @@ const SignUpScreen: React.FC<{}> = () => {
     }
   };
 
+  const handleGenerateSecurePassword = async () => {
+    setLoadingGeneratePassword(true);
+
+    const securePassword = generateSecurePassword();
+    setShowConfirmPass(true);
+    setShowPass(true);
+    setPassword(securePassword);
+    setConfirmPassword(securePassword);
+
+    try {
+      await navigator.clipboard.writeText(securePassword);
+
+      toast({
+        title: 'Success',
+        description: 'Secure password copied to clipboard!',
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+      });
+    } catch (error) {
+      console.error('Error copying secure password to clipboard.', error);
+    } finally {
+      setLoadingGeneratePassword(false);
+      setPasswordTooltipIsOpen(false);
+    }
+  };
+
   return (
     <>
       <div className='flex flex-col p-8 pt-10 items-center w-full'>
@@ -139,18 +182,53 @@ const SignUpScreen: React.FC<{}> = () => {
         <FormControl isInvalid={!!passwordError}>
           <div className='flex flex-col w-full pb-4 '>
             <InputGroup size='md'>
-              <Input
-                pr='4.5rem'
-                type={showPass ? 'text' : 'password'}
-                name='password'
-                placeholder='Enter password'
-                value={password}
-                onChange={(event) => {
-                  setPassword(event.target.value);
-                  if (passwordError) setPasswordError('');
-                }}
-                backgroundColor={'white'}
-              />
+              <Popover isOpen={passwordTooltipIsOpen}>
+                <PopoverTrigger>
+                  <Input
+                    pr='4.5rem'
+                    type={showPass ? 'text' : 'password'}
+                    name='password'
+                    placeholder='Enter password'
+                    value={password}
+                    onChange={(event) => {
+                      setPassword(event.target.value);
+                      if (passwordError) setPasswordError('');
+                    }}
+                    backgroundColor={'white'}
+                    onClick={() => setPasswordTooltipIsOpen(true)}
+                  />
+                </PopoverTrigger>
+                <Portal>
+                  <PopoverContent>
+                    <PopoverArrow />
+                    <PopoverHeader>Generate Secure Password</PopoverHeader>
+                    <PopoverCloseButton
+                      onClick={() => setPasswordTooltipIsOpen(false)}
+                    />
+                    <PopoverBody
+                      justifyContent={'center'}
+                      alignItems={'center'}
+                      display={'flex'}
+                    >
+                      <Button
+                        isLoading={loadingGeneratePassword}
+                        disabled={loadingGeneratePassword}
+                        size='sm'
+                        colorScheme='gray'
+                        onClick={handleGenerateSecurePassword}
+                      >
+                        Generate
+                      </Button>
+                    </PopoverBody>
+                    <PopoverFooter>
+                      <Text fontSize={'sm'}>
+                        This will generate a secure password of 12 characters
+                        for you.
+                      </Text>
+                    </PopoverFooter>
+                  </PopoverContent>
+                </Portal>
+              </Popover>
               <InputRightElement width='4.5rem'>
                 <Button
                   h='1.75rem'
@@ -193,7 +271,7 @@ const SignUpScreen: React.FC<{}> = () => {
                 placeholder='Confirm password'
                 value={confirmPassword}
                 onChange={(event) => {
-                  setConformPassword(event.target.value);
+                  setConfirmPassword(event.target.value);
                   if (confirmPassError) setConfirmPassError('');
                 }}
                 backgroundColor={'white'}

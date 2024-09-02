@@ -54,7 +54,7 @@ export const SettingsScreen: React.FC<object> = () => {
             onClick={() => navigateTo('about-wtm')}
           >
             <Icon as={BsInfoCircle} boxSize={5} color='gray.600' />
-            <Text fontSize='medium'>About WTM</Text>
+            <Text fontSize='medium'>About WebTM</Text>
           </div>
           <div
             className='flex gap-2 items-center w-full p-2 select-none bg-white rounded-lg cursor-pointer'

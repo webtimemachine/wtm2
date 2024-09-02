@@ -1,3 +1,4 @@
+import { useGetBasicUserIngormation } from '../hooks/use-get-user-basic-information.hook';
 import { useLogout } from '../hooks';
 import { useNavigation } from '../store';
 import { ChevronDownIcon, SettingsIcon } from '@chakra-ui/icons';
@@ -20,21 +21,14 @@ import {
   MenuGroup,
   MenuDivider,
   Icon,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverHeader,
-  PopoverBody,
-  PopoverCloseButton,
-  Wrap,
 } from '@chakra-ui/react';
 import { BsPersonLock, BsInfoCircle } from 'react-icons/bs';
 import { FaRegTrashAlt, FaSignOutAlt } from 'react-icons/fa';
-import { FaCircleUser, FaUser } from 'react-icons/fa6';
+import { FaUser } from 'react-icons/fa6';
 import { FcContacts } from 'react-icons/fc';
 import { LuSettings2 } from 'react-icons/lu';
 import { PiTabs } from 'react-icons/pi';
-import { RiNumber1, RiNumber2, RiNumber3 } from 'react-icons/ri';
+import { ImProfile } from 'react-icons/im';
 
 export const CustomDrawer = ({
   isOpen,
@@ -47,9 +41,11 @@ export const CustomDrawer = ({
 }) => {
   const { logout } = useLogout();
   const { navigateTo } = useNavigation();
-  const getUserMail = () => {
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem('mail')?.split('@')[0];
+  const { basicUserInformationQuery } = useGetBasicUserIngormation();
+  const getUserMail = (basicUserInformationQuery: any) => {
+    if (basicUserInformationQuery && basicUserInformationQuery.data) {
+      const email: string = basicUserInformationQuery.data.email;
+      return email.split('@')[0];
     }
     return 'Loading...';
   };
@@ -70,19 +66,19 @@ export const CustomDrawer = ({
               leftIcon={<FaUser />}
               rightIcon={<ChevronDownIcon />}
             >
-              {getUserMail()}
+              {basicUserInformationQuery &&
+                getUserMail(basicUserInformationQuery)}
             </MenuButton>
             <MenuList>
               <MenuGroup title='Profile'>
                 <MenuDivider />
-                <MenuItem icon={<RiNumber1 />}>
-                  <Text fontWeight={300}>Option 1</Text>
-                </MenuItem>
-                <MenuItem icon={<RiNumber2 />}>
-                  <Text fontWeight={300}>Option 2</Text>
-                </MenuItem>
-                <MenuItem icon={<RiNumber3 />}>
-                  <Text fontWeight={300}>Option 3</Text>
+                <MenuItem
+                  icon={<ImProfile />}
+                  onClick={() => navigateTo('profile')}
+                >
+                  <Text fontWeight={400} fontSize={12}>
+                    My profile
+                  </Text>
                 </MenuItem>
               </MenuGroup>
             </MenuList>
@@ -135,21 +131,6 @@ export const CustomDrawer = ({
                     onClick={() => navigateTo('confirm-delete-account')}
                   >
                     Delete account
-                  </MenuItem>
-                </MenuGroup>
-              </MenuList>
-            </Menu>
-            <Menu>
-              <MenuButton as={Button} leftIcon={<FcContacts />}>
-                Contacts
-              </MenuButton>
-              <MenuList>
-                <MenuGroup title='Not done yet!'>
-                  <MenuItem>
-                    <Text className='max-w-fit'>
-                      We are glad to inform you that this <br />
-                      section will be here sooner than you think.
-                    </Text>
                   </MenuItem>
                 </MenuGroup>
               </MenuList>
