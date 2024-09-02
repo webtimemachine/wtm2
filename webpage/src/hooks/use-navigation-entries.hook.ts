@@ -13,6 +13,7 @@ export const useNavigationEntries = (params: GetNavigationEntriesData) => {
     queryKey: ['getNavigationEntriesQuery'],
     queryFn: () => apiClient.getNavigationEntries(params),
     enabled: false,
+    retry: false,
   });
 
   return { navigationEntriesQuery };

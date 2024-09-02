@@ -5,6 +5,7 @@ import { JwtContext } from '../../auth/interfaces';
 import { PrismaService } from '../../common/services';
 
 import {
+  ChangePasswordInput,
   UpdateUserDeviceInput,
   UpdateUserPreferencesInput,
   UserDto,
@@ -18,12 +19,16 @@ import { UserDeviceDto } from '../dtos/user-device.dto';
 import { CompleteUserDevice, completeUserDeviceInclude } from '../types';
 
 import { UAParser } from 'ua-parser-js';
+import { AuthService } from '../../auth/services';
 
 @Injectable()
 export class UserService {
   private readonly logger = new Logger(UserService.name);
 
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly authService: AuthService,
+  ) {}
 
   static completeUserToDto(user: User): UserDto {
     const userDto = plainToInstance(UserDto, user);
@@ -218,5 +223,22 @@ export class UserService {
     return plainToClassFromExist(new MessageResponse(), {
       message: 'User deleted',
     });
+  }
+
+  async changePassword(
+    jwtContext: JwtContext,
+    changePasswordInput: ChangePasswordInput,
+  ): Promise<MessageResponse> {
+    const { oldPassword, newPassword } = changePasswordInput;
+    await this.authService.validateUserOrThrow(
+      jwtContext.user.email,
+      oldPassword,
+    );
+    await this.authService.updatePassword(jwtContext, newPassword);
+
+    return {
+      statusCode: 200,
+      message: 'Pasword updated successfully!',
+    };
   }
 }

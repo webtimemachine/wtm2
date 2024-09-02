@@ -6,6 +6,7 @@ import {
   Spinner,
   Switch,
   Text,
+  useToast,
 } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 
@@ -29,8 +30,6 @@ import { getBrowserIconFromDevice } from '../utils';
 import clsx from 'clsx';
 
 import { updateIcon } from '../utils/updateIcon';
-
-import { useTest } from 'wtm-lib/hooks';
 
 const truncateString = (str: string, maxLength: number) => {
   return str.length <= maxLength ? str : str.slice(0, maxLength) + '...';
@@ -61,9 +60,6 @@ const NavigationEntry = ({
   isSemantic,
 }: NavEntryProps) => {
   const [visible, setVisible] = useState<boolean>(false);
-
-  const { superPrint } = useTest();
-  superPrint();
 
   return (
     <div className='flex flex-col w-full bg-white px-2 py-1 rounded-lg mb-1 gap-3'>
@@ -130,6 +126,7 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
   updateIcon(true);
 
   const { navigateTo } = useNavigation();
+  const toast = useToast();
 
   const LIMIT = 16;
   const [page, setPage] = useState<number>(0);
@@ -154,6 +151,19 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
   useEffect(() => {
     navigationEntriesQuery.refetch();
   }, [page, isSemantic, deleteNavigationEntryMutation.isSuccess]);
+
+  useEffect(() => {
+    if (navigationEntriesQuery.isError) {
+      toast({
+        status: 'error',
+        title: 'An error has occurred!',
+        description:
+          'It may be that the service is temporarily disabled. Please try again later',
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  }, [navigationEntriesQuery.error]);
 
   const search = () => {
     setPage(0);

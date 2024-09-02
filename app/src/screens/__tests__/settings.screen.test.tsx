@@ -43,7 +43,7 @@ describe('SettingsScreen', () => {
     expect(screen.getByText('Preferences')).toBeInTheDocument();
     expect(screen.getByText('Active Sessions')).toBeInTheDocument();
     expect(screen.getByText('Open in new tab')).toBeInTheDocument();
-    expect(screen.getByText('About WTM')).toBeInTheDocument();
+    expect(screen.getByText('About WebTM')).toBeInTheDocument();
     expect(screen.getByText('Delete account')).toBeInTheDocument();
     expect(screen.getByText('Logout')).toBeInTheDocument();
   });
@@ -66,7 +66,7 @@ describe('SettingsScreen', () => {
     fireEvent.click(screen.getByText('Active Sessions'));
     expect(mockNavigateTo).toHaveBeenCalledWith('active-sessions');
 
-    fireEvent.click(screen.getByText('About WTM'));
+    fireEvent.click(screen.getByText('About WebTM'));
     expect(mockNavigateTo).toHaveBeenCalledWith('about-wtm');
 
     fireEvent.click(screen.getByText('Delete account'));
