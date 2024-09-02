@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   uuid = "E2A917B6-9984-4AE8-9A88-E709C1FCC5AF"
+   type = "1"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "7ACB85B1-8070-417F-A2F6-8943DBC0C046"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Shared (App)/ViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "169"
+            endingLineNumber = "169"
+            landmarkName = "setupConstraints()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "93AA1BE1-E0B3-4AF7-AD32-045C6E7EAF86"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Shared (App)/ViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "170"
+            endingLineNumber = "170"
+            landmarkName = "setupConstraints()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "EDAFCE67-0058-4F1D-ACC1-61E5D4339322"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Shared (App)/ViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "201"
+            endingLineNumber = "201"
+            landmarkName = "doLogin()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "EDAFCE67-0058-4F1D-ACC1-61E5D4339322 - cb24d0adae006377"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 @Swift.MainActor () -&gt; () in closure #1 (Swift.Result&lt;wtm.LoginResponse, wtm.AuthService.LoginError&gt;) -&gt; () in wtm.ViewController.doLogin() -&gt; ()"
+                  moduleName = "wtm"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/maxi/Documents/Swift-Project/WTM/app_ios/wtm/Shared%20(App)/ViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "201"
+                  endingLineNumber = "201"
+                  offsetFromSymbolStart = "384">
+               </Location>
+               <Location
+                  uuid = "EDAFCE67-0058-4F1D-ACC1-61E5D4339322 - cb24d0adae006377"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 @Swift.MainActor () -&gt; () in closure #1 (Swift.Result&lt;wtm.LoginResponse, wtm.AuthService.LoginError&gt;) -&gt; () in wtm.ViewController.doLogin() -&gt; ()"
+                  moduleName = "wtm"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/maxi/Documents/Swift-Project/WTM/app_ios/wtm/Shared%20(App)/ViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "201"
+                  endingLineNumber = "201"
+                  offsetFromSymbolStart = "332">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "E2507DB5-7422-4F09-B727-D69EE6DEC0EF"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Shared (App)/ViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "197"
+            endingLineNumber = "197"
+            landmarkName = "doLogin()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "E2507DB5-7422-4F09-B727-D69EE6DEC0EF - cb24d0adae0063f3"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 @Swift.MainActor () -&gt; () in closure #1 (Swift.Result&lt;wtm.LoginResponse, wtm.AuthService.LoginError&gt;) -&gt; () in wtm.ViewController.doLogin() -&gt; ()"
+                  moduleName = "wtm"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/maxi/Documents/Swift-Project/WTM/app_ios/wtm/Shared%20(App)/ViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "197"
+                  endingLineNumber = "197"
+                  offsetFromSymbolStart = "96">
+               </Location>
+               <Location
+                  uuid = "E2507DB5-7422-4F09-B727-D69EE6DEC0EF - cb24d0adae0063f3"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 @Swift.MainActor () -&gt; () in closure #1 (Swift.Result&lt;wtm.LoginResponse, wtm.AuthService.LoginError&gt;) -&gt; () in wtm.ViewController.doLogin() -&gt; ()"
+                  moduleName = "wtm"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/maxi/Documents/Swift-Project/WTM/app_ios/wtm/Shared%20(App)/ViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "197"
+                  endingLineNumber = "197"
+                  offsetFromSymbolStart = "52">
+               </Location>
+               <Location
+                  uuid = "E2507DB5-7422-4F09-B727-D69EE6DEC0EF - cb24d0adae0063f3"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 @Swift.MainActor () -&gt; () in closure #1 (Swift.Result&lt;wtm.LoginResponse, wtm.AuthService.LoginError&gt;) -&gt; () in wtm.ViewController.doLogin() -&gt; ()"
+                  moduleName = "wtm"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/maxi/Documents/Swift-Project/WTM/app_ios/wtm/Shared%20(App)/ViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "197"
+                  endingLineNumber = "197"
+                  offsetFromSymbolStart = "580">
+               </Location>
+               <Location
+                  uuid = "E2507DB5-7422-4F09-B727-D69EE6DEC0EF - cb24d0adae0063f3"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 @Swift.MainActor () -&gt; () in closure #1 (Swift.Result&lt;wtm.LoginResponse, wtm.AuthService.LoginError&gt;) -&gt; () in wtm.ViewController.doLogin() -&gt; ()"
+                  moduleName = "wtm"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/maxi/Documents/Swift-Project/WTM/app_ios/wtm/Shared%20(App)/ViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "197"
+                  endingLineNumber = "197"
+                  offsetFromSymbolStart = "60">
+               </Location>
+               <Location
+                  uuid = "E2507DB5-7422-4F09-B727-D69EE6DEC0EF - cb24d0adae0063f3"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 @Swift.MainActor () -&gt; () in closure #1 (Swift.Result&lt;wtm.LoginResponse, wtm.AuthService.LoginError&gt;) -&gt; () in wtm.ViewController.doLogin() -&gt; ()"
+                  moduleName = "wtm"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/maxi/Documents/Swift-Project/WTM/app_ios/wtm/Shared%20(App)/ViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "197"
+                  endingLineNumber = "197"
+                  offsetFromSymbolStart = "828">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "4A9DA5F2-AADA-404C-B46A-2BF120C0C3C9"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Shared (App)/ViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "196"
+            endingLineNumber = "196"
+            landmarkName = "doLogin()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "4A9DA5F2-AADA-404C-B46A-2BF120C0C3C9 - cb24d0adae006392"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 @Swift.MainActor () -&gt; () in closure #1 (Swift.Result&lt;wtm.LoginResponse, wtm.AuthService.LoginError&gt;) -&gt; () in wtm.ViewController.doLogin() -&gt; ()"
+                  moduleName = "wtm"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/maxi/Documents/Swift-Project/WTM/app_ios/wtm/Shared%20(App)/ViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "196"
+                  endingLineNumber = "196"
+                  offsetFromSymbolStart = "52">
+               </Location>
+               <Location
+                  uuid = "4A9DA5F2-AADA-404C-B46A-2BF120C0C3C9 - cb24d0adae006392"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 @Swift.MainActor () -&gt; () in closure #1 (Swift.Result&lt;wtm.LoginResponse, wtm.AuthService.LoginError&gt;) -&gt; () in wtm.ViewController.doLogin() -&gt; ()"
+                  moduleName = "wtm"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/maxi/Documents/Swift-Project/WTM/app_ios/wtm/Shared%20(App)/ViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "196"
+                  endingLineNumber = "196"
+                  offsetFromSymbolStart = "580">
+               </Location>
+               <Location
+                  uuid = "4A9DA5F2-AADA-404C-B46A-2BF120C0C3C9 - cb24d0adae0063f3"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 @Swift.MainActor () -&gt; () in closure #1 (Swift.Result&lt;wtm.LoginResponse, wtm.AuthService.LoginError&gt;) -&gt; () in wtm.ViewController.doLogin() -&gt; ()"
+                  moduleName = "wtm"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/maxi/Documents/Swift-Project/WTM/app_ios/wtm/Shared%20(App)/ViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "197"
+                  endingLineNumber = "197"
+                  offsetFromSymbolStart = "52">
+               </Location>
+               <Location
+                  uuid = "4A9DA5F2-AADA-404C-B46A-2BF120C0C3C9 - cb24d0adae0063f3"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 @Swift.MainActor () -&gt; () in closure #1 (Swift.Result&lt;wtm.LoginResponse, wtm.AuthService.LoginError&gt;) -&gt; () in wtm.ViewController.doLogin() -&gt; ()"
+                  moduleName = "wtm"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/maxi/Documents/Swift-Project/WTM/app_ios/wtm/Shared%20(App)/ViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "197"
+                  endingLineNumber = "197"
+                  offsetFromSymbolStart = "580">
+               </Location>
+               <Location
+                  uuid = "4A9DA5F2-AADA-404C-B46A-2BF120C0C3C9 - cb24d0adae0063f3"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 @Swift.MainActor () -&gt; () in closure #1 (Swift.Result&lt;wtm.LoginResponse, wtm.AuthService.LoginError&gt;) -&gt; () in wtm.ViewController.doLogin() -&gt; ()"
+                  moduleName = "wtm"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/maxi/Documents/Swift-Project/WTM/app_ios/wtm/Shared%20(App)/ViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "197"
+                  endingLineNumber = "197"
+                  offsetFromSymbolStart = "60">
+               </Location>
+               <Location
+                  uuid = "4A9DA5F2-AADA-404C-B46A-2BF120C0C3C9 - cb24d0adae0063f3"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 @Swift.MainActor () -&gt; () in closure #1 (Swift.Result&lt;wtm.LoginResponse, wtm.AuthService.LoginError&gt;) -&gt; () in wtm.ViewController.doLogin() -&gt; ()"
+                  moduleName = "wtm"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/maxi/Documents/Swift-Project/WTM/app_ios/wtm/Shared%20(App)/ViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "197"
+                  endingLineNumber = "197"
+                  offsetFromSymbolStart = "96">
+               </Location>
+               <Location
+                  uuid = "4A9DA5F2-AADA-404C-B46A-2BF120C0C3C9 - cb24d0adae0063f3"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 @Swift.MainActor () -&gt; () in closure #1 (Swift.Result&lt;wtm.LoginResponse, wtm.AuthService.LoginError&gt;) -&gt; () in wtm.ViewController.doLogin() -&gt; ()"
+                  moduleName = "wtm"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/maxi/Documents/Swift-Project/WTM/app_ios/wtm/Shared%20(App)/ViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "197"
+                  endingLineNumber = "197"
+                  offsetFromSymbolStart = "828">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>

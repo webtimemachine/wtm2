@@ -32,7 +32,6 @@ import { getBrowserIconFromDevice } from '../../utils';
 import clsx from 'clsx';
 
 import Markdown from 'react-markdown';
-
 const getPreProcessedMarkDown = (relevantSegment: string) => {
   const emptyListPatterns = [
     /\*\n(\*\n)*/g, // matches lines with only *

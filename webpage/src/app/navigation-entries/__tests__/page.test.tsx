@@ -10,7 +10,6 @@ import {
 } from '../../../hooks';
 import { CompleteNavigationEntryDto } from '../../../interfaces/navigation-entry.interface';
 import NavigationEntriesScreen from '../page';
-import { useQuery } from '@tanstack/react-query';
 
 // Mock de useNavigation, useDeleteNavigationEntry y useNavigationEntries
 jest.mock('../../../store', () => ({

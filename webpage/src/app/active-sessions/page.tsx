@@ -42,6 +42,8 @@ const ActiveSessionsScreen: React.FC<object> = () => {
 
   useEffect(() => {
     if (getActiveSessionsQuery.isSuccess && getActiveSessionsQuery.data) {
+      console.log('getActiveSessionsQuery.data', getActiveSessionsQuery.data);
+
       setSessions(moveCurrentSessionToFirst(getActiveSessionsQuery.data));
     }
   }, [getActiveSessionsQuery]);
