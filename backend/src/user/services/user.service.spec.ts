@@ -7,6 +7,7 @@ import { PrismaService } from '../../common/services';
 import { CommonTestingModule } from '../../common/common.testing.module';
 
 import { UserService } from './user.service';
+import { AuthService } from '../../auth/services';
 
 jest.mock('../../common/services/prisma.service');
 
@@ -88,7 +89,18 @@ describe('UserService', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [CommonTestingModule.forTest(prismaClient)],
-      providers: [UserService],
+      providers: [
+        {
+          provide: AuthService,
+          useValue: {},
+        },
+        {
+          provide: UserService,
+          useValue: {
+            delete: jest.fn(() => expectResponse),
+          },
+        },
+      ],
     }).compile();
 
     userService = module.get<UserService>(UserService);
