@@ -33,10 +33,6 @@ import clsx from 'clsx';
 
 import Markdown from 'react-markdown';
 
-const truncateString = (str: string, maxLength: number) => {
-  return str.length <= maxLength ? str : str.slice(0, maxLength) + '...';
-};
-
 const getPreProcessedMarkDown = (relevantSegment: string) => {
   const emptyListPatterns = [
     /\*\n(\*\n)*/g, // matches lines with only *
@@ -285,18 +281,19 @@ const NavigationEntry: React.FC<NavigationEntryProps> = ({
             <Icon as={BrowserIcon} boxSize={6} color='gray.600' />
           </div>
           <div className='flex flex-col w-full'>
-            <Text
-              className='cursor-pointer hover:underline'
-              fontSize={'small'}
-              {...(element.liteMode && {
-                fontWeight: 'bold',
-              })}
-              onClick={() => processOpenLink(element.url)}
-            >
-              <Tooltip label={element.title}>
-                {truncateString(element.title, 30)}
-              </Tooltip>
-            </Text>
+            <Tooltip label={element.title}>
+              <Text
+                className='cursor-pointer hover:underline'
+                noOfLines={1}
+                fontSize={'small'}
+                {...(element.liteMode && {
+                  fontWeight: 'bold',
+                })}
+                onClick={() => processOpenLink(element.url)}
+              >
+                {element.title}
+              </Text>
+            </Tooltip>
             <Text className='text-slate-600' fontSize={'smaller'}>
               {new Date(element.navigationDate).toLocaleString()}
             </Text>
