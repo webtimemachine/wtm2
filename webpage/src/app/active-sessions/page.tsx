@@ -1,14 +1,8 @@
 'use client';
 
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Text, IconButton, Input, Divider, Badge } from '@chakra-ui/react';
-import {
-  ArrowBackIcon,
-  EditIcon,
-  CheckIcon,
-  CloseIcon,
-  Icon,
-} from '@chakra-ui/icons';
+import { EditIcon, CheckIcon, CloseIcon, Icon } from '@chakra-ui/icons';
 import { MdLogout } from 'react-icons/md';
 
 import { useNavigation } from '@/store';
@@ -188,35 +182,33 @@ const ActiveSessionsScreen: React.FC<object> = () => {
   const [currentSession, ...restSessions] = sessions;
   if (currentSession || restSessions) {
     return (
-      <div className='flex justify-center items-center  w-full h-1/2'>
-        <div className='flex flex-col md:px-5 py-3 items-center max-w-6xl min-w-[360px] w-3/4 min-h-[600px]'>
-          <div className='flex w-full justify-start pb-4 gap-4 items-center'>
-            <IconButton aria-label='Back icon' onClick={() => navigateBack()}>
-              <ArrowBackIcon boxSize={5} />
-            </IconButton>
-            <div className='flex w-full justify-center pr-[40px]'>
-              <Text fontSize={'xx-large'} fontWeight={'bold'}>
-                Active Sessions
-              </Text>
-            </div>
-          </div>
-          <div className='flex flex-col w-full h-full'>
-            <Text fontSize={'medium'}>
-              Below you can see the complete list of active sessions:
+      <div className='flex flex-col h-full'>
+        <div className='flex w-full justify-start pb-4 gap-4 items-center'>
+          <div className='flex flex-col leading-none w-full justify-center items-center px-0 md:px-[40px] h-[40px]'>
+            <Text
+              fontSize={{ base: 'x-large', md: 'xx-large' }}
+              fontWeight={'bold'}
+            >
+              Active Sessions
             </Text>
+          </div>
+        </div>
+        <div className='flex flex-col w-full h-full'>
+          <Text fontSize={'medium'}>
+            Below you can see the complete list of active sessions:
+          </Text>
 
-            {currentSession && (
-              <div className='pt-5 pr-3 w-full'>
-                <ActiveSessionRow session={currentSession} />
-              </div>
-            )}
-            <Divider className='my-2' />
-            <div className='flex flex-col gap-2 w-full h-full overflow-y-auto scrollbar pr-1'>
-              {restSessions &&
-                restSessions.map((session, i) => (
-                  <ActiveSessionRow session={session} key={i} />
-                ))}
+          {currentSession && (
+            <div className='pt-5 pr-3 w-full'>
+              <ActiveSessionRow session={currentSession} />
             </div>
+          )}
+          <Divider className='my-2' />
+          <div className='flex flex-col gap-2 w-full h-full overflow-y-auto scrollbar pr-1'>
+            {restSessions &&
+              restSessions.map((session, i) => (
+                <ActiveSessionRow session={session} key={i} />
+              ))}
           </div>
         </div>
       </div>
