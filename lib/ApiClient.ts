@@ -29,6 +29,7 @@ import {
   ValidateRecoveryCodeResponse,
   VerifyCodeData,
   ChangeUserPassword,
+  ChangeUserDisplayName,
 } from './interfaces';
 
 interface ApiClientOptions {
@@ -569,6 +570,30 @@ export class ApiClient {
       if (res.status !== 200) {
         const errorJson = await res.json();
         throw new Error(errorJson?.message || 'POST Update Password Error');
+      }
+
+      const response: BasicResponse = await res.json();
+      return response;
+    } catch (error: any) {
+      if (`${error?.message}`.toLowerCase().includes('unauthorized')) {
+        if (this.handleSessionExpired) await this.handleSessionExpired();
+      } else {
+        throw error;
+      }
+    }
+  };
+  changeUserDisplayName = async (data: ChangeUserDisplayName) => {
+    try {
+      const res = await this.securedFetch(
+        '/api/user/profile/change-displayname',
+        {
+          method: 'POST',
+          body: JSON.stringify(data),
+        },
+      );
+      if (res.status !== 200) {
+        const errorJson = await res.json();
+        throw new Error(errorJson?.message || 'POST Update Display Name Error');
       }
 
       const response: BasicResponse = await res.json();

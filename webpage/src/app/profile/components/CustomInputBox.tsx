@@ -12,7 +12,7 @@ import {
 import { BiCopy } from 'react-icons/bi';
 
 interface CustomInputBoxProps {
-  width: string | number;
+  width?: string | number;
   label: string;
   value: string;
   onCopy?: () => void;
@@ -41,7 +41,7 @@ const CustomInputBox: React.FC<CustomInputBoxProps> = ({
   };
 
   return (
-    <Box width={width}>
+    <Box width={{ base: '45%', full: '100%' }}>
       <Text>{label}:</Text>
       <Divider mb={2} />
       <InputGroup>

@@ -720,4 +720,24 @@ export class AuthService {
       return { updatedUser };
     });
   }
+  async updateDisplayName(
+    jwtContext: JwtContext,
+    newDisplayName: string,
+  ): Promise<void> {
+    const { user } = jwtContext;
+
+    await this.prismaService.$transaction(async (prismaClient) => {
+      const updatedUser: CompleteUser = await prismaClient.user.update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          displayname: newDisplayName,
+        },
+        include: completeUserInclude,
+      });
+
+      return { updatedUser };
+    });
+  }
 }
