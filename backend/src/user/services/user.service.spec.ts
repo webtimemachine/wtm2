@@ -94,7 +94,12 @@ describe('UserService', () => {
           provide: AuthService,
           useValue: {},
         },
-        UserService,
+        {
+          provide: UserService,
+          useValue: {
+            delete: jest.fn(() => expectResponse),
+          },
+        },
       ],
     }).compile();
 
