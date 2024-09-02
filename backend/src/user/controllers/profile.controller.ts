@@ -3,10 +3,10 @@ import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 import { JwtContext } from '../../auth/interfaces';
 import { JwtAccessToken, JwtRequestContext } from '../../auth/decorators';
+import { MessageResponse } from '../../common/dtos';
 
-import { ChangePasswordInput, UserDto } from '../dtos';
 import { UserService } from '../services';
-import { MessageResponse } from 'src/common/dtos';
+import { ChangePasswordInput, UserDto } from '../dtos';
 
 @ApiTags('User')
 @Controller('user/profile')
