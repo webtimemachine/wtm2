@@ -32,7 +32,6 @@ jest.mock('react-markdown', () => ({
 const mockNavigateTo = jest.fn();
 const mockMutate = jest.fn();
 const mockRefetch = jest.fn();
-const mockSetSessionFromDevice = jest.fn();
 
 (useNavigation as jest.Mock).mockReturnValue({
   navigateTo: mockNavigateTo,
