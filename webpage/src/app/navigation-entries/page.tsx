@@ -2,7 +2,6 @@
 
 import {
   Badge,
-  Button,
   Icon,
   IconButton,
   Input,
@@ -10,7 +9,6 @@ import {
   Switch,
   Text,
   Tooltip,
-  useDisclosure,
   useToast,
 } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
@@ -20,23 +18,25 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
   ChevronUpIcon,
-  HamburgerIcon,
+  SearchIcon,
   SmallCloseIcon,
 } from '@chakra-ui/icons';
+import { IconType } from 'react-icons';
 import { BsStars } from 'react-icons/bs';
+
 import { useDeleteNavigationEntry, useNavigationEntries } from '../../hooks';
-import {
-  CompleteNavigationEntryDto,
-  NavEntryProps,
-} from '../../interfaces/navigation-entry.interface';
+import { CompleteNavigationEntryDto } from '../../interfaces';
+
 import { getBrowserIconFromDevice } from '../../utils';
+
 import clsx from 'clsx';
 
-import { CustomDrawer } from '../../components/custom-drawer';
 import Markdown from 'react-markdown';
+
 const truncateString = (str: string, maxLength: number) => {
   return str.length <= maxLength ? str : str.slice(0, maxLength) + '...';
 };
+
 const getPreProcessedMarkDown = (relevantSegment: string) => {
   const emptyListPatterns = [
     /\*\n(\*\n)*/g, // matches lines with only *
@@ -54,6 +54,7 @@ const getPreProcessedMarkDown = (relevantSegment: string) => {
   markdown = markdown.replace(/\n{2,}/g, '\n\n');
   return markdown || '';
 };
+
 const RelevantSegment = ({ relevantSegment }: { relevantSegment: string }) => {
   const markdown = getPreProcessedMarkDown(relevantSegment);
 
@@ -68,13 +69,208 @@ const RelevantSegment = ({ relevantSegment }: { relevantSegment: string }) => {
   );
 };
 
-const NavigationEntry = ({
+const NavigationEntriesScreen: React.FC = () => {
+  const LIMIT = 16;
+  const [page, setPage] = useState<number>(0);
+  const [query, setQuery] = useState<string>('');
+  const [isSemantic, setIsSemantic] = useState<boolean>(true);
+  const toast = useToast();
+
+  const offset = page * LIMIT;
+  const limit = LIMIT;
+
+  const { deleteNavigationEntryMutation } = useDeleteNavigationEntry();
+  const { navigationEntriesQuery } = useNavigationEntries({
+    offset,
+    limit,
+    query,
+    isSemantic,
+  });
+
+  const navigationEntries = navigationEntriesQuery?.data?.items || [];
+  const count = navigationEntriesQuery?.data?.count || 0;
+  const pagesCount = Math.ceil(count / limit);
+
+  useEffect(() => {
+    navigationEntriesQuery.refetch();
+  }, [page, isSemantic, deleteNavigationEntryMutation.isSuccess]);
+
+  useEffect(() => {
+    if (navigationEntriesQuery.isError) {
+      toast({
+        status: 'error',
+        title: 'An error has occurred!',
+        description:
+          'It may be that the service is temporarily disabled. Please try again later',
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  }, [navigationEntriesQuery.error]);
+
+  const search = () => {
+    setPage(0);
+    navigationEntriesQuery.refetch();
+  };
+
+  const prev = () => page > 0 && setPage(page - 1);
+  const next = () => !(offset + limit >= count) && setPage(page + 1);
+  // Callback used for onClick Navigation Entry that redirects to te current element url.
+  const processOpenLinkCallback = async (url: string): Promise<void> => {
+    return new Promise((resolve) => {
+      window.open(url, '_blank');
+      resolve();
+    });
+  };
+
+  return (
+    <div className='flex flex-col h-full'>
+      <div className='flex flex-col w-full'>
+        <div className='flex w-full justify-start pb-4 gap-4 items-center'>
+          <div className='flex w-full justify-center px-[40px]'>
+            <Text fontSize={'xx-large'} fontWeight={'bold'}>
+              Navigation History
+            </Text>
+          </div>
+        </div>
+
+        <div className='pt-4 flex w-full'>
+          <Input
+            type='text'
+            name='search'
+            placeholder='Search'
+            backgroundColor={'white'}
+            onChange={(e) => setQuery(e.target.value)}
+            onKeyUp={(e) => {
+              if (e.key === 'Enter') {
+                search();
+              }
+            }}
+          />
+          <div className='pl-4'>
+            <IconButton
+              aria-label='Menu'
+              colorScheme='blue'
+              onClick={() => search()}
+            >
+              <SearchIcon boxSize={5} />
+            </IconButton>
+          </div>
+        </div>
+
+        <div className='flex py-1'>
+          <div
+            className='flex items-center gap-1 p-1 h-[32px] select-none cursor-pointer hover:bg-white rounded-lg'
+            data-testid='ia-search-container'
+            onClick={() => setIsSemantic((value) => !value)}
+          >
+            <Icon
+              className={clsx([isSemantic ? 'fill-blue-500' : 'fill-gray-500'])}
+              as={BsStars}
+              boxSize={4}
+            />
+            <Text className='text-slate-600 mr-1' fontSize='small'>
+              AI Search
+            </Text>
+            <Switch
+              size='sm'
+              aria-label='AI Search'
+              isChecked={isSemantic}
+              onChange={() => setIsSemantic((value) => !value)}
+            />
+          </div>
+        </div>
+      </div>
+
+      <div
+        id='content'
+        className='flex flex-col w-full h-full min-h-[350px] overflow-y-auto scrollbar pr-1'
+      >
+        {navigationEntries && navigationEntries.length ? (
+          navigationEntries.map((element: CompleteNavigationEntryDto, i) => {
+            const BrowserIcon = getBrowserIconFromDevice(
+              element.userDevice.device,
+            );
+            return (
+              <NavigationEntry
+                key={i}
+                BrowserIcon={BrowserIcon}
+                deleteNavEntry={deleteNavigationEntryMutation.mutate}
+                processOpenLink={processOpenLinkCallback}
+                element={element}
+                isSemantic={isSemantic}
+              />
+            );
+          })
+        ) : !navigationEntriesQuery.isLoading ? (
+          <div>
+            <Text fontSize={'small'}>
+              No results found. Try different search terms!
+            </Text>
+          </div>
+        ) : null}
+        {navigationEntriesQuery.isLoading && (
+          <div className='flex w-full h-full items-center justify-center'>
+            <Spinner size={'lg'} />
+          </div>
+        )}
+      </div>
+
+      <div className='flex w-full justify-between items-center pt-4'>
+        <IconButton
+          colorScheme='blue'
+          icon={<ChevronLeftIcon />}
+          aria-label='left'
+          isDisabled={offset === 0}
+          onClick={() => prev()}
+        />
+        <div
+          className='select-none'
+          onWheel={(e) => {
+            if (e.deltaY < 0) next();
+            else prev();
+          }}
+        >
+          {pagesCount ? (
+            <Text className='text-slate-600' fontSize='medium'>
+              {page + 1}
+              {' / '}
+              {pagesCount}
+            </Text>
+          ) : (
+            <Text className='text-slate-600' fontSize='medium'>
+              -
+            </Text>
+          )}
+        </div>
+        <IconButton
+          colorScheme='blue'
+          icon={<ChevronRightIcon />}
+          aria-label='right'
+          isDisabled={offset + limit >= count}
+          onClick={() => next()}
+        />
+      </div>
+    </div>
+  );
+};
+export default NavigationEntriesScreen;
+
+export interface NavigationEntryProps {
+  element: CompleteNavigationEntryDto;
+  BrowserIcon: IconType;
+  deleteNavEntry: ({ id }: { id: number }) => void;
+  processOpenLink: (url: string) => Promise<void>;
+  isSemantic: boolean;
+}
+
+const NavigationEntry: React.FC<NavigationEntryProps> = ({
   element,
   BrowserIcon,
   deleteNavEntry,
   processOpenLink,
   isSemantic,
-}: NavEntryProps) => {
+}: NavigationEntryProps) => {
   const [visible, setVisible] = useState<boolean>(false);
 
   useEffect(() => {
@@ -138,196 +334,3 @@ const NavigationEntry = ({
     </div>
   );
 };
-const NavigationEntriesScreen: React.FC<object> = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const btnRef = React.useRef<HTMLElement>(null);
-  const LIMIT = 16;
-  const [page, setPage] = useState<number>(0);
-  const [query, setQuery] = useState<string>('');
-  const [isSemantic, setIsSemantic] = useState<boolean>(true);
-  const toast = useToast();
-
-  const offset = page * LIMIT;
-  const limit = LIMIT;
-
-  const { deleteNavigationEntryMutation } = useDeleteNavigationEntry();
-  const { navigationEntriesQuery } = useNavigationEntries({
-    offset,
-    limit,
-    query,
-    isSemantic,
-  });
-
-  const navigationEntries = navigationEntriesQuery?.data?.items || [];
-  const count = navigationEntriesQuery?.data?.count || 0;
-  const pagesCount = Math.ceil(count / limit);
-
-  useEffect(() => {
-    navigationEntriesQuery.refetch();
-  }, [page, isSemantic, deleteNavigationEntryMutation.isSuccess]);
-
-  useEffect(() => {
-    if (navigationEntriesQuery.isError) {
-      toast({
-        status: 'error',
-        title: 'An error has occurred!',
-        description:
-          'It may be that the service is temporarily disabled. Please try again later',
-        duration: 3000,
-        isClosable: true,
-      });
-    }
-  }, [navigationEntriesQuery.error]);
-
-  const search = () => {
-    setPage(0);
-    navigationEntriesQuery.refetch();
-  };
-
-  const prev = () => page > 0 && setPage(page - 1);
-  const next = () => !(offset + limit >= count) && setPage(page + 1);
-  // Callback used for onClick Navigation Entry that redirects to te current element url.
-  const processOpenLinkCallback = async (url: string): Promise<void> => {
-    return new Promise((resolve) => {
-      window.open(url, '_blank');
-      resolve();
-    });
-  };
-
-  return (
-    <div className='flex justify-center items-center  w-full h-1/2'>
-      <div className='flex flex-col px-5 py-3 items-center max-w-6xl min-w-[360px] w-3/4 min-h-[600px] h-screen'>
-        <div className='flex flex-col w-full'>
-          <div className='flex w-full justify-start pb-4 gap-4 items-center'>
-            <IconButton aria-label='Back icon' onClick={onOpen}>
-              <HamburgerIcon boxSize={5} />
-            </IconButton>
-            <div className='flex w-full justify-center pr-[40px]'>
-              <Text fontSize={'xx-large'} fontWeight={'bold'}>
-                WebTM
-              </Text>
-            </div>
-          </div>
-
-          <CustomDrawer isOpen={isOpen} onClose={onClose} btnRef={btnRef} />
-
-          <div className='pt-4 flex w-full'>
-            <Input
-              type='text'
-              name='search'
-              placeholder='Search'
-              backgroundColor={'white'}
-              onChange={(e) => setQuery(e.target.value)}
-              onKeyUp={(e) => {
-                if (e.key === 'Enter') {
-                  search();
-                }
-              }}
-            />
-            <div className='pl-4'>
-              <Button colorScheme='blue' onClick={() => search()}>
-                Search
-              </Button>
-            </div>
-          </div>
-
-          <div className='flex py-1'>
-            <div
-              className='flex items-center gap-1 p-1 h-[32px] select-none cursor-pointer hover:bg-white rounded-lg'
-              data-testid='ia-search-container'
-              onClick={() => setIsSemantic((value) => !value)}
-            >
-              <Icon
-                className={clsx([
-                  isSemantic ? 'fill-blue-500' : 'fill-gray-500',
-                ])}
-                as={BsStars}
-                boxSize={4}
-              />
-              <Text className='text-slate-600 mr-1' fontSize='small'>
-                AI Search
-              </Text>
-              <Switch
-                size='sm'
-                aria-label='AI Search'
-                isChecked={isSemantic}
-                onChange={() => setIsSemantic((value) => !value)}
-              />
-            </div>
-          </div>
-        </div>
-
-        <div
-          id='content'
-          className='flex flex-col w-full h-full min-h-[350px] overflow-y-auto scrollbar pr-1'
-        >
-          {navigationEntries && navigationEntries.length ? (
-            navigationEntries.map((element: CompleteNavigationEntryDto, i) => {
-              const BrowserIcon = getBrowserIconFromDevice(
-                element.userDevice.device,
-              );
-              return (
-                <NavigationEntry
-                  key={i}
-                  BrowserIcon={BrowserIcon}
-                  deleteNavEntry={deleteNavigationEntryMutation.mutate}
-                  processOpenLink={processOpenLinkCallback}
-                  element={element}
-                  isSemantic={isSemantic}
-                />
-              );
-            })
-          ) : !navigationEntriesQuery.isLoading ? (
-            <div>
-              <Text fontSize={'small'}>
-                No results found. Try different search terms!
-              </Text>
-            </div>
-          ) : null}
-          {navigationEntriesQuery.isLoading && (
-            <div className='flex w-full h-full items-center justify-center'>
-              <Spinner size={'lg'} />
-            </div>
-          )}
-        </div>
-
-        <div className='flex w-full justify-between items-center py-4'>
-          <IconButton
-            colorScheme='blue'
-            icon={<ChevronLeftIcon />}
-            aria-label='left'
-            isDisabled={offset === 0}
-            onClick={() => prev()}
-          />
-          <div
-            className='select-none'
-            onWheel={(e) => {
-              if (e.deltaY < 0) next();
-              else prev();
-            }}
-          >
-            {pagesCount ? (
-              <Text className='text-slate-600' fontSize='medium'>
-                {page + 1}
-                {' / '}
-                {pagesCount}
-              </Text>
-            ) : (
-              <Text className='text-slate-600' fontSize='medium'>
-                -
-              </Text>
-            )}
-          </div>
-          <IconButton
-            colorScheme='blue'
-            icon={<ChevronRightIcon />}
-            aria-label='right'
-            isDisabled={offset + limit >= count}
-            onClick={() => next()}
-          />
-        </div>
-      </div>
-    </div>
-  );
-};
-export default NavigationEntriesScreen;
