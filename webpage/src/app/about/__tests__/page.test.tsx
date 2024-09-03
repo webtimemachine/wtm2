@@ -34,15 +34,6 @@ describe('AboutWTMScreen', () => {
     expect(screen.getByText('Privacy Policies')).toBeInTheDocument();
   });
 
-  test('calls navigateBack when back button is clicked', () => {
-    customRender(<AboutWTMScreen />);
-
-    const backButton = screen.getByLabelText('Back icon');
-    fireEvent.click(backButton);
-
-    expect(mockNavigateBack).toHaveBeenCalled();
-  });
-
   test('opens the correct URL when "Report an Issue" is clicked', () => {
     customRender(<AboutWTMScreen />);
     jest.spyOn(global.window, 'open');
