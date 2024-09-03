@@ -199,6 +199,11 @@ export class ApiClient {
       }
 
       const data = await res.json();
+
+      if (!data.accessToken || !data.refreshToken) {
+        throw new Error('Unauthorized');
+      }
+
       await Promise.all([
         this.setAccessToken(data.accessToken),
         this.setRefreshToken(data.refreshToken),

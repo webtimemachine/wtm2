@@ -7,6 +7,9 @@ export const manifestChrome: ManifestV3Export = {
   description:
     'WebTM is a cross-platform solution to integrate the navigation history between desktop and mobile web browsers.',
   permissions: ['tabs', 'activeTab', 'storage', 'scripting'],
+  background: {
+    service_worker: './src/service-workers/background.ts',
+  },
   action: {
     default_popup: 'index.html',
   },
