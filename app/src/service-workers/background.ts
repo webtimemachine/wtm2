@@ -93,3 +93,58 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
     console.error(`Unexpected Error in tabs onUpdated:`, error);
   }
 });
+
+let intervalId: NodeJS.Timeout;
+
+const startInterval = () => {
+  intervalId = setInterval(refreshAccessToken, 1.5 * 60 * 1000);
+};
+
+const refreshAccessToken = async () => {
+  try {
+    const { accessToken } = await chrome.storage.local.get(['accessToken']);
+
+    if (accessToken) {
+      await apiClient.refresh();
+
+      chrome.action.setIcon({
+        path: {
+          '16': 'app-icon-16.png',
+          '32': 'app-icon-32.png',
+          '48': 'app-icon-48.png',
+          '128': 'app-icon-128.png',
+        },
+      });
+    } else {
+      chrome.action.setIcon({
+        path: {
+          '16': 'app-icon-grayscale-16.png',
+          '32': 'app-icon-grayscale-32.png',
+          '48': 'app-icon-grayscale-48.png',
+          '128': 'app-icon-grayscale-128.png',
+        },
+      });
+    }
+  } catch (error) {
+    chrome.action.setIcon({
+      path: {
+        '16': 'app-icon-grayscale-16.png',
+        '32': 'app-icon-grayscale-32.png',
+        '48': 'app-icon-grayscale-48.png',
+        '128': 'app-icon-grayscale-128.png',
+      },
+    });
+    console.error(`Unexpected Error in windows onFocusChanged:`, error);
+  }
+};
+
+chrome.windows.onFocusChanged.addListener(async (windowId) => {
+  if (windowId !== chrome.windows.WINDOW_ID_NONE) {
+    clearInterval(intervalId);
+    startInterval();
+  }
+});
+
+chrome.runtime.onStartup.addListener(() => {
+  startInterval();
+});

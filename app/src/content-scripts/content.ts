@@ -84,3 +84,46 @@ export const postNavigationEntry = async () => {
   }
 };
 postNavigationEntry();
+
+const startInterval = () => {
+  setInterval(refreshAccessToken, 1.5 * 60 * 1000);
+};
+
+const refreshAccessToken = async () => {
+  try {
+    const { accessToken } = await chrome.storage.local.get(['accessToken']);
+
+    if (accessToken) {
+      await apiClient.refresh();
+
+      chrome.action.setIcon({
+        path: {
+          '16': 'app-icon-16.png',
+          '32': 'app-icon-32.png',
+          '48': 'app-icon-48.png',
+          '128': 'app-icon-128.png',
+        },
+      });
+    } else {
+      chrome.action.setIcon({
+        path: {
+          '16': 'app-icon-grayscale-16.png',
+          '32': 'app-icon-grayscale-32.png',
+          '48': 'app-icon-grayscale-48.png',
+          '128': 'app-icon-grayscale-128.png',
+        },
+      });
+    }
+  } catch (error) {
+    chrome.action.setIcon({
+      path: {
+        '16': 'app-icon-grayscale-16.png',
+        '32': 'app-icon-grayscale-32.png',
+        '48': 'app-icon-grayscale-48.png',
+        '128': 'app-icon-grayscale-128.png',
+      },
+    });
+    console.error(`Unexpected Error in windows onFocusChanged:`, error);
+  }
+};
+startInterval();
