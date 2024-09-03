@@ -30,8 +30,8 @@ import { useSignUp } from '@/hooks';
 
 import { useNavigation } from '@/store';
 
-import clsx from 'clsx';
-import { generateSecurePassword } from '@/utils/generateSecurePassword';
+import { generateSecurePassword } from '../../utils/generateSecurePassword';
+import { cn } from '../../utils';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[^\s]{8,20}$/;
@@ -172,7 +172,7 @@ const SignUpScreen: React.FC<{}> = () => {
         </div>
         <FormControl isInvalid={!!emailError}>
           <div
-            className={clsx([
+            className={cn([
               'flex flex-col w-full',
               !displayNameError && 'pb-4',
             ])}
@@ -195,9 +195,7 @@ const SignUpScreen: React.FC<{}> = () => {
           </div>
         </FormControl>
         <FormControl isInvalid={!!emailError}>
-          <div
-            className={clsx(['flex flex-col w-full', !emailError && 'pb-4'])}
-          >
+          <div className={cn(['flex flex-col w-full', !emailError && 'pb-4'])}>
             <Input
               type='text'
               name='email'
