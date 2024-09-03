@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 
-import { useGetBasicUserIngormation as useGetBasicUserInformation } from '../../hooks/use-get-user-basic-information.hook';
+import { useGetBasicUserInformation } from '../../hooks/use-get-user-basic-information.hook';
 import {
   Avatar,
   Badge,

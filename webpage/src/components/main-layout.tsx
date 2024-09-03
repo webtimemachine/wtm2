@@ -16,7 +16,7 @@ import {
 } from '@chakra-ui/react';
 
 import { useNavigation } from '@/store';
-import { useGetBasicUserIngormation, useLogout } from '@/hooks';
+import { useGetBasicUserInformation, useLogout } from '@/hooks';
 
 import { LuSettings2 } from 'react-icons/lu';
 import { BsPersonLock, BsInfoCircle } from 'react-icons/bs';
@@ -38,7 +38,7 @@ export const MainLayout: React.FC<Props> = ({ children }) => {
   const { navigateTo } = useNavigation();
   const { logout } = useLogout();
 
-  const { basicUserInformationQuery } = useGetBasicUserIngormation();
+  const { basicUserInformationQuery } = useGetBasicUserInformation();
   const user: User | undefined = basicUserInformationQuery?.data;
 
   const ProfileSection = () => {
