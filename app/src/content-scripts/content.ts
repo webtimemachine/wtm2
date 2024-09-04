@@ -41,7 +41,7 @@ const getSemanticMarkdownForLLM = (
 
     // Unify links test in one line
     if ($(elem).is('a')) {
-      let linkText = $(elem).text().replace(/\s+/g, ' ').trim(); // Replaces multiple spaces for an empty space.
+      const linkText = $(elem).text().replace(/\s+/g, ' ').trim(); // Replaces multiple spaces for an empty space.
       $(elem).text(linkText); // Updates text content from an <a>
     }
   });
