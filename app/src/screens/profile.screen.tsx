@@ -321,23 +321,23 @@ export const ProfileScreen: React.FC<object> = () => {
                       user?.passChangedAt
                         ? typeof user.passChangedAt === 'string'
                           ? new Date(user.passChangedAt).toLocaleTimeString(
-                              'es-AR',
+                              'en-US',
                               {
                                 hour12: false,
                               },
                             ) +
                             ' ' +
                             new Date(user.passChangedAt)
-                              .toLocaleDateString('es-AR')
+                              .toLocaleDateString('en-US')
                               .split('/')
                               .reverse()
                               .join('/')
-                          : user.passChangedAt.toLocaleTimeString('es-AR', {
+                          : user.passChangedAt.toLocaleTimeString('en-US', {
                               hour12: false,
                             }) +
                             ' ' +
                             user.passChangedAt
-                              .toLocaleDateString('es-AR')
+                              .toLocaleDateString('en-US')
                               .split('/')
                               .reverse()
                               .join('/')
