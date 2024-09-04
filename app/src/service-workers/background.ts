@@ -98,7 +98,7 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
 let intervalId: NodeJS.Timeout;
 
 const startInterval = () => {
-  intervalId = setInterval(refreshAccessToken, 15 * 1000);
+  intervalId = setInterval(refreshAccessToken, 60 * 60 * 1000);
 };
 
 const defaultIcons = {
