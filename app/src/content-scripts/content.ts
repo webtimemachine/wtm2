@@ -5,6 +5,7 @@ import * as cheerio from 'cheerio';
 import { convertHtmlToMarkdown } from 'dom-to-semantic-markdown';
 
 import { AnyNode } from 'domhandler';
+import { isTokenExpired } from '../utils/isTokenExpired';
 function onUrlChange(callback: () => void) {
   let lastUrl = location.href;
   new MutationObserver(() => {
@@ -41,7 +42,7 @@ const getSemanticMarkdownForLLM = (
 
     // Unify links test in one line
     if ($(elem).is('a')) {
-      let linkText = $(elem).text().replace(/\s+/g, ' ').trim(); // Replaces multiple spaces for an empty space.
+      const linkText = $(elem).text().replace(/\s+/g, ' ').trim(); // Replaces multiple spaces for an empty space.
       $(elem).text(linkText); // Updates text content from an <a>
     }
   });
@@ -85,45 +86,56 @@ export const postNavigationEntry = async () => {
 };
 postNavigationEntry();
 
+const defaultIcons = {
+  '16': 'app-icon-16.png',
+  '32': 'app-icon-32.png',
+  '48': 'app-icon-48.png',
+  '128': 'app-icon-128.png',
+};
+
+const grayScaleIcons = {
+  '16': 'app-icon-grayscale-16.png',
+  '32': 'app-icon-grayscale-32.png',
+  '48': 'app-icon-grayscale-48.png',
+  '128': 'app-icon-grayscale-128.png',
+};
+
 const startInterval = () => {
-  setInterval(refreshAccessToken, 1.5 * 60 * 1000);
+  setInterval(refreshAccessToken, 15 * 1000); // 1 hour
 };
 
 const refreshAccessToken = async () => {
-  try {
-    const { accessToken } = await chrome.storage.local.get(['accessToken']);
+  console.log('refreshAccessToken content');
 
-    if (accessToken) {
+  try {
+    const { accessToken, refreshToken } = await chrome.storage.local.get([
+      'accessToken',
+      'refreshToken',
+    ]);
+
+    const isAccessTokenExpired = isTokenExpired(accessToken);
+    const isRefreshTokenExpired = isTokenExpired(refreshToken);
+
+    console.log('isAccessTokenExpired', isAccessTokenExpired);
+    console.log('isRefreshTokenExpired', isRefreshTokenExpired);
+
+    if (isAccessTokenExpired && !isRefreshTokenExpired) {
       await apiClient.refresh();
 
       chrome.action.setIcon({
-        path: {
-          '16': 'app-icon-16.png',
-          '32': 'app-icon-32.png',
-          '48': 'app-icon-48.png',
-          '128': 'app-icon-128.png',
-        },
+        path: defaultIcons,
       });
     } else {
       chrome.action.setIcon({
-        path: {
-          '16': 'app-icon-grayscale-16.png',
-          '32': 'app-icon-grayscale-32.png',
-          '48': 'app-icon-grayscale-48.png',
-          '128': 'app-icon-grayscale-128.png',
-        },
+        path: grayScaleIcons,
       });
     }
   } catch (error) {
     chrome.action.setIcon({
-      path: {
-        '16': 'app-icon-grayscale-16.png',
-        '32': 'app-icon-grayscale-32.png',
-        '48': 'app-icon-grayscale-48.png',
-        '128': 'app-icon-grayscale-128.png',
-      },
+      path: grayScaleIcons,
     });
     console.error(`Unexpected Error in windows onFocusChanged:`, error);
   }
 };
+
 startInterval();

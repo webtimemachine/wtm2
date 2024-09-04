@@ -4,6 +4,7 @@ import { apiClient } from '../utils/api.client';
 import * as cheerio from 'cheerio';
 import { convertHtmlToMarkdown } from 'dom-to-semantic-markdown';
 import { AnyNode } from 'domhandler';
+import { isTokenExpired } from '../utils/isTokenExpired';
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 const getSemanticMarkdownForLLM = (
   data: string | AnyNode | AnyNode[] | Buffer,
@@ -28,7 +29,7 @@ const getSemanticMarkdownForLLM = (
 
     // Unify links test in one line
     if ($(elem).is('a')) {
-      let linkText = $(elem).text().replace(/\s+/g, ' ').trim(); // Replaces multiple spaces for an empty space.
+      const linkText = $(elem).text().replace(/\s+/g, ' ').trim(); // Replaces multiple spaces for an empty space.
       $(elem).text(linkText); // Updates text content from an <a>
     }
   });
@@ -97,42 +98,51 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
 let intervalId: NodeJS.Timeout;
 
 const startInterval = () => {
-  intervalId = setInterval(refreshAccessToken, 1.5 * 60 * 1000);
+  intervalId = setInterval(refreshAccessToken, 15 * 1000);
+};
+
+const defaultIcons = {
+  '16': 'app-icon-16.png',
+  '32': 'app-icon-32.png',
+  '48': 'app-icon-48.png',
+  '128': 'app-icon-128.png',
+};
+
+const grayScaleIcons = {
+  '16': 'app-icon-grayscale-16.png',
+  '32': 'app-icon-grayscale-32.png',
+  '48': 'app-icon-grayscale-48.png',
+  '128': 'app-icon-grayscale-128.png',
 };
 
 const refreshAccessToken = async () => {
+  console.log('refreshAccessToken background');
   try {
-    const { accessToken } = await chrome.storage.local.get(['accessToken']);
+    const { accessToken, refreshToken } = await chrome.storage.local.get([
+      'accessToken',
+      'refreshToken',
+    ]);
 
-    if (accessToken) {
+    const isAccessTokenExpired = isTokenExpired(accessToken);
+    const isRefreshTokenExpired = isTokenExpired(refreshToken);
+
+    console.log('isAccessTokenExpired', isAccessTokenExpired);
+    console.log('isRefreshTokenExpired', isRefreshTokenExpired);
+
+    if (isAccessTokenExpired && !isRefreshTokenExpired) {
       await apiClient.refresh();
 
       chrome.action.setIcon({
-        path: {
-          '16': 'app-icon-16.png',
-          '32': 'app-icon-32.png',
-          '48': 'app-icon-48.png',
-          '128': 'app-icon-128.png',
-        },
+        path: defaultIcons,
       });
     } else {
       chrome.action.setIcon({
-        path: {
-          '16': 'app-icon-grayscale-16.png',
-          '32': 'app-icon-grayscale-32.png',
-          '48': 'app-icon-grayscale-48.png',
-          '128': 'app-icon-grayscale-128.png',
-        },
+        path: grayScaleIcons,
       });
     }
   } catch (error) {
     chrome.action.setIcon({
-      path: {
-        '16': 'app-icon-grayscale-16.png',
-        '32': 'app-icon-grayscale-32.png',
-        '48': 'app-icon-grayscale-48.png',
-        '128': 'app-icon-grayscale-128.png',
-      },
+      path: grayScaleIcons,
     });
     console.error(`Unexpected Error in windows onFocusChanged:`, error);
   }
