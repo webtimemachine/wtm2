@@ -101,7 +101,7 @@ const grayScaleIcons = {
 };
 
 const startInterval = () => {
-  setInterval(refreshAccessToken, 15 * 1000); // 1 hour
+  setInterval(refreshAccessToken, 60 * 60 * 1000); // 1 hour
 };
 
 const refreshAccessToken = async () => {
