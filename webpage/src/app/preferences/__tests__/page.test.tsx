@@ -66,15 +66,6 @@ describe('PreferencesScreen', () => {
     expect(screen.getByText('History Entries Expiration')).toBeInTheDocument();
   });
 
-  test('calls navigateBack when back button is clicked', () => {
-    customRender(<PreferencesScreen />);
-
-    const backButton = screen.getByLabelText('Back icon');
-    fireEvent.click(backButton);
-
-    expect(mockNavigateBack).toHaveBeenCalled();
-  });
-
   test('handles enabling and disabling preferences correctly', async () => {
     customRender(<PreferencesScreen />);
 

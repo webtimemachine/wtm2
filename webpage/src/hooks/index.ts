@@ -17,4 +17,4 @@ export { useValidateRecoveryCode } from './use-validate-recovery-code.hook';
 export { useRestorePassword } from './use-restore-password.hook';
 export { useDeleteNavigationEntry } from './use-delete-navigation-entry.hook';
 export { useHandleSessionExpired } from './use-handle-session-expired.hook';
-export { useGetBasicUserIngormation } from './use-get-user-basic-information.hook';
+export { useGetBasicUserInformation } from './use-get-user-basic-information.hook';

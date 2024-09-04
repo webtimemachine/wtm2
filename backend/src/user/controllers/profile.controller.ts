@@ -5,8 +5,8 @@ import { JwtContext } from '../../auth/interfaces';
 import { JwtAccessToken, JwtRequestContext } from '../../auth/decorators';
 import { MessageResponse } from '../../common/dtos';
 
+import { ChangePasswordInput, UserDto, ChangeDisplayNameInput } from '../dtos';
 import { UserService } from '../services';
-import { ChangePasswordInput, UserDto } from '../dtos';
 
 @ApiTags('User')
 @Controller('user/profile')
@@ -35,5 +35,19 @@ export class ProfileController {
     @Body() changePasswordInput: ChangePasswordInput,
   ): Promise<any> {
     return this.userService.changePassword(context, changePasswordInput);
+  }
+
+  @ApiOkResponse({
+    status: 200,
+    type: MessageResponse,
+  })
+  @JwtAccessToken([])
+  @HttpCode(200)
+  @Post('/change-displayname')
+  changeDisplayName(
+    @JwtRequestContext() context: JwtContext,
+    @Body() changePasswordInput: ChangeDisplayNameInput,
+  ): Promise<any> {
+    return this.userService.changeDisplayName(context, changePasswordInput);
   }
 }

@@ -1,4 +1,4 @@
-import { useGetBasicUserIngormation } from '../hooks/use-get-user-basic-information.hook';
+import { useGetBasicUserInformation } from '../hooks/use-get-user-basic-information.hook';
 import { useLogout } from '../hooks';
 import { useNavigation } from '../store';
 import { ChevronDownIcon, SettingsIcon } from '@chakra-ui/icons';
@@ -41,7 +41,7 @@ export const CustomDrawer = ({
 }) => {
   const { logout } = useLogout();
   const { navigateTo } = useNavigation();
-  const { basicUserInformationQuery } = useGetBasicUserIngormation();
+  const { basicUserInformationQuery } = useGetBasicUserInformation();
   const getUserMail = (basicUserInformationQuery: any) => {
     if (basicUserInformationQuery && basicUserInformationQuery.data) {
       const email: string = basicUserInformationQuery.data.email;

@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { apiClient } from '../utils/api.client';
 import { useHandleSessionExpired } from '.';
 
-export const useGetBasicUserIngormation = () => {
+export const useGetBasicUserInformation = () => {
   const { handleSessionExpired } = useHandleSessionExpired();
 
   apiClient.setHandleSessionExpired(handleSessionExpired);

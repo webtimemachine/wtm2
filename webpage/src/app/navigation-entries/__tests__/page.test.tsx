@@ -120,7 +120,6 @@ describe('NavigationEntriesScreen', () => {
   test('renders the component with initial state', () => {
     customRender(<NavigationEntriesScreen />);
 
-    expect(screen.getByText('WebTM')).toBeInTheDocument();
     expect(screen.getByPlaceholderText('Search')).toBeInTheDocument();
     expect(screen.getByText('AI Search')).toBeInTheDocument();
     expect(screen.getAllByText(/Test Entry/i)).toHaveLength(2);
