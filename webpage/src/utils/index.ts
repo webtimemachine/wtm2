@@ -5,3 +5,4 @@ export { DOMtoString, getImages } from './DOMtoString';
 export { getBrowserIconFromDevice } from './getBrowserIconFromDevice';
 export { getOSIconFromDevice } from './getOSIconFromDevice';
 export { getSupportedBrowserFromDevice } from './getSupportedBrowserFromDevice';
+export { relativeTime } from './datesUtils';
