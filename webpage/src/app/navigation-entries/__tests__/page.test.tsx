@@ -8,7 +8,7 @@ import {
   useNavigationEntries,
   useHandleSessionExpired,
 } from '../../../hooks';
-import { CompleteNavigationEntryDto } from '../../../interfaces/navigation-entry.interface';
+import { CompleteNavigationEntryDto } from 'wtm-lib/interfaces';
 import NavigationEntriesScreen from '../page';
 
 // Mock de useNavigation, useDeleteNavigationEntry y useNavigationEntries

@@ -2,7 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useToast } from '@chakra-ui/react';
 
 import { apiClient } from '../utils/api.client';
-import { UpdatePreferenciesData } from '@/interfaces';
+import { UpdatePreferenciesData } from 'wtm-lib/interfaces';
 import { useHandleSessionExpired } from '.';
 
 export const useUpdatePreferences = () => {
