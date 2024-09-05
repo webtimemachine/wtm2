@@ -4,6 +4,7 @@ import { apiClient } from '../utils/api.client';
 import * as cheerio from 'cheerio';
 import { convertHtmlToMarkdown } from 'dom-to-semantic-markdown';
 import { AnyNode } from 'domhandler';
+import { isTokenExpired } from '../utils/isTokenExpired';
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 const getSemanticMarkdownForLLM = (
   data: string | AnyNode | AnyNode[] | Buffer,
@@ -28,7 +29,7 @@ const getSemanticMarkdownForLLM = (
 
     // Unify links test in one line
     if ($(elem).is('a')) {
-      let linkText = $(elem).text().replace(/\s+/g, ' ').trim(); // Replaces multiple spaces for an empty space.
+      const linkText = $(elem).text().replace(/\s+/g, ' ').trim(); // Replaces multiple spaces for an empty space.
       $(elem).text(linkText); // Updates text content from an <a>
     }
   });
@@ -92,4 +93,64 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
   } catch (error) {
     console.error(`Unexpected Error in tabs onUpdated:`, error);
   }
+});
+
+let intervalId: NodeJS.Timeout;
+
+const startInterval = () => {
+  intervalId = setInterval(refreshAccessToken, 60 * 60 * 1000);
+};
+
+const defaultIcons = {
+  '16': 'app-icon-16.png',
+  '32': 'app-icon-32.png',
+  '48': 'app-icon-48.png',
+  '128': 'app-icon-128.png',
+};
+
+const grayScaleIcons = {
+  '16': 'app-icon-grayscale-16.png',
+  '32': 'app-icon-grayscale-32.png',
+  '48': 'app-icon-grayscale-48.png',
+  '128': 'app-icon-grayscale-128.png',
+};
+
+const refreshAccessToken = async () => {
+  try {
+    const { accessToken, refreshToken } = await chrome.storage.local.get([
+      'accessToken',
+      'refreshToken',
+    ]);
+
+    const isAccessTokenExpired = isTokenExpired(accessToken);
+    const isRefreshTokenExpired = isTokenExpired(refreshToken);
+
+    if (isAccessTokenExpired && !isRefreshTokenExpired) {
+      await apiClient.refresh();
+
+      chrome.action.setIcon({
+        path: defaultIcons,
+      });
+    } else {
+      chrome.action.setIcon({
+        path: grayScaleIcons,
+      });
+    }
+  } catch (error) {
+    chrome.action.setIcon({
+      path: grayScaleIcons,
+    });
+    console.error(`Unexpected Error in windows onFocusChanged:`, error);
+  }
+};
+
+chrome.windows.onFocusChanged.addListener(async (windowId) => {
+  if (windowId !== chrome.windows.WINDOW_ID_NONE) {
+    clearInterval(intervalId);
+    startInterval();
+  }
+});
+
+chrome.runtime.onStartup.addListener(() => {
+  startInterval();
 });
