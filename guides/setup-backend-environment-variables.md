@@ -52,5 +52,8 @@ Copy the `sample.env` to `.env` and `sample.db.env` to `db.env` on the backend f
 16. **WEAVIATE_HOST**:
     - Example: **`WEAVIATE_HOST=localhost:8080`**
     - Usage: Specifies the vector store host.
+17. **AVOID_DOMAIN_LIST**:
+    - Example: **`AVOID_DOMAIN_LIST='localhost, www.webtm.io, webtm.vercel.app'`**
+    - Usage: Specifies the domains list to avoid to track.
 
 You will also need to set this env variables as secrets on your GitHub repository for the db migrations GitHub action to work properly.
