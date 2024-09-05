@@ -1,10 +1,10 @@
-import { jwtDecode } from 'jwt-decode';
+import { jwtDecode, JwtPayload } from 'jwt-decode';
 
 export function isTokenExpired(token?: string) {
   if (!token) return true;
 
   try {
-    const decoded = jwtDecode(token);
+    const decoded = jwtDecode<JwtPayload>(token);
     const currentTime = Date.now() / 1000;
 
     if (!decoded.exp) return true;
