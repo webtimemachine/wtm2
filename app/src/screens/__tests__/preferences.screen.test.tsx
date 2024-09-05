@@ -31,6 +31,7 @@ const mockMutate = jest.fn();
       navigationEntryExpirationInDays: 30,
       enableImageEncoding: true,
       enableExplicitContentFilter: true,
+      enableStopTracking: true,
     },
   },
 });
@@ -50,7 +51,7 @@ global.chrome = {
   storage: {
     local: {
       get: jest.fn().mockImplementation(() => {
-        return { enabledLiteMode: false };
+        return { enabledLiteMode: false, enabledStopTracking: true };
       }),
       set: jest.fn(),
     },
@@ -71,6 +72,7 @@ describe('PreferencesScreen', () => {
     expect(screen.getByText('Explicit Filter')).toBeInTheDocument();
     expect(screen.getByText('Lite Mode')).toBeInTheDocument();
     expect(screen.getByText('History Entries Expiration')).toBeInTheDocument();
+    expect(screen.getByText('Stop Tracking')).toBeInTheDocument();
   });
 
   test('calls navigateBack when back button is clicked', () => {
@@ -134,7 +136,7 @@ describe('PreferencesScreen', () => {
     expect(daysInput).toHaveValue(20);
   });
 
-  test('calls updatePreferencesMutation and sets lite mode in local storage when save button is clicked', async () => {
+  test('calls updatePreferencesMutation and sets lite mode and stop tracking in local storage when save button is clicked', async () => {
     customRender(<PreferencesScreen />);
 
     const saveButton = screen.getByText('Save Changes');
@@ -146,12 +148,14 @@ describe('PreferencesScreen', () => {
         navigationEntryExpirationInDays: 30,
         enableImageEncoding: true,
         enableExplicitContentFilter: true,
+        enableStopTracking: true,
       });
     });
 
     await waitFor(() => {
       expect(chrome.storage.local.set).toHaveBeenCalledWith({
         enabledLiteMode: false,
+        stopTrackingEnabled: true,
       });
     });
   });
