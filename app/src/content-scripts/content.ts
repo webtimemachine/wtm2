@@ -41,7 +41,7 @@ const getSemanticMarkdownForLLM = (
 
     // Unify links test in one line
     if ($(elem).is('a')) {
-      let linkText = $(elem).text().replace(/\s+/g, ' ').trim(); // Replaces multiple spaces for an empty space.
+      const linkText = $(elem).text().replace(/\s+/g, ' ').trim(); // Replaces multiple spaces for an empty space.
       $(elem).text(linkText); // Updates text content from an <a>
     }
   });
@@ -53,10 +53,15 @@ export const postNavigationEntry = async () => {
   try {
     const url = window.location.href;
 
-    const { accessToken, enabledLiteMode } = await chrome.storage.local.get([
-      'accessToken',
-      'enabledLiteMode',
-    ]);
+    const { accessToken, enabledLiteMode, stopTrackingEnabled } =
+      await chrome.storage.local.get([
+        'accessToken',
+        'enabledLiteMode',
+        'stopTrackingEnabled',
+      ]);
+
+    if (stopTrackingEnabled) return;
+
     if (accessToken && url && !url.startsWith('chrome://')) {
       const htmlContent = DOMtoString('body');
       const images = getImages();
