@@ -18,6 +18,8 @@ const PreferencesScreen: React.FC<object> = () => {
   const [imageEncodingEnabled, setImageEncodingEnabled] = useState(false);
   const [explicitContentFilterEnabled, setExplicitContentFilterEnabled] =
     useState(false);
+  const [stopTrackingEnabledValue, setStopTrackingEnabledValue] =
+    useState(false);
   const [days, setDays] = useState<number | null>(null);
   const { userPreferencesQuery } = useGetPreferences();
   const { updatePreferencesMutation } = useUpdatePreferences();
@@ -25,6 +27,13 @@ const PreferencesScreen: React.FC<object> = () => {
   const isEnableLiteMode = useAuthStore((state) => state.enabledLiteMode);
   const setIsEnabledLiteMode = useAuthStore(
     (state) => state.updateEnabledLiteMode,
+  );
+  const isStopTrackingEnabled = useAuthStore(
+    (state) => state.enabledStopTracking,
+  );
+
+  const setEnableStopTracking = useAuthStore(
+    (state) => state.updateEnabledStopTracking,
   );
 
   useEffect(() => {
@@ -52,13 +61,15 @@ const PreferencesScreen: React.FC<object> = () => {
       navigationEntryExpirationInDays: days || 0,
       enableImageEncoding: imageEncodingEnabled,
       enableExplicitContentFilter: explicitContentFilterEnabled,
-      enableStopTracking: false,
+      enableStopTracking: stopTrackingEnabledValue,
     });
     setIsEnabledLiteMode(enabledLiteMode);
+    setEnableStopTracking(stopTrackingEnabledValue);
   };
 
   useEffect(() => {
     setEnabledLiteMode(isEnableLiteMode);
+    setStopTrackingEnabledValue(isStopTrackingEnabled);
   }, []);
 
   return (
@@ -141,6 +152,23 @@ const PreferencesScreen: React.FC<object> = () => {
           <Text fontSize={14}>
             Enable to automatically remove history entries after a specified
             number of days.
+          </Text>
+        </div>
+        <Divider />
+        <div className='flex flex-col w-full py-2'>
+          <div className='flex flex-row w-full justify-between pb-2'>
+            <Text fontSize={'medium'} fontWeight={700}>
+              Stop Tracking
+            </Text>
+            <Switch
+              size='md'
+              isChecked={stopTrackingEnabledValue}
+              aria-label='Stop Tracking'
+              onChange={(e) => setStopTrackingEnabledValue(e.target.checked)}
+            />
+          </div>
+          <Text fontSize={14}>
+            Enable to stop tracking your browsing history.
           </Text>
         </div>
 
