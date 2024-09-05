@@ -178,6 +178,7 @@ describe('SignUpScreen', () => {
       expect(mockMutate).toHaveBeenCalledWith({
         email: 'test@example.com',
         password: 'Valid123',
+        displayname: 'test',
       });
     });
   });

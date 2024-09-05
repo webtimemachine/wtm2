@@ -1,8 +1,5 @@
-'use client';
-
 import { useEffect, useState } from 'react';
 
-import { useGetBasicUserInformation } from '../../hooks/use-get-user-basic-information.hook';
 import {
   Avatar,
   Badge,
@@ -12,6 +9,7 @@ import {
   FormErrorMessage,
   FormHelperText,
   FormLabel,
+  IconButton,
   Input,
   Modal,
   ModalBody,
@@ -27,18 +25,20 @@ import {
   TabPanels,
   Tabs,
   Text,
-  Tooltip,
   useDisclosure,
 } from '@chakra-ui/react';
-
+import { useGetBasicUserInformation } from '../hooks/use-get-user-basic-information.hook';
 import React from 'react';
-import CustomInputBox from './components/CustomInputBox';
-import { useChangeUserPassword } from '../../hooks/use-change-user-password.hook';
+import CustomInputBox from '../components/custom-input-box.component';
+import { useChangeUserPassword } from '../hooks/use-change-user-password.hook';
 import { BsKey, BsPerson } from 'react-icons/bs';
-import { useChangeUserDisplayName } from '../../hooks/use-change-user-displayname.hook';
-import { relativeTime } from '../../utils';
+import { useChangeUserDisplayName } from '../hooks/use-change-user-displayname.hook';
+import { relativeTime } from '../utils';
+import { ArrowBackIcon } from '@chakra-ui/icons';
+import { useNavigation } from '../store';
 
-const ProfileScreen: React.FC<object> = () => {
+export const ProfileScreen: React.FC<object> = () => {
+  const { navigateBack } = useNavigation();
   const { basicUserInformationQuery } = useGetBasicUserInformation();
   const { changeUserPasswordMutation } = useChangeUserPassword();
   const { changeUserDisplayNameMutation } = useChangeUserDisplayName();
@@ -319,23 +319,23 @@ const ProfileScreen: React.FC<object> = () => {
                       user?.passChangedAt
                         ? typeof user.passChangedAt === 'string'
                           ? new Date(user.passChangedAt).toLocaleTimeString(
-                              'es-AR',
+                              'en-US',
                               {
                                 hour12: false,
                               },
                             ) +
                             ' ' +
                             new Date(user.passChangedAt)
-                              .toLocaleDateString('es-AR')
+                              .toLocaleDateString('en-US')
                               .split('/')
                               .reverse()
                               .join('/')
-                          : user.passChangedAt.toLocaleTimeString('es-AR', {
+                          : user.passChangedAt.toLocaleTimeString('en-US', {
                               hour12: false,
                             }) +
                             ' ' +
                             user.passChangedAt
-                              .toLocaleDateString('es-AR')
+                              .toLocaleDateString('en-US')
                               .split('/')
                               .reverse()
                               .join('/')
@@ -358,9 +358,12 @@ const ProfileScreen: React.FC<object> = () => {
   };
 
   return (
-    <>
-      <div className='flex flex-col h-full'>
+    <div className='flex flex-col h-full w-full justify-center items-center'>
+      <div className='flex flex-col h-full w-2/3'>
         <div className='flex w-full justify-start pb-4 items-center'>
+          <IconButton aria-label='Back icon' onClick={() => navigateBack()}>
+            <ArrowBackIcon boxSize={5} />
+          </IconButton>
           <div className='flex flex-col leading-none w-full justify-center items-center px-[40px] mb-5 h-[40px]'>
             <Text
               fontSize={{ base: 'x-large', md: 'xx-large' }}
@@ -372,8 +375,6 @@ const ProfileScreen: React.FC<object> = () => {
         </div>
         {user ? <ProfileCard /> : <Spinner />}
       </div>
-    </>
+    </div>
   );
 };
-
-export default ProfileScreen;

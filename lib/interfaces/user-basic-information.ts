@@ -6,4 +6,6 @@ export interface User {
   id: number;
   userType: UserType;
   email: string;
+  passChangedAt: string | Date;
+  displayname: string;
 }

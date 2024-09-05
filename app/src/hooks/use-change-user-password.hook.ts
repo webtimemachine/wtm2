@@ -3,7 +3,10 @@ import { useToast } from '@chakra-ui/react';
 
 import { apiClient } from '../utils/api.client';
 import { useHandleSessionExpired } from '.';
-import { ChangeUserPassword } from 'wtm-lib/interfaces';
+interface ChangeUserPassword {
+  oldPassword: string;
+  newPassword: string;
+}
 
 export const useChangeUserPassword = () => {
   const toast = useToast();

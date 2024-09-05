@@ -18,14 +18,16 @@ enum UserType {
 }
 
 model User {
-  id               BigInt   @id @default(autoincrement())
+  id               BigInt    @id @default(autoincrement())
   userType         UserType
-  email            String   @unique @db.VarChar()
-  password         String?  @db.VarChar()
-  recoveryCode     String?  @db.VarChar()
-  verified         Boolean  @default(false)
-  verificationCode String?  @db.VarChar()
-  createdAt        DateTime @default(now()) @db.Timestamptz(0)
+  email            String    @unique @db.VarChar()
+  displayname      String?   @db.VarChar()
+  passChangedAt    DateTime? @db.Timestamptz(0)
+  password         String?   @db.VarChar()
+  recoveryCode     String?   @db.VarChar()
+  verified         Boolean   @default(false)
+  verificationCode String?   @db.VarChar()
+  createdAt        DateTime  @default(now()) @db.Timestamptz(0)
 
   userPreferences   UserPreferences?
   userDevices       UserDevice[]
