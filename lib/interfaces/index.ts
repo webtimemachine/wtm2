@@ -51,3 +51,4 @@ export {
   type RestorePasswordErrorResponse,
 } from './restore-password.interface';
 export { type ChangeUserPassword } from './change-user-password.interface';
+export { type ChangeUserDisplayName } from './change-user-displayname.interface';

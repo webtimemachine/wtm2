@@ -106,6 +106,7 @@ export const SignUpScreen: React.FC = () => {
       const signUpData = {
         email,
         password,
+        displayname: email.split('@')[0] || '',
       };
       signUpMutation.mutate(signUpData);
     }

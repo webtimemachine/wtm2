@@ -10,6 +10,7 @@ import {
   UpdateUserPreferencesInput,
   UserDto,
   UserPreferencesDto,
+  ChangeDisplayNameInput,
 } from '../dtos';
 
 import { plainToClassFromExist, plainToInstance } from 'class-transformer';
@@ -241,6 +242,18 @@ export class UserService {
     return {
       statusCode: 200,
       message: 'Pasword updated successfully!',
+    };
+  }
+  async changeDisplayName(
+    jwtContext: JwtContext,
+    changeDisplayNameInput: ChangeDisplayNameInput,
+  ): Promise<MessageResponse> {
+    const { displayname: displayName } = changeDisplayNameInput;
+    await this.authService.updateDisplayName(jwtContext, displayName);
+
+    return {
+      statusCode: 200,
+      message: 'Displayname updated successfully!',
     };
   }
 }

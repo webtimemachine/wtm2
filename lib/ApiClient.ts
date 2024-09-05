@@ -29,6 +29,7 @@ import {
   ValidateRecoveryCodeResponse,
   VerifyCodeData,
   ChangeUserPassword,
+  ChangeUserDisplayName,
 } from './interfaces';
 
 interface ApiClientOptions {
@@ -199,6 +200,11 @@ export class ApiClient {
       }
 
       const data = await res.json();
+
+      if (!data.accessToken || !data.refreshToken) {
+        throw new Error('Unauthorized');
+      }
+
       await Promise.all([
         this.setAccessToken(data.accessToken),
         this.setRefreshToken(data.refreshToken),
@@ -544,7 +550,13 @@ export class ApiClient {
         );
       }
 
-      const response: User = await res.json();
+      const jsonRes: any = await res.json();
+      const response: User = {
+        ...jsonRes,
+        passChangedAt: jsonRes.passChangedAt
+          ? new Date(jsonRes.passChangedAt)
+          : null,
+      };
       return response;
     } catch (error: any) {
       if (`${error?.message}`.toLowerCase().includes('unauthorized')) {
@@ -560,9 +572,33 @@ export class ApiClient {
         method: 'POST',
         body: JSON.stringify(data),
       });
-      if (res.status !== 201) {
+      if (res.status !== 200) {
         const errorJson = await res.json();
         throw new Error(errorJson?.message || 'POST Update Password Error');
+      }
+
+      const response: BasicResponse = await res.json();
+      return response;
+    } catch (error: any) {
+      if (`${error?.message}`.toLowerCase().includes('unauthorized')) {
+        if (this.handleSessionExpired) await this.handleSessionExpired();
+      } else {
+        throw error;
+      }
+    }
+  };
+  changeUserDisplayName = async (data: ChangeUserDisplayName) => {
+    try {
+      const res = await this.securedFetch(
+        '/api/user/profile/change-displayname',
+        {
+          method: 'POST',
+          body: JSON.stringify(data),
+        },
+      );
+      if (res.status !== 200) {
+        const errorJson = await res.json();
+        throw new Error(errorJson?.message || 'POST Update Display Name Error');
       }
 
       const response: BasicResponse = await res.json();
