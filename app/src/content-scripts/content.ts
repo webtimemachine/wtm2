@@ -105,8 +105,6 @@ const startInterval = () => {
 };
 
 const refreshAccessToken = async () => {
-  console.log('refreshAccessToken content');
-
   try {
     const { accessToken, refreshToken } = await chrome.storage.local.get([
       'accessToken',
@@ -115,9 +113,6 @@ const refreshAccessToken = async () => {
 
     const isAccessTokenExpired = isTokenExpired(accessToken);
     const isRefreshTokenExpired = isTokenExpired(refreshToken);
-
-    console.log('isAccessTokenExpired', isAccessTokenExpired);
-    console.log('isRefreshTokenExpired', isRefreshTokenExpired);
 
     if (isAccessTokenExpired && !isRefreshTokenExpired) {
       await apiClient.refresh();
