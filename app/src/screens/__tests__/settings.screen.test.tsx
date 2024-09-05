@@ -39,6 +39,7 @@ describe('SettingsScreen', () => {
   test('renders the component with initial state', () => {
     customRender(<SettingsScreen />);
 
+    expect(screen.getByText('Profile')).toBeInTheDocument();
     expect(screen.getByText('Settings')).toBeInTheDocument();
     expect(screen.getByText('Preferences')).toBeInTheDocument();
     expect(screen.getByText('Active Sessions')).toBeInTheDocument();
@@ -59,6 +60,9 @@ describe('SettingsScreen', () => {
 
   test('navigates to correct screens when options are clicked', () => {
     customRender(<SettingsScreen />);
+
+    fireEvent.click(screen.getByText('Profile'));
+    expect(mockNavigateTo).toHaveBeenCalledWith('profile');
 
     fireEvent.click(screen.getByText('Preferences'));
     expect(mockNavigateTo).toHaveBeenCalledWith('preferences');
