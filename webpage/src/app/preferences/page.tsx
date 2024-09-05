@@ -19,7 +19,6 @@ const PreferencesScreen: React.FC<object> = () => {
   const [explicitContentFilterEnabled, setExplicitContentFilterEnabled] =
     useState(false);
   const [days, setDays] = useState<number | null>(null);
-  const { navigateBack } = useNavigation();
   const { userPreferencesQuery } = useGetPreferences();
   const { updatePreferencesMutation } = useUpdatePreferences();
 
@@ -53,6 +52,7 @@ const PreferencesScreen: React.FC<object> = () => {
       navigationEntryExpirationInDays: days || 0,
       enableImageEncoding: imageEncodingEnabled,
       enableExplicitContentFilter: explicitContentFilterEnabled,
+      enableStopTracking: false,
     });
     setIsEnabledLiteMode(enabledLiteMode);
   };

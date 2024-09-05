@@ -6,7 +6,7 @@ import { EditIcon, CheckIcon, CloseIcon, Icon } from '@chakra-ui/icons';
 import { MdLogout } from 'react-icons/md';
 
 import { useNavigation } from '@/store';
-import { ActiveSession } from '@/interfaces/active-sessons.interface';
+import { ActiveSession } from 'wtm-lib/interfaces';
 import {
   useCloseActiveSession,
   useGetActiveSessions,

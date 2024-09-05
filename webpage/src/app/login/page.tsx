@@ -14,7 +14,7 @@ import {
 import { ServerUrlEditable } from '../../components';
 import { useLogin } from '../../hooks';
 import { useAuthStore, useNavigation } from '../../store';
-import { isLoginRes } from '../../interfaces/login.interface';
+import { isLoginRes } from 'wtm-lib/interfaces';
 
 import clsx from 'clsx';
 import { readAuthStateFromLocal } from '../../store/auth.store';
