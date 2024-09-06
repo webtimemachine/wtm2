@@ -25,7 +25,7 @@ import { IconType } from 'react-icons';
 import { BsStars } from 'react-icons/bs';
 
 import { useDeleteNavigationEntry, useNavigationEntries } from '../../hooks';
-import { CompleteNavigationEntryDto } from '../../interfaces';
+import { CompleteNavigationEntryDto } from 'wtm-lib/interfaces';
 
 import { getBrowserIconFromDevice } from '../../utils';
 

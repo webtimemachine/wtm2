@@ -3,7 +3,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useAuthStore } from '@/store';
 
 import { apiClient } from '@/utils/api.client';
-import { isLoginRes } from '@/interfaces';
+import { isLoginRes } from 'wtm-lib/interfaces';
 
 export const useLogin = () => {
   const toast = useToast();
