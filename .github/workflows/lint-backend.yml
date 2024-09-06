@@ -1,9 +1,9 @@
-name: ESLint
+name: Run ESLint on backend
 
 on:
   pull_request:
-    branches:
-      - main # Adjust the branch as needed
+    branches: ['develop']
+    paths: ['backend/**']
 
 jobs:
   lint:
