@@ -142,10 +142,9 @@ const ProfileScreen: React.FC<object> = () => {
             </ModalBody>
 
             <ModalFooter>
-              <div className='flex w-full justify-center md:justify-end'>
+              <div className='flex w-full flex-col space-y-2 md:flex-row md:justify-end md:space-y-0 md:space-x-3'>
                 <Button
                   colorScheme='blue'
-                  mr={3}
                   onClick={handleSubmit}
                   disabled={isError}
                 >
@@ -237,10 +236,9 @@ const ProfileScreen: React.FC<object> = () => {
             </ModalBody>
 
             <ModalFooter>
-              <div className='flex w-full justify-center md:justify-end'>
+              <div className='flex w-full flex-col space-y-2 md:flex-row md:justify-end md:space-y-0 md:space-x-3'>
                 <Button
                   colorScheme='blue'
-                  mr={3}
                   onClick={handleSubmit}
                   disabled={isError}
                 >
