@@ -109,6 +109,7 @@ export class UserService {
       navigationEntryExpirationInDays,
       enableImageEncoding,
       enableExplicitContentFilter,
+      enableStopTracking,
     } = updateUserPreferencesInput;
 
     const updatedUserPreferences =
@@ -121,6 +122,7 @@ export class UserService {
           navigationEntryExpirationInDays,
           enableImageEncoding,
           enableExplicitContentFilter,
+          enableStopTracking,
         },
       });
 

@@ -3,7 +3,7 @@ import { useToast } from '@chakra-ui/react';
 
 import { apiClient } from '../utils/api.client';
 import { useHandleSessionExpired } from '.';
-import { ChangeUserDisplayName } from '../interfaces';
+import { ChangeUserDisplayName } from 'wtm-lib/interfaces';
 
 export const useChangeUserDisplayName = () => {
   const toast = useToast();
