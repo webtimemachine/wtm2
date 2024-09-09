@@ -1,8 +1,9 @@
-name: Check Chrome Extension tests
+name: Run extension tests and build
 
 on:
   pull_request:
     branches: ['develop']
+    paths: ['app/**']
 
 jobs:
   testcheck:
