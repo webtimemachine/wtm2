@@ -171,14 +171,6 @@ describe('Indexer service', () => {
         tenant: `Tenant-1`,
       };
 
-      const results = await indexerService.search('Test query', 1n);
-      const expectedSearchResult = {
-        urls: new Set(['source1', 'source2']),
-        mostRelevantResults: new Map<string, string>([
-          ['source1', 'relevant content 1'],
-          ['source2', 'relevant content 2'],
-        ]),
-      };
       expect(mockRetriever.getRelevantDocuments).toHaveBeenCalledWith(
         'Test query',
       );
