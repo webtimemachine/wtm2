@@ -170,6 +170,8 @@ describe('Indexer service', () => {
         textKey: 'text',
         tenant: `Tenant-1`,
       };
+      // We don't need to check given data.
+      await indexerService.search('Test query', 1n);
 
       expect(mockRetriever.getRelevantDocuments).toHaveBeenCalledWith(
         'Test query',
