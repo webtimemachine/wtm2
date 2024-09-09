@@ -1,7 +1,15 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { Button, IconButton, Input, Text } from '@chakra-ui/react';
+import {
+  Button,
+  IconButton,
+  HStack,
+  PinInput,
+  PinInputField,
+  Text,
+  Code,
+} from '@chakra-ui/react';
 import { RepeatIcon, Icon } from '@chakra-ui/icons';
 import { LuLogIn } from 'react-icons/lu';
 
@@ -24,9 +32,13 @@ const ValidateEmailScreen: React.FC<{}> = () => {
     }
   }, [verificationCodeMutation.isSuccess]);
 
+  const handlePinChange = (value: string) => {
+    setVerificationCode(value);
+  };
+
   return (
-    <>
-      <div className='flex flex-col p-8 pt-10 items-center w-full'>
+    <div className='flex justify-center items-center h-screen'>
+      <div className='flex flex-col p-3 md:p-8 py-10 items-center md:h-1/3 max-w-6xl min-w-[360px] w-1/3 md:min-h-[500px] bg-white rounded-md shadow-2xl transition-shadow filter drop-shadow'>
         <div className='flex w-full justify-start pb-4 gap-4 items-center'>
           <IconButton aria-label='Back icon'>
             <Icon
@@ -49,17 +61,29 @@ const ValidateEmailScreen: React.FC<{}> = () => {
           <ServerUrlEditable />
         </div>
 
-        <div className='flex flex-col w-full pb-2'>
-          <Input
-            type='text'
-            name='verification-code'
-            placeholder='Verification code'
-            value={verificationCode}
-            onChange={(event) => {
-              setVerificationCode(event.target.value.replace(/\D/g, ''));
-            }}
-            backgroundColor={'white'}
-          />
+        <div className='flex flex-col w-full pb-2 items-center'>
+          <Text my={4}>
+            {' '}
+            Please, insert the <Code fontWeight={600}>code</Code> provided to
+            your email.
+          </Text>
+          <HStack>
+            <PinInput
+              otp
+              value={verificationCode}
+              onChange={handlePinChange}
+              isInvalid={verificationCode.length !== 6}
+              size='lg'
+              placeholder='-'
+            >
+              <PinInputField />
+              <PinInputField />
+              <PinInputField />
+              <PinInputField />
+              <PinInputField />
+              <PinInputField />
+            </PinInput>
+          </HStack>
         </div>
 
         <div className='flex flex-row gap-2 w-full pb-4'>
@@ -72,14 +96,14 @@ const ValidateEmailScreen: React.FC<{}> = () => {
             isLoading={resendCodeMutation.isPending}
             loadingText='Sending email...'
           >
-            Resend Email
+            Resend Email Code
           </Button>
         </div>
 
         <div className='flex gap-4'>
           <Button
             colorScheme='blue'
-            isDisabled={!verificationCode}
+            isDisabled={verificationCode.length !== 6}
             onClick={() =>
               verificationCodeMutation.mutate({
                 deviceKey,
@@ -97,7 +121,8 @@ const ValidateEmailScreen: React.FC<{}> = () => {
           </Button>
         </div>
       </div>
-    </>
+    </div>
   );
 };
+
 export default ValidateEmailScreen;
