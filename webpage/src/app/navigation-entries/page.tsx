@@ -1,7 +1,10 @@
 'use client';
 
 import {
+  AbsoluteCenter,
   Badge,
+  Box,
+  Divider,
   Icon,
   IconButton,
   Input,
@@ -55,7 +58,12 @@ const RelevantSegment = ({ relevantSegment }: { relevantSegment: string }) => {
 
   return (
     <div>
-      <p className='font-semibold mb-4'>Most relevant match</p>
+      <Box position='relative' padding='5'>
+        <Divider />
+        <AbsoluteCenter bg='white' px='4'>
+          <p className='font-bold mb-2 truncate'>Most relevant match</p>
+        </AbsoluteCenter>
+      </Box>
       <p className='text-xs'></p>
       <div className='markdown-content'>
         <Markdown>{markdown}</Markdown>
@@ -69,6 +77,7 @@ const NavigationEntriesScreen: React.FC = () => {
   const [page, setPage] = useState<number>(0);
   const [query, setQuery] = useState<string>('');
   const [isSemantic, setIsSemantic] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
   const toast = useToast();
 
   const offset = page * LIMIT;
@@ -104,8 +113,12 @@ const NavigationEntriesScreen: React.FC = () => {
   }, [navigationEntriesQuery.error]);
 
   const search = () => {
+    setLoading(true);
     setPage(0);
-    navigationEntriesQuery.refetch();
+    navigationEntriesQuery
+      .refetch()
+      .finally(() => setLoading(false))
+      .catch(() => setLoading(false));
   };
 
   const prev = () => page > 0 && setPage(page - 1);
@@ -150,6 +163,7 @@ const NavigationEntriesScreen: React.FC = () => {
               aria-label='Menu'
               colorScheme='blue'
               onClick={() => search()}
+              isLoading={loading}
             >
               <SearchIcon boxSize={5} />
             </IconButton>
