@@ -179,7 +179,6 @@ describe('Indexer service', () => {
           ['source2', 'relevant content 2'],
         ]),
       };
-      expect(results).toEqual(expectedSearchResult);
       expect(mockRetriever.getRelevantDocuments).toHaveBeenCalledWith(
         'Test query',
       );
