@@ -112,13 +112,11 @@ const NavigationEntriesScreen: React.FC = () => {
     }
   }, [navigationEntriesQuery.error]);
 
-  const search = () => {
+  const search = async () => {
     setLoading(true);
     setPage(0);
-    navigationEntriesQuery
-      .refetch()
-      .finally(() => setLoading(false))
-      .catch(() => setLoading(false));
+    await navigationEntriesQuery.refetch();
+    setLoading(false);
   };
 
   const prev = () => page > 0 && setPage(page - 1);
