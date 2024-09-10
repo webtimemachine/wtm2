@@ -153,8 +153,8 @@ export class IndexerService {
 
       - Output code must be formatted with Prettier like.
 
-      - Output a section named Code: that shows a list of code present in INPUT content in markdown  
-      
+      - Output a section named Code: that shows a list of code present in INPUT content in markdown
+
       - Output a section named Tags found: that shows in a list of tags you find
 
       # OUTPUT INSTRUCTIONS
@@ -177,9 +177,8 @@ export class IndexerService {
 
       INPUT:
 
-
       The search result is:
-      
+
       ### Source: ${key}
       ${value}
       `;
