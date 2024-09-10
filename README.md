@@ -1,100 +1,144 @@
 # WebTM ![WTM  Website](https://cronitor.io/badges/CbeIhd/production/7FN5-J8hdv7hTI7zSN0Yyc6TBw0.svg) ![WTM  API](https://cronitor.io/badges/DOrpsj/production/0PbZKWShlq8iS_6_sPowwKHxKVI.svg)<img align="right" width="100" height="100" src="./app/public/app-icon.png">
 
-Web Time Machine is a cross-platform solution built using React, Vite, and TypeScript to integrate the navigation history between desktop and mobile web browsers. Focusing on providing a solution for an integration between Google Chrome, Safari, Firefox, Android and iOS. This repository implements the backend solution with a NestJS application that provides a REST API and a PostgreSQL database used through PrismaORM.
+Web Time Machine (WebTM) is an open-source, cross-platform browser extension and web application designed to provide users with a seamless experience to access, search, and manage their browsing history. The project integrates advanced AI-powered features, allowing users to efficiently search through their browsing history and filter explicit content.
 
-## Installation
+### Table of Contents
 
-```bash
-npm run app:install
-npm run backend:install
-```
+1. [Overview](#overview)
+2. [Core Components](#core-components)
+   - [Backend](#backend)
+   - [Browser Extension](#browser-extension)
+   - [Web Page](#web-page)
+3. [Getting Started](#getting-started)
+   - [Clone the Repository](#clone-the-repository)
+   - [Install Dependencies](#install-dependencies)
+   - [Development Setup](#development-setup)
+4. [Folder Structure](#folder-structure)
+5. [Contributing](#contributing)
+6. [License](#license)
+7. [Contact](#contact)
 
-<br/>
+### Overview
 
-## Running with Docker
+WebTM consists of a backend service, a browser extension compatible with multiple browsers, and a standalone web page. The backend is built with NestJS and integrated with OpenAI and Weaviate to provide AI-powered search capabilities and explicit content filtering. The browser extension is built with React, TypeScript, and Vite, while the web page is built with Next.js and offers a responsive UI for both desktop and mobile users.
 
-If you are pointing to your local database, you can use Docker Compose inside the backend folder to run the application. Before running the command, ensure that you have Docker and Docker compose installed on your system. You can download and install Docker Desktop from [here](https://www.docker.com/products/docker-desktop/).
-Execute the following command in your terminal:
+### Core Components
 
-```bash
-cd backend
-docker compose up
-```
+#### Backend
 
-Also you can run the ngrok to get a public access to your API. That's so useful when you are debugging on from any device regardless your local network. For that, do:
+- **Framework**: [NestJS](https://nestjs.com/)
+- **Database**: PostgreSQL (via Prisma ORM)
+- **AI Integration**: OpenAI, Weaviate
+- **Deployment**: Deployed on Vercel
+- **Functionality**: Provides REST API for user authentication, session management, data storage, AI-based search, and explicit content filtering.
+- **[Backend README](backend/README.md)**: Detailed setup and usage instructions for the backend.
 
-1. Visit the [Ngrok website](https://ngrok.com/) and sign up for an account.
-2. After signing up, navigate to the dashboard to obtain your authentication token and domain
+#### Browser Extension
 
-<br/>
+- **Framework**: [React](https://reactjs.org/), [TypeScript](https://www.typescriptlang.org/)
+- **Bundler**: [Vite](https://vitejs.dev/)
+- **State Management**: React Query, Zustand
+- **UI Library**: Chakra UI, Tailwind CSS
+- **Compatibility**: Chrome, Firefox, Safari, Safari iOS, Firefox Android
+- **Functionality**: Tracks browsing history, sends data to the backend, and provides an AI-based search within the extension popup.
+- **[Browser Extension README](app/README.md)**: Detailed setup and usage instructions for the browser extension.
 
-## Set the Backend Environment Variables
+#### Web Page
 
-To see the full configuration file with all the variables and explanation, look at this guide: [Backend Environment Variables](/guides/setup-backend-environment-variables.md)
+- **Framework**: [Next.js](https://nextjs.org/)
+- **Styling**: Tailwind CSS, Chakra UI
+- **State Management**: Zustand
+- **Data Fetching**: TanStack Query
+- **Deployment**: Vercel
+- **Functionality**: Allows users to log in, view their browsing data, and utilize WebTM features without needing the extension.
+- **[Webpage README](webpage/README.md)**: Detailed setup and usage instructions for the web page.
 
-<br/>
+### Getting Started
 
-## Running the backend
+To set up the WebTM project locally, follow the instructions below.
 
-```bash
-# development
-npm run backend:dev
-
-# production mode
-npm run backend:prod
-```
-
-## Open API Docs
-
-To see the Open API Specification navigate to / of your API running on the port you have enter in the .env. Ex: [http://localhost:5000/](http://localhost:5000/)
-
-<br/>
-
-## Installation Walkthrough
-
-To see the full installation walkthrough with and step by step video look at this guide [Installation Guide](/guides/installation-walkthrough.md)
-
-<br/>
-
-## Deploy WTM backend on Vercel
-
-Deploy [this repository](https://github.com/webtimemachine/wtm2) into your vercel account using the following button. After the deploy is complete you will need to go to the project settings and change the root folder to `backend` and also set the env variables.
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fwebtimemachine%2Fwtm2)
-
-<br/>
-
-## Create a Vercel Postgres Serverless SQL
-
-The backend of WTM uses a PostgressDB, we recommend using Vercel Postgres. In order to do that you need to go to your Vercel dashboard on the tab 'Storage' and create a new DB. Then you need to setup the connection with your app, open the Advanced Options an set `DATABASE` as the envaronment variables prefix. After doing that, you can do to the env variables of you project and get the DATABASE_URL and DATABASE_URL_NON_POOLING to use on your local, connect to the database using an SQL client like [DBeaver](https://dbeaver.io/) and update your repository secrets.
-
-![db-connect-project](./docs/db-connect-project.png)
-
-<br/>
-
-## Build the Extension
+#### Clone the Repository
 
 ```bash
-npm run app:install
-npm run app:build
+git clone https://github.com/webtimemachine/wtm2.git
+cd wtm2
 ```
 
-As a result you will found the built folders for chrome and firefox at the root folder on `app_chrome` and `app_firefox`
+#### Install Dependencies
 
-<br/>
+Install dependencies for each core component:
 
-## Install the extension in Chrome (using the .zip file or the extension folder)
+1. **Backend**:
 
-- Click on the **Settings** icon located in the top-right corner of your Chrome browser. It resembles three vertically aligned dots, also known as the 'hamburger' icon.
+   ```bash
+   cd backend
+   npm install
+   ```
 
-- From the dropdown menu, hover over the **Tools** option, then select **Extensions**.
+2. **Browser Extension**:
 
-- Navigate to the location of the .zip file you wish to install. Unzip it where you want to let it installed (Desktop, for example). Keep in mind that if you want to use your local code, don't do anything.
+   ```bash
+   cd ../app
+   npm install
+   ```
 
-- Click on the **Load unpacked** button located in the top-left corner of the screen. This action opens a file selection dialog.
+3. **Web Page**:
 
-- Select the folder where you had unziped or select the folder where your extension code is in local and click on the **Open** button. Chrome will begin installing the extension.
+   ```bash
+   cd ../webpage
+   npm install
+   ```
 
-- Once completed, you'll see a notification confirming the successful installation. The extension should now be visible in your list of installed extensions.
+#### Development Setup
+
+1. **Backend**:
+
+   Start the backend development server:
+
+   ```bash
+   cd backend
+   npm run start:dev
+   ```
+
+2. **Browser Extension**:
+
+   Start the extension development server:
+
+   ```bash
+   cd ../app
+   npm run dev
+   ```
+
+3. **Web Page**:
+
+   Start the web page development server:
+
+   ```bash
+   cd ../webpage
+   npm run dev
+   ```
+
+   The web page will be available at [http://localhost:3000](http://localhost:3000).
+
+### Folder Structure
+
+The repository is organized as follows:
+
+- **/backend**: Contains the NestJS backend application code.
+- **/app**: Contains the browser extension code built with React, TypeScript, and Vite.
+- **/webpage**: Contains the Next.js-based web page code.
+- **/lib**: Contains shared libraries and utilities used across multiple components.
+
+### Contributing
+
+Contributions are welcome! If you have suggestions, improvements, or find bugs, please open an issue or submit a Pull Request. Make sure to follow the code of conduct and contribution guidelines.
+
+### License
+
+This project is licensed under the AGPL-3.0 License - see the [LICENSE](LICENSE) file for details.
+
+### Contact
+
+For any inquiries, please reach out to the [WebTM team](https://www.webtm.io).
 
 Created by ttt246
