@@ -1,12 +1,20 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { Button, IconButton, Input, Text } from '@chakra-ui/react';
+import {
+  Button,
+  IconButton,
+  HStack,
+  PinInput,
+  PinInputField,
+  Text,
+} from '@chakra-ui/react';
 import { Icon } from '@chakra-ui/icons';
 import { LuLogIn } from 'react-icons/lu';
 
 import { useValidateRecoveryCode } from '@/hooks';
 import { useAuthStore, useNavigation } from '@/store';
+import { BiLock } from 'react-icons/bi';
 
 const ValidateRecoveryCode: React.FC<{}> = () => {
   const [recoveryCode, setRecoveryCode] = useState('');
@@ -25,9 +33,13 @@ const ValidateRecoveryCode: React.FC<{}> = () => {
     }
   }, [validateRecoveryCodeMutation.isSuccess]);
 
+  const handlePinChange = (value: string) => {
+    setRecoveryCode(value);
+  };
+
   return (
-    <>
-      <div className='flex flex-col p-8 pt-10 items-center w-full'>
+    <div className='flex justify-center items-center h-screen'>
+      <div className='flex flex-col p-3 md:p-8 py-10 items-center md:h-1/3 max-w-6xl min-w-[360px] w-1/3 md:min-h-[500px] bg-white rounded-md shadow-2xl transition-shadow filter drop-shadow'>
         <div className='flex w-full justify-start pb-4 gap-4 items-center'>
           <IconButton aria-label='Back icon'>
             <Icon
@@ -53,23 +65,30 @@ const ValidateRecoveryCode: React.FC<{}> = () => {
           </div>
         </div>
 
-        <div className='flex flex-col w-full pb-6'>
-          <Input
-            type='text'
-            name='recovery-code'
-            placeholder='Recovery code'
-            value={recoveryCode}
-            onChange={(event) => {
-              setRecoveryCode(event.target.value.replace(/\D/g, ''));
-            }}
-            backgroundColor={'white'}
-          />
+        <div className='flex flex-col w-full pb-6 items-center'>
+          <HStack>
+            <PinInput
+              otp
+              value={recoveryCode}
+              onChange={handlePinChange}
+              isInvalid={recoveryCode.length !== 6}
+              size='lg'
+              placeholder='-'
+            >
+              <PinInputField />
+              <PinInputField />
+              <PinInputField />
+              <PinInputField />
+              <PinInputField />
+              <PinInputField />
+            </PinInput>
+          </HStack>
         </div>
 
         <div className='flex gap-4'>
           <Button
             colorScheme='blue'
-            isDisabled={!recoveryCode}
+            isDisabled={recoveryCode.length !== 6}
             onClick={() =>
               validateRecoveryCodeMutation.mutate({
                 email: recoveryEmail,
@@ -83,7 +102,8 @@ const ValidateRecoveryCode: React.FC<{}> = () => {
           </Button>
         </div>
       </div>
-    </>
+    </div>
   );
 };
+
 export default ValidateRecoveryCode;

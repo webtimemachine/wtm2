@@ -3,21 +3,21 @@ import { useToast } from '@chakra-ui/react';
 
 import { apiClient } from '../utils/api.client';
 import { useHandleSessionExpired } from '.';
-import { ChangeUserPassword } from 'wtm-lib/interfaces';
+import { ChangeUserDisplayName } from 'wtm-lib/interfaces';
 
-export const useChangeUserPassword = () => {
+export const useChangeUserDisplayName = () => {
   const toast = useToast();
   const queryClient = useQueryClient();
-
   const { handleSessionExpired } = useHandleSessionExpired();
   apiClient.setHandleSessionExpired(handleSessionExpired);
-  const changeUserPasswordMutation = useMutation({
-    mutationFn: (data: ChangeUserPassword) =>
-      apiClient.changeUserPassword(data),
+
+  const changeUserDisplayNameMutation = useMutation({
+    mutationFn: (data: ChangeUserDisplayName) =>
+      apiClient.changeUserDisplayName(data),
     onSuccess: () => {
       toast({
         title: 'Success',
-        description: `Your password has been changed!`,
+        description: `Your displayname has been changed!`,
         status: 'success',
         duration: 3000,
         isClosable: true,
@@ -29,7 +29,7 @@ export const useChangeUserPassword = () => {
     onError: () => {
       toast({
         title: 'Error',
-        description: `Your password has not been changed! Please check the requirements and try again.`,
+        description: `Your displayname has not been changed! Please check the requirements and try again.`,
         status: 'error',
         duration: 8000,
         isClosable: true,
@@ -37,5 +37,5 @@ export const useChangeUserPassword = () => {
     },
   });
 
-  return { changeUserPasswordMutation };
+  return { changeUserDisplayNameMutation };
 };

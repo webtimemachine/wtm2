@@ -51,6 +51,7 @@ const existingUser = {
     navigationEntryExpirationInDays: 120,
     enableImageEncoding: true,
     enableExplicitContentFilter: true,
+    enableStopTracking: true,
     createdAt: new Date(),
     updateAt: new Date(),
   },

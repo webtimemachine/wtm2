@@ -50,7 +50,7 @@ export class NavigationEntryController {
   async createNavigationEntry(
     @Body() createNavigationEntryInputDto: CreateNavigationEntryInputDto,
     @JwtRequestContext() context: JwtContext,
-  ): Promise<CompleteNavigationEntryDto> {
+  ): Promise<void> {
     return this.navigationService.createNavigationEntry(
       context,
       createNavigationEntryInputDto,
