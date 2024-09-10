@@ -30,16 +30,36 @@ import { getBrowserIconFromDevice } from '../utils';
 import clsx from 'clsx';
 
 import { updateIcon } from '../utils/updateIcon';
-
+import Markdown from 'react-markdown';
 const truncateString = (str: string, maxLength: number) => {
   return str.length <= maxLength ? str : str.slice(0, maxLength) + '...';
 };
-
+const getPreProcessedMarkDown = (relevantSegment: string) => {
+  const emptyListPatterns = [
+    /\*\n(\*\n)*/g, // matches lines with only *
+    /-\n(-\n)*/g, // matches lines with only -
+    /- \*\*\n(\*+\n)*/g, // matches lines with only - ** and *+
+    /\n\s*\*\*\n(\s*\*+\n)*/g, // matches lines with ** and *+ with spaces
+    /- \*\n(\s*\*\n)*/g, // matches lines with - * and *+
+    /\n\s*\*\n(\s*\*\n)*/g, // matches lines with * and *+ with spaces
+    /\n\s*-\n(\s*-\n)*/g, // matches lines with - and -+ with spaces
+  ];
+  let markdown = relevantSegment;
+  emptyListPatterns.forEach((pattern) => {
+    markdown = markdown.replace(pattern, '');
+  });
+  markdown = markdown.replace(/\n{2,}/g, '\n\n');
+  return markdown || '';
+};
 const RelevantSegment = ({ relevantSegment }: { relevantSegment: string }) => {
+  const markdown = getPreProcessedMarkDown(relevantSegment);
   return (
     <div>
       <p className='font-semibold mb-4'>Most relevant match</p>
-      <p className='text-xs'>{relevantSegment}</p>
+      <p className='text-xs'></p>
+      <div className='markdown-content'>
+        <Markdown>{markdown}</Markdown>
+      </div>
     </div>
   );
 };
@@ -132,7 +152,7 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
   const [page, setPage] = useState<number>(0);
   const [query, setQuery] = useState<string>('');
   const [isSemantic, setIsSemantic] = useState<boolean>(true);
-
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const offset = page * LIMIT;
   const limit = LIMIT;
 
@@ -165,9 +185,11 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
     }
   }, [navigationEntriesQuery.error]);
 
-  const search = () => {
+  const search = async () => {
+    setIsLoading(true);
     setPage(0);
-    navigationEntriesQuery.refetch();
+    await navigationEntriesQuery.refetch();
+    setIsLoading(false);
   };
 
   const prev = () => page > 0 && setPage(page - 1);
@@ -214,7 +236,11 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
               }}
             />
             <div className='pl-4'>
-              <Button colorScheme='blue' onClick={() => search()}>
+              <Button
+                colorScheme='blue'
+                onClick={() => search()}
+                isLoading={isLoading}
+              >
                 Search
               </Button>
             </div>
