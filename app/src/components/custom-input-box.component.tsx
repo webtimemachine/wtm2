@@ -12,14 +12,12 @@ import {
 import { BiCopy } from 'react-icons/bi';
 
 interface CustomInputBoxProps {
-  width?: string | number;
   label: string;
   value: string;
   onCopy?: () => void;
 }
 
 const CustomInputBox: React.FC<CustomInputBoxProps> = ({
-  width,
   label,
   value,
   onCopy,

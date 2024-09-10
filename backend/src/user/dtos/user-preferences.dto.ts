@@ -26,4 +26,8 @@ export class UserPreferencesDto {
   @ApiProperty()
   @Expose()
   enableExplicitContentFilter: boolean;
+
+  @ApiProperty()
+  @Expose()
+  enableStopTracking: boolean;
 }

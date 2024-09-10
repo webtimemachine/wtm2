@@ -9,9 +9,11 @@ import {
   FormErrorMessage,
   IconButton,
   Input,
+  InputGroup,
+  InputLeftAddon,
   Text,
 } from '@chakra-ui/react';
-import { ArrowBackIcon } from '@chakra-ui/icons';
+import { ArrowBackIcon, AtSignIcon } from '@chakra-ui/icons';
 
 import { useAuthStore, useNavigation } from '@/store';
 import { ServerUrlEditable } from '@/components';
@@ -64,8 +66,8 @@ const ForgotPasswordScreen: React.FC<{}> = () => {
   }, [recoverPasswordMutation.isSuccess]);
 
   return (
-    <>
-      <div className='flex flex-col p-8 pt-10 items-center w-full'>
+    <div className='flex justify-center items-center h-screen'>
+      <div className='flex flex-col p-3 md:p-8 py-10 items-center md:h-1/3 max-w-6xl min-w-[360px] w-1/3 md:min-h-[500px] bg-white rounded-md shadow-2xl transition-shadow filter drop-shadow'>
         <div className='flex w-full justify-start pb-4 gap-4 items-center'>
           <IconButton aria-label='Back icon'>
             <ArrowBackIcon
@@ -99,18 +101,23 @@ const ForgotPasswordScreen: React.FC<{}> = () => {
         <div className='flex flex-col w-full'>
           <FormControl isInvalid={!!emailError}>
             <div className={clsx(['flex flex-col w-full'])}>
-              <Input
-                type='text'
-                name='email'
-                placeholder='Email'
-                value={email}
-                autoCapitalize='false'
-                onChange={(event) => {
-                  setEmail(event.target.value);
-                  if (emailError) setEmailError('');
-                }}
-                backgroundColor={'white'}
-              />
+              <InputGroup>
+                <InputLeftAddon>
+                  <AtSignIcon />
+                </InputLeftAddon>
+                <Input
+                  type='text'
+                  name='email'
+                  placeholder='Email'
+                  value={email}
+                  autoCapitalize='false'
+                  onChange={(event) => {
+                    setEmail(event.target.value);
+                    if (emailError) setEmailError('');
+                  }}
+                  backgroundColor={'white'}
+                />
+              </InputGroup>
               <div className='min-h-[32px] [&>div]:mt-1 [&>div]:mb-1'>
                 <FormErrorMessage>{emailError}</FormErrorMessage>
               </div>
@@ -130,7 +137,7 @@ const ForgotPasswordScreen: React.FC<{}> = () => {
           </Button>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 export default ForgotPasswordScreen;

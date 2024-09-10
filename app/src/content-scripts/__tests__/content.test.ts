@@ -65,6 +65,7 @@ describe('postNavigationEntry', () => {
     expect(global.chrome.storage.local.get).toHaveBeenCalledWith([
       'accessToken',
       'enabledLiteMode',
+      'stopTrackingEnabled',
     ]);
     // expect(apiClient.securedFetch).toHaveBeenCalled();
   });

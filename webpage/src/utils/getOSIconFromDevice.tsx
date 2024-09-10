@@ -1,4 +1,4 @@
-import { Device } from '../interfaces/user-device.interface';
+import { Device } from 'wtm-lib/interfaces';
 import {
   FaWindows,
   FaLinux,

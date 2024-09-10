@@ -22,16 +22,18 @@ import {
   PopoverTrigger,
   Portal,
   useToast,
+  InputLeftAddon,
 } from '@chakra-ui/react';
-import { ArrowBackIcon, InfoIcon } from '@chakra-ui/icons';
+import { ArrowBackIcon, AtSignIcon, InfoIcon } from '@chakra-ui/icons';
 
 import { ServerUrlEditable } from '@/components';
 import { useSignUp } from '@/hooks';
 
 import { useNavigation } from '@/store';
 
-import clsx from 'clsx';
-import { generateSecurePassword } from '@/utils/generateSecurePassword';
+import { generateSecurePassword } from '../../utils/generateSecurePassword';
+import { cn } from '../../utils';
+import { BiAt, BiKey, BiRename } from 'react-icons/bi';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[^\s]{8,20}$/;
@@ -44,6 +46,7 @@ const SignUpScreen: React.FC<{}> = () => {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [displayname, setDisplayname] = useState('');
   const [showPass, setShowPass] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showConfirmPass, setShowConfirmPass] = useState(false);
@@ -51,6 +54,7 @@ const SignUpScreen: React.FC<{}> = () => {
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [confirmPassError, setConfirmPassError] = useState('');
+  const [displayNameError, setDisplayNameError] = useState('');
 
   const [loadingGeneratePassword, setLoadingGeneratePassword] = useState(false);
   const [passwordTooltipIsOpen, setPasswordTooltipIsOpen] = useState(false);
@@ -68,6 +72,12 @@ const SignUpScreen: React.FC<{}> = () => {
     let emailErrorFound = false;
     let passwordErrorFound = false;
     let confirmPassErrorFound = false;
+    let displayNameErrorFound = false;
+
+    if (!displayname) {
+      setDisplayNameError('Full Name is required');
+      displayNameErrorFound = true;
+    }
 
     if (!email) {
       setEmailError('Email is required');
@@ -99,7 +109,12 @@ const SignUpScreen: React.FC<{}> = () => {
       }
     }
 
-    return emailErrorFound || passwordErrorFound || confirmPassErrorFound;
+    return (
+      emailErrorFound ||
+      passwordErrorFound ||
+      confirmPassErrorFound ||
+      displayNameErrorFound
+    );
   };
 
   const handleSignUp = () => {
@@ -108,6 +123,7 @@ const SignUpScreen: React.FC<{}> = () => {
       const signUpData = {
         email,
         password,
+        displayname,
       };
       signUpMutation.mutate(signUpData);
     }
@@ -141,8 +157,8 @@ const SignUpScreen: React.FC<{}> = () => {
   };
 
   return (
-    <>
-      <div className='flex flex-col p-8 pt-10 items-center w-full'>
+    <div className='flex justify-center items-center h-screen'>
+      <div className='flex flex-col p-3 md:p-8 py-10 items-center md:h-1/3 max-w-6xl min-w-[360px] w-1/3 md:min-h-[500px] bg-white rounded-md shadow-2xl transition-shadow filter drop-shadow'>
         <div className='flex w-full justify-start pb-4 gap-4 items-center'>
           <IconButton aria-label='Back icon' onClick={() => navigateBack()}>
             <ArrowBackIcon boxSize={5} />
@@ -153,35 +169,68 @@ const SignUpScreen: React.FC<{}> = () => {
             </Text>
           </div>
         </div>
-
         <div className='pb-4 flex w-full'>
           <ServerUrlEditable />
         </div>
         <FormControl isInvalid={!!emailError}>
           <div
-            className={clsx(['flex flex-col w-full', !emailError && 'pb-4'])}
+            className={cn([
+              'flex flex-col w-full',
+              !displayNameError && 'pb-4',
+            ])}
           >
-            <Input
-              type='text'
-              name='email'
-              placeholder='Email'
-              value={email}
-              autoCapitalize='false'
-              onChange={(event) => {
-                setEmail(event.target.value);
-                if (emailError) setEmailError('');
-              }}
-              backgroundColor={'white'}
-            />
+            <InputGroup>
+              <InputLeftAddon>
+                <BiRename />
+              </InputLeftAddon>
+              <Input
+                type='text'
+                name='displayname'
+                placeholder='Display Name'
+                value={displayname}
+                autoCapitalize='false'
+                onChange={(event) => {
+                  setDisplayname(event.target.value);
+                  if (displayNameError) setDisplayNameError('');
+                }}
+                backgroundColor={'white'}
+              />
+            </InputGroup>
+            <div className='[&>div]:mt-1 [&>div]:mb-1 select-none'>
+              <FormErrorMessage>{displayNameError}</FormErrorMessage>
+            </div>
+          </div>
+        </FormControl>
+        <FormControl isInvalid={!!emailError}>
+          <div className={cn(['flex flex-col w-full', !emailError && 'pb-4'])}>
+            <InputGroup>
+              <InputLeftAddon>
+                <BiAt />
+              </InputLeftAddon>
+              <Input
+                type='text'
+                name='email'
+                placeholder='Email'
+                value={email}
+                autoCapitalize='false'
+                onChange={(event) => {
+                  setEmail(event.target.value);
+                  if (emailError) setEmailError('');
+                }}
+                backgroundColor={'white'}
+              />
+            </InputGroup>
             <div className='[&>div]:mt-1 [&>div]:mb-1 select-none'>
               <FormErrorMessage>{emailError}</FormErrorMessage>
             </div>
           </div>
         </FormControl>
-
         <FormControl isInvalid={!!passwordError}>
           <div className='flex flex-col w-full pb-4 '>
             <InputGroup size='md'>
+              <InputLeftAddon>
+                <BiKey />
+              </InputLeftAddon>
               <Popover isOpen={passwordTooltipIsOpen}>
                 <PopoverTrigger>
                   <Input
@@ -260,10 +309,12 @@ const SignUpScreen: React.FC<{}> = () => {
             </div>
           </div>
         </FormControl>
-
         <FormControl isInvalid={!!confirmPassError}>
           <div className='flex flex-col w-full pb-4 '>
             <InputGroup size='md'>
+              <InputLeftAddon>
+                <BiKey />
+              </InputLeftAddon>
               <Input
                 pr='4.5rem'
                 type={showConfirmPass ? 'text' : 'password'}
@@ -291,7 +342,6 @@ const SignUpScreen: React.FC<{}> = () => {
             </div>
           </div>
         </FormControl>
-
         <div className='flex gap-4'>
           <Button
             colorScheme='blue'
@@ -310,7 +360,7 @@ const SignUpScreen: React.FC<{}> = () => {
           </Button>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 export default SignUpScreen;
