@@ -9,7 +9,7 @@
     "build:chrome": "tsc && export BROWSER='chrome' && vite build && rm -rf ../../build/app_chrome && mv chrome ../../build/app_chrome",
     "build:firefox": "tsc && export BROWSER='firefox' && vite build && rm -rf ../../build/app_firefox && mv firefox ../../build/app_firefox",
     "build:chrome:agus": "tsc && vite build",
-    "dev": "concurrently \"npm run nodemon:chrome\" \"npm run nodemon:firefox\" --names chrome,firefox",
+    "dev": "concurrently \"npm run dev:chrome\" \"npm run dev:firefox\" --names chrome,firefox",
     "dev:chrome": "nodemon --exec npm run build:chrome",
     "dev:firefox": "nodemon --exec npm run build:firefox",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
