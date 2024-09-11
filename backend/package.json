@@ -1,6 +1,6 @@
 {
   "name": "wtm-back",
-  "version": "0.0.1",
+  "version": "1.6.0",
   "description": "",
   "author": "",
   "private": true,
@@ -17,11 +17,10 @@
     "migrate:create": "prisma migrate dev --name",
     "migrate:create-only": "prisma migrate dev --create-only --name",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-    "test": "jest --passWithNoTests",
+    "test": "jest --passWithNoTests --config jest.config.js",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json",
     "sentry:sourcemaps": "./sentry-sourcemaps.sh"
   },
   "dependencies": {

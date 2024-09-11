@@ -42,6 +42,7 @@ export class ExplicitFilterService {
   private readonly model = new ChatOpenAI({
     temperature: 0,
     openAIApiKey: appEnv.OPENAI_ACCESS_TOKEN,
+    modelName: 'gpt-4o-mini',
   });
 
   private async isExplicit(content: string): Promise<boolean> {

@@ -21,4 +21,9 @@ export class UpdateUserPreferencesInput {
   @IsOptional()
   @IsBoolean()
   enableExplicitContentFilter: boolean;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsBoolean()
+  enableStopTracking: boolean;
 }

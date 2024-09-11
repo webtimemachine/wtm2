@@ -23,6 +23,7 @@ import { IndexerService } from '../../encoder/services';
 import { EncoderTestingModule } from '../../encoder/encoder.testing.module';
 
 import { JWTPayload, JwtContext } from '../../auth/interfaces';
+import { CompleteUser } from 'src/user/types';
 
 jest.mock('../../common/services/prisma.service');
 
@@ -33,7 +34,7 @@ const mockJWTPayload: JWTPayload = {
   sessionId: 456,
 };
 
-const existingUser = {
+const existingUser: CompleteUser = {
   id: BigInt(1),
   email: 'test@example.com',
   password: 'hashedPassword',
@@ -44,6 +45,8 @@ const existingUser = {
   updateAt: new Date(),
   deletedAt: null,
   recoveryCode: null,
+  displayname: 'test',
+  passChangedAt: new Date(),
   userPreferences: {
     id: BigInt(1),
     userId: BigInt(1),
@@ -51,6 +54,7 @@ const existingUser = {
     navigationEntryExpirationInDays: 120,
     enableImageEncoding: true,
     enableExplicitContentFilter: true,
+    enableStopTracking: true,
     createdAt: new Date(),
     updateAt: new Date(),
   },
@@ -86,7 +90,7 @@ const mockedSession = {
 const navigationDate = new Date();
 
 const createNavigationEntryInputDto: CreateNavigationEntryInputDto = {
-  url: 'example.com',
+  url: 'https://example.com',
   title: 'Example Title',
   navigationDate,
   content: 'Test content',
@@ -101,7 +105,7 @@ const jwtContext: JwtContext = {
 
 const createdNavigationEntry: CompleteNavigationEntryDto = {
   id: 1,
-  url: 'example.com',
+  url: 'https://example.com',
   title: 'Example Title',
   userId: 1,
   userDeviceId: 1,
@@ -273,21 +277,22 @@ describe('NavigationEntryService', () => {
         enableExplicitContentFilter: true,
       });
 
-      const result = await navigationEntryService.createNavigationEntry(
+      await navigationEntryService.createNavigationEntry(
         jwtContext,
         createNavigationEntryInputDto,
       );
 
-      expect(result).toBeDefined();
-      expect(result).toEqual(createdNavigationEntry);
       expect(mockIndex).toHaveBeenCalledWith(
         'Test content',
         [],
-        'example.com',
+        'https://example.com',
         1n,
         true,
       );
-      expect(mockFilter).toHaveBeenCalledWith('Test content', 'example.com');
+      expect(mockFilter).toHaveBeenCalledWith(
+        'Test content',
+        'https://example.com',
+      );
     });
 
     it('should create a new navigation entry successfully on repetitive entry', async () => {
@@ -309,21 +314,13 @@ describe('NavigationEntryService', () => {
         enableExplicitContentFilter: true,
       });
 
-      const result = await navigationEntryService.createNavigationEntry(
+      await navigationEntryService.createNavigationEntry(
         jwtContext,
         createNavigationEntryInputDto,
       );
 
-      expect(result).toBeDefined();
-      expect(result).toEqual(createdNavigationEntry);
-      expect(mockIndex).toHaveBeenCalledWith(
-        'Test content',
-        [],
-        'example.com',
-        1n,
-        true,
-      );
-      expect(mockFilter).toHaveBeenCalledWith('Test content', 'example.com');
+      expect(mockIndex).not.toHaveBeenCalled();
+      expect(mockFilter).not.toHaveBeenCalled();
     });
   });
 

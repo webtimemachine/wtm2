@@ -9,6 +9,7 @@ export default {
   moduleNameMapper: {
     // '\\.(gif|ttf|eot|svg|png)$': '<rootDir>/config/jest/fileMock.ts',
     // '^.+\\.(css|less|scss|sass)$': '<rootDir>/config/jest/styleMock.ts',
+    'react-markdown': '<rootDir>/src/__mocks___/react-markdown.ts',
   },
   setupFilesAfterEnv: ['./config/jest/setupTests.ts'],
   moduleFileExtensions: [

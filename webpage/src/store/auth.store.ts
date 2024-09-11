@@ -18,6 +18,7 @@ interface AuthState {
   partialToken: string;
   recoveryToken: string;
   enabledLiteMode: boolean;
+  enabledStopTracking: boolean;
 }
 
 export interface AuthStore extends AuthState {
@@ -28,6 +29,7 @@ export interface AuthStore extends AuthState {
   notifyRecoveryCodeValidated: () => void;
   updateServerUrl: (serverUrl: string) => void;
   updateEnabledLiteMode: (enabledLiteMode: boolean) => void;
+  updateEnabledStopTracking: (enabledStopTracking: boolean) => void;
 }
 
 export const authStore = createStore<AuthStore>()(
@@ -43,6 +45,7 @@ export const authStore = createStore<AuthStore>()(
       partialToken: '',
       recoveryToken: '',
       enabledLiteMode: false,
+      enabledStopTracking: false,
 
       updateEnabledLiteMode: (enabledLiteMode: boolean) =>
         set(() => {
@@ -122,6 +125,13 @@ export const authStore = createStore<AuthStore>()(
             refreshToken: '',
             partialToken: '',
             recoveryToken: '',
+          };
+        }),
+
+      updateEnabledStopTracking: (enabledStopTracking: boolean) =>
+        set(() => {
+          return {
+            enabledStopTracking,
           };
         }),
     }),
