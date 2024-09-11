@@ -15,7 +15,7 @@ import {
 import { JwtContext } from '../interfaces';
 import { LocalStrategy } from '../strategies';
 import { EmailService, PrismaService } from '../../common/services';
-import { CompleteSession } from '../../user/types';
+import { CompleteSession, CompleteUser } from '../../user/types';
 
 describe('AuthService', () => {
   let authService: AuthService;
@@ -27,7 +27,7 @@ describe('AuthService', () => {
   const accessToken = 'accessToken';
   const refreshToken = 'refreshToken';
 
-  const existingUser = {
+  const existingUser: CompleteUser = {
     id: BigInt(1),
     email: 'test@example.com',
     password: 'hashedPassword',
@@ -38,6 +38,8 @@ describe('AuthService', () => {
     recoveryCode: null,
     verified: true,
     verificationCode: '1234',
+    displayname: 'test',
+    passChangedAt: new Date(),
     userPreferences: {
       id: BigInt(1),
       userId: BigInt(1),
@@ -51,7 +53,7 @@ describe('AuthService', () => {
     },
   };
 
-  const nonVerifiedUser = {
+  const nonVerifiedUser: CompleteUser = {
     id: BigInt(1),
     email: 'test@example.com',
     password: 'hashedPassword',
@@ -62,6 +64,8 @@ describe('AuthService', () => {
     recoveryCode: null,
     verified: false,
     verificationCode: '1234',
+    displayname: 'test',
+    passChangedAt: new Date(),
     userPreferences: {
       id: BigInt(1),
       userId: BigInt(1),
@@ -78,6 +82,7 @@ describe('AuthService', () => {
   const signUpDtoRequest = {
     email: 'test@example.com',
     password: 'password123',
+    displayname: 'test',
   };
 
   const signUpResult = {
@@ -237,6 +242,8 @@ describe('AuthService', () => {
           createdAt: new Date('2024-04-08T16:58:29.000Z'),
           updateAt: new Date('2024-04-08T19:50:40.000Z'),
           deletedAt: null,
+          displayname: 'test',
+          passChangedAt: new Date('2024-04-08T16:58:29.000Z'),
           userPreferences: {
             id: BigInt(1),
             userId: BigInt(1),

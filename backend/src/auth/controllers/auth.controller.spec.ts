@@ -54,6 +54,7 @@ describe('AuthController', () => {
       const signUpDtoRequest = {
         email: 'example@email.com',
         password: '123456',
+        displayname: '',
       };
 
       const signUpResult = {
@@ -147,6 +148,8 @@ describe('AuthController', () => {
           createdAt: new Date(),
           updateAt: new Date(),
           deletedAt: null,
+          displayname: '',
+          passChangedAt: new Date(),
         },
       };
 
@@ -173,6 +176,8 @@ describe('AuthController', () => {
             createdAt: expect.any(Date),
             updateAt: expect.any(Date),
             deletedAt: null,
+            displayname: '',
+            passChangedAt: expect.any(Date),
           },
         }),
         expect.objectContaining({
