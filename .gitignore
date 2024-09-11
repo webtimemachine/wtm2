@@ -2,3 +2,10 @@ app_chrome
 app_firefox
 app_safari
 app/src/coverage
+
+
+# ROOT
+node_modules
+.turbo
+build
+dist
