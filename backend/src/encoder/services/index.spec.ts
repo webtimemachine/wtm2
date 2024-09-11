@@ -3,8 +3,6 @@ import { CommonTestingModule } from '../../common/common.testing.module';
 import { PrismaService } from '../../common/services';
 import { PrismaClient } from '@prisma/client';
 import { WeaviateStore } from '@langchain/weaviate';
-import { Document } from '@langchain/core/documents';
-import { OpenAIEmbeddings } from '@langchain/openai';
 import { IndexerService } from '.';
 import * as utils from '../utils';
 
@@ -89,64 +87,40 @@ describe('Indexer service', () => {
   });
 
   describe('Index data', () => {
-    // it('should index successfully', async () => {
-    //   const expectedData = {
-    //     client: weaviate.client({ scheme: 'http', host: 'localhost:8084' }),
-    //     indexName: 'MultiTenancyCollection',
-    //     metadataKeys: ['source'],
-    //     textKey: 'text',
-    //     tenant: `Tenant-1`,
-    //   };
-    //   const mockWeaviate = jest
-    //     .spyOn(WeaviateStore, 'fromDocuments')
-    //     .mockImplementation();
+    it('should index successfully', async () => {
+      const expectedData = {
+        client: weaviate.client({ scheme: 'http', host: 'localhost:8084' }),
+        indexName: 'MultiTenancyCollection',
+        metadataKeys: ['source'],
+        textKey: 'text',
+        tenant: `Tenant-1`,
+      };
+      const mockWeaviate = jest
+        .spyOn(WeaviateStore, 'fromDocuments')
+        .mockImplementation();
 
-    //   prismaService.navigationEntry.count = jest.fn().mockResolvedValue(0);
+      prismaService.navigationEntry.count = jest.fn().mockResolvedValue(0);
 
-    //   const mockCaption = jest
-    //     .spyOn(utils, 'caption')
-    //     .mockImplementation()
-    //     .mockResolvedValueOnce('image caption 1')
-    //     .mockResolvedValueOnce('image caption 2');
+      const mockCaption = jest
+        .spyOn(utils, 'caption')
+        .mockImplementation()
+        .mockResolvedValueOnce('image caption 1')
+        .mockResolvedValueOnce('image caption 2');
 
-    //   await indexerService.index(
-    //     'Test.Content',
-    //     ['imageURL 1', 'imageURL 2'],
-    //     'example.com',
-    //     1n,
-    //     true,
-    //   );
+      await indexerService.index(
+        'Test.Content',
+        ['imageURL 1', 'imageURL 2'],
+        'example.com',
+        1n,
+        true,
+      );
 
-    //   expect(mockCaption).toHaveBeenCalledTimes(2);
-    //   expect(mockCaption).toHaveBeenCalledWith('imageURL 1');
-    //   expect(mockCaption).toHaveBeenCalledWith('imageURL 2');
-    //   expect(mockWeaviate).toHaveBeenCalledWith(
-    //     [
-    //       new Document({
-    //         pageContent: 'Test.Content',
-    //         metadata: {
-    //           loc: { lines: { from: 1, to: 1 } },
-    //           source: 'example.com',
-    //         },
-    //       }),
-    //       new Document({
-    //         pageContent: 'image caption 1',
-    //         metadata: {
-    //           source: 'example.com',
-    //         },
-    //       }),
-    //       new Document({
-    //         pageContent: 'image caption 2',
-    //         metadata: {
-    //           source: 'example.com',
-    //         },
-    //       }),
-    //     ],
-    //     expect.any(OpenAIEmbeddings),
-    //     expectedData,
-    //   );
-    //   mockWeaviate.mockRestore();
-    // });
+      expect(mockCaption).toHaveBeenCalledTimes(2);
+      expect(mockCaption).toHaveBeenCalledWith('imageURL 1');
+      expect(mockCaption).toHaveBeenCalledWith('imageURL 2');
+      expect(mockWeaviate).toHaveBeenCalled();
+      mockWeaviate.mockRestore();
+    });
 
     it('should not index', async () => {
       const mockWeaviate = jest

@@ -56,7 +56,6 @@ const RelevantSegment = ({ relevantSegment }: { relevantSegment: string }) => {
   return (
     <div>
       <p className='font-semibold mb-4'>Most relevant match</p>
-      <p className='text-xs'></p>
       <div className='markdown-content'>
         <Markdown>{markdown}</Markdown>
       </div>
