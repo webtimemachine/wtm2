@@ -10,6 +10,7 @@ import { PaginationResponse } from '../../common/dtos';
 import { PrismaService } from '../../common/services';
 
 import { JWTPayload, JwtContext } from '../../auth/interfaces';
+import { CompleteUser } from 'src/user/types';
 
 jest.mock('../../common/services/prisma.service');
 
@@ -26,7 +27,7 @@ const queryParams = {
   query: 'foobar',
 };
 
-const existingUser = {
+const existingUser: CompleteUser = {
   id: BigInt(1),
   email: 'test@example.com',
   password: 'hashedPassword',
@@ -37,6 +38,8 @@ const existingUser = {
   updateAt: new Date(),
   deletedAt: null,
   recoveryCode: null,
+  displayname: 'test',
+  passChangedAt: new Date(),
   userPreferences: {
     id: BigInt(1),
     userId: BigInt(1),
@@ -44,6 +47,7 @@ const existingUser = {
     navigationEntryExpirationInDays: 120,
     enableImageEncoding: true,
     enableExplicitContentFilter: true,
+    enableStopTracking: true,
     createdAt: new Date(),
     updateAt: new Date(),
   },

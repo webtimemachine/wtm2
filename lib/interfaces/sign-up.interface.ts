@@ -1,5 +1,6 @@
 export interface SignUpData {
   email: string;
+  displayname: string;
   password: string;
 }
 

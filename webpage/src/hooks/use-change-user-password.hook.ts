@@ -1,16 +1,16 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useToast } from '@chakra-ui/react';
 
 import { apiClient } from '../utils/api.client';
 import { useHandleSessionExpired } from '.';
-import { ChangeUserPassword } from '@/interfaces/change-user-password.interface';
+import { ChangeUserPassword } from 'wtm-lib/interfaces';
 
 export const useChangeUserPassword = () => {
   const toast = useToast();
+  const queryClient = useQueryClient();
 
   const { handleSessionExpired } = useHandleSessionExpired();
   apiClient.setHandleSessionExpired(handleSessionExpired);
-
   const changeUserPasswordMutation = useMutation({
     mutationFn: (data: ChangeUserPassword) =>
       apiClient.changeUserPassword(data),
@@ -21,6 +21,9 @@ export const useChangeUserPassword = () => {
         status: 'success',
         duration: 3000,
         isClosable: true,
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['getBasicUserInformationQuery'],
       });
     },
     onError: () => {

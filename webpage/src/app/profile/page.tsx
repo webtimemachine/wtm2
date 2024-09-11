@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 
-import { useGetBasicUserIngormation } from '../../hooks/use-get-user-basic-information.hook';
+import { useGetBasicUserInformation } from '../../hooks/use-get-user-basic-information.hook';
 import {
   Avatar,
   Badge,
@@ -21,19 +21,27 @@ import {
   ModalHeader,
   ModalOverlay,
   Spinner,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
   Text,
+  Tooltip,
   useDisclosure,
 } from '@chakra-ui/react';
 
 import React from 'react';
 import CustomInputBox from './components/CustomInputBox';
-import { useChangeUserPassword } from '@/hooks/use-change-user-password.hook';
-import { BsKey } from 'react-icons/bs';
+import { useChangeUserPassword } from '../../hooks/use-change-user-password.hook';
+import { BsKey, BsPerson } from 'react-icons/bs';
+import { useChangeUserDisplayName } from '../../hooks/use-change-user-displayname.hook';
+import { relativeTime } from '../../utils';
 
 const ProfileScreen: React.FC<object> = () => {
-  const { basicUserInformationQuery } = useGetBasicUserIngormation();
+  const { basicUserInformationQuery } = useGetBasicUserInformation();
   const { changeUserPasswordMutation } = useChangeUserPassword();
-
+  const { changeUserDisplayNameMutation } = useChangeUserDisplayName();
   const user = basicUserInformationQuery.data;
 
   const ChangePasswordModal = () => {
@@ -134,10 +142,9 @@ const ProfileScreen: React.FC<object> = () => {
             </ModalBody>
 
             <ModalFooter>
-              <div className='flex w-full justify-center md:justify-end'>
+              <div className='flex w-full flex-col space-y-2 md:flex-row md:justify-end md:space-y-0 md:space-x-3'>
                 <Button
                   colorScheme='blue'
-                  mr={3}
                   onClick={handleSubmit}
                   disabled={isError}
                 >
@@ -154,8 +161,107 @@ const ProfileScreen: React.FC<object> = () => {
     );
   };
 
+  const ChangeDisplayNameModal = () => {
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const [newDisplayName, setNewDisplayName] = useState('');
+    const isError =
+      newDisplayName === basicUserInformationQuery.data?.displayname;
+    const handleNewDisplaynameChange = (e: {
+      target: { value: React.SetStateAction<string> };
+    }) => setNewDisplayName(e.target.value);
+    useEffect(() => {
+      if (!isOpen) {
+        setNewDisplayName('');
+      }
+    }, [isOpen]);
+    const verifyFields = () => {
+      return (
+        newDisplayName &&
+        newDisplayName.length > 3 &&
+        newDisplayName != basicUserInformationQuery.data?.displayname
+      );
+    };
+    const handleSubmit = () => {
+      if (verifyFields()) {
+        changeUserDisplayNameMutation.mutate({
+          displayname: newDisplayName,
+        });
+      }
+    };
+
+    return (
+      <>
+        <Button
+          size='sm'
+          onClick={onOpen}
+          className='flex justify-between items-center gap-2'
+        >
+          <BsPerson /> Change display name
+        </Button>
+
+        <Modal
+          isOpen={isOpen}
+          onClose={onClose}
+          size={{ base: 'full', md: 'md' }}
+        >
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Change the displayname</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <FormControl isInvalid={isError}>
+                <FormLabel>Actual Displayname</FormLabel>
+                <Input
+                  type='text'
+                  value={basicUserInformationQuery.data?.displayname}
+                  disabled
+                />
+                <Divider my={2} />
+                <FormLabel>New Displayname</FormLabel>
+                <Input
+                  type='text'
+                  value={newDisplayName}
+                  onChange={handleNewDisplaynameChange}
+                />
+                {!isError ? (
+                  <FormHelperText>
+                    Displayname must be different to actual displayname.
+                  </FormHelperText>
+                ) : (
+                  <FormErrorMessage>
+                    {'Displayname must be different to actual displayname.'}
+                  </FormErrorMessage>
+                )}
+              </FormControl>
+            </ModalBody>
+
+            <ModalFooter>
+              <div className='flex w-full flex-col space-y-2 md:flex-row md:justify-end md:space-y-0 md:space-x-3'>
+                <Button
+                  colorScheme='blue'
+                  onClick={handleSubmit}
+                  disabled={isError}
+                >
+                  Change
+                </Button>
+                <Button variant='ghost' onClick={onClose}>
+                  Close
+                </Button>
+              </div>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+      </>
+    );
+  };
   const ProfileCard = () => {
-    const username = user?.email?.split('@')?.[0];
+    const username = basicUserInformationQuery.data?.displayname;
+    const relativeTimeLabel =
+      basicUserInformationQuery.data &&
+      relativeTime(
+        new Date(),
+        new Date(basicUserInformationQuery.data?.passChangedAt),
+      );
     return (
       <div className='bg-white p-6 rounded-lg shadow-lg w-full'>
         <div className='flex justify-between '>
@@ -192,20 +298,58 @@ const ProfileScreen: React.FC<object> = () => {
         </div>
 
         <div className='flex justify-center w-full pt-5'>
-          <ChangePasswordModal />
-        </div>
-        <div className='relative py-10'>
-          <Divider />
-          <Text className='absolute inset-x-0 px-4 font-light text-xs text-center'>
-            Personal Information
-          </Text>
-        </div>
-        <div className='flex justify-between flex-wrap gap-5'>
-          <CustomInputBox
-            width={'40%'}
-            label={'Email'}
-            value={user?.email || ''}
-          />
+          <Tabs w={'100%'} variant='enclosed'>
+            <TabList>
+              <Tab>Personal Information</Tab>
+              <Tab>Actions</Tab>
+            </TabList>
+            <TabPanels>
+              <TabPanel>
+                <div className='flex justify-between flex-wrap gap-5'>
+                  <CustomInputBox label={'Email'} value={user?.email || ''} />
+                  <CustomInputBox
+                    label={'Display Name'}
+                    value={user?.displayname || ''}
+                  />
+                  <CustomInputBox
+                    label={`Last password change (${relativeTimeLabel})`}
+                    value={
+                      user?.passChangedAt
+                        ? typeof user.passChangedAt === 'string'
+                          ? new Date(user.passChangedAt).toLocaleTimeString(
+                              'es-AR',
+                              {
+                                hour12: false,
+                              },
+                            ) +
+                            ' ' +
+                            new Date(user.passChangedAt)
+                              .toLocaleDateString('es-AR')
+                              .split('/')
+                              .reverse()
+                              .join('/')
+                          : user.passChangedAt.toLocaleTimeString('es-AR', {
+                              hour12: false,
+                            }) +
+                            ' ' +
+                            user.passChangedAt
+                              .toLocaleDateString('es-AR')
+                              .split('/')
+                              .reverse()
+                              .join('/')
+                        : ''
+                    }
+                  />
+                </div>
+              </TabPanel>
+              <TabPanel>
+                <div className='flex flex-col justify-start gap-5'>
+                  <ChangePasswordModal />
+                  <ChangeDisplayNameModal />
+                </div>
+              </TabPanel>
+            </TabPanels>
+          </Tabs>
         </div>
       </div>
     );

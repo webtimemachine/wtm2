@@ -123,7 +123,7 @@ export class AuthService {
   }
 
   async signup(requestSignupDto: SignUpRequestDto): Promise<SignUpResponseDto> {
-    const { password, email } = requestSignupDto;
+    const { password, email, displayname: displayname } = requestSignupDto;
     const hashedPassword = hashValue(password);
     const verificationCode = generateNumericCode(6);
 
@@ -135,6 +135,7 @@ export class AuthService {
               email,
               verificationCode: hashValue(verificationCode),
               verified: false,
+              displayname: displayname,
               password: hashedPassword,
               userType: UserType.MEMBER,
               userPreferences: {
@@ -344,22 +345,9 @@ export class AuthService {
   async refreshToken(context: JwtRefreshContext): Promise<RefreshResponseDto> {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { iat, exp, ...rest } = context.payload;
+    const { refreshToken } = context;
     const accessToken = this.buildAccessToken(rest);
-    const refreshToken = this.buildRefreshToken({ ...rest, exp });
 
-    const { exp: expiration } = this.jwtService.decode(refreshToken) as {
-      exp: number;
-    };
-
-    await this.prismaService.session.update({
-      where: {
-        id: rest.sessionId,
-      },
-      data: {
-        expiration: new Date(expiration * 1000),
-        refreshToken: this.hashIt(refreshToken),
-      },
-    });
     return plainToInstance(RefreshResponseDto, {
       accessToken,
       refreshToken,
@@ -711,6 +699,27 @@ export class AuthService {
         data: {
           recoveryCode: null,
           password: hashedPassword,
+          passChangedAt: new Date(),
+        },
+        include: completeUserInclude,
+      });
+
+      return { updatedUser };
+    });
+  }
+  async updateDisplayName(
+    jwtContext: JwtContext,
+    newDisplayName: string,
+  ): Promise<void> {
+    const { user } = jwtContext;
+
+    await this.prismaService.$transaction(async (prismaClient) => {
+      const updatedUser: CompleteUser = await prismaClient.user.update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          displayname: newDisplayName,
         },
         include: completeUserInclude,
       });

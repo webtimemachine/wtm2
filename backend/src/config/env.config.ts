@@ -34,6 +34,7 @@ const envSchemas = {
   WEAVIATE_API_KEY: z.string().default('api-key'),
   SENTRY_DSN: z.string().optional(),
   SENTRY_AUTH_TOKEN: z.string().optional(),
+  AVOID_DOMAIN_LIST: z.string().optional(),
 };
 
 const envSchema = z.object({

@@ -12,12 +12,14 @@ import {
   useDisclosure,
   FormErrorMessage,
   Tooltip,
+  InputLeftAddon,
 } from '@chakra-ui/react';
 import { Icon, InfoIcon } from '@chakra-ui/icons';
 import { LuLogIn } from 'react-icons/lu';
 
 import { useAuthStore, useNavigation } from '@/store';
 import { useRestorePassword } from '@/hooks';
+import { BiKey } from 'react-icons/bi';
 
 const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[^\s]{8,20}$/;
 const passwordRegexMessage =
@@ -93,8 +95,8 @@ const RecoveryNewPassword: React.FC<{}> = () => {
   }, [restorePasswordMutation.isSuccess]);
 
   return (
-    <>
-      <div className='flex flex-col p-8 pt-10 items-center w-full'>
+    <div className='flex justify-center items-center h-screen'>
+      <div className='flex flex-col p-3 md:p-8 py-10 items-center md:h-1/3 max-w-6xl min-w-[360px] w-1/3 md:min-h-[500px] bg-white rounded-md shadow-2xl transition-shadow filter drop-shadow'>
         <div className='flex w-full justify-start pb-4 gap-4 items-center'>
           <IconButton aria-label='Back icon'>
             <Icon
@@ -123,6 +125,9 @@ const RecoveryNewPassword: React.FC<{}> = () => {
         <FormControl isInvalid={!!passwordError}>
           <div className='flex flex-col w-full pb-4'>
             <InputGroup size='md'>
+              <InputLeftAddon>
+                <BiKey />
+              </InputLeftAddon>
               <Input
                 pr='4.5rem'
                 type={showPass ? 'text' : 'password'}
@@ -171,6 +176,9 @@ const RecoveryNewPassword: React.FC<{}> = () => {
         <FormControl isInvalid={!!confirmPassError}>
           <div className='flex flex-col w-full pb-4'>
             <InputGroup size='md'>
+              <InputLeftAddon>
+                <BiKey />
+              </InputLeftAddon>
               <Input
                 pr='4.5rem'
                 type={showConfirmPass ? 'text' : 'password'}
@@ -216,7 +224,7 @@ const RecoveryNewPassword: React.FC<{}> = () => {
           </Button>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 export default RecoveryNewPassword;

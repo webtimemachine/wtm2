@@ -15,4 +15,12 @@ export class UserDto {
   @ApiProperty()
   @Expose()
   email: string;
+
+  @ApiProperty()
+  @Expose()
+  displayname: string;
+
+  @ApiProperty()
+  @Expose()
+  passChangedAt: Date;
 }
