@@ -1,9 +1,9 @@
-name: Run Jest tests on backend
+name: Run Backend Tests
 
 on:
   pull_request:
     branches: ['develop']
-    paths: ['backend/**']
+    paths: ['apps/backend/**']
 
 jobs:
   test:
