@@ -88,13 +88,13 @@ describe('Indexer service', () => {
 
   describe('Index data', () => {
     it('should index successfully', async () => {
-      const expectedData = {
-        client: weaviate.client({ scheme: 'http', host: 'localhost:8084' }),
-        indexName: 'MultiTenancyCollection',
-        metadataKeys: ['source'],
-        textKey: 'text',
-        tenant: `Tenant-1`,
-      };
+      // const expectedData = {
+      //   client: weaviate.client({ scheme: 'http', host: 'localhost:8084' }),
+      //   indexName: 'MultiTenancyCollection',
+      //   metadataKeys: ['source'],
+      //   textKey: 'text',
+      //   tenant: `Tenant-1`,
+      // };
       const mockWeaviate = jest
         .spyOn(WeaviateStore, 'fromDocuments')
         .mockImplementation();
