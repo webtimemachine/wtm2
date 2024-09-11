@@ -35,9 +35,11 @@ export class JWTRefreshStrategy extends PassportStrategy(
         payload,
         refreshToken,
       );
+
       return {
         payload,
         user,
+        refreshToken,
       };
     } catch (err) {
       throw new UnauthorizedException();
