@@ -29,7 +29,7 @@ import { CompleteUser } from '../../user/types';
 import { IndexerService } from '../../encoder/services';
 import { QueryService } from '../../query/services';
 import { ExplicitFilterService } from '../../filter/services';
-import { appEnv } from 'src/config';
+import { appEnv } from '../../config';
 
 @Injectable()
 export class NavigationEntryService {
