@@ -345,22 +345,9 @@ export class AuthService {
   async refreshToken(context: JwtRefreshContext): Promise<RefreshResponseDto> {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { iat, exp, ...rest } = context.payload;
+    const { refreshToken } = context;
     const accessToken = this.buildAccessToken(rest);
-    const refreshToken = this.buildRefreshToken({ ...rest, exp });
 
-    const { exp: expiration } = this.jwtService.decode(refreshToken) as {
-      exp: number;
-    };
-
-    await this.prismaService.session.update({
-      where: {
-        id: rest.sessionId,
-      },
-      data: {
-        expiration: new Date(expiration * 1000),
-        refreshToken: this.hashIt(refreshToken),
-      },
-    });
     return plainToInstance(RefreshResponseDto, {
       accessToken,
       refreshToken,
