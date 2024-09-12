@@ -319,8 +319,14 @@ describe('NavigationEntryService', () => {
         createNavigationEntryInputDto,
       );
 
-      expect(mockIndex).not.toHaveBeenCalled();
-      expect(mockFilter).not.toHaveBeenCalled();
+      expect(mockIndex).toHaveBeenCalledWith(
+        'Test content',
+        [],
+        'example.com',
+        1n,
+        true,
+      );
+      expect(mockFilter).toHaveBeenCalledWith('Test content', 'example.com');
     });
   });
 
