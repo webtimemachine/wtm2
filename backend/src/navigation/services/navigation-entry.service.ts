@@ -117,9 +117,49 @@ export class NavigationEntryService {
     jwtContext: JwtContext,
     createNavigationEntryInputDto: CreateNavigationEntryInputDto,
   ): Promise<void> {
+    const domains = appEnv.AVOID_DOMAIN_LIST;
+    const noTrackingDomains = (domains && domains.split(', ')) || [];
+
+    const { hostname } = new URL(createNavigationEntryInputDto.url);
+
+    if (hostname && noTrackingDomains.includes(hostname)) return;
+
     const { content, images, ...entryData } = createNavigationEntryInputDto;
 
     const liteMode = !content;
+
+    if (!liteMode) {
+      const userPreference = await this.prismaService.userPreferences.findFirst(
+        {
+          where: {
+            userId: jwtContext.user.id,
+          },
+          select: {
+            enableImageEncoding: true,
+            enableExplicitContentFilter: true,
+          },
+        },
+      );
+      if (userPreference?.enableExplicitContentFilter) {
+        await this.explicitFilter.filter(
+          content!,
+          createNavigationEntryInputDto.url,
+        );
+      }
+      try {
+        await this.indexerService.index(
+          content!,
+          images,
+          createNavigationEntryInputDto.url,
+          jwtContext.user.id,
+          userPreference?.enableImageEncoding || false,
+        );
+      } catch (error) {
+        this.logger.error(
+          `An error occurred indexing '${createNavigationEntryInputDto.url}'. Cause: ${error.message}`,
+        );
+      }
+    }
 
     const lastEntry = await this.prismaService.navigationEntry.findFirst({
       where: {
@@ -144,53 +184,15 @@ export class NavigationEntryService {
         include: completeNavigationEntryInclude,
       });
     } else {
-      const domains = appEnv.AVOID_DOMAIN_LIST;
-      const noTrackingDomains = (domains && domains.split(', ')) || [];
-
-      const { hostname } = new URL(createNavigationEntryInputDto.url);
-      if (hostname && !noTrackingDomains.includes(hostname)) {
-        await this.prismaService.navigationEntry.create({
-          data: {
-            liteMode,
-            userId: jwtContext.user.id,
-            userDeviceId: jwtContext.session.userDeviceId,
-            ...entryData,
-          },
-          include: completeNavigationEntryInclude,
-        });
-
-        if (!liteMode) {
-          const userPreference =
-            await this.prismaService.userPreferences.findFirst({
-              where: {
-                userId: jwtContext.user.id,
-              },
-              select: {
-                enableImageEncoding: true,
-                enableExplicitContentFilter: true,
-              },
-            });
-          if (userPreference?.enableExplicitContentFilter) {
-            await this.explicitFilter.filter(
-              content!,
-              createNavigationEntryInputDto.url,
-            );
-          }
-          try {
-            await this.indexerService.index(
-              content!,
-              images,
-              createNavigationEntryInputDto.url,
-              jwtContext.user.id,
-              userPreference?.enableImageEncoding || false,
-            );
-          } catch (error) {
-            this.logger.error(
-              `An error occurred indexing '${createNavigationEntryInputDto.url}'. Cause: ${error.message}`,
-            );
-          }
-        }
-      }
+      await this.prismaService.navigationEntry.create({
+        data: {
+          liteMode,
+          userId: jwtContext.user.id,
+          userDeviceId: jwtContext.session.userDeviceId,
+          ...entryData,
+        },
+        include: completeNavigationEntryInclude,
+      });
     }
 
     return;
