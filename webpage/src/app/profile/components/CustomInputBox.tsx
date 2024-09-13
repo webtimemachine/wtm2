@@ -41,7 +41,13 @@ const CustomInputBox: React.FC<CustomInputBoxProps> = ({
   };
 
   return (
-    <Box width={{ base: '45%', full: '100%' }}>
+    <Box
+      sx={{
+        display: 'flex',
+        width: '100%',
+        flexDirection: 'column',
+      }}
+    >
       <Text>{label}:</Text>
       <Divider mb={2} />
       <InputGroup>
