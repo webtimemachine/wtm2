@@ -1,7 +1,14 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { Text, IconButton, Input, Divider, Badge } from '@chakra-ui/react';
+import {
+  Text,
+  IconButton,
+  Input,
+  Divider,
+  Badge,
+  Spinner,
+} from '@chakra-ui/react';
 import { EditIcon, CheckIcon, CloseIcon, Icon } from '@chakra-ui/icons';
 import { MdLogout } from 'react-icons/md';
 
@@ -42,8 +49,6 @@ const ActiveSessionsScreen: React.FC<object> = () => {
 
   useEffect(() => {
     if (getActiveSessionsQuery.isSuccess && getActiveSessionsQuery.data) {
-      console.log('getActiveSessionsQuery.data', getActiveSessionsQuery.data);
-
       setSessions(moveCurrentSessionToFirst(getActiveSessionsQuery.data));
     }
   }, [getActiveSessionsQuery]);
@@ -174,25 +179,28 @@ const ActiveSessionsScreen: React.FC<object> = () => {
             </>
           )}
         </div>
-        {/* {isCurrentDevice && <Divider className='pt-2' />} */}
       </div>
     );
   };
 
   const [currentSession, ...restSessions] = sessions;
-  if (currentSession || restSessions) {
-    return (
-      <div className='flex flex-col h-full'>
-        <div className='flex w-full justify-start pb-4 gap-4 items-center'>
-          <div className='flex flex-col leading-none w-full justify-center items-center px-0 md:px-[40px] h-[40px]'>
-            <Text
-              fontSize={{ base: 'x-large', md: 'xx-large' }}
-              fontWeight={'bold'}
-            >
-              Active Sessions
-            </Text>
-          </div>
+  return (
+    <div className='flex flex-col h-full'>
+      <div className='flex w-full justify-start pb-4 gap-4 items-center'>
+        <div className='flex flex-col leading-none w-full justify-center items-center px-0 md:px-[40px] h-[40px]'>
+          <Text
+            fontSize={{ base: 'x-large', md: 'xx-large' }}
+            fontWeight={'bold'}
+          >
+            Active Sessions
+          </Text>
         </div>
+      </div>
+      {getActiveSessionsQuery.isLoading ? (
+        <div className='flex w-full h-full items-center justify-center'>
+          <Spinner size={'lg'} />
+        </div>
+      ) : (
         <div className='flex flex-col w-full h-full'>
           <Text fontSize={'medium'}>
             Below you can see the complete list of active sessions:
@@ -211,13 +219,8 @@ const ActiveSessionsScreen: React.FC<object> = () => {
               ))}
           </div>
         </div>
-      </div>
-    );
-  } else {
-    <div className='flex justify-center items-center  w-full h-1/2'>
-      Loading
-      {/**TODO: Hay que revisar si esto ayuda a renderear la pantalla y no dejar al usuario esperando. */}
-    </div>;
-  }
+      )}
+    </div>
+  );
 };
 export default ActiveSessionsScreen;
