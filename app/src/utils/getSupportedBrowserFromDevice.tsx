@@ -6,14 +6,15 @@ export type SupportedBrowser =
   | 'Safari'
   | 'Edge'
   | 'Brave'
-  | 'Unknown';
+  | 'Unknown'
+  | 'iOS App';
 
 export const getSupportedBrowserFromDevice = (
   device: Device,
 ): SupportedBrowser => {
   const browserName = device.uaResult?.browser.name;
   let userAgentData: any = {};
-
+  console.log(device);
   try {
     userAgentData = JSON.parse(device?.userAgentData || '{}');
   } catch (error) {
@@ -38,6 +39,11 @@ export const getSupportedBrowserFromDevice = (
   if (browserName && browserName === 'Safari') return 'Safari';
   if (browserName && browserName === 'Mobile Safari') return 'Safari';
   if (browserName && browserName === 'Edge') return 'Edge';
+  if (
+    device?.uaResult?.device?.model?.includes('iPhone') &&
+    device?.uaResult?.device.type === 'mobile'
+  )
+    return 'iOS App';
 
   return 'Unknown';
 };
