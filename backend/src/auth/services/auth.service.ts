@@ -691,6 +691,7 @@ export class AuthService {
           },
         },
       });
+      const updatedChangedAtDate = new Date();
 
       const updatedUser: CompleteUser = await prismaClient.user.update({
         where: {
@@ -699,11 +700,10 @@ export class AuthService {
         data: {
           recoveryCode: null,
           password: hashedPassword,
-          passChangedAt: new Date(),
+          passChangedAt: updatedChangedAtDate,
         },
         include: completeUserInclude,
       });
-
       return { updatedUser };
     });
   }

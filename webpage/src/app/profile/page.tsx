@@ -258,12 +258,14 @@ const ProfileScreen: React.FC<object> = () => {
     const username = basicUserInformationQuery.data?.displayname;
     const relativeTimeLabel =
       basicUserInformationQuery.data &&
-      relativeTime(
-        new Date(),
-        new Date(basicUserInformationQuery.data?.passChangedAt),
-      );
+      basicUserInformationQuery.data?.passChangedAt
+        ? relativeTime(
+            new Date(),
+            new Date(basicUserInformationQuery.data?.passChangedAt),
+          )
+        : 'Never';
     return (
-      <div className='bg-white p-6 rounded-lg shadow-lg w-full'>
+      <div className='bg-white md:p-6 px-2 py-3 rounded-lg shadow-lg w-full sm:max-w-screen'>
         <div className='flex justify-between '>
           <div className='flex flex-col items-center md:flex-row md:items-start w-full gap-2'>
             <Avatar
