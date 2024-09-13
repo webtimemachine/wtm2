@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Text, IconButton, Input, Divider, Badge } from '@chakra-ui/react';
+import {
+  Text,
+  IconButton,
+  Input,
+  Divider,
+  Badge,
+  Spinner,
+} from '@chakra-ui/react';
 import {
   ArrowBackIcon,
   EditIcon,
@@ -78,7 +85,7 @@ export const ActiveSessionsScreen: React.FC<object> = () => {
     );
     const isCurrentDevice = session.userDevice.isCurrentDevice;
 
-    let name = deviceAlias || `${browserName} - ${deviceModel || osName} `;
+    const name = deviceAlias || `${browserName} - ${deviceModel || osName} `;
 
     const handleCloseActiveSession = () => {
       closeActiveSessionMutation.mutate({
@@ -176,7 +183,6 @@ export const ActiveSessionsScreen: React.FC<object> = () => {
             </>
           )}
         </div>
-        {/* {isCurrentDevice && <Divider className='pt-2' />} */}
       </div>
     );
   };
@@ -196,24 +202,30 @@ export const ActiveSessionsScreen: React.FC<object> = () => {
             </Text>
           </div>
         </div>
-        <div className='flex flex-col w-full h-full'>
-          <Text fontSize={'medium'}>
-            Below you can see the complete list of active sessions:
-          </Text>
-
-          {currentSession && (
-            <div className='pt-5 pr-3'>
-              <ActiveSessionRow session={currentSession} />
-            </div>
-          )}
-          <Divider className='my-2' />
-          <div className='flex flex-col gap-2 w-full h-full overflow-y-auto scrollbar pr-1'>
-            {restSessions &&
-              restSessions.map((session) => (
-                <ActiveSessionRow session={session} />
-              ))}
+        {getActiveSessionsQuery.isLoading ? (
+          <div className='flex w-full h-full items-center justify-center'>
+            <Spinner size={'lg'} />
           </div>
-        </div>
+        ) : (
+          <div className='flex flex-col w-full h-full'>
+            <Text fontSize={'medium'}>
+              Below you can see the complete list of active sessions:
+            </Text>
+
+            {currentSession && (
+              <div className='pt-5 pr-3'>
+                <ActiveSessionRow session={currentSession} />
+              </div>
+            )}
+            <Divider className='my-2' />
+            <div className='flex flex-col gap-2 w-full h-full overflow-y-auto scrollbar pr-1'>
+              {restSessions &&
+                restSessions.map((session) => (
+                  <ActiveSessionRow session={session} />
+                ))}
+            </div>
+          </div>
+        )}
       </div>
     </>
   );
