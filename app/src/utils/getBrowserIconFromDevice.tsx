@@ -6,6 +6,7 @@ import {
   FaEdge,
   FaSafari,
   FaBrave,
+  FaApple,
 } from 'react-icons/fa6';
 import { getSupportedBrowserFromDevice } from '.';
 
@@ -27,6 +28,9 @@ export const getBrowserIconFromDevice = (device: Device) => {
 
     case 'Brave':
       return FaBrave;
+
+    case 'iOS App':
+      return FaApple;
 
     case 'Unknown':
       return FaEarthAmericas;
