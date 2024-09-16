@@ -23,7 +23,7 @@ import { IndexerService } from '../../encoder/services';
 import { EncoderTestingModule } from '../../encoder/encoder.testing.module';
 
 import { JWTPayload, JwtContext } from '../../auth/interfaces';
-import { CompleteUser } from 'src/user/types';
+import { CompleteUser } from '../../user/types';
 
 jest.mock('../../common/services/prisma.service');
 
