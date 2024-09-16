@@ -190,7 +190,7 @@ export const MainLayout: React.FC<Props> = ({ children }) => {
         <SideCard />
       </div>
 
-      <div className='flex flex-col w-full mx-auto max-w-[900px] px-5'>
+      <div className='flex flex-col w-full mx-auto max-w-[900px]'>
         {children}
       </div>
     </div>

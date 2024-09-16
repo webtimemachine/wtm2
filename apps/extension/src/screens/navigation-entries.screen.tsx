@@ -111,7 +111,7 @@ const NavigationEntry = ({
             </Text>
           </div>
         </div>
-        <div className='space-x-2'>
+        <div className='space-x-2 flex items-center justify-center'>
           {element.relevantSegment && (
             <IconButton
               aria-label={

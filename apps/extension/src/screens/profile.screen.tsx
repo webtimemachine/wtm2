@@ -260,10 +260,12 @@ export const ProfileScreen: React.FC<object> = () => {
     const username = basicUserInformationQuery.data?.displayname;
     const relativeTimeLabel =
       basicUserInformationQuery.data &&
-      relativeTime(
-        new Date(),
-        new Date(basicUserInformationQuery.data?.passChangedAt),
-      );
+      basicUserInformationQuery.data?.passChangedAt
+        ? relativeTime(
+            new Date(),
+            new Date(basicUserInformationQuery.data?.passChangedAt),
+          )
+        : 'Never';
     return (
       <div className='bg-white p-6 rounded-lg shadow-lg w-full'>
         <div className='flex justify-between '>
