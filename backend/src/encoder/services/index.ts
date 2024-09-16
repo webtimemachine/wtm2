@@ -37,6 +37,15 @@ export class IndexerService {
         .withClass({
           class: this.multitenantCollection,
           multiTenancyConfig: { enabled: true },
+          vectorIndexConfig: {
+            efConstruction: 512,
+            invertedIndexConfig: {
+              bm25: {
+                b: 0.75,
+                k1: 1.2,
+              },
+            },
+          },
         })
         .do();
       this.logger.log('Creating main multitenancy collection');
