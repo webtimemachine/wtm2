@@ -122,16 +122,16 @@ const refreshAccessToken = async () => {
     if (isAccessTokenExpired && !isRefreshTokenExpired) {
       await apiClient.refresh();
 
-      chrome.action.setIcon({
+      chrome?.action?.setIcon({
         path: defaultIcons,
       });
     } else {
-      chrome.action.setIcon({
+      chrome?.action?.setIcon({
         path: grayScaleIcons,
       });
     }
   } catch (error) {
-    chrome.action.setIcon({
+    chrome?.action?.setIcon({
       path: grayScaleIcons,
     });
     console.error(`Unexpected Error in windows onFocusChanged:`, error);
