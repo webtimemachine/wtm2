@@ -11,7 +11,7 @@ build
 dist
 
 #OLD FOLDERS
-app
-app_ios
-backend
-webpage
+./app
+./app_ios
+./backend
+./webpage
