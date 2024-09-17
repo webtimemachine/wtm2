@@ -109,7 +109,7 @@ const LoginScreen: React.FC<{}> = () => {
                 name='email'
                 placeholder='Email'
                 value={email}
-                autoCapitalize='false'
+                autoCapitalize={'off'}
                 onChange={(event) => {
                   setEmail(event.target.value);
                   if (emailError) setEmailError('');
