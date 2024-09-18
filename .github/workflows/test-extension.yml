@@ -1,9 +1,9 @@
-name: Run extension tests and build
+name: Run Extension Tests
 
 on:
   pull_request:
     branches: ['develop']
-    paths: ['app/**']
+    paths: ['apps/extension/**']
 
 jobs:
   testcheck:

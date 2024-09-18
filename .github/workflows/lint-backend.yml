@@ -1,4 +1,4 @@
-name: Run ESLint on backend
+name: Run Backend Lint
 
 on:
   pull_request:
