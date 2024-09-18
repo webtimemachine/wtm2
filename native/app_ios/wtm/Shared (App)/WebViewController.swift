@@ -15,8 +15,9 @@ class WebViewController: UIViewController, WKScriptMessageHandler, WKUIDelegate 
         config.userContentController = contentController
         
         // Configura la webView con la configuración deseada
-        webView.configuration.userContentController = contentController
-        self.webView.scrollView.isScrollEnabled = false
+        self.webView = WKWebView(frame: self.view.frame, configuration: config)
+                
+        self.view.addSubview(self.webView)
 
         // Delegate the webview's uiDelegate
         self.webView.uiDelegate = self
@@ -24,7 +25,7 @@ class WebViewController: UIViewController, WKScriptMessageHandler, WKUIDelegate 
         // Carga la webapp embebida
         if let url = URL(string: "https://webtm.vercel.app/login") {
             let request = URLRequest(url: url)
-            webView.load(request)
+            self.webView.load(request)
         }
     }
 
