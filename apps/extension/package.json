@@ -5,9 +5,10 @@
   "type": "module",
   "scripts": {
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.tsx\" \"test/**/*.ts\"",
-    "build": "concurrently \"npm run build:chrome\" \"npm run build:firefox\" --names chrome,firefox",
+    "build": "npm run build:chrome && npm run build:firefox && npm run build:ios",
     "build:chrome": "tsc && export BROWSER='chrome' && vite build && rm -rf ../../build/app_chrome && mv chrome ../../build/app_chrome",
     "build:firefox": "tsc && export BROWSER='firefox' && vite build && rm -rf ../../build/app_firefox && mv firefox ../../build/app_firefox",
+    "build:ios": "xcrun safari-web-extension-converter --project-location ../../build/app_safari --app-name 'wtm' --bundle-identifier com.ttt246llc.wtm --no-open --force --no-prompt ../../build/app_chrome",
     "build:chrome:agus": "tsc && vite build",
     "dev": "concurrently \"npm run dev:chrome\" \"npm run dev:firefox\" --names chrome,firefox",
     "dev:chrome": "nodemon --exec npm run build:chrome",

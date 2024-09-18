@@ -21,13 +21,10 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y libnss3 libnspr4 libatk1.0-0 libatk-bridge2.0-0 libcups2 libdrm2 libxkbcommon0 libxcomposite1 libxdamage1 libxfixes3 libxrandr2 libgbm1 libasound2
 
       - name: Install dependencies
-        working-directory: app
-        run: npm install
+        run: npm install --workspace=@wtm/extension
 
       - name: Run Tests
-        working-directory: app
-        run: npm run test:cov
+        run: npm run test:cov --workspace=@wtm/extension
 
       - name: Build Chrome Extension app
-        working-directory: app
-        run: npm run build:chrome
+        run: npm run build:chrome --workspace=@wtm/extension
