@@ -37,8 +37,8 @@ jobs:
 
       - name: Install dependencies
         working-directory: backend
-        run: npm install
+        run: npm install --workspace=@wtm/backend
 
       - name: Run Jest tests
         working-directory: backend
-        run: npm run test
+        run: npm run test --workspace=@wtm/backend

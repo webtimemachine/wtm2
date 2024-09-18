@@ -3,7 +3,7 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**"]
+      "outputs": ["build/backend/**", "build/app_chrome/**", "dist/**", "build/app_firefox/**", "build/app_safari/**"]
     },
     "dev": {
       "persistent": true,

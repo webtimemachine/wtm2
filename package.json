@@ -14,7 +14,7 @@
     "app:watch": "npm --prefix app run nodemon",
     "app:watch:chrome": "npm --prefix app run nodemon:chrome",
     "app:watch:firefox": "npm --prefix app run nodemon:firefox",
-    "app:build:ios": "xcrun safari-web-extension-converter --project-location ./app_safari --app-name 'wtm' --bundle-identifier com.ttt246llc.wtm --no-open --force --no-prompt ./app_chrome",
+    "app:build:ios": "xcrun safari-web-extension-converter --project-location ./build/app_safari --app-name 'wtm' --bundle-identifier com.ttt246llc.wtm --no-open --force --no-prompt ./build/app_chrome",
     "backend:install": "npm --prefix backend install",
     "backend:build": "npm --prefix backend run build",
     "backend:start": "npm --prefix backend run start",
