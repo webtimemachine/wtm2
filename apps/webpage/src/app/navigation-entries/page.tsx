@@ -71,6 +71,12 @@ const RelevantSegment = ({ relevantSegment }: { relevantSegment: string }) => {
   );
 };
 
+declare global {
+  interface Window {
+    webkit: any;
+  }
+}
+
 const NavigationEntriesScreen: React.FC = () => {
   const LIMIT = 16;
   const [page, setPage] = useState<number>(0);
@@ -120,8 +126,13 @@ const NavigationEntriesScreen: React.FC = () => {
 
   const prev = () => page > 0 && setPage(page - 1);
   const next = () => !(offset + limit >= count) && setPage(page + 1);
+
   // Callback used for onClick Navigation Entry that redirects to te current element url.
   const processOpenLinkCallback = async (url: string): Promise<void> => {
+    if (window.webkit) {
+      window.webkit.messageHandlers.openLink.postMessage(url);
+    }
+
     return new Promise((resolve) => {
       window.open(url, '_blank');
       resolve();

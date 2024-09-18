@@ -1,27 +1,37 @@
-//
-//  WebViewController.swift
-//  wtm
-//
-//  Created by Maxi Cassola on 12/08/2024.
-//
-
-import UIKit
 import WebKit
+import UIKit
 
-class WebViewController: UIViewController {
+class WebViewController: UIViewController, WKScriptMessageHandler, WKUIDelegate {
 
-    // Conecta la WKWebView desde el Storyboard
-    @IBOutlet weak var webView: WKWebView!
-    
+    @IBOutlet var webView: WKWebView!
+
     override func viewDidLoad() {
         super.viewDidLoad()
-                
-        let urlString = "https://webtm.vercel.app/login"
-        if let url = URL(string: urlString) {
+        
+        let contentController = WKUserContentController()
+        contentController.add(self, name: "openLink")
+
+        let config = WKWebViewConfiguration()
+        config.userContentController = contentController
+        
+        webView = WKWebView(frame: self.view.frame, configuration: config)
+        
+        self.view.addSubview(webView)
+        // Delegate the webview's uiDelegate
+        self.webView.uiDelegate = self
+        // Carga la webapp embebida
+        if let url = URL(string: "https://webtm.vercel.app/login") {
             let request = URLRequest(url: url)
             webView.load(request)
         }
-        
+    }
+    
+
+    // Implementa el manejador de mensajes
+    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+        if message.name == "openLink", let urlString = message.body as? String, let url = URL(string: urlString) {
+            // Abre Safari
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        }
     }
 }
-
