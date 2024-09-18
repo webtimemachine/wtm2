@@ -3,7 +3,7 @@ name: Run Prisma Migrate
 on:
   push:
     branches: ['main']
-    paths: ['backend/prisma/schema.prisma']
+    paths: ['apps/backend/prisma/schema.prisma']
 
 jobs:
   prisma-migrate:
