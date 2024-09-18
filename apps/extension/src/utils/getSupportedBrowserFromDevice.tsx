@@ -14,7 +14,6 @@ export const getSupportedBrowserFromDevice = (
 ): SupportedBrowser => {
   const browserName = device.uaResult?.browser.name;
   let userAgentData: any = {};
-  console.log(device);
   try {
     userAgentData = JSON.parse(device?.userAgentData || '{}');
   } catch (error) {
