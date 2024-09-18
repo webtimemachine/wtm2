@@ -3,6 +3,10 @@
   "version": "1.6.0",
   "description": "",
   "scripts": {
+    "test": "turbo run test",
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
     "app:install": "npm --prefix app install",
     "app:build": "npm --prefix app run build",
     "app:build:chrome": "npm --prefix app run build:chrome",
@@ -18,5 +22,13 @@
     "backend:prod": "npm --prefix backend run start:prod"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "turbo": "^2.1.1"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "packageManager": "npm@10.8.3"
 }
