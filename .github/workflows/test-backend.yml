@@ -36,9 +36,9 @@ jobs:
           node-version: 18.16
 
       - name: Install dependencies
-        working-directory: backend
-        run: npm install --workspace=@wtm/backend
+        run: |
+          npm install turbo --global
+          npm install --workspace=@wtm/backend
 
-      - name: Run Jest tests
-        working-directory: backend
-        run: npm run test --workspace=@wtm/backend
+      - name: Run Backend Tests
+        run: turbo run test --filter=@wtm/backend

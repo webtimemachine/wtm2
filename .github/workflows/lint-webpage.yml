@@ -3,7 +3,7 @@ name: Run Backend Lint
 on:
   pull_request:
     branches: ['develop']
-    paths: ['apps/backend/**']
+    paths: ['apps/webpage/**']
 
 jobs:
   lint:
@@ -21,7 +21,7 @@ jobs:
       - name: Install dependencies
         run: |
           npm install turbo --global
-          npm install --workspace=@wtm/backend
+          npm install --workspace=@wtm/webpage
 
       - name: Run ESLint
-        run: turbo run lint --filter=@wtm/backend
+        run: turbo run lint --filter=@wtm/webpage
