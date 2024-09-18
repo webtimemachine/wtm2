@@ -19,8 +19,8 @@
     "backend:db:start": "npm run db --workspace=@wtm/backend",
     "backend:db:stop": "npm run db:stop --workspace=@wtm/backend",
     "backend:migrate": "npm run migrate --workspace=@wtm/backend",
-    "web:dev": "npm run dev --workspace=@wtm/web",
-    "web:build": "npm run build --workspace=@wtm/web"
+    "web:dev": "npm run dev --workspace=@wtm/webpage",
+    "web:build": "npm run build --workspace=@wtm/webpage"
   },
   "author": "",
   "license": "ISC",
