@@ -13,37 +13,43 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Install dependencies
-        working-directory: app
-        run: npm install
-
-      - name: Build Chrome and Firefox Extensions apps
+      - name: Install TurboRepo and dependencies
         run: |
-          npm run app:build:chrome
-          npm run app:build:firefox
+          npm install turbo --global
+          npm install
 
-      - name: Create ZIP files
+      - name: Cache turbo build setup
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
+
+      - name: Run turbo build
+        run: turbo run build --filter=@wtm/extension...
+
+      - name: Create ZIP files for Chrome and Firefox
         run: |
-          zip -r chrome-extension.zip ./app_chrome
-          cd app_firefox && zip -r ../firefox-extension.zip . && cd ..
+          zip -r chrome-extension.zip ./build/app_chrome
+          zip -r firefox-extension.zip ./build/app_firefox
 
       - name: Build iOS app from Chrome code
         run: npm run app:build:ios
 
       - name: Copy ExportOptions.plist file
-        run: cp app/ExportOptions.plist app_safari/wtm
+        run: cp app/ExportOptions.plist ./build/app_safari/wtm
 
       - name: Update xcode project file
         run: |
-          sed -i '' 's/PRODUCT_BUNDLE_IDENTIFIER = com.ttt246llc.wtm;/PRODUCT_BUNDLE_IDENTIFIER = com.ttt246llc.wtm;\nPROVISIONING_PROFILE_SPECIFIER = "Web Time Machine Prov Profile Dev";/' app_safari/wtm/wtm.xcodeproj/project.pbxproj
-          sed -i '' 's/PRODUCT_BUNDLE_IDENTIFIER = com.ttt246llc.wtm.Extension;/PRODUCT_BUNDLE_IDENTIFIER = com.ttt246llc.wtm.Extension;\nPROVISIONING_PROFILE_SPECIFIER = "Web Time Machine Prov Profile Dev Extension";/' app_safari/wtm/wtm.xcodeproj/project.pbxproj
+          sed -i '' 's/PRODUCT_BUNDLE_IDENTIFIER = com.ttt246llc.wtm;/PRODUCT_BUNDLE_IDENTIFIER = com.ttt246llc.wtm;\nPROVISIONING_PROFILE_SPECIFIER = "Web Time Machine Prov Profile Dev";/' ./build/app_safari/wtm/wtm.xcodeproj/project.pbxproj
+          sed -i '' 's/PRODUCT_BUNDLE_IDENTIFIER = com.ttt246llc.wtm.Extension;/PRODUCT_BUNDLE_IDENTIFIER = com.ttt246llc.wtm.Extension;\nPROVISIONING_PROFILE_SPECIFIER = "Web Time Machine Prov Profile Dev Extension";/' ./build/app_safari/wtm/wtm.xcodeproj/project.pbxproj
 
-      - name: Install dependencies & build backend project
-        working-directory: backend
-        run: |
-          npm install
-          npm run build
-          zip -r backend.zip ./dist
+      - name: Run turbo build for backend
+        run: turbo run build --filter=backend
+
+      - name: Zip backend build
+        run: zip -r backend.zip ./build/backend
 
       - name: Install Dependencies
         run: brew install coreutils
@@ -74,21 +80,21 @@ jobs:
           P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
 
       - name: List all schemes
-        working-directory: 'app_safari/wtm'
+        working-directory: 'build/app_safari/wtm'
         run: xcodebuild -list
 
       - name: Build Safari Extension for Testing
-        working-directory: 'app_safari/wtm'
+        working-directory: 'build/app_safari/wtm'
         run: |
           xcodebuild build-for-testing -scheme "wtm (iOS)" -sdk iphonesimulator -derivedDataPath './build' -allowProvisioningUpdates
 
       - name: Archive the iOS App
-        working-directory: 'app_safari/wtm'
+        working-directory: 'build/app_safari/wtm'
         run: |
           xcodebuild archive -scheme "wtm (iOS)" -sdk iphoneos -configuration AppStoreDistribution DEVELOPMENT_TEAM=2858MX5336 CODE_SIGN_STYLE=Manual -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.4' archive -archivePath "$PWD/build/Web Time Machine.xcarchive" -allowProvisioningUpdates
 
       - name: Export the .ipa File
-        working-directory: 'app_safari/wtm'
+        working-directory: 'build/app_safari/wtm'
         run: |
           xcodebuild -exportArchive -archivePath "$PWD/build/Web Time Machine.xcarchive" -exportOptionsPlist "$PWD/ExportOptions.plist" DEVELOPMENT_TEAM=2858MX5336 -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.4' -exportPath "$PWD/build"
 
@@ -143,6 +149,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: 'app_safari/wtm/build/wtm.ipa'
+          asset_path: 'build/app_safari/wtm/build/wtm.ipa'
           asset_name: wtm.ipa
           asset_content_type: application/octet-stream
