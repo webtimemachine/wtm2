@@ -1,4 +1,4 @@
-name: Run Backend Lint
+name: Run Extension Lint
 
 on:
   pull_request:
