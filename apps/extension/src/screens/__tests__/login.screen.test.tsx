@@ -4,6 +4,7 @@ import { ChakraProvider } from '@chakra-ui/react';
 import { useLogin } from '../../hooks';
 import { useAuthStore, useNavigation } from '../../store';
 import { LoginScreen } from '../login.screen';
+import { isLoginRes } from '@wtm/api';
 
 interface NavigatorUABrandVersion {
   brand: string;
@@ -46,9 +47,6 @@ jest.mock('clsx');
 jest.mock('@wtm/api', () => ({
   isLoginRes: jest.fn(),
 }));
-
-// Importa isLoginRes después de mockear el módulo
-import { isLoginRes } from '@wtm/api';
 
 global.chrome = {
   action: {

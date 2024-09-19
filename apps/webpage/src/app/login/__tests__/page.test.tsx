@@ -4,6 +4,7 @@ import { ChakraProvider } from '@chakra-ui/react';
 import { useLogin } from '../../../hooks';
 import { useAuthStore, useNavigation } from '../../../store';
 import LoginScreen from '../page';
+import { isLoginRes } from '@wtm/api';
 
 // Mock de ServerUrlEditable
 jest.mock('../../../components', () => ({
@@ -27,9 +28,6 @@ jest.mock('clsx');
 jest.mock('@wtm/api', () => ({
   isLoginRes: jest.fn(),
 }));
-
-// Importa isLoginRes después de mockear el módulo
-import { isLoginRes } from '@wtm/api';
 
 const mockLoginMutation = {
   mutate: jest.fn(),
