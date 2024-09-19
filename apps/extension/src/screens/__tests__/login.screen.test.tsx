@@ -24,6 +24,10 @@ jest.mock('../../store', () => ({
 // Mock de clsx
 jest.mock('clsx');
 
+jest.mock('@wtm/api', () => ({
+  isLoginRes: jest.fn().mockReturnValueOnce(true).mockReturnValueOnce(false),
+}));
+
 global.chrome = {
   action: {
     setIcon: jest.fn(),
