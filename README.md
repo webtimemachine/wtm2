@@ -4,21 +4,19 @@ Web Time Machine (WebTM) is an open-source, cross-platform browser extension and
 
 ### Table of Contents
 
-- [WebTM  ](#webtm--)
-    - [Table of Contents](#table-of-contents)
-    - [Overview](#overview)
-    - [Core Components](#core-components)
-      - [Backend](#backend)
-      - [Browser Extension](#browser-extension)
-      - [Web Page](#web-page)
-    - [Getting Started](#getting-started)
-      - [Clone the Repository](#clone-the-repository)
-      - [Install Dependencies](#install-dependencies)
-      - [Development Setup](#development-setup)
-    - [Folder Structure](#folder-structure)
-    - [Contributing](#contributing)
-    - [License](#license)
-    - [Contact](#contact)
+1. [Overview](#overview)
+2. [Core Components](#core-components)
+   - [Backend](#backend)
+   - [Browser Extension](#browser-extension)
+   - [Web Page](#web-page)
+3. [Getting Started](#getting-started)
+   - [Clone the Repository](#clone-the-repository)
+   - [Install Dependencies](#install-dependencies)
+   - [Development Setup](#development-setup)
+4. [Folder Structure](#folder-structure)
+5. [Contributing](#contributing)
+6. [License](#license)
+7. [Contact](#contact)
 
 ### Overview
 
