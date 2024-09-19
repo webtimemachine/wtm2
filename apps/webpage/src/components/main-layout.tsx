@@ -173,7 +173,7 @@ export const MainLayout: React.FC<Props> = ({ children }) => {
   };
 
   return (
-    <div className='flex h-screen p-5 gap-5 relative'>
+    <div className='flex min-h-screen md:h-screen p-5 gap-5 relative'>
       <div className='absolute top-5 left-5 md:hidden'>
         <IconButton
           aria-label='Menu'

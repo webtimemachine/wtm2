@@ -212,7 +212,7 @@ const ActiveSessionsScreen: React.FC<object> = () => {
             </div>
           )}
           <Divider className='my-2' />
-          <div className='flex flex-col gap-2 w-full h-full overflow-y-auto scrollbar pr-1'>
+          <div className='flex flex-col gap-2 w-full md:max-h-[calc(100vh-208px)] overflow-y-auto scrollbar pr-1'>
             {restSessions &&
               restSessions.map((session, i) => (
                 <ActiveSessionRow session={session} key={i} />
