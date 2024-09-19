@@ -27,4 +27,5 @@ export default {
     'node',
   ],
   modulePaths: ['<rootDir>/src'],
+  testPathIgnorePatterns: ['/node_modules/', '/dist/', '/utils/'],
 };
