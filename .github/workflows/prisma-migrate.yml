@@ -35,9 +35,7 @@ jobs:
           node-version: 18.16
 
       - name: Install Dependencies
-        working-directory: backend
-        run: npm install
+        run: npm install --workspace=@wtm/backend
 
       - name: Run Prisma Migrate
-        working-directory: backend
-        run: npx prisma migrate dev
+        run: npm run backend:migrate

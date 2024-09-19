@@ -6,8 +6,7 @@
   "scripts": {
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.tsx\" \"test/**/*.ts\"",
     "oldbuild": "npm run tsc && npm run ensure-build-dir && npm run build:chrome && npm run build:firefox && npm run build:ios",
-    "build": "npm run tsc && npm run ensure-build-dir && npm run build:chrome && npm run build:firefox",
-    "tsc": "tsc",
+    "build": "npm run ensure-build-dir && npm run build:chrome && npm run build:firefox",
     "ensure-build-dir": "mkdir -p ../../build",
     "build:chrome": "cross-env BROWSER=chrome npm run build:target && npm run copy:chrome",
     "build:firefox": "cross-env BROWSER=firefox npm run build:target",
@@ -18,6 +17,7 @@
     "dev:chrome": "nodemon --exec npm run build:chrome",
     "dev:firefox": "nodemon --exec npm run build:firefox",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "lint:fix": "eslint --fix . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "test": "jest --passWithNoTests",
     "test:cov": "jest --passWithNoTests --coverage"
