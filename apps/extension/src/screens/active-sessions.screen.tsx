@@ -68,7 +68,7 @@ export const ActiveSessionsScreen: React.FC<object> = () => {
       setEditingSession(undefined);
       getActiveSessionsQuery.refetch();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [updateDeviceAliasMutation.isSuccess]);
 
   interface ActiveSessionRowProps {

@@ -13,9 +13,9 @@ export const getSupportedBrowserFromDevice = (
   device: Device,
 ): SupportedBrowser => {
   const browserName = device.uaResult?.browser.name;
-  let userAgentData: any = {};
+  let userAgentData: { brands: [] } = { brands: [] };
   try {
-    userAgentData = JSON.parse(device?.userAgentData || '{}');
+    userAgentData = JSON.parse(device?.userAgentData || '{ "brands": [] }');
   } catch (error) {
     console.error(
       'Error while parsing userAgentData',
@@ -30,7 +30,9 @@ export const getSupportedBrowserFromDevice = (
 
   if (
     userAgentData &&
-    userAgentData?.brands?.some((elem: any) => elem?.brand == 'Brave')
+    userAgentData?.brands?.some(
+      (elem: { brand: string }) => elem?.brand == 'Brave',
+    )
   )
     return 'Brave';
   if (browserName && browserName === 'Chrome') return 'Chrome';

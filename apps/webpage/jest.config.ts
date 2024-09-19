@@ -26,6 +26,7 @@ const config = {
     'node',
   ],
   modulePaths: ['<rootDir>/src'],
+  testPathIgnorePatterns: ['/node_modules/', '/dist/', '/utils/'],
 };
 
 export default config;
