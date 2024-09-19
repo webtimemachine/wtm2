@@ -17,6 +17,7 @@
     "dev:chrome": "nodemon --exec npm run build:chrome",
     "dev:firefox": "nodemon --exec npm run build:firefox",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "lint:fix": "eslint --fix . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "test": "jest --passWithNoTests",
     "test:cov": "jest --passWithNoTests --coverage"
