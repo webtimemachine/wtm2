@@ -18,7 +18,7 @@ import { useRecoverPassword } from '../hooks';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-export const ForgotPasswordScreen: React.FC<{}> = () => {
+export const ForgotPasswordScreen: React.FC<object> = () => {
   const { navigateTo } = useNavigation();
 
   const notifyRecoveryCodeSent = useAuthStore(
