@@ -1,4 +1,4 @@
-# WebTM ![WTM  Website](https://cronitor.io/badges/CbeIhd/production/7FN5-J8hdv7hTI7zSN0Yyc6TBw0.svg) ![WTM  API](https://cronitor.io/badges/DOrpsj/production/0PbZKWShlq8iS_6_sPowwKHxKVI.svg)<img align="right" width="100" height="100" src="./app/public/app-icon.png">
+# WebTM ![WTM  Website](https://cronitor.io/badges/CbeIhd/production/7FN5-J8hdv7hTI7zSN0Yyc6TBw0.svg) ![WTM  API](https://cronitor.io/badges/DOrpsj/production/0PbZKWShlq8iS_6_sPowwKHxKVI.svg)<img align="right" width="100" height="100" src="./apps/extension/public/app-icon.png">
 
 Web Time Machine (WebTM) is an open-source, cross-platform browser extension and web application designed to provide users with a seamless experience to access, search, and manage their browsing history. The project integrates advanced AI-powered features, allowing users to efficiently search through their browsing history and filter explicit content.
 
@@ -33,7 +33,7 @@ WebTM consists of a backend service, a browser extension compatible with multipl
 - **AI Integration**: OpenAI, Weaviate
 - **Deployment**: Deployed on Vercel
 - **Functionality**: Provides REST API for user authentication, session management, data storage, AI-based search, and explicit content filtering.
-- **[Backend README](backend/README.md)**: Detailed setup and usage instructions for the backend.
+- **[Backend README](apps/backend/README.md)**: Detailed setup and usage instructions for the backend.
 
 #### Browser Extension
 
@@ -43,7 +43,7 @@ WebTM consists of a backend service, a browser extension compatible with multipl
 - **UI Library**: Chakra UI, Tailwind CSS
 - **Compatibility**: Chrome, Firefox, Safari, Safari iOS, Firefox Android
 - **Functionality**: Tracks browsing history, sends data to the backend, and provides an AI-based search within the extension popup.
-- **[Browser Extension README](app/README.md)**: Detailed setup and usage instructions for the browser extension.
+- **[Browser Extension README](apps/extension/README.md)**: Detailed setup and usage instructions for the browser extension.
 
 #### Web Page
 
@@ -53,7 +53,7 @@ WebTM consists of a backend service, a browser extension compatible with multipl
 - **Data Fetching**: TanStack Query
 - **Deployment**: Vercel
 - **Functionality**: Allows users to log in, view their browsing data, and utilize WebTM features without needing the extension.
-- **[Webpage README](webpage/README.md)**: Detailed setup and usage instructions for the web page.
+- **[Webpage README](apps/webpage/README.md)**: Detailed setup and usage instructions for the web page.
 
 ### Getting Started
 
