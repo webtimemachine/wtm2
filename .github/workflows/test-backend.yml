@@ -9,23 +9,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    env:
-      PORT: ${{ secrets.PORT }}
-      DATABASE_URL: ${{ secrets.DATABASE_URL }}
-      DATABASE_URL_NON_POOLING: ${{ secrets.DATABASE_URL_NON_POOLING }}
-      BCRYPT_SALT: ${{ secrets.BCRYPT_SALT }}
-      CRYPTO_SALT: ${{ secrets.CRYPTO_SALT }}
-      CRYPTO_KEY: ${{ secrets.CRYPTO_KEY }}
-      JWT_ACCESS_SECRET: ${{ secrets.JWT_ACCESS_SECRET }}
-      JWT_PARTIAL_SECRET: ${{ secrets.JWT_PARTIAL_SECRET }}
-      JWT_ACCESS_EXPIRATION: ${{ secrets.JWT_ACCESS_EXPIRATION }}
-      JWT_REFRESH_SECRET: ${{ secrets.JWT_REFRESH_SECRET }}
-      JWT_REFRESH_EXPIRATION: ${{ secrets.JWT_REFRESH_EXPIRATION }}
-      JWT_RECOVERY_TOKEN_SECRET: ${{ secrets.JWT_RECOVERY_TOKEN_SECRET }}
-      JWT_RECOVERY_TOKEN_EXPIRATION: ${{ secrets.JWT_RECOVERY_TOKEN_EXPIRATION }}
-      EMAIL_URI: ${{ secrets.EMAIL_URI }}
-      OPENAI_ACCESS_TOKEN: ${{ secrets.OPENAI_ACCESS_TOKEN }}
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -36,9 +19,25 @@ jobs:
           node-version: 18.16
 
       - name: Install dependencies
-        working-directory: backend
-        run: npm install --workspace=@wtm/backend
+        run: |
+          npm install turbo --global
+          npm install --workspace=@wtm/backend
 
-      - name: Run Jest tests
-        working-directory: backend
-        run: npm run test --workspace=@wtm/backend
+      - name: Run Backend Tests
+        run: turbo run test --filter=@wtm/backend
+        env:
+          PORT: ${{ secrets.PORT }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DATABASE_URL_NON_POOLING: ${{ secrets.DATABASE_URL_NON_POOLING }}
+          BCRYPT_SALT: ${{ secrets.BCRYPT_SALT }}
+          CRYPTO_SALT: ${{ secrets.CRYPTO_SALT }}
+          CRYPTO_KEY: ${{ secrets.CRYPTO_KEY }}
+          JWT_ACCESS_SECRET: ${{ secrets.JWT_ACCESS_SECRET }}
+          JWT_PARTIAL_SECRET: ${{ secrets.JWT_PARTIAL_SECRET }}
+          JWT_ACCESS_EXPIRATION: ${{ secrets.JWT_ACCESS_EXPIRATION }}
+          JWT_REFRESH_SECRET: ${{ secrets.JWT_REFRESH_SECRET }}
+          JWT_REFRESH_EXPIRATION: ${{ secrets.JWT_REFRESH_EXPIRATION }}
+          JWT_RECOVERY_TOKEN_SECRET: ${{ secrets.JWT_RECOVERY_TOKEN_SECRET }}
+          JWT_RECOVERY_TOKEN_EXPIRATION: ${{ secrets.JWT_RECOVERY_TOKEN_EXPIRATION }}
+          EMAIL_URI: ${{ secrets.EMAIL_URI }}
+          OPENAI_ACCESS_TOKEN: ${{ secrets.OPENAI_ACCESS_TOKEN }}
