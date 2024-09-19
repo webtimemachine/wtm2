@@ -30,9 +30,51 @@ jest.mock('@wtm/api', () => ({
 
 const mockLoginMutation = {
   mutate: jest.fn(),
-  isSuccess: false,
+  isSuccess: true,
   isPending: false,
-  data: null,
+  data: {
+    accessToken: 'tokenTest123',
+    refreshToken: 'refreshTest123',
+    user: {
+      id: 0,
+      email: 'email@test.com',
+    },
+    userDevice: {
+      id: 0,
+      userId: 0,
+      deviceId: 0,
+      isCurrentDevice: true,
+      deviceAlias: 'test-string',
+      device: {
+        id: 0,
+        deviceKey: 'test-string',
+        userAgent:
+          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+        uaResult: {
+          ua: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+          browser: {
+            name: 'Chrome',
+            version: '121.0.0.0',
+            major: '121',
+          },
+          engine: {
+            name: 'Blink',
+            version: '121.0.0.0',
+          },
+          os: {
+            name: 'Windows',
+            version: '10',
+          },
+          device: {},
+          cpu: {
+            architecture: 'amd64',
+          },
+        },
+        userAgentData:
+          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+      },
+    },
+  },
 };
 
 const mockNavigateTo = jest.fn();
@@ -116,50 +158,9 @@ describe('LoginScreen', () => {
   });
 
   test('navigates to correct screen on success', async () => {
-    mockLoginMutation.isSuccess = true;
-    (mockLoginMutation as any).data = {
-      accessToken: 'tokenTest123',
-      refreshToken: 'refreshTest123',
-      user: {
-        id: 0,
-        email: 'email@test.com',
-      },
-      userDevice: {
-        id: 0,
-        userId: 0,
-        deviceId: 0,
-        isCurrentDevice: true,
-        deviceAlias: 'test-string',
-        device: {
-          id: 0,
-          deviceKey: 'test-string',
-          userAgent:
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
-          uaResult: {
-            ua: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
-            browser: {
-              name: 'Chrome',
-              version: '121.0.0.0',
-              major: '121',
-            },
-            engine: {
-              name: 'Blink',
-              version: '121.0.0.0',
-            },
-            os: {
-              name: 'Windows',
-              version: '10',
-            },
-            device: {},
-            cpu: {
-              architecture: 'amd64',
-            },
-          },
-          userAgentData:
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
-        },
-      },
-    };
+    (isLoginRes as jest.MockedFunction<typeof isLoginRes>).mockReturnValue(
+      true,
+    );
 
     customRender(<LoginScreen />);
 
@@ -169,12 +170,10 @@ describe('LoginScreen', () => {
   });
 
   test('navigates to validate-email when login response with partialToken', async () => {
-    mockLoginMutation.isSuccess = true;
-    (mockLoginMutation as any).data = {
-      id: 0,
-      email: 'email@test.com',
-      partialToken: 'partialTest123',
-    };
+    (isLoginRes as jest.MockedFunction<typeof isLoginRes>).mockReturnValue(
+      false,
+    );
+
     customRender(<LoginScreen />);
 
     await waitFor(() =>

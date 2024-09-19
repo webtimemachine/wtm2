@@ -5,7 +5,7 @@ import { useNavigation } from './store';
 import { isMobile } from './utils/isMobile';
 import clsx from 'clsx';
 
-const App: React.FC<{}> = () => {
+const App: React.FC<object> = () => {
   const { CurrentScreen } = useNavigation();
   const [isLargerThan800] = useMediaQuery('(min-width: 800px)');
 
