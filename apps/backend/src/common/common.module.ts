@@ -13,7 +13,10 @@ import { EmailService, PrismaService } from './services';
         from: '"No Reply" <webtimemachinedev@gmail.com>',
       },
       template: {
-        dir: join(__dirname, '../../', 'src/assets/email-templates'),
+        dir:
+          process.env.NODE_ENV === 'production'
+            ? join(__dirname, '../../', 'src/assets/email-templates')
+            : join(__dirname, '../assets/email-templates'),
         adapter: new HandlebarsAdapter(),
         options: {
           strict: true,

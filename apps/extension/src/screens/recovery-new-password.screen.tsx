@@ -21,7 +21,7 @@ const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[^\s]{8,20}$/;
 const passwordRegexMessage =
   'Password must be between 8 and 20 characters long and contain at least one uppercase letter, one lowercase letter, and one digit. Spaces are not allowed.';
 
-export const RecoveryNewPassword: React.FC<{}> = () => {
+export const RecoveryNewPassword: React.FC<object> = () => {
   const { navigateTo } = useNavigation();
   const { recoveryEmail, deviceKey } = useAuthStore((state) => state);
   const { restorePasswordMutation } = useRestorePassword();
@@ -42,7 +42,7 @@ export const RecoveryNewPassword: React.FC<{}> = () => {
   } = useDisclosure();
 
   const validateInputs = () => {
-    let emailErrorFound = false;
+    const emailErrorFound = false;
     let passwordErrorFound = false;
     let confirmPassErrorFound = false;
 
@@ -77,9 +77,7 @@ export const RecoveryNewPassword: React.FC<{}> = () => {
         verificationPassword: confirmPassword,
         deviceKey,
         userAgent: window.navigator.userAgent,
-        userAgentData: JSON.stringify(
-          (window as any)?.navigator?.userAgentData || '{}',
-        ),
+        userAgentData: JSON.stringify(window.navigator?.userAgentData || '{}'),
       });
     }
   };

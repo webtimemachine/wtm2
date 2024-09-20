@@ -6,7 +6,7 @@ import { LuLogIn } from 'react-icons/lu';
 import { useValidateRecoveryCode } from '../hooks';
 import { useAuthStore, useNavigation } from '../store';
 
-export const ValidateRecoveryCode: React.FC<{}> = () => {
+export const ValidateRecoveryCode: React.FC<object> = () => {
   const [recoveryCode, setRecoveryCode] = useState('');
 
   const { navigateTo } = useNavigation();
