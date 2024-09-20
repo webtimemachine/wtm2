@@ -40,7 +40,7 @@ jobs:
           sed -i '' 's/PRODUCT_BUNDLE_IDENTIFIER = com.ttt246llc.wtm.Extension;/PRODUCT_BUNDLE_IDENTIFIER = com.ttt246llc.wtm.Extension;\nPROVISIONING_PROFILE_SPECIFIER = "Web Time Machine Prov Profile Dev Extension";/' ./native/app_ios/wtm/wtm.xcodeproj/project.pbxproj
 
       - name: Run turbo build for backend
-        run: turbo run build --filter=backend
+        run: turbo run build --filter=@wtm/backend
 
       - name: Zip backend build
         run: zip -r backend.zip ./build/backend
