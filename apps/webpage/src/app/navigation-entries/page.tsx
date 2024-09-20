@@ -58,12 +58,14 @@ const RelevantSegment = ({ relevantSegment }: { relevantSegment: string }) => {
 
   return (
     <div>
-      <Box position='relative' padding='5'>
+      <div className='relative p-5'>
         <Divider />
-        <AbsoluteCenter bg='white' px='4'>
-          <p className='font-bold mb-2 truncate'>Most relevant match</p>
-        </AbsoluteCenter>
-      </Box>
+        <div className='absolute left-1/2 top-0 h-full transform -translate-x-1/2 bg-white px-4 flex justify-center items-center'>
+          <p className='font-bold truncate text-gray-600'>
+            Most relevant match
+          </p>
+        </div>
+      </div>
       <div className='markdown-content'>
         <Markdown>{markdown}</Markdown>
       </div>

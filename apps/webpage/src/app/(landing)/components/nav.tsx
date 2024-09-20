@@ -1,12 +1,13 @@
 'use client';
 
-import { Box, Button, HStack, Img, Text } from '@chakra-ui/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
+
+import { Button } from '@chakra-ui/react';
 import { NavMenu } from './nav-menu';
 import { cn } from '@/utils/cn';
 import { useMediaQuery } from 'usehooks-ts';
-import { useEffect, useState } from 'react';
 
 export enum Routes {
   HOME = '/',
@@ -40,30 +41,18 @@ export const Nav = () => {
   if (!isMounted) return null;
 
   return (
-    <HStack
-      rounded={'xl'}
-      w='100%'
-      justifyContent={'space-between'}
-      className='py-2 sm:px-3'
-    >
+    <div className='w-full flex justify-between rounded-xl py-2 sm:px-3'>
       <Link
         className='flex items-center justify-center gap-2'
         href={Routes.HOME}
       >
-        <Box
-          boxSize={'sm'}
-          display={'flex'}
-          justifyContent={'center'}
-          alignItems={'center'}
-          maxW={'36px'}
-          maxH={'36px'}
-        >
-          <Img src='/icon-512.png' alt='WebTM Icon' />
-        </Box>
-        <Text fontWeight={'medium'}>WebTM</Text>
+        <div className='flex justify-center items-center max-w-[36px] max-h-[36px]'>
+          <img src='/icon-512.png' alt='WebTM Icon' />
+        </div>
+        <span className='font-medium'>WebTM</span>
       </Link>
 
-      <HStack spacing={4}>
+      <div className='flex items-center space-x-4'>
         {renderNavigation &&
           ROUTES_ARRAY.map((route) => (
             <Link
@@ -82,7 +71,7 @@ export const Nav = () => {
           </Button>
         </Link>
         {!renderNavigation && <NavMenu routes={ROUTES_ARRAY} />}
-      </HStack>
-    </HStack>
+      </div>
+    </div>
   );
 };
