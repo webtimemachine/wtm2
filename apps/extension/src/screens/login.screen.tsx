@@ -18,7 +18,13 @@ import { updateIcon } from '../utils/updateIcon';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-export const LoginScreen: React.FC<{}> = () => {
+declare global {
+  interface Window {
+    webkit: object;
+  }
+}
+
+export const LoginScreen: React.FC<object> = () => {
   updateIcon(false);
 
   const deviceKey = useAuthStore((state) => state.deviceKey);
@@ -56,9 +62,7 @@ export const LoginScreen: React.FC<{}> = () => {
         password,
         deviceKey,
         userAgent: window.navigator.userAgent,
-        userAgentData: JSON.stringify(
-          (window as any)?.navigator?.userAgentData || '{}',
-        ),
+        userAgentData: JSON.stringify(window?.navigator?.userAgentData || '{}'),
       };
       loginMutation.mutate(loginData);
     }

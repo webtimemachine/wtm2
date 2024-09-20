@@ -10,7 +10,32 @@
       "cache": false
     },
     "test": {
-      "dependsOn": ["build"]
+      "dependsOn": ["build"],
+      "cache": false,
+      "env": [
+        "PORT",
+        "BASE_URL",
+        "BCRYPT_SALT",
+        "CRYPTO_SALT",
+        "CRYPTO_KEY",
+        "JWT_ACCESS_SECRET",
+        "JWT_ACCESS_EXPIRATION",
+        "JWT_REFRESH_SECRET",
+        "JWT_REFRESH_EXPIRATION",
+        "JWT_PARTIAL_SECRET",
+        "JWT_RECOVERY_TOKEN_SECRET",
+        "JWT_RECOVERY_TOKEN_EXPIRATION",
+        "EMAIL_URI",
+        "WEAVIATE_SCHEME",
+        "WEAVIATE_HOST",
+        "OPENAI_ACCESS_TOKEN",
+        "AVOID_DOMAIN_LIST",
+        "DATABASE_URL",
+        "DATABASE_URL_NON_POOLING"
+      ]
+    },
+    "lint": {
+      "cache": false
     }
   }
 }
