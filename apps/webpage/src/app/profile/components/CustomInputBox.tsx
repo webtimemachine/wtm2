@@ -41,13 +41,7 @@ const CustomInputBox: React.FC<CustomInputBoxProps> = ({
   };
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        width: '100%',
-        flexDirection: 'column',
-      }}
-    >
+    <div className='flex flex-col w-full'>
       <Text>{label}:</Text>
       <Divider mb={2} />
       <InputGroup>
@@ -58,7 +52,7 @@ const CustomInputBox: React.FC<CustomInputBoxProps> = ({
           </Button>
         </InputRightElement>
       </InputGroup>
-    </Box>
+    </div>
   );
 };
 
