@@ -13,39 +13,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <Container
-      display={'flex'}
-      flexDirection={'column'}
-      justifyContent={'center'}
-      alignItems={'center'}
-      maxW={'6xl'}
-      minHeight={'100vh'}
-    >
-      <Box
-        as='main'
-        display={'flex'}
-        flexDir={'column'}
-        flexGrow={1}
-        justifyContent={'space-between'}
-        w='100%'
-      >
+    <div className='flex flex-col justify-center items-center max-w-6xl min-h-screen mx-auto px-4'>
+      <div className='flex flex-col flex-grow justify-between w-full'>
         <Nav />
-        <Box
-          as='main'
-          w='100%'
-          display={'flex'}
-          flexGrow={1}
-          alignItems={'center'}
-        >
-          <Box
-            rounded={'xl'}
-            w='100%'
-            className='sm:bg-white sm:shadow-xl sm:p-8 pb-4'
-          >
+        <div className='flex w-full flex-grow items-center'>
+          <div className='w-full rounded-xl sm:bg-white sm:shadow-xl sm:p-8 pb-4'>
             {children}
-          </Box>
-        </Box>
-      </Box>
-    </Container>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }

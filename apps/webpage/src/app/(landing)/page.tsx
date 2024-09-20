@@ -1,5 +1,5 @@
-import { Box, Button, Img, Link, Stack } from '@chakra-ui/react';
 import type { Metadata } from 'next';
+import { Button, Link } from '@chakra-ui/react';
 import { FaGithub, FaHackerNews, FaTwitter } from 'react-icons/fa6';
 import { DownloadButton } from './components/download-button';
 
@@ -10,28 +10,20 @@ export const metadata: Metadata = {
 };
 
 export default function Home() {
+  //
+
   return (
-    <Stack spacing={20}>
-      <Stack
-        alignItems={'center'}
-        direction={{ md: 'row', base: 'column' }}
-        gap={8}
-        justifyContent={'space-around'}
-      >
-        <Box
-          display={'flex'}
-          justifyContent={'center'}
-          alignItems={'center'}
-          maxW={'420px'}
-        >
-          <Img
+    <div className='space-y-20'>
+      <div className='flex flex-col md:flex-row items-center justify-around gap-8'>
+        <div className='flex justify-center items-center max-w-[420px]'>
+          <img
             src='/WebTM.png'
             className='drop-shadow-lg rounded-lg'
             alt='WebTM App'
           />
-        </Box>
-        <Stack spacing={4}>
-          <Stack className='sm:max-w-prose'>
+        </div>
+        <div className='space-y-4'>
+          <div className='sm:max-w-prose space-y-2'>
             <p className='text-2xl sm:text-3xl font-medium'>
               It{"'"}s like a Time Machine for your browser. Search through
               everything {"you've"} seen and find that thing you {"don't"} know
@@ -49,8 +41,8 @@ export default function Home() {
               Use state of the art Machine Learning to query your browser
               history
             </p>
-          </Stack>
-          <Stack spacing={2} direction={'column'} wrap={'wrap'}>
+          </div>
+          <div className='flex flex-col space-y-2'>
             <DownloadButton />
             <Link
               href='https://github.com/webtimemachine/wtm2'
@@ -87,9 +79,9 @@ export default function Home() {
                 Follow me on Twitter
               </Button>
             </Link>
-          </Stack>
-        </Stack>
-      </Stack>
-    </Stack>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
