@@ -8,17 +8,16 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Webpage-->
+        <!--Web View Controller-->
         <scene sceneID="gw2-SJ-eOq">
             <objects>
                 <viewController storyboardIdentifier="WebViewController" id="sAk-hv-ReQ" customClass="WebViewController" customModule="wtm" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleAspectFit" id="IxU-ZG-7zi">
+                    <view key="view" opaque="NO" contentMode="scaleAspectFit" id="IxU-ZG-7zi">
                         <rect key="frame" x="0.0" y="0.0" width="402" height="874"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <wkWebView contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="Nzf-WD-9me">
+                            <wkWebView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="r1Y-aW-oCl">
                                 <rect key="frame" x="0.0" y="62" width="402" height="729"/>
-                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <wkWebViewConfiguration key="configuration">
                                     <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
                                     <wkPreferences key="preferences"/>
@@ -26,26 +25,22 @@
                             </wkWebView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="lin-PU-0lj"/>
+                        <color key="backgroundColor" red="0.94700962310000003" green="0.96092075109999997" blue="0.9770308137" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="lin-PU-0lj" firstAttribute="bottom" secondItem="Nzf-WD-9me" secondAttribute="bottom" id="5qs-sj-FTT"/>
-                            <constraint firstItem="Nzf-WD-9me" firstAttribute="leading" secondItem="lin-PU-0lj" secondAttribute="leading" id="61M-Ph-vej"/>
-                            <constraint firstItem="lin-PU-0lj" firstAttribute="trailing" secondItem="Nzf-WD-9me" secondAttribute="trailing" id="cFE-ku-X5n"/>
-                            <constraint firstItem="Nzf-WD-9me" firstAttribute="top" secondItem="lin-PU-0lj" secondAttribute="top" id="mjY-01-bqP"/>
+                            <constraint firstItem="r1Y-aW-oCl" firstAttribute="leading" secondItem="lin-PU-0lj" secondAttribute="leading" id="7Ty-QS-kJs"/>
+                            <constraint firstItem="r1Y-aW-oCl" firstAttribute="top" secondItem="lin-PU-0lj" secondAttribute="top" id="7mU-Lw-hXI"/>
+                            <constraint firstItem="lin-PU-0lj" firstAttribute="bottom" secondItem="r1Y-aW-oCl" secondAttribute="bottom" id="I0I-nI-4Gs"/>
+                            <constraint firstItem="lin-PU-0lj" firstAttribute="trailing" secondItem="r1Y-aW-oCl" secondAttribute="trailing" id="a94-0D-dWQ"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Webpage" image="book.pages" catalog="system" selectedImage="book.pages.fill" id="QcV-82-HyJ"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
-                        <outlet property="webView" destination="Nzf-WD-9me" id="uMX-cj-Hwm"/>
+                        <outlet property="webView" destination="r1Y-aW-oCl" id="UZo-Wd-pAm"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="s8S-1r-I5a" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="886" y="375"/>
+            <point key="canvasLocation" x="885.07462686567158" y="374.82837528604114"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="book.pages" catalog="system" width="107" height="128"/>
-        <image name="book.pages.fill" catalog="system" width="107" height="128"/>
-    </resources>
 </document>

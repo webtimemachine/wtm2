@@ -1,39 +1,35 @@
-import WebKit
+@preconcurrency import WebKit
 import UIKit
 
-class WebViewController: UIViewController, WKScriptMessageHandler, WKUIDelegate {
+class WebViewController: UIViewController, WKNavigationDelegate {
 
     @IBOutlet var webView: WKWebView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        let contentController = WKUserContentController()
-        contentController.add(self, name: "openLink")
 
-        let config = WKWebViewConfiguration()
-        config.userContentController = contentController
-        
-        // Configura la webView con la configuración deseada
-        self.webView = WKWebView(frame: self.view.frame, configuration: config)
-                
-        self.view.addSubview(self.webView)
-
-        // Delegate the webview's uiDelegate
-        self.webView.uiDelegate = self
+        webView.configuration.defaultWebpagePreferences.allowsContentJavaScript = true
+        webView.navigationDelegate = self
+        webView.scrollView.isScrollEnabled = false
 
         // Carga la webapp embebida
         if let url = URL(string: "https://webtm.vercel.app/login") {
             let request = URLRequest(url: url)
-            self.webView.load(request)
+            webView.load(request)
         }
     }
 
     // Implementa el manejador de mensajes
-    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-        if message.name == "openLink", let urlString = message.body as? String, let url = URL(string: urlString) {
-            // Abre Safari
-            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+            if let url = navigationAction.request.url, navigationAction.navigationType == .linkActivated {
+                // Verifica si el enlace debe abrirse en Safari
+                if url.host != "https://webtm.vercel.app" {  // Puedes ajustar esto según tu lógica
+                    // Abre el enlace en Safari
+                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                    decisionHandler(.cancel)
+                    return
+                }
+            }
+            decisionHandler(.allow)
         }
-    }
 }

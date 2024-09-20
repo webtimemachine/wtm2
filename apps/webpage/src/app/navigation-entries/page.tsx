@@ -127,18 +127,6 @@ const NavigationEntriesScreen: React.FC = () => {
   const prev = () => page > 0 && setPage(page - 1);
   const next = () => !(offset + limit >= count) && setPage(page + 1);
 
-  // Callback used for onClick Navigation Entry that redirects to te current element url.
-  const processOpenLinkCallback = async (url: string): Promise<void> => {
-    if (window.webkit) {
-      window.webkit.messageHandlers.openLink.postMessage(url);
-    }
-
-    return new Promise((resolve) => {
-      window.open(url, '_blank');
-      resolve();
-    });
-  };
-
   return (
     <div className='flex flex-col h-full'>
       <div className='flex flex-col w-full'>
@@ -216,7 +204,6 @@ const NavigationEntriesScreen: React.FC = () => {
                 key={i}
                 BrowserIcon={BrowserIcon}
                 deleteNavEntry={deleteNavigationEntryMutation.mutate}
-                processOpenLink={processOpenLinkCallback}
                 element={element}
                 isSemantic={isSemantic}
               />
@@ -280,7 +267,6 @@ export interface NavigationEntryProps {
   element: CompleteNavigationEntryDto;
   BrowserIcon: IconType;
   deleteNavEntry: ({ id }: { id: number }) => void;
-  processOpenLink: (url: string) => Promise<void>;
   isSemantic: boolean;
 }
 
@@ -288,7 +274,6 @@ const NavigationEntry: React.FC<NavigationEntryProps> = ({
   element,
   BrowserIcon,
   deleteNavEntry,
-  processOpenLink,
   isSemantic,
 }: NavigationEntryProps) => {
   const [visible, setVisible] = useState<boolean>(false);
@@ -307,13 +292,16 @@ const NavigationEntry: React.FC<NavigationEntryProps> = ({
           <div className='flex flex-col w-full'>
             <Tooltip label={element.title}>
               <Text
+                as={'a'}
+                href={element.url}
+                target='_blank'
+                rel='noreferrer'
                 className='cursor-pointer hover:underline'
                 noOfLines={1}
                 fontSize={'small'}
                 {...(element.liteMode && {
                   fontWeight: 'bold',
                 })}
-                onClick={() => processOpenLink(element.url)}
               >
                 {element.title}
               </Text>
