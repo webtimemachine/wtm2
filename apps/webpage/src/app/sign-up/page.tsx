@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import {
   Button,
   Input,
@@ -58,6 +58,8 @@ const SignUpScreen: React.FC<{}> = () => {
 
   const [loadingGeneratePassword, setLoadingGeneratePassword] = useState(false);
   const [passwordTooltipIsOpen, setPasswordTooltipIsOpen] = useState(false);
+
+  const passwordInputRef = useRef<HTMLInputElement>(null);
 
   const toast = useToast();
 
@@ -231,7 +233,10 @@ const SignUpScreen: React.FC<{}> = () => {
               <InputLeftAddon>
                 <BiKey />
               </InputLeftAddon>
-              <Popover isOpen={passwordTooltipIsOpen}>
+              <Popover
+                isOpen={passwordTooltipIsOpen}
+                initialFocusRef={passwordInputRef}
+              >
                 <PopoverTrigger>
                   <Input
                     pr='4.5rem'
@@ -240,11 +245,19 @@ const SignUpScreen: React.FC<{}> = () => {
                     placeholder='Enter password'
                     value={password}
                     onChange={(event) => {
+                      if (passwordTooltipIsOpen) {
+                        setPasswordTooltipIsOpen(false);
+                      }
+
                       setPassword(event.target.value);
                       if (passwordError) setPasswordError('');
                     }}
                     backgroundColor={'white'}
-                    onClick={() => setPasswordTooltipIsOpen(true)}
+                    onClick={() => {
+                      if (password.length) return;
+                      setPasswordTooltipIsOpen(true);
+                    }}
+                    ref={passwordInputRef}
                   />
                 </PopoverTrigger>
                 <Portal>
