@@ -178,6 +178,11 @@ export const RecoveryNewPassword: React.FC<object> = () => {
                   if (confirmPassError) setConfirmPassError('');
                 }}
                 backgroundColor={'white'}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter') {
+                    handleRestorePassword();
+                  }
+                }}
               />
               <InputRightElement width='4.5rem'>
                 <Button
