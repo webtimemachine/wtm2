@@ -121,6 +121,11 @@ export const LoginScreen: React.FC<object> = () => {
               value={password}
               onChange={(event) => setPassword(event.target.value)}
               backgroundColor={'white'}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter') {
+                  handleLogin();
+                }
+              }}
             />
             <InputRightElement width='4.5rem'>
               <Button
