@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import {
   Button,
   Input,
@@ -52,6 +52,8 @@ export const SignUpScreen: React.FC = () => {
 
   const [loadingGeneratePassword, setLoadingGeneratePassword] = useState(false);
   const [passwordTooltipIsOpen, setPasswordTooltipIsOpen] = useState(false);
+
+  const passwordInputRef = useRef<HTMLInputElement>(null);
 
   const toast = useToast();
 
@@ -181,20 +183,31 @@ export const SignUpScreen: React.FC = () => {
         <FormControl isInvalid={!!passwordError}>
           <div className='flex flex-col w-full pb-4 '>
             <InputGroup size='md'>
-              <Popover isOpen={passwordTooltipIsOpen}>
+              <Popover
+                isOpen={passwordTooltipIsOpen}
+                initialFocusRef={passwordInputRef}
+              >
                 <PopoverTrigger>
                   <Input
+                    ref={passwordInputRef}
                     pr='4.5rem'
                     type={showPass ? 'text' : 'password'}
                     name='password'
                     placeholder='Enter password'
                     value={password}
                     onChange={(event) => {
+                      if (passwordTooltipIsOpen) {
+                        setPasswordTooltipIsOpen(false);
+                      }
+
                       setPassword(event.target.value);
                       if (passwordError) setPasswordError('');
                     }}
                     backgroundColor={'white'}
-                    onClick={() => setPasswordTooltipIsOpen(true)}
+                    onClick={() => {
+                      if (password.length) return;
+                      setPasswordTooltipIsOpen(true);
+                    }}
                   />
                 </PopoverTrigger>
                 <Portal>
