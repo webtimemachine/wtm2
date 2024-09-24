@@ -84,6 +84,17 @@ const LoginScreen: React.FC<{}> = () => {
     }
   }, [authState]);
 
+  useEffect(() => {
+    (window as any).receiveMessageFromiOS = function (data: any) {
+      console.log('Mensaje recibido desde iOS:', data);
+      // Aquí puedes trabajar con los datos
+    };
+
+    window.webkit.messageHandlers.iosListener.postMessage(
+      'Este es un mensaje para iOS',
+    );
+  }, []);
+
   return (
     <div className='flex justify-center items-center h-screen'>
       <div className='flex flex-col p-3 md:p-8 py-10 items-center md:h-1/3 max-w-6xl min-w-[360px] w-1/3 md:min-h-[500px] bg-white rounded-md shadow-2xl transition-shadow filter drop-shadow'>
