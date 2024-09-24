@@ -311,7 +311,6 @@ const ProfileScreen: React.FC<object> = () => {
       return selectedImages.length > 0;
     };
     const handleSubmit = () => {
-      console.log(selectedImages);
       if (verifyFields()) {
         setCurrentUserAvatar(avatars[selectedImages[0]]);
       }
@@ -387,7 +386,7 @@ const ProfileScreen: React.FC<object> = () => {
     return (
       <div className='bg-white md:p-6 px-2 py-3 rounded-lg shadow-lg w-full sm:max-w-screen'>
         <div className='flex justify-between items-center '>
-          <div className='flex flex-col items-center md:flex-row md:items-start w-full gap-2'>
+          <div className='flex flex-col items-center md:flex-row md:center w-full gap-2'>
             {currentUserAvatar ? (
               <Image src={currentUserAvatar.src} className='w-[15%]' />
             ) : (
