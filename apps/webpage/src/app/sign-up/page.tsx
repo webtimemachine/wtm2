@@ -188,7 +188,7 @@ const SignUpScreen: React.FC<{}> = () => {
                 name='displayname'
                 placeholder='Display Name'
                 value={displayname}
-                autoCapitalize='false'
+                autoCapitalize={'off'}
                 onChange={(event) => {
                   setDisplayname(event.target.value);
                   if (displayNameError) setDisplayNameError('');
@@ -212,7 +212,7 @@ const SignUpScreen: React.FC<{}> = () => {
                 name='email'
                 placeholder='Email'
                 value={email}
-                autoCapitalize='false'
+                autoCapitalize={'off'}
                 onChange={(event) => {
                   setEmail(event.target.value);
                   if (emailError) setEmailError('');
