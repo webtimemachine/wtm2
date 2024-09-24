@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>SFSafariWebExtensionConverterVersion</key>
 	<string>15.4</string>
 	<key>UIApplicationSceneManifest</key>
@@ -23,8 +25,7 @@
 			</array>
 		</dict>
 	</dict>
-    <key>NSContactsUsageDescription</key>
-    <string>This app requires access to your contacts to help you connect with your friends and family easily.</string>
-
+	<key>NSContactsUsageDescription</key>
+	<string>This app requires access to your contacts to help you connect with your friends and family easily.</string>
 </dict>
 </plist>
