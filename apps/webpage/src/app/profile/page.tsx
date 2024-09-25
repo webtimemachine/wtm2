@@ -43,10 +43,10 @@ import { ReactImageSelector } from 'react-images-selector';
 import { ImageType } from 'react-images-selector/dist/image';
 import { RxAvatar } from 'react-icons/rx';
 
-import MaleOne from '../../../public/Avatars/male_one.png';
-import MaleTwo from '../../../public/Avatars/male_two.png';
-import FemaleOne from '../../../public/Avatars/female_one.png';
-import FemaleTwo from '../../../public/Avatars/female_two.png';
+import MaleOne from '../../assets/Avatars/male_one.png';
+import MaleTwo from '../../assets/Avatars/male_two.png';
+import FemaleOne from '../../assets/Avatars/female_one.png';
+import FemaleTwo from '../../assets/Avatars/female_two.png';
 import { StaticImageData } from 'next/image';
 const avatars: { [key: string]: StaticImageData } = {
   MaleOne: MaleOne,
