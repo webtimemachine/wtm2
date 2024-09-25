@@ -41,7 +41,8 @@
     "sanitize-html": "^2.13.0",
     "tailwind-merge": "^2.0.0",
     "zustand": "^4.5.2",
-    "@wtm/api": "*"
+    "@wtm/api": "*",
+    "@wtm/utils": "*"
   },
   "devDependencies": {
     "@crxjs/vite-plugin": "^2.0.0-beta.21",

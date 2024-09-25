@@ -23,7 +23,7 @@ import {
   getBrowserIconFromDevice,
   getOSIconFromDevice,
   getSupportedBrowserFromDevice,
-} from '@/utils';
+} from '@wtm/utils';
 
 const moveCurrentSessionToFirst = (arr: ActiveSession[]) => {
   const currentIndex = arr.findIndex(
