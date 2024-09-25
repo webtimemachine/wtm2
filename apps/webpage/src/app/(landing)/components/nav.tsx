@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 
 import { Button } from '@chakra-ui/react';
 import { NavMenu } from './nav-menu';
-import { cn } from '@/utils/cn';
+import { cn } from '@wtm/utils';
 import { useMediaQuery } from 'usehooks-ts';
 
 export enum Routes {

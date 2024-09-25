@@ -1,11 +1,11 @@
 import { apiClient } from '../utils/api.client';
-import { DOMtoString, getImages } from '../utils';
+import { DOMtoString, getImages } from '@wtm/utils';
 import { CreateNavigationEntry } from '@wtm/api';
 import * as cheerio from 'cheerio';
 import { convertHtmlToMarkdown } from 'dom-to-semantic-markdown';
 
 import { AnyNode } from 'domhandler';
-import { isTokenExpired } from '../utils/isTokenExpired';
+import { isTokenExpired } from '@wtm/utils';
 function onUrlChange(callback: () => void) {
   let lastUrl = location.href;
   new MutationObserver(() => {

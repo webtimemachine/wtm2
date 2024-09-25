@@ -38,7 +38,7 @@ import CustomInputBox from './components/CustomInputBox';
 import { useChangeUserPassword } from '../../hooks/use-change-user-password.hook';
 import { BsKey, BsPerson } from 'react-icons/bs';
 import { useChangeUserDisplayName } from '../../hooks/use-change-user-displayname.hook';
-import { relativeTime } from '../../utils';
+import { relativeTime } from '@wtm/utils';
 import { ReactImageSelector } from 'react-images-selector';
 import { ImageType } from 'react-images-selector/dist/image';
 import { RxAvatar } from 'react-icons/rx';
