@@ -108,6 +108,11 @@ export const ForgotPasswordScreen: React.FC<object> = () => {
                   if (emailError) setEmailError('');
                 }}
                 backgroundColor={'white'}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter') {
+                    sendCode();
+                  }
+                }}
               />
               <div className='min-h-[32px] [&>div]:mt-1 [&>div]:mb-1'>
                 <FormErrorMessage>{emailError}</FormErrorMessage>
