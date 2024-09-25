@@ -1,0 +1,27 @@
+{
+  "name": "@wtm/utils",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc --build",
+    "clean": "rimraf dist",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@wtm/api": "*",
+    "react-icons": "^5.3.0"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.5.0",
+    "@types/jest": "^29.5.13",
+    "jest": "^29.7.0",
+    "rimraf": "^3.0.0",
+    "ts-jest": "^29.2.5",
+    "typescript": "^4.0.0"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
