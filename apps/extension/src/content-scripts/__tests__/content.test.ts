@@ -2,7 +2,7 @@ import { apiClient } from '../../utils/api.client';
 import { postNavigationEntry } from '../content';
 
 // Mocking the DOMtoString function
-jest.mock('../../utils', () => ({
+jest.mock('@wtm/utils', () => ({
   DOMtoString: jest.fn().mockReturnValue('<div>Mock HTML Content</div>'),
   getImages: jest
     .fn()
