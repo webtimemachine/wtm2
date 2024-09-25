@@ -287,6 +287,11 @@ export const SignUpScreen: React.FC = () => {
                   if (confirmPassError) setConfirmPassError('');
                 }}
                 backgroundColor={'white'}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter') {
+                    handleSignUp();
+                  }
+                }}
               />
               <InputRightElement width='4.5rem'>
                 <Button

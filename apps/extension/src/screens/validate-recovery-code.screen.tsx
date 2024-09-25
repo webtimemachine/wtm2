@@ -23,6 +23,12 @@ export const ValidateRecoveryCode: React.FC<object> = () => {
     }
   }, [validateRecoveryCodeMutation.isSuccess]);
 
+  const handleRecoveryCode = () => {
+    validateRecoveryCodeMutation.mutate({
+      email: recoveryEmail,
+      recoveryCode,
+    });
+  };
   return (
     <>
       <div className='flex flex-col p-8 pt-10 items-center w-full'>
@@ -61,6 +67,11 @@ export const ValidateRecoveryCode: React.FC<object> = () => {
               setRecoveryCode(event.target.value.replace(/\D/g, ''));
             }}
             backgroundColor={'white'}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter') {
+                handleRecoveryCode();
+              }
+            }}
           />
         </div>
 
@@ -68,12 +79,7 @@ export const ValidateRecoveryCode: React.FC<object> = () => {
           <Button
             colorScheme='blue'
             isDisabled={!recoveryCode}
-            onClick={() =>
-              validateRecoveryCodeMutation.mutate({
-                email: recoveryEmail,
-                recoveryCode,
-              })
-            }
+            onClick={() => handleRecoveryCode()}
             isLoading={validateRecoveryCodeMutation.isPending}
             loadingText='Validating code'
           >

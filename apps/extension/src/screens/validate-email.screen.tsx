@@ -22,6 +22,15 @@ export const ValidateEmailScreen: React.FC<object> = () => {
     }
   }, [verificationCodeMutation.isSuccess]);
 
+  const handleEmailVerification = () => {
+    verificationCodeMutation.mutate({
+      deviceKey,
+      verificationCode,
+      userAgent: window.navigator.userAgent,
+      userAgentData: JSON.stringify(window?.navigator?.userAgentData || '{}'),
+    });
+  };
+
   return (
     <>
       <div className='flex flex-col p-8 pt-10 items-center w-full'>
@@ -57,6 +66,11 @@ export const ValidateEmailScreen: React.FC<object> = () => {
               setVerificationCode(event.target.value.replace(/\D/g, ''));
             }}
             backgroundColor={'white'}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter') {
+                handleEmailVerification();
+              }
+            }}
           />
         </div>
 
@@ -78,16 +92,9 @@ export const ValidateEmailScreen: React.FC<object> = () => {
           <Button
             colorScheme='blue'
             isDisabled={!verificationCode}
-            onClick={() =>
-              verificationCodeMutation.mutate({
-                deviceKey,
-                verificationCode,
-                userAgent: window.navigator.userAgent,
-                userAgentData: JSON.stringify(
-                  window?.navigator?.userAgentData || '{}',
-                ),
-              })
-            }
+            onClick={() => {
+              handleEmailVerification();
+            }}
             isLoading={verificationCodeMutation.isPending}
             loadingText='Verifying email'
           >
