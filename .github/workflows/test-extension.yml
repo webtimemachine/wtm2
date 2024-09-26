@@ -18,7 +18,13 @@ jobs:
           node-version: 20.17.0
 
       - name: Install dependencies
-        run: npm install
+        run: npm install --workspaces
+
+      - name: Clear Jest cache
+        run: npx jest --clearCache
+
+      - name: Build all packages
+        run: npm run build --workspace=@wtm/utils
 
       - name: Run Extension Tests
         run: npm run test:cov --workspace=@wtm/extension
