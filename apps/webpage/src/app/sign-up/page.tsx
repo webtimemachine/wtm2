@@ -24,15 +24,15 @@ import {
   useToast,
   InputLeftAddon,
 } from '@chakra-ui/react';
-import { ArrowBackIcon, AtSignIcon, InfoIcon } from '@chakra-ui/icons';
+import { ArrowBackIcon, InfoIcon } from '@chakra-ui/icons';
 
 import { ServerUrlEditable } from '@/components';
 import { useSignUp } from '@/hooks';
 
 import { useNavigation } from '@/store';
 
-import { generateSecurePassword } from '../../utils/generateSecurePassword';
-import { cn } from '../../utils';
+import { generateSecurePassword } from '@wtm/utils';
+import { cn } from '@wtm/utils';
 import { BiAt, BiKey, BiRename } from 'react-icons/bi';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

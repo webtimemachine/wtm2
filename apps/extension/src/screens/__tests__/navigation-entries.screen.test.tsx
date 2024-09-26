@@ -16,6 +16,10 @@ jest.mock('../../hooks', () => ({
   useNavigationEntries: jest.fn(),
 }));
 
+jest.mock('@wtm/utils', () => ({
+  getBrowserIconFromDevice: jest.fn(),
+}));
+
 const mockNavigateTo = jest.fn();
 const mockMutate = jest.fn();
 const mockRefetch = jest.fn();

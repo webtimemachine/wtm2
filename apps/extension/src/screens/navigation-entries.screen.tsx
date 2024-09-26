@@ -25,7 +25,7 @@ import { CompleteNavigationEntryDto } from '@wtm/api';
 import { useDeleteNavigationEntry, useNavigationEntries } from '../hooks';
 
 import { useNavigation } from '../store';
-import { getBrowserIconFromDevice } from '../utils';
+import { getBrowserIconFromDevice } from '@wtm/utils';
 
 import clsx from 'clsx';
 

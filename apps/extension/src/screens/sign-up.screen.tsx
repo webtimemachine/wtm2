@@ -29,7 +29,7 @@ import { useSignUp } from '../hooks';
 import { useNavigation } from '../store';
 
 import clsx from 'clsx';
-import { generateSecurePassword } from '../utils/generateSecurePassword';
+import { generateSecurePassword } from '@wtm/utils';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[^\s]{8,20}$/;
