@@ -27,7 +27,6 @@ import {
   TabPanels,
   Tabs,
   Text,
-  Tooltip,
   useDisclosure,
 } from '@chakra-ui/react';
 
@@ -370,7 +369,13 @@ const ProfileScreen: React.FC<object> = () => {
             </Text>
           </div>
         </div>
-        {user ? <ProfileCard /> : <Spinner />}
+        {user ? (
+          <ProfileCard />
+        ) : (
+          <div className='flex w-full h-full items-center justify-center'>
+            <Spinner size={'lg'} />
+          </div>
+        )}
       </div>
     </>
   );
