@@ -20,11 +20,8 @@ jobs:
       - name: Install dependencies
         run: npm install --workspaces
 
-      - name: Clear Jest cache
-        run: npx jest --clearCache
-
       - name: Build all packages
-        run: npm run build --workspace=@wtm/utils
+        run: npm run build --workspace=packages/
 
       - name: Run Extension Tests
         run: npm run test:cov --workspace=@wtm/extension

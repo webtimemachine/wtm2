@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "test": "tsc --project tsconfig.test.json && jest --passWithNoTests --detectOpenHandles",
-    "test:cov": "tsc --project tsconfig.test.json && jest --passWithNoTests --detectOpenHandles --coverage"
+    "test:cov": "jest --passWithNoTests --detectOpenHandles --coverage"
   },
   "dependencies": {
     "@chakra-ui/icons": "^2.1.1",
