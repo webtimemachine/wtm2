@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import {
   Button,
   Input,
@@ -29,7 +29,7 @@ import { useSignUp } from '../hooks';
 import { useNavigation } from '../store';
 
 import clsx from 'clsx';
-import { generateSecurePassword } from '../utils/generateSecurePassword';
+import { generateSecurePassword } from '@wtm/utils';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[^\s]{8,20}$/;
@@ -52,6 +52,8 @@ export const SignUpScreen: React.FC = () => {
 
   const [loadingGeneratePassword, setLoadingGeneratePassword] = useState(false);
   const [passwordTooltipIsOpen, setPasswordTooltipIsOpen] = useState(false);
+
+  const passwordInputRef = useRef<HTMLInputElement>(null);
 
   const toast = useToast();
 
@@ -165,7 +167,7 @@ export const SignUpScreen: React.FC = () => {
               name='email'
               placeholder='Email'
               value={email}
-              autoCapitalize='false'
+              autoCapitalize={'off'}
               onChange={(event) => {
                 setEmail(event.target.value);
                 if (emailError) setEmailError('');
@@ -181,20 +183,31 @@ export const SignUpScreen: React.FC = () => {
         <FormControl isInvalid={!!passwordError}>
           <div className='flex flex-col w-full pb-4 '>
             <InputGroup size='md'>
-              <Popover isOpen={passwordTooltipIsOpen}>
+              <Popover
+                isOpen={passwordTooltipIsOpen}
+                initialFocusRef={passwordInputRef}
+              >
                 <PopoverTrigger>
                   <Input
+                    ref={passwordInputRef}
                     pr='4.5rem'
                     type={showPass ? 'text' : 'password'}
                     name='password'
                     placeholder='Enter password'
                     value={password}
                     onChange={(event) => {
+                      if (passwordTooltipIsOpen) {
+                        setPasswordTooltipIsOpen(false);
+                      }
+
                       setPassword(event.target.value);
                       if (passwordError) setPasswordError('');
                     }}
                     backgroundColor={'white'}
-                    onClick={() => setPasswordTooltipIsOpen(true)}
+                    onClick={() => {
+                      if (password.length) return;
+                      setPasswordTooltipIsOpen(true);
+                    }}
                   />
                 </PopoverTrigger>
                 <Portal>
@@ -274,6 +287,11 @@ export const SignUpScreen: React.FC = () => {
                   if (confirmPassError) setConfirmPassError('');
                 }}
                 backgroundColor={'white'}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter') {
+                    handleSignUp();
+                  }
+                }}
               />
               <InputRightElement width='4.5rem'>
                 <Button

@@ -6,12 +6,14 @@ import { useGetBasicUserInformation } from '../../hooks/use-get-user-basic-infor
 import {
   Avatar,
   Badge,
+  Box,
   Button,
   Divider,
   FormControl,
   FormErrorMessage,
   FormHelperText,
   FormLabel,
+  Image,
   Input,
   Modal,
   ModalBody,
@@ -27,7 +29,6 @@ import {
   TabPanels,
   Tabs,
   Text,
-  Tooltip,
   useDisclosure,
 } from '@chakra-ui/react';
 
@@ -36,12 +37,28 @@ import CustomInputBox from './components/CustomInputBox';
 import { useChangeUserPassword } from '../../hooks/use-change-user-password.hook';
 import { BsKey, BsPerson } from 'react-icons/bs';
 import { useChangeUserDisplayName } from '../../hooks/use-change-user-displayname.hook';
-import { relativeTime } from '../../utils';
+import { relativeTime } from '@wtm/utils';
+import { ReactImageSelector } from 'react-images-selector';
+import { ImageType } from 'react-images-selector/dist/image';
+import { RxAvatar } from 'react-icons/rx';
+
+import MaleOne from '../../assets/Avatars/male_one.png';
+import MaleTwo from '../../assets/Avatars/male_two.png';
+import FemaleOne from '../../assets/Avatars/female_one.png';
+import FemaleTwo from '../../assets/Avatars/female_two.png';
+import { StaticImageData } from 'next/image';
+const avatars: { [key: string]: StaticImageData } = {
+  MaleOne: MaleOne,
+  MaleTwo: MaleTwo,
+  FemaleOne: FemaleOne,
+  FemaleTwo: FemaleTwo,
+};
 
 const ProfileScreen: React.FC<object> = () => {
   const { basicUserInformationQuery } = useGetBasicUserInformation();
   const { changeUserPasswordMutation } = useChangeUserPassword();
   const { changeUserDisplayNameMutation } = useChangeUserDisplayName();
+  const [currentUserAvatar, setCurrentUserAvatar] = useState<StaticImageData>();
   const user = basicUserInformationQuery.data;
 
   const ChangePasswordModal = () => {
@@ -254,6 +271,107 @@ const ProfileScreen: React.FC<object> = () => {
       </>
     );
   };
+  const ChangeAvatarModal = () => {
+    const images = [
+      {
+        src: MaleOne.src,
+        value: 'MaleOne',
+      },
+      {
+        src: MaleTwo.src,
+        value: 'MaleTwo',
+      },
+      {
+        src: FemaleOne.src,
+        value: 'FemaleOne',
+      },
+      {
+        src: FemaleTwo.src,
+        value: 'FemaleTwo',
+      },
+    ];
+    const [selectedImages, setSelectedImages] = useState<string[]>([]);
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const [newAvatar, setNewAvatar] = useState<ImageType>({
+      src: '',
+      value: '',
+    });
+    const isError = !newAvatar.src && !newAvatar.value;
+
+    useEffect(() => {
+      if (!isOpen) {
+        setNewAvatar({
+          src: '',
+          value: '',
+        });
+      }
+    }, [isOpen]);
+    const verifyFields = () => {
+      return selectedImages.length > 0;
+    };
+    const handleSubmit = () => {
+      if (verifyFields()) {
+        setCurrentUserAvatar(avatars[selectedImages[0]]);
+      }
+    };
+
+    return (
+      <>
+        <Button
+          size='sm'
+          onClick={onOpen}
+          className='flex justify-between items-center gap-2'
+        >
+          <RxAvatar /> Change Avatar
+        </Button>
+
+        <Modal
+          isOpen={isOpen}
+          onClose={onClose}
+          size={{ base: 'full', md: 'md' }}
+        >
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Change your Avatar</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <FormControl>
+                <ReactImageSelector
+                  availableImages={images}
+                  selectedImages={selectedImages}
+                  SelectorControl={undefined}
+                  onPick={(image) => {
+                    if (selectedImages.includes(image.value)) {
+                      setSelectedImages([]);
+                    } else {
+                      setSelectedImages([image.value]);
+                    }
+                  }}
+                  imageStyles={{ margin: 8, padding: 5 }}
+                />
+                <FormHelperText>Please, select one avatar.</FormHelperText>
+              </FormControl>
+            </ModalBody>
+
+            <ModalFooter>
+              <div className='flex w-full flex-col space-y-2 md:flex-row md:justify-end md:space-y-0 md:space-x-3'>
+                <Button
+                  colorScheme='blue'
+                  onClick={handleSubmit}
+                  disabled={isError}
+                >
+                  Change
+                </Button>
+                <Button variant='ghost' onClick={onClose}>
+                  Close
+                </Button>
+              </div>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+      </>
+    );
+  };
   const ProfileCard = () => {
     const username = basicUserInformationQuery.data?.displayname;
     const relativeTimeLabel =
@@ -266,14 +384,19 @@ const ProfileScreen: React.FC<object> = () => {
         : 'Never';
     return (
       <div className='bg-white md:p-6 px-2 py-3 rounded-lg shadow-lg w-full sm:max-w-screen'>
-        <div className='flex justify-between '>
-          <div className='flex flex-col items-center md:flex-row md:items-start w-full gap-2'>
-            <Avatar
-              name={user?.email}
-              size={{ base: 'xl', md: 'lg' }}
-              bg='gray.400'
-            />
-            <div className='flex flex-col items-center md:items-start pt-1'>
+        <div className='flex justify-between items-center '>
+          <div className='flex flex-col items-center md:flex-row md:center w-full gap-2'>
+            {currentUserAvatar ? (
+              <Image src={currentUserAvatar.src} className='w-[15%]' />
+            ) : (
+              <Avatar
+                name={user?.email}
+                size={{ base: 'xl', md: 'lg' }}
+                bg='gray.400'
+              />
+            )}
+
+            <div className='flex flex-col justify-center items-center md:items-start pt-1 h-full'>
               <span className='text-lg font-medium text-card-foreground'>
                 {username}
               </span>
@@ -348,6 +471,7 @@ const ProfileScreen: React.FC<object> = () => {
                 <div className='flex flex-col justify-start gap-5'>
                   <ChangePasswordModal />
                   <ChangeDisplayNameModal />
+                  <ChangeAvatarModal />
                 </div>
               </TabPanel>
             </TabPanels>
@@ -370,7 +494,13 @@ const ProfileScreen: React.FC<object> = () => {
             </Text>
           </div>
         </div>
-        {user ? <ProfileCard /> : <Spinner />}
+        {user ? (
+          <ProfileCard />
+        ) : (
+          <div className='flex w-full h-full items-center justify-center'>
+            <Spinner size={'lg'} />
+          </div>
+        )}
       </div>
     </>
   );

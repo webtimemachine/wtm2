@@ -163,22 +163,6 @@ export const PreferencesScreen: React.FC<object> = () => {
                   specified number of days.
                 </Text>
               </div>
-              <div className='flex flex-col w-full py-2'>
-                <div className='flex flex-row w-full justify-between pb-2'>
-                  <Text fontSize={'medium'} fontWeight={700}>
-                    Stop Tracking
-                  </Text>
-                  <Switch
-                    size='md'
-                    isChecked={stopTrackingEnabled}
-                    aria-label='Stop Tracking'
-                    onChange={(e) => setStopTrackingEnabled(e.target.checked)}
-                  />
-                </div>
-                <Text fontSize={14}>
-                  Enable to stop tracking your search history.
-                </Text>
-              </div>
 
               {enabled && (
                 <div className='flex w-full py-2 items-center justify-between pb-2'>
@@ -198,6 +182,24 @@ export const PreferencesScreen: React.FC<object> = () => {
                   />
                 </div>
               )}
+
+              <div className='flex flex-col w-full py-2'>
+                <div className='flex flex-row w-full justify-between pb-2'>
+                  <Text fontSize={'medium'} fontWeight={700}>
+                    Stop Tracking
+                  </Text>
+                  <Switch
+                    size='md'
+                    isChecked={stopTrackingEnabled}
+                    aria-label='Stop Tracking'
+                    onChange={(e) => setStopTrackingEnabled(e.target.checked)}
+                  />
+                </div>
+                <Text fontSize={14}>
+                  Enable to stop tracking your search history.
+                </Text>
+              </div>
+
               <Divider />
             </div>
             <div className='pb-8 pt-4'>

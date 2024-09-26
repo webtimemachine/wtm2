@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import {
   Button,
   Input,
@@ -24,15 +24,15 @@ import {
   useToast,
   InputLeftAddon,
 } from '@chakra-ui/react';
-import { ArrowBackIcon, AtSignIcon, InfoIcon } from '@chakra-ui/icons';
+import { ArrowBackIcon, InfoIcon } from '@chakra-ui/icons';
 
 import { ServerUrlEditable } from '@/components';
 import { useSignUp } from '@/hooks';
 
 import { useNavigation } from '@/store';
 
-import { generateSecurePassword } from '../../utils/generateSecurePassword';
-import { cn } from '../../utils';
+import { generateSecurePassword } from '@wtm/utils';
+import { cn } from '@wtm/utils';
 import { BiAt, BiKey, BiRename } from 'react-icons/bi';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -58,6 +58,8 @@ const SignUpScreen: React.FC<{}> = () => {
 
   const [loadingGeneratePassword, setLoadingGeneratePassword] = useState(false);
   const [passwordTooltipIsOpen, setPasswordTooltipIsOpen] = useState(false);
+
+  const passwordInputRef = useRef<HTMLInputElement>(null);
 
   const toast = useToast();
 
@@ -188,7 +190,7 @@ const SignUpScreen: React.FC<{}> = () => {
                 name='displayname'
                 placeholder='Display Name'
                 value={displayname}
-                autoCapitalize='false'
+                autoCapitalize={'off'}
                 onChange={(event) => {
                   setDisplayname(event.target.value);
                   if (displayNameError) setDisplayNameError('');
@@ -212,7 +214,7 @@ const SignUpScreen: React.FC<{}> = () => {
                 name='email'
                 placeholder='Email'
                 value={email}
-                autoCapitalize='false'
+                autoCapitalize={'off'}
                 onChange={(event) => {
                   setEmail(event.target.value);
                   if (emailError) setEmailError('');
@@ -231,7 +233,10 @@ const SignUpScreen: React.FC<{}> = () => {
               <InputLeftAddon>
                 <BiKey />
               </InputLeftAddon>
-              <Popover isOpen={passwordTooltipIsOpen}>
+              <Popover
+                isOpen={passwordTooltipIsOpen}
+                initialFocusRef={passwordInputRef}
+              >
                 <PopoverTrigger>
                   <Input
                     pr='4.5rem'
@@ -240,11 +245,19 @@ const SignUpScreen: React.FC<{}> = () => {
                     placeholder='Enter password'
                     value={password}
                     onChange={(event) => {
+                      if (passwordTooltipIsOpen) {
+                        setPasswordTooltipIsOpen(false);
+                      }
+
                       setPassword(event.target.value);
                       if (passwordError) setPasswordError('');
                     }}
                     backgroundColor={'white'}
-                    onClick={() => setPasswordTooltipIsOpen(true)}
+                    onClick={() => {
+                      if (password.length) return;
+                      setPasswordTooltipIsOpen(true);
+                    }}
+                    ref={passwordInputRef}
                   />
                 </PopoverTrigger>
                 <Portal>

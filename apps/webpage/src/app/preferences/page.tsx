@@ -161,6 +161,26 @@ const PreferencesScreen: React.FC<object> = () => {
                 number of days.
               </Text>
             </div>
+
+            {enabled && (
+              <div className='flex w-full py-2 items-center justify-between pb-2'>
+                <div className='flex pr-4'>
+                  <Text fontSize={14}>
+                    Set the number of days before history entries expire.
+                  </Text>
+                </div>
+                <Input
+                  type='number'
+                  name='days'
+                  backgroundColor={'white'}
+                  width={75}
+                  value={days || ''}
+                  isDisabled={!enabled}
+                  onChange={(e) => setDays(parseInt(e.target.value))}
+                />
+              </div>
+            )}
+
             <Divider />
             <div className='flex flex-col w-full py-2'>
               <div className='flex flex-row w-full justify-between pb-2'>
@@ -181,24 +201,6 @@ const PreferencesScreen: React.FC<object> = () => {
               </Text>
             </div>
 
-            {enabled && (
-              <div className='flex w-full py-2 items-center justify-between pb-2'>
-                <div className='flex pr-4'>
-                  <Text fontSize={14}>
-                    Set the number of days before history entries expire.
-                  </Text>
-                </div>
-                <Input
-                  type='number'
-                  name='days'
-                  backgroundColor={'white'}
-                  width={75}
-                  value={days || ''}
-                  isDisabled={!enabled}
-                  onChange={(e) => setDays(parseInt(e.target.value))}
-                />
-              </div>
-            )}
             <Divider />
           </div>
           <div className='flex justify-center pb-8 pt-4'>
