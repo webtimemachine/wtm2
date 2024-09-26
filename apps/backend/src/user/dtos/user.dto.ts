@@ -23,4 +23,8 @@ export class UserDto {
   @ApiProperty()
   @Expose()
   passChangedAt: Date;
+
+  @ApiProperty()
+  @Expose()
+  profilePicture: string;
 }
