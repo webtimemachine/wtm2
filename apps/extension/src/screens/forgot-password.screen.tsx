@@ -102,12 +102,17 @@ export const ForgotPasswordScreen: React.FC<object> = () => {
                 name='email'
                 placeholder='Email'
                 value={email}
-                autoCapitalize='false'
+                autoCapitalize={'off'}
                 onChange={(event) => {
                   setEmail(event.target.value);
                   if (emailError) setEmailError('');
                 }}
                 backgroundColor={'white'}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter') {
+                    sendCode();
+                  }
+                }}
               />
               <div className='min-h-[32px] [&>div]:mt-1 [&>div]:mb-1'>
                 <FormErrorMessage>{emailError}</FormErrorMessage>

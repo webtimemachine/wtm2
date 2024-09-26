@@ -29,6 +29,10 @@ jest.mock('react-markdown', () => ({
   Markdown: jest.fn().mockReturnValue(<></>),
 }));
 
+jest.mock('@wtm/utils', () => ({
+  getBrowserIconFromDevice: jest.fn(),
+}));
+
 const mockNavigateTo = jest.fn();
 const mockMutate = jest.fn();
 const mockRefetch = jest.fn();

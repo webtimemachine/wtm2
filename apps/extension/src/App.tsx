@@ -2,7 +2,7 @@ import React from 'react';
 import { useMediaQuery } from '@chakra-ui/react';
 
 import { useNavigation } from './store';
-import { isMobile } from './utils/isMobile';
+import { isMobile } from '@wtm/utils';
 import clsx from 'clsx';
 
 const App: React.FC<object> = () => {

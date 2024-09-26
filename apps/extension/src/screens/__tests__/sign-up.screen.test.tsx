@@ -19,6 +19,10 @@ jest.mock('../../hooks', () => ({
   useSignUp: jest.fn(),
 }));
 
+jest.mock('@wtm/utils', () => ({
+  generateSecurePassword: jest.fn(),
+}));
+
 const mockNavigateBack = jest.fn();
 const mockMutate = jest.fn();
 const mockIsPending = jest.fn();

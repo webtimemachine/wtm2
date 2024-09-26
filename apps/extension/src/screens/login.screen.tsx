@@ -98,7 +98,7 @@ export const LoginScreen: React.FC<object> = () => {
               name='email'
               placeholder='Email'
               value={email}
-              autoCapitalize='false'
+              autoCapitalize={'off'}
               onChange={(event) => {
                 setEmail(event.target.value);
                 if (emailError) setEmailError('');
@@ -121,6 +121,11 @@ export const LoginScreen: React.FC<object> = () => {
               value={password}
               onChange={(event) => setPassword(event.target.value)}
               backgroundColor={'white'}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter') {
+                  handleLogin();
+                }
+              }}
             />
             <InputRightElement width='4.5rem'>
               <Button

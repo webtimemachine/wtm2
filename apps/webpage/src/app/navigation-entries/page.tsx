@@ -15,7 +15,6 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
-
 import {
   ChevronDownIcon,
   ChevronLeftIcon,
@@ -30,7 +29,7 @@ import { BsStars } from 'react-icons/bs';
 import { useDeleteNavigationEntry, useNavigationEntries } from '../../hooks';
 import { CompleteNavigationEntryDto } from '@wtm/api';
 
-import { getBrowserIconFromDevice } from '../../utils';
+import { getBrowserIconFromDevice } from '@wtm/utils';
 
 import clsx from 'clsx';
 

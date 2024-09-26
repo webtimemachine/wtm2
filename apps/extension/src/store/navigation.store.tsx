@@ -14,7 +14,7 @@ import {
   ProfileScreen,
 } from '../screens';
 
-import { last } from '../utils';
+import { last } from '@wtm/utils';
 import { ConfirmDeleteAccountScreen } from '../screens/confirm-delete-account.screen';
 import { readAuthStateFromLocal, useAuthStore } from './auth.store';
 

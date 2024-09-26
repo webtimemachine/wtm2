@@ -72,13 +72,13 @@ export const DOMtoString = (selector: string): string => {
   }
 };
 
-
 /**
  * Return the sources of existing images that meet the size threshold
  *
  * Note that sources can be HTTP URLs or base64 encoded images
  * @returns {string[]}
  */
-export const getImages = (): string[] => Array.from(document.querySelectorAll('img'))
-  .filter(img => img.height > 500)
-  .map(img => img.src);
+export const getImages = (): string[] =>
+  Array.from(document.querySelectorAll('img'))
+    .filter((img) => img.height > 500)
+    .map((img) => img.src);

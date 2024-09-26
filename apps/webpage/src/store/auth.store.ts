@@ -3,7 +3,7 @@
 import { useStore } from 'zustand';
 import { createStore } from 'zustand/vanilla';
 import { persist } from 'zustand/middleware';
-import { getRandomToken } from '../utils';
+import { getRandomToken } from '@wtm/utils';
 
 import { ScreenName } from './use-screen-navigation';
 
