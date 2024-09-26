@@ -6,8 +6,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "dev": "nodemon --watch src --exec \"npm run build\"",
-    "build": "rimraf ./dist && tsc",
-    "postinstall": "npm run build"
+    "build": "rimraf ./dist && tsc"
   },
   "keywords": [],
   "author": "",

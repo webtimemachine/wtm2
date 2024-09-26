@@ -8,7 +8,6 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -19,9 +18,10 @@ jobs:
           node-version: 20.17.0
 
       - name: Install dependencies
-        run: |
-          npm install turbo --global
-          npm install --workspace=@wtm/webpage
+        run: npm install --workspaces
+
+      - name: Build all packages
+        run: npm run build --workspace=packages/
 
       - name: Run Webpage Tests
-        run: turbo run test --filter=@wtm/webpage
+        run: npm run test:cov --workspace=@wtm/webpage
