@@ -29,6 +29,10 @@ jest.mock('@wtm/api', () => ({
   isLoginRes: jest.fn(),
 }));
 
+jest.mock('@wtm/utils', () => ({
+  getRandomToken: jest.fn(),
+}));
+
 const mockLoginMutation = {
   mutate: jest.fn(),
   isSuccess: true,

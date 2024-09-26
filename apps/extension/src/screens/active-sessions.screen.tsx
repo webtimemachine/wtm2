@@ -27,7 +27,7 @@ import {
   getBrowserIconFromDevice,
   getOSIconFromDevice,
   getSupportedBrowserFromDevice,
-} from '../utils';
+} from '@wtm/utils';
 
 const moveCurrentSessionToFirst = (arr: ActiveSession[]) => {
   const currentIndex = arr.findIndex(
@@ -68,7 +68,6 @@ export const ActiveSessionsScreen: React.FC<object> = () => {
       setEditingSession(undefined);
       getActiveSessionsQuery.refetch();
     }
-     
   }, [updateDeviceAliasMutation.isSuccess]);
 
   interface ActiveSessionRowProps {

@@ -33,7 +33,7 @@ import CustomInputBox from '../components/custom-input-box.component';
 import { useChangeUserPassword } from '../hooks/use-change-user-password.hook';
 import { BsKey, BsPerson } from 'react-icons/bs';
 import { useChangeUserDisplayName } from '../hooks/use-change-user-displayname.hook';
-import { relativeTime } from '../utils';
+import { relativeTime } from '@wtm/utils';
 import { ArrowBackIcon } from '@chakra-ui/icons';
 import { useNavigation } from '../store';
 import { ReactImageSelector } from 'react-images-selector';

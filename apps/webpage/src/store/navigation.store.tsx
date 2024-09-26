@@ -1,5 +1,5 @@
 // import { create } from 'zustand';
-// import { last } from '@/utils';
+// import { last } from '@wtm/utils';
 import { useAuthStore } from './auth.store';
 import {
   useScreenNavigation,

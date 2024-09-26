@@ -1,6 +1,6 @@
 'use client';
 
-import { BROWSERS, getBrowser } from '@/utils/getBrowser';
+import { BROWSERS, getBrowser } from '@wtm/utils';
 import { Button, Link } from '@chakra-ui/react';
 import NextLink from 'next/link';
 import { ReactElement, useEffect, useState } from 'react';
