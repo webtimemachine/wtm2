@@ -116,6 +116,14 @@ const customRender = (ui: React.ReactElement) => {
 };
 
 describe('LoginScreen', () => {
+  beforeAll(() => {
+    Object.defineProperty(window.navigator, 'userAgentData', {
+      value: {
+        platform: 'Test',
+      },
+      writable: true,
+    });
+  });
   beforeEach(() => {
     jest.clearAllMocks();
   });
