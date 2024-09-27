@@ -104,7 +104,8 @@ export class UserController {
 
   @ApiInternalServerErrorMessageResponse()
   @ApiOkResponse({
-    type: MessageResponse,
+    status: 200,
+    type: UserDeviceDto,
   })
   @JwtAccessToken([])
   @HttpCode(200)

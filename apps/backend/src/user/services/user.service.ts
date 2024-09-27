@@ -11,6 +11,7 @@ import {
   UserDto,
   UserPreferencesDto,
   ChangeDisplayNameInput,
+  ChangeProfilePictureInput,
 } from '../dtos';
 
 import { plainToClassFromExist, plainToInstance } from 'class-transformer';
@@ -244,6 +245,7 @@ export class UserService {
       message: 'Pasword updated successfully!',
     };
   }
+
   async changeDisplayName(
     jwtContext: JwtContext,
     changeDisplayNameInput: ChangeDisplayNameInput,
@@ -254,6 +256,27 @@ export class UserService {
     return {
       statusCode: 200,
       message: 'Displayname updated successfully!',
+    };
+  }
+
+  async changeProfilePicture(
+    jwtContext: JwtContext,
+    changeProfilePictureInput: ChangeProfilePictureInput,
+  ): Promise<MessageResponse> {
+    const userId = jwtContext.user.id;
+    const { profilePicture } = changeProfilePictureInput;
+    await this.prismaService.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        profilePicture: profilePicture || '',
+      },
+    });
+
+    return {
+      statusCode: 200,
+      message: 'Profile picture updated successfully!',
     };
   }
 }
