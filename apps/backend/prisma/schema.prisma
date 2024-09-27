@@ -27,6 +27,7 @@ model User {
   recoveryCode     String?   @db.VarChar()
   verified         Boolean   @default(false)
   verificationCode String?   @db.VarChar()
+  profilePicture   String?   @db.VarChar()
   createdAt        DateTime  @default(now()) @db.Timestamptz(0)
 
   userPreferences   UserPreferences?
@@ -49,7 +50,7 @@ model UserPreferences {
   navigationEntryExpirationInDays Int?
   enableImageEncoding             Boolean? @default(false)
   enableExplicitContentFilter     Boolean? @default(true)
-  enableStopTracking              Boolean @default(false)
+  enableStopTracking              Boolean  @default(false)
 
   createdAt DateTime  @default(now()) @db.Timestamptz(0)
   updateAt  DateTime? @updatedAt @db.Timestamptz(0)
