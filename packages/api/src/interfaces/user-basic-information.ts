@@ -1,6 +1,6 @@
 export enum UserType {
-  MEMBER = 'MEMBER',
-  ADMIN = 'ADMIN',
+  MEMBER = "MEMBER",
+  ADMIN = "ADMIN",
 }
 export interface User {
   id: number;
@@ -8,4 +8,5 @@ export interface User {
   email: string;
   passChangedAt: string | Date;
   displayname: string;
+  profilePicture: string | null | undefined;
 }
