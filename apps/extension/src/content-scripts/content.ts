@@ -3,9 +3,8 @@ import { DOMtoString, getImages } from '@wtm/utils';
 import { CreateNavigationEntry } from '@wtm/api';
 import * as cheerio from 'cheerio';
 import { convertHtmlToMarkdown } from 'dom-to-semantic-markdown';
-
 import { AnyNode } from 'domhandler';
-import { isTokenExpired } from '@wtm/utils';
+
 function onUrlChange(callback: () => void) {
   let lastUrl = location.href;
   new MutationObserver(() => {
@@ -90,52 +89,3 @@ export const postNavigationEntry = async () => {
   }
 };
 postNavigationEntry();
-
-const defaultIcons = {
-  '16': 'app-icon-16.png',
-  '32': 'app-icon-32.png',
-  '48': 'app-icon-48.png',
-  '128': 'app-icon-128.png',
-};
-
-const grayScaleIcons = {
-  '16': 'app-icon-grayscale-16.png',
-  '32': 'app-icon-grayscale-32.png',
-  '48': 'app-icon-grayscale-48.png',
-  '128': 'app-icon-grayscale-128.png',
-};
-
-const startInterval = () => {
-  setInterval(refreshAccessToken, 60 * 60 * 1000); // 1 hour
-};
-
-const refreshAccessToken = async () => {
-  try {
-    const { accessToken, refreshToken } = await chrome.storage.local.get([
-      'accessToken',
-      'refreshToken',
-    ]);
-
-    const isAccessTokenExpired = isTokenExpired(accessToken);
-    const isRefreshTokenExpired = isTokenExpired(refreshToken);
-
-    if (isAccessTokenExpired && !isRefreshTokenExpired) {
-      await apiClient.refresh();
-
-      chrome?.action?.setIcon({
-        path: defaultIcons,
-      });
-    } else {
-      chrome?.action?.setIcon({
-        path: grayScaleIcons,
-      });
-    }
-  } catch (error) {
-    chrome?.action?.setIcon({
-      path: grayScaleIcons,
-    });
-    console.error(`Unexpected Error in windows onFocusChanged:`, error);
-  }
-};
-
-startInterval();
