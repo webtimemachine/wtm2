@@ -126,6 +126,14 @@ const refreshAccessToken = async () => {
       'refreshToken',
     ]);
 
+    if (!accessToken || !refreshToken) {
+      chrome.action.setIcon({
+        path: grayScaleIcons,
+      });
+
+      return;
+    }
+
     const isAccessTokenExpired = isTokenExpired(accessToken);
     const isRefreshTokenExpired = isTokenExpired(refreshToken);
 
@@ -135,9 +143,9 @@ const refreshAccessToken = async () => {
       chrome.action.setIcon({
         path: defaultIcons,
       });
-    } else {
+    } else if (!isAccessTokenExpired) {
       chrome.action.setIcon({
-        path: grayScaleIcons,
+        path: defaultIcons,
       });
     }
   } catch (error) {
@@ -156,5 +164,6 @@ chrome.windows.onFocusChanged.addListener(async (windowId) => {
 });
 
 chrome.runtime.onStartup.addListener(() => {
+  refreshAccessToken();
   startInterval();
 });
