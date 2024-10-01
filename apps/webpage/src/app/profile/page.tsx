@@ -41,8 +41,8 @@ import { relativeTime } from '@wtm/utils';
 import { ReactImageSelector } from 'react-images-selector';
 import { ImageType } from 'react-images-selector/dist/image';
 import { RxAvatar } from 'react-icons/rx';
-import { useChangeUserAvatar } from '@/hooks/use-change-user-profile-avatar.hook';
-import { getAvatarFromLabel } from '@/utils/get-avatar';
+import { useChangeUserAvatar } from '../../hooks/use-change-user-profile-avatar.hook';
+import { getAvatarFromLabel } from '../../utils/get-avatar';
 
 const ProfileScreen: React.FC<object> = () => {
   const { basicUserInformationQuery } = useGetBasicUserInformation();
@@ -312,6 +312,7 @@ const ProfileScreen: React.FC<object> = () => {
       });
       onClose();
     };
+    console.log(images);
     return (
       <>
         <Button

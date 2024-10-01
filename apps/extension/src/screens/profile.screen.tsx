@@ -38,25 +38,28 @@ import { ArrowBackIcon } from '@chakra-ui/icons';
 import { useNavigation } from '../store';
 import { ReactImageSelector } from 'react-images-selector';
 import { RxAvatar } from 'react-icons/rx';
+
+import { ImageType } from 'react-images-selector/dist/image';
+import { useChangeUserAvatar } from '../hooks/use-change-user-profile-avatar.hook';
 import MaleOne from '../assets/Avatars/male_one.png';
 import MaleTwo from '../assets/Avatars/male_two.png';
 import FemaleOne from '../assets/Avatars/female_one.png';
 import FemaleTwo from '../assets/Avatars/female_two.png';
-import { ImageType } from 'react-images-selector/dist/image';
-const avatars: { [key: string]: string } = {
-  MaleOne: MaleOne,
-  MaleTwo: MaleTwo,
-  FemaleOne: FemaleOne,
-  FemaleTwo: FemaleTwo,
-};
+import { StaticImageData } from 'next/image';
 export const ProfileScreen: React.FC<object> = () => {
   const { navigateBack } = useNavigation();
   const { basicUserInformationQuery } = useGetBasicUserInformation();
   const { changeUserPasswordMutation } = useChangeUserPassword();
   const { changeUserDisplayNameMutation } = useChangeUserDisplayName();
   const user = basicUserInformationQuery.data;
-  const [currentUserAvatar, setCurrentUserAvatar] = useState<string>();
+  const { changeUserAvatarMutation } = useChangeUserAvatar();
 
+  const avatars: { [key: string]: string } = {
+    MaleOne: MaleOne,
+    MaleTwo: MaleTwo,
+    FemaleOne: FemaleOne,
+    FemaleTwo: FemaleTwo,
+  };
   const ChangePasswordModal = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [newPassword, setNewPassword] = useState('');
@@ -270,24 +273,26 @@ export const ProfileScreen: React.FC<object> = () => {
     );
   };
   const ChangeAvatarModal = () => {
-    const images = [
+    console.log(avatars);
+    const images: ImageType[] = [
       {
-        src: MaleOne,
+        src: avatars.MaleOne,
         value: 'MaleOne',
       },
       {
-        src: MaleTwo,
+        src: avatars.MaleTwo,
         value: 'MaleTwo',
       },
       {
-        src: FemaleOne,
+        src: avatars.FemaleOne,
         value: 'FemaleOne',
       },
       {
-        src: FemaleTwo,
+        src: avatars.FemaleTwo,
         value: 'FemaleTwo',
       },
     ];
+    console.log(images);
     const [selectedImages, setSelectedImages] = useState<string[]>([]);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [newAvatar, setNewAvatar] = useState<ImageType>({
@@ -309,8 +314,16 @@ export const ProfileScreen: React.FC<object> = () => {
     };
     const handleSubmit = () => {
       if (verifyFields()) {
-        setCurrentUserAvatar(avatars[selectedImages[0]]);
+        changeUserAvatarMutation.mutate({
+          profilePicture: selectedImages[0],
+        });
       }
+    };
+    const handleRemoveAvatar = () => {
+      changeUserAvatarMutation.mutate({
+        profilePicture: '',
+      });
+      onClose();
     };
 
     return (
@@ -353,15 +366,15 @@ export const ProfileScreen: React.FC<object> = () => {
 
             <ModalFooter>
               <div className='flex w-full flex-col space-y-2 md:flex-row md:justify-end md:space-y-0 md:space-x-3'>
+                <Button variant='ghost' onClick={handleRemoveAvatar}>
+                  Remove Actual Avatar
+                </Button>
                 <Button
                   colorScheme='blue'
                   onClick={handleSubmit}
                   disabled={isError}
                 >
                   Change
-                </Button>
-                <Button variant='ghost' onClick={onClose}>
-                  Close
                 </Button>
               </div>
             </ModalFooter>
@@ -380,12 +393,13 @@ export const ProfileScreen: React.FC<object> = () => {
             new Date(basicUserInformationQuery.data?.passChangedAt),
           )
         : 'Never';
+    const currentUserAvatar = basicUserInformationQuery.data?.profilePicture;
     return (
       <div className='bg-white p-6 rounded-lg shadow-lg w-full'>
         <div className='flex justify-between '>
           <div className='flex flex-col items-center md:flex-row md:items-start w-full gap-2'>
-            {currentUserAvatar ? (
-              <img src={currentUserAvatar} className='w-[15%]' />
+            {currentUserAvatar && currentUserAvatar.length > 0 ? (
+              <img src={avatars[currentUserAvatar]} className='w-[25%]' />
             ) : (
               <Avatar
                 name={user?.email}
