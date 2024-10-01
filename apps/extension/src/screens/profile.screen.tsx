@@ -45,7 +45,6 @@ import MaleOne from '../assets/Avatars/male_one.png';
 import MaleTwo from '../assets/Avatars/male_two.png';
 import FemaleOne from '../assets/Avatars/female_one.png';
 import FemaleTwo from '../assets/Avatars/female_two.png';
-import { StaticImageData } from 'next/image';
 export const ProfileScreen: React.FC<object> = () => {
   const { navigateBack } = useNavigation();
   const { basicUserInformationQuery } = useGetBasicUserInformation();
