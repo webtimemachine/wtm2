@@ -119,6 +119,26 @@ const grayScaleIcons = {
   '128': 'app-icon-grayscale-128.png',
 };
 
+const noTrackingIcons = {
+  '16': 'image.png',
+  '32': 'image.png',
+  '48': 'image.png',
+  '128': 'image.png',
+};
+
+const setCorrectIconByUserPreferences = async () => {
+  const response = await apiClient.getUserPreferences();
+  if (response?.enableStopTracking) {
+    chrome.action.setIcon({
+      path: noTrackingIcons,
+    });
+  } else {
+    chrome.action.setIcon({
+      path: defaultIcons,
+    });
+  }
+};
+
 const refreshAccessToken = async () => {
   try {
     const { accessToken, refreshToken } = await chrome.storage.local.get([
@@ -140,13 +160,9 @@ const refreshAccessToken = async () => {
     if (isAccessTokenExpired && !isRefreshTokenExpired) {
       await apiClient.refresh();
 
-      chrome.action.setIcon({
-        path: defaultIcons,
-      });
+      setCorrectIconByUserPreferences();
     } else if (!isAccessTokenExpired) {
-      chrome.action.setIcon({
-        path: defaultIcons,
-      });
+      setCorrectIconByUserPreferences();
     }
   } catch (error) {
     chrome.action.setIcon({
