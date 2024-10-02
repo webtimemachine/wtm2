@@ -15,6 +15,10 @@ jest.mock('../../hooks', () => ({
   useUpdatePreferences: jest.fn(),
 }));
 
+jest.mock('../../utils/updateIcon', () => ({
+  updateIcon: jest.fn(),
+}));
+
 const mockNavigateBack = jest.fn();
 const mockNavigateTo = jest.fn();
 const mockMutate = jest.fn();

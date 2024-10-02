@@ -48,6 +48,10 @@ jest.mock('@wtm/api', () => ({
   isLoginRes: jest.fn(),
 }));
 
+jest.mock('../../utils/updateIcon', () => ({
+  updateIcon: jest.fn(),
+}));
+
 global.chrome = {
   action: {
     setIcon: jest.fn(),
