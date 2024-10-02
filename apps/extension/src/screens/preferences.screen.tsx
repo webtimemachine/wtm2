@@ -11,6 +11,7 @@ import {
 import { ArrowBackIcon } from '@chakra-ui/icons';
 import { useGetPreferences, useUpdatePreferences } from '../hooks';
 import { useNavigation } from '../store';
+import { updateIcon } from '../utils/updateIcon';
 
 export const PreferencesScreen: React.FC<object> = () => {
   const [enabled, setEnabled] = useState(false);
@@ -46,6 +47,12 @@ export const PreferencesScreen: React.FC<object> = () => {
     );
   }, [userPreferencesQuery.data]);
 
+  useEffect(() => {
+    if (updatePreferencesMutation.isSuccess) {
+      updateIcon(true);
+    }
+  }, [updatePreferencesMutation.isSuccess]);
+
   const handleSavePreferences = async () => {
     updatePreferencesMutation.mutate({
       enableNavigationEntryExpiration: enabled,
@@ -54,7 +61,6 @@ export const PreferencesScreen: React.FC<object> = () => {
       enableExplicitContentFilter: explicitContentFilterEnabled,
       enableStopTracking: stopTrackingEnabled,
     });
-
     await chrome.storage.local.set({
       enabledLiteMode,
       stopTrackingEnabled,
