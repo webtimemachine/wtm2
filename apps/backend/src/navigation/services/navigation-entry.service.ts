@@ -30,6 +30,7 @@ import { IndexerService } from '../../encoder/services';
 import { QueryService } from '../../query/services';
 import { ExplicitFilterService } from '../../filter/services';
 import { appEnv } from '../../config';
+import { subDays } from 'date-fns';
 
 @Injectable()
 export class NavigationEntryService {
@@ -378,6 +379,55 @@ export class NavigationEntryService {
 
     return plainToInstance(MessageResponse, {
       message: `${deletedNavigationEntries.length} navigation entries has been deleted`,
+    });
+  }
+
+  async deleteExpiredNavigationEntries(): Promise<MessageResponse> {
+    const userPreferences = await this.prismaService.userPreferences.findMany({
+      where: {
+        enableNavigationEntryExpiration: true,
+        navigationEntryExpirationInDays: {
+          not: null,
+        },
+      },
+      select: {
+        userId: true,
+        navigationEntryExpirationInDays: true,
+      },
+    });
+
+    await Promise.all(
+      userPreferences.map(async (preference) => {
+        const { userId, navigationEntryExpirationInDays } = preference;
+
+        const expirationDate = subDays(
+          new Date(),
+          navigationEntryExpirationInDays!,
+        );
+
+        const entries = await this.prismaService.navigationEntry.findMany({
+          where: {
+            userId: userId,
+            createdAt: {
+              lt: expirationDate,
+            },
+          },
+        });
+
+        await Promise.all(
+          entries.map(async (e) => {
+            const { url, userId, id } = e;
+            this.indexerService.delete(url, userId);
+            await this.prismaService.navigationEntry.delete({
+              where: { id, userId },
+            });
+          }),
+        );
+      }),
+    );
+
+    return plainToInstance(MessageResponse, {
+      message: `Expired navigation entries has been deleted`,
     });
   }
 }
