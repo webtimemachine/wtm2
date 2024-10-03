@@ -99,13 +99,13 @@ const NavigationEntry = ({
   
               - Combine all of your understanding of the content into a single, 20-word sentence in a section called Search Summary:.
   
-              - Output the 10 if exists, including most important points of the content as a list with no more than 15 words per point into a section called Main Points:.
+              - Output the 10 if exists, including most important points of the content as a list with no more than 15 words per point into a section called Main Points.
   
-              - Output a list of the 5 best takeaways from the content in a section called Takeaways:.
+              - Output a list of the 5 best takeaways from the content in a section called Takeaways.
   
-              - Output code must be formatted with Prettier like.
+              - Output code must be formatted with Prettier like if there is programming code in the content.
   
-              - Output a section named Code: that shows a list of code present in INPUT content in markdown
+              - Output a section named Code: that shows a list of code present in INPUT content in markdown if there is programming code in the content.
   
               - Output a section named Tags found: that shows in a list of tags you find
   
@@ -119,10 +119,10 @@ const NavigationEntry = ({
               - Do not output warnings or notes—just the requested sections.
               - Do not repeat items in the output sections.
               - Do not start items with the same opening words.
-              - Do not show Code: section if no code is present on input provided.
+              - Do not show Code section if no code is present on input provided.
               - You must detect the type of code and add it to code block so markdown styles are applied.
               - Set codes proper language if you can detect it.
-              - Detect code and apply format to it.
+              - Detect programming code if there is programming code and apply format to it.
               - The wrapped tags must be tags that you find from page information.
               - Tags must be a link that redirects to source url.
               # INPUT:
