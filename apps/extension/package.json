@@ -27,6 +27,7 @@
     "@chakra-ui/react": "^2.8.2",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
+    "@mlc-ai/web-llm": "^0.2.72",
     "@tanstack/react-query": "^5.29.2",
     "@wcj/html-to-markdown": "^2.1.1",
     "@wtm/api": "*",

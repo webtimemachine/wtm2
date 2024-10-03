@@ -1,5 +1,6 @@
 import { isTokenExpired } from '@wtm/utils';
 import { apiClient } from '../utils/api.client';
+import { ExtensionServiceWorkerMLCEngineHandler } from '@mlc-ai/web-llm';
 
 let intervalId: NodeJS.Timeout;
 
@@ -68,4 +69,17 @@ chrome.windows.onFocusChanged.addListener(async (windowId) => {
 chrome.runtime.onStartup.addListener(() => {
   refreshAccessToken();
   startInterval();
+});
+
+// Hookup an engine to a service worker handler
+let handler: ExtensionServiceWorkerMLCEngineHandler;
+
+chrome.runtime.onConnect.addListener(function (port) {
+  console.assert(port.name === 'web_llm_service_worker');
+  if (handler === undefined) {
+    handler = new ExtensionServiceWorkerMLCEngineHandler(port);
+  } else {
+    handler.setPort(port);
+  }
+  port.onMessage.addListener(handler.onmessage.bind(handler));
 });

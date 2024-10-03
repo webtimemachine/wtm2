@@ -11,10 +11,8 @@ import {
 import React, { useEffect, useState } from 'react';
 
 import {
-  ChevronDownIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
-  ChevronUpIcon,
   SettingsIcon,
   SmallCloseIcon,
 } from '@chakra-ui/icons';
@@ -31,6 +29,7 @@ import clsx from 'clsx';
 
 import { updateIcon } from '../utils/updateIcon';
 import Markdown from 'react-markdown';
+import { useWebLLM } from '../hooks/use-web-llm.hook';
 const truncateString = (str: string, maxLength: number) => {
   return str.length <= maxLength ? str : str.slice(0, maxLength) + '...';
 };
@@ -55,7 +54,6 @@ const RelevantSegment = ({ relevantSegment }: { relevantSegment: string }) => {
   const markdown = getPreProcessedMarkDown(relevantSegment);
   return (
     <div>
-      <p className='font-semibold mb-4'>Most relevant match</p>
       <div className='markdown-content'>
         <Markdown>{markdown}</Markdown>
       </div>
@@ -79,6 +77,78 @@ const NavigationEntry = ({
   isSemantic,
 }: NavEntryProps) => {
   const [visible, setVisible] = useState<boolean>(false);
+  const [aiResult, setAiResult] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
+  const { engine } = useWebLLM();
+
+  const generateAiResult = async () => {
+    try {
+      setLoading(true);
+      const result = await engine?.chat.completions.create({
+        messages: [
+          {
+            role: 'system',
+            content: `
+              # IDENTITY and PURPOSE
+  
+              You are an expert content summarizer. You take semantic markdown content in and output a Markdown formatted summary using the format below. Also, you are an expert code formatter in markdown, making code more legible and well formatted.
+  
+              Take a deep breath and think step by step about how to best accomplish this goal using the following steps.
+  
+              # OUTPUT SECTIONS
+  
+              - Combine all of your understanding of the content into a single, 20-word sentence in a section called Search Summary:.
+  
+              - Output the 10 if exists, including most important points of the content as a list with no more than 15 words per point into a section called Main Points:.
+  
+              - Output a list of the 5 best takeaways from the content in a section called Takeaways:.
+  
+              - Output code must be formatted with Prettier like.
+  
+              - Output a section named Code: that shows a list of code present in INPUT content in markdown
+  
+              - Output a section named Tags found: that shows in a list of tags you find
+  
+              # OUTPUT INSTRUCTIONS
+  
+              - Create the output using the formatting above.
+              - You only output human readable Markdown.
+              - Sections MUST be in capital case.
+              - Sections must be h2 to lower.
+              - Output numbered lists, not bullets.
+              - Do not output warnings or notes—just the requested sections.
+              - Do not repeat items in the output sections.
+              - Do not start items with the same opening words.
+              - Do not show Code: section if no code is present on input provided.
+              - You must detect the type of code and add it to code block so markdown styles are applied.
+              - Set codes proper language if you can detect it.
+              - Detect code and apply format to it.
+              - The wrapped tags must be tags that you find from page information.
+              - Tags must be a link that redirects to source url.
+              # INPUT:
+            `,
+          },
+          {
+            role: 'user',
+            content: `
+              INPUT:
+              URL: ${element.url}
+              ${element.relevantSegment}
+            `,
+          },
+        ],
+      });
+
+      if (result) {
+        setAiResult(result.choices[0].message.content || '');
+        setVisible(true);
+      }
+    } catch (error) {
+      console.log('error', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className='flex flex-col w-full bg-white px-2 py-1 rounded-lg mb-1 gap-3'>
@@ -118,8 +188,8 @@ const NavigationEntry = ({
                 visible ? 'hide relevant result' : 'show relevant result'
               }
               size='xs'
-              icon={visible ? <ChevronUpIcon /> : <ChevronDownIcon />}
-              onClick={() => setVisible(!visible)}
+              icon={loading ? <Spinner size='xs' /> : <BsStars />}
+              onClick={() => generateAiResult()}
             />
           )}
           <IconButton
@@ -134,8 +204,8 @@ const NavigationEntry = ({
           />
         </div>
       </div>
-      {isSemantic && element.relevantSegment && visible && (
-        <RelevantSegment relevantSegment={element.relevantSegment} />
+      {isSemantic && aiResult && visible && (
+        <RelevantSegment relevantSegment={aiResult} />
       )}
     </div>
   );
