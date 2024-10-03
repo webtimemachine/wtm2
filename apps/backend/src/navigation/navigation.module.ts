@@ -8,12 +8,7 @@ import { NavigationEntryController } from './controllers';
 import { NavigationEntryService } from './services';
 
 @Module({
-  imports: [
-    CommonModule,
-    EncoderModule,
-    ExplicitFilterModule,
-    QueryModule,
-  ],
+  imports: [CommonModule, EncoderModule, ExplicitFilterModule, QueryModule],
   controllers: [NavigationEntryController],
   providers: [NavigationEntryService],
 })
