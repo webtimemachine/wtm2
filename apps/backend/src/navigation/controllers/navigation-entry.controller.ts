@@ -83,7 +83,7 @@ export class NavigationEntryController {
   @CronJobKey()
   @HttpCode(200)
   @Delete('/expired')
-  deleteExpiredNavigationEntries(): Promise<MessageResponse> {
+  deleteExpiredNavigationEntries(): Promise<void> {
     return this.navigationService.deleteExpiredNavigationEntries();
   }
 
