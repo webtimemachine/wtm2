@@ -47,6 +47,7 @@ const existingUser: CompleteUser = {
   recoveryCode: null,
   displayname: 'test',
   passChangedAt: new Date(),
+  profilePicture: 'profilePicture',
   userPreferences: {
     id: BigInt(1),
     userId: BigInt(1),
