@@ -359,7 +359,7 @@ export class NavigationEntryService {
               });
 
             if (navigationEntry) {
-              this.indexerService.delete(
+              await this.indexerService.delete(
                 navigationEntry.url,
                 jwtContext.user.id,
               );
