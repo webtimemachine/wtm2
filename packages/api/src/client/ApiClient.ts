@@ -31,6 +31,7 @@ import {
   ChangeUserPassword,
   ChangeUserDisplayName,
 } from "../interfaces";
+import { ChangeUserAvatar } from "@/interfaces/change-user-avatar.interface";
 import { BulkDeleteNavigationEntriesData } from "@/interfaces/navigation-entry.interface";
 
 interface ApiClientOptions {
@@ -592,6 +593,30 @@ export class ApiClient {
     try {
       const res = await this.securedFetch(
         "/api/user/profile/change-displayname",
+        {
+          method: "POST",
+          body: JSON.stringify(data),
+        }
+      );
+      if (res.status !== 200) {
+        const errorJson = await res.json();
+        throw new Error(errorJson?.message || "POST Update Display Name Error");
+      }
+
+      const response: BasicResponse = await res.json();
+      return response;
+    } catch (error: any) {
+      if (`${error?.message}`.toLowerCase().includes("unauthorized")) {
+        if (this.handleSessionExpired) await this.handleSessionExpired();
+      } else {
+        throw error;
+      }
+    }
+  };
+  changeUserAvatar = async (data: ChangeUserAvatar) => {
+    try {
+      const res = await this.securedFetch(
+        "/api/user/profile/change-profile-picture",
         {
           method: "POST",
           body: JSON.stringify(data),
