@@ -250,7 +250,7 @@ const NavigationEntriesScreen: React.FC = () => {
               size='sm'
               aria-label='Bulk Delete'
               isChecked={isBulkDeleteOn}
-              onClick={() => {
+              onChange={() => {
                 setIsBulkDeleteOn((value) => !value);
                 if (isBulkDeleteOn) setSelectedForDelete([]);
               }}
