@@ -312,7 +312,6 @@ const ProfileScreen: React.FC<object> = () => {
       });
       onClose();
     };
-    console.log(images);
     return (
       <>
         <Button
