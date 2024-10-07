@@ -41,24 +41,14 @@ import { relativeTime } from '@wtm/utils';
 import { ReactImageSelector } from 'react-images-selector';
 import { ImageType } from 'react-images-selector/dist/image';
 import { RxAvatar } from 'react-icons/rx';
-
-import MaleOne from '../../assets/Avatars/male_one.png';
-import MaleTwo from '../../assets/Avatars/male_two.png';
-import FemaleOne from '../../assets/Avatars/female_one.png';
-import FemaleTwo from '../../assets/Avatars/female_two.png';
-import { StaticImageData } from 'next/image';
-const avatars: { [key: string]: StaticImageData } = {
-  MaleOne: MaleOne,
-  MaleTwo: MaleTwo,
-  FemaleOne: FemaleOne,
-  FemaleTwo: FemaleTwo,
-};
+import { useChangeUserAvatar } from '../../hooks/use-change-user-profile-avatar.hook';
+import { getAvatarFromLabel } from '../../utils/get-avatar';
 
 const ProfileScreen: React.FC<object> = () => {
   const { basicUserInformationQuery } = useGetBasicUserInformation();
   const { changeUserPasswordMutation } = useChangeUserPassword();
   const { changeUserDisplayNameMutation } = useChangeUserDisplayName();
-  const [currentUserAvatar, setCurrentUserAvatar] = useState<StaticImageData>();
+  const { changeUserAvatarMutation } = useChangeUserAvatar();
   const user = basicUserInformationQuery.data;
 
   const ChangePasswordModal = () => {
@@ -274,19 +264,19 @@ const ProfileScreen: React.FC<object> = () => {
   const ChangeAvatarModal = () => {
     const images = [
       {
-        src: MaleOne.src,
+        src: getAvatarFromLabel('MaleOne').src,
         value: 'MaleOne',
       },
       {
-        src: MaleTwo.src,
+        src: getAvatarFromLabel('MaleTwo').src,
         value: 'MaleTwo',
       },
       {
-        src: FemaleOne.src,
+        src: getAvatarFromLabel('FemaleOne').src,
         value: 'FemaleOne',
       },
       {
-        src: FemaleTwo.src,
+        src: getAvatarFromLabel('FemaleTwo').src,
         value: 'FemaleTwo',
       },
     ];
@@ -311,10 +301,17 @@ const ProfileScreen: React.FC<object> = () => {
     };
     const handleSubmit = () => {
       if (verifyFields()) {
-        setCurrentUserAvatar(avatars[selectedImages[0]]);
+        changeUserAvatarMutation.mutate({
+          profilePicture: selectedImages[0],
+        });
       }
     };
-
+    const handleRemoveAvatar = () => {
+      changeUserAvatarMutation.mutate({
+        profilePicture: '',
+      });
+      onClose();
+    };
     return (
       <>
         <Button
@@ -355,15 +352,15 @@ const ProfileScreen: React.FC<object> = () => {
 
             <ModalFooter>
               <div className='flex w-full flex-col space-y-2 md:flex-row md:justify-end md:space-y-0 md:space-x-3'>
+                <Button variant='ghost' onClick={handleRemoveAvatar}>
+                  Remove Actual Avatar
+                </Button>
                 <Button
                   colorScheme='blue'
                   onClick={handleSubmit}
                   disabled={isError}
                 >
                   Change
-                </Button>
-                <Button variant='ghost' onClick={onClose}>
-                  Close
                 </Button>
               </div>
             </ModalFooter>
@@ -373,6 +370,7 @@ const ProfileScreen: React.FC<object> = () => {
     );
   };
   const ProfileCard = () => {
+    const currentAvatar = basicUserInformationQuery.data?.profilePicture;
     const username = basicUserInformationQuery.data?.displayname;
     const relativeTimeLabel =
       basicUserInformationQuery.data &&
@@ -386,8 +384,11 @@ const ProfileScreen: React.FC<object> = () => {
       <div className='bg-white md:p-6 px-2 py-3 rounded-lg shadow-lg w-full sm:max-w-screen'>
         <div className='flex justify-between items-center '>
           <div className='flex flex-col items-center md:flex-row md:center w-full gap-2'>
-            {currentUserAvatar ? (
-              <Image src={currentUserAvatar.src} className='w-[15%]' />
+            {currentAvatar ? (
+              <Image
+                src={getAvatarFromLabel(currentAvatar).src}
+                className='w-[15%]'
+              />
             ) : (
               <Avatar
                 name={user?.email}
