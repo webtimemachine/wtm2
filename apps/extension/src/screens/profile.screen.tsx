@@ -272,7 +272,6 @@ export const ProfileScreen: React.FC<object> = () => {
     );
   };
   const ChangeAvatarModal = () => {
-    console.log(avatars);
     const images: ImageType[] = [
       {
         src: avatars.MaleOne,
@@ -291,7 +290,6 @@ export const ProfileScreen: React.FC<object> = () => {
         value: 'FemaleTwo',
       },
     ];
-    console.log(images);
     const [selectedImages, setSelectedImages] = useState<string[]>([]);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [newAvatar, setNewAvatar] = useState<ImageType>({
