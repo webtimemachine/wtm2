@@ -34,7 +34,11 @@ import {
 import { IconType } from 'react-icons';
 import { BsStars } from 'react-icons/bs';
 
-import { useDeleteNavigationEntry, useNavigationEntries } from '../../hooks';
+import {
+  useDeleteNavigationEntry,
+  useNavigationEntries,
+  useBulkDeleteNavigationEntries,
+} from '../../hooks';
 import { CompleteNavigationEntryDto } from '@wtm/api';
 
 import { getBrowserIconFromDevice } from '@wtm/utils';
@@ -43,7 +47,6 @@ import clsx from 'clsx';
 
 import Markdown from 'react-markdown';
 import { BiTrash } from 'react-icons/bi';
-import { useBulkDeleteNavigationEntries } from '@/hooks/use-bulk-delete.hook';
 const getPreProcessedMarkDown = (relevantSegment: string) => {
   const emptyListPatterns = [
     /\*\n(\*\n)*/g, // matches lines with only *
@@ -119,8 +122,8 @@ const NavigationEntriesScreen: React.FC = () => {
   }, [
     page,
     isSemantic,
-    deleteNavigationEntryMutation.isSuccess,
-    deleteBulkNavigationEntriesMutation.isSuccess,
+    deleteNavigationEntryMutation?.isSuccess,
+    deleteBulkNavigationEntriesMutation?.isSuccess,
   ]);
 
   useEffect(() => {
@@ -233,8 +236,11 @@ const NavigationEntriesScreen: React.FC = () => {
           </div>
           <div
             className='flex items-center gap-1 p-1 h-[32px] select-none cursor-pointer hover:bg-white rounded-lg'
-            data-testid='ia-search-container'
-            onClick={() => {}}
+            data-testid='bulk-delete-container'
+            onClick={() => {
+              setIsBulkDeleteOn((value) => !value);
+              if (isBulkDeleteOn) setSelectedForDelete([]);
+            }}
           >
             <BiTrash />
             <Text className='text-slate-600 mr-1' fontSize='small'>
@@ -242,9 +248,9 @@ const NavigationEntriesScreen: React.FC = () => {
             </Text>
             <Switch
               size='sm'
-              aria-label='AI Search'
+              aria-label='Bulk Delete'
               isChecked={isBulkDeleteOn}
-              onChange={() => {
+              onClick={() => {
                 setIsBulkDeleteOn((value) => !value);
                 if (isBulkDeleteOn) setSelectedForDelete([]);
               }}

@@ -43,6 +43,7 @@ const existingUser: CompleteUser = {
     createdAt: new Date(),
     updateAt: new Date(),
   },
+  profilePicture: '',
 };
 
 const mockedSession = {
