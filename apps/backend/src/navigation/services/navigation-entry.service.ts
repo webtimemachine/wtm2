@@ -403,7 +403,7 @@ export class NavigationEntryService {
         console.log(`There is no entries to delete`);
         return;
       }
-      Promise.allSettled(
+      await Promise.allSettled(
         userPreferences.map(async (preference) => {
           const { userId, navigationEntryExpirationInDays } = preference;
 
@@ -442,6 +442,7 @@ export class NavigationEntryService {
       ).catch((error) => {
         console.error('Error deleting expired navigation entries:', error);
       });
+      console.log(`deleteExpiredNavigationEntries has finished`);
     } catch (error) {
       console.error('Error executing process', error);
     }

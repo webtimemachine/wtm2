@@ -75,19 +75,6 @@ export class NavigationEntryController {
   }
 
   @ApiInternalServerErrorMessageResponse()
-  @ApiForbiddenMessageResponse()
-  @ApiBadRequestMessageResponse()
-  @ApiOkResponse({
-    type: MessageResponse,
-  })
-  @CronJobKey()
-  @HttpCode(200)
-  @Delete('/expired')
-  deleteExpiredNavigationEntries(): Promise<void> {
-    return this.navigationService.deleteExpiredNavigationEntries();
-  }
-
-  @ApiInternalServerErrorMessageResponse()
   @ApiBadRequestMessageResponse()
   @ApiOkResponse({
     type: MessageResponse,
@@ -119,5 +106,14 @@ export class NavigationEntryController {
       context,
       deleteNavigationEntriesDto,
     );
+  }
+
+  @ApiInternalServerErrorMessageResponse()
+  @ApiOkResponse()
+  @CronJobKey()
+  @HttpCode(200)
+  @Post('/expired')
+  deleteExpiredNavigationEntries(): Promise<void> {
+    return this.navigationService.deleteExpiredNavigationEntries();
   }
 }
