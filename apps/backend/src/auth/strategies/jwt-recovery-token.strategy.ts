@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PrismaService } from '../../common/services';
@@ -6,6 +6,8 @@ import { appEnv } from '../../config';
 import { completeUserInclude } from '../../user/types';
 import { JWTPayload } from '../interfaces';
 import { RecoveryJwtContext } from '../interfaces/jwt-context.interface';
+
+import { CustomLogger } from '../../common/helpers/custom-logger';
 
 const jwtFromRequest = ExtractJwt.fromExtractors([
   ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -16,7 +18,7 @@ export class JwtRecoveryTokenStrategy extends PassportStrategy(
   Strategy,
   'jwt-recovery-token',
 ) {
-  private readonly logger = new Logger(JwtRecoveryTokenStrategy.name);
+  private readonly logger = new CustomLogger(JwtRecoveryTokenStrategy.name);
 
   constructor(private readonly prismaService: PrismaService) {
     super({
