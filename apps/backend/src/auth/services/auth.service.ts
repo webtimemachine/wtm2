@@ -53,9 +53,11 @@ import { appEnv } from '../../config';
 import { CompleteSessionDto } from '../dtos/complete-session.dto';
 import { LogoutSessionInputDto } from '../dtos/logout-session.input.dto';
 
+import { CustomLogger } from '../../common/helpers/custom-logger';
+
 @Injectable()
 export class AuthService {
-  private readonly logger = new Logger(AuthService.name);
+  private readonly logger = new CustomLogger(AuthService.name);
 
   constructor(
     private readonly prismaService: PrismaService,
