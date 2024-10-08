@@ -20,7 +20,12 @@ import {
 } from '../dtos';
 import { NavigationEntryService } from '../services';
 
-import { JwtAccessToken, JwtRequestContext } from '../../auth/decorators';
+import {
+  CronJobKey,
+  JwtAccessToken,
+  JwtRequestContext,
+  /*  CronJobKey, */
+} from '../../auth/decorators';
 import { JwtContext } from '../../auth/interfaces';
 
 import {
@@ -101,5 +106,14 @@ export class NavigationEntryController {
       context,
       deleteNavigationEntriesDto,
     );
+  }
+
+  @ApiInternalServerErrorMessageResponse()
+  @ApiOkResponse()
+  @CronJobKey()
+  @HttpCode(200)
+  @Post('/expired')
+  deleteExpiredNavigationEntries(): Promise<void> {
+    return this.navigationService.deleteExpiredNavigationEntries();
   }
 }

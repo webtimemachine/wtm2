@@ -62,6 +62,7 @@ async function bootstrap() {
     .addBearerAuth(bearerAuthJWT, 'refreshToken')
     .addBearerAuth(bearerAuthJWT, 'recoveryToken')
     .addBearerAuth(bearerAuthJWT, 'partialToken')
+    .addBearerAuth(bearerAuthJWT, 'cronJobSecret')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

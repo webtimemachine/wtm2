@@ -30,6 +30,7 @@ import { IndexerService } from '../../encoder/services';
 import { QueryService } from '../../query/services';
 import { ExplicitFilterService } from '../../filter/services';
 import { appEnv } from '../../config';
+import { subDays } from 'date-fns';
 
 @Injectable()
 export class NavigationEntryService {
@@ -382,5 +383,71 @@ export class NavigationEntryService {
     return plainToInstance(MessageResponse, {
       message: `${deletedNavigationEntries.length} navigation entries has been deleted`,
     });
+  }
+
+  async deleteExpiredNavigationEntries(): Promise<void> {
+    try {
+      console.log(`deleteExpiredNavigationEntries has started`);
+      const userPreferences = await this.prismaService.userPreferences.findMany(
+        {
+          where: {
+            enableNavigationEntryExpiration: true,
+            navigationEntryExpirationInDays: {
+              not: null,
+            },
+          },
+          select: {
+            userId: true,
+            navigationEntryExpirationInDays: true,
+          },
+        },
+      );
+      if (userPreferences.length === 0) {
+        console.log(`There is no entries to delete`);
+        return;
+      }
+      await Promise.allSettled(
+        userPreferences.map(async (preference) => {
+          const { userId, navigationEntryExpirationInDays } = preference;
+
+          const expirationDate = subDays(
+            new Date(),
+            navigationEntryExpirationInDays!,
+          );
+
+          try {
+            const entries = await this.prismaService.navigationEntry.findMany({
+              where: {
+                userId: userId,
+                createdAt: {
+                  lt: expirationDate,
+                },
+              },
+            });
+
+            await Promise.allSettled(
+              entries.map(async (entry) => {
+                const { url, userId, id } = entry;
+                try {
+                  await this.indexerService.delete(url, userId);
+                  await this.prismaService.navigationEntry.delete({
+                    where: { id, userId },
+                  });
+                } catch (error) {
+                  console.error(`Error deleting entry ${id}:`, error);
+                }
+              }),
+            );
+          } catch (error) {
+            console.error(`Error getting entries of user ${userId}:`, error);
+          }
+        }),
+      ).catch((error) => {
+        console.error('Error deleting expired navigation entries:', error);
+      });
+      console.log(`deleteExpiredNavigationEntries has finished`);
+    } catch (error) {
+      console.error('Error executing process', error);
+    }
   }
 }
