@@ -1,12 +1,13 @@
-import { Logger } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 
 import { PrismaService } from './common/services';
 import { GetVersionResponse } from './dtos';
 import { getVersion } from './getVersion';
 
+import { CustomLogger } from './common/helpers/custom-logger';
+
 export class AppService {
-  private readonly logger = new Logger(AppService.name);
+  private readonly logger = new CustomLogger(AppService.name);
 
   constructor(private readonly prismaService: PrismaService) {}
 

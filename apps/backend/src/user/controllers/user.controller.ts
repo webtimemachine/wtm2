@@ -4,7 +4,6 @@ import {
   Delete,
   Get,
   HttpCode,
-  Logger,
   Param,
   ParseIntPipe,
   Put,
@@ -24,11 +23,12 @@ import {
   UserDeviceDto,
 } from '../dtos';
 import { UserService } from '../services';
+import { CustomLogger } from '../../common/helpers/custom-logger';
 
 @ApiTags('User')
 @Controller('user')
 export class UserController {
-  private readonly logger = new Logger(UserController.name);
+  private readonly logger = new CustomLogger(UserController.name);
   constructor(private readonly userService: UserService) {}
 
   @ApiOkResponse({
