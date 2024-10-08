@@ -1,20 +1,28 @@
 'use client';
 
 import {
-  AbsoluteCenter,
   Badge,
-  Box,
+  Button,
+  Checkbox,
   Divider,
   Icon,
   IconButton,
   Input,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Spinner,
   Switch,
   Text,
   Tooltip,
+  useDisclosure,
   useToast,
 } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   ChevronDownIcon,
   ChevronLeftIcon,
@@ -26,7 +34,11 @@ import {
 import { IconType } from 'react-icons';
 import { BsStars } from 'react-icons/bs';
 
-import { useDeleteNavigationEntry, useNavigationEntries } from '../../hooks';
+import {
+  useDeleteNavigationEntry,
+  useNavigationEntries,
+  useBulkDeleteNavigationEntries,
+} from '../../hooks';
 import { CompleteNavigationEntryDto } from '@wtm/api';
 
 import { getBrowserIconFromDevice } from '@wtm/utils';
@@ -34,6 +46,7 @@ import { getBrowserIconFromDevice } from '@wtm/utils';
 import clsx from 'clsx';
 
 import Markdown from 'react-markdown';
+import { BiTrash } from 'react-icons/bi';
 const getPreProcessedMarkDown = (relevantSegment: string) => {
   const emptyListPatterns = [
     /\*\n(\*\n)*/g, // matches lines with only *
@@ -83,12 +96,15 @@ const NavigationEntriesScreen: React.FC = () => {
   const [page, setPage] = useState<number>(0);
   const [query, setQuery] = useState<string>('');
   const [isSemantic, setIsSemantic] = useState<boolean>(true);
+  const [isBulkDeleteOn, setIsBulkDeleteOn] = useState<boolean>(false);
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const [loading, setLoading] = useState<boolean>(false);
   const toast = useToast();
-
+  const [selectedForDelete, setSelectedForDelete] = useState<number[]>([]);
   const offset = page * LIMIT;
   const limit = LIMIT;
-
+  const { deleteBulkNavigationEntriesMutation } =
+    useBulkDeleteNavigationEntries();
   const { deleteNavigationEntryMutation } = useDeleteNavigationEntry();
   const { navigationEntriesQuery } = useNavigationEntries({
     offset,
@@ -103,7 +119,12 @@ const NavigationEntriesScreen: React.FC = () => {
 
   useEffect(() => {
     navigationEntriesQuery.refetch();
-  }, [page, isSemantic, deleteNavigationEntryMutation.isSuccess]);
+  }, [
+    page,
+    isSemantic,
+    deleteNavigationEntryMutation?.isSuccess,
+    deleteBulkNavigationEntriesMutation?.isSuccess,
+  ]);
 
   useEffect(() => {
     if (navigationEntriesQuery.isError) {
@@ -125,8 +146,33 @@ const NavigationEntriesScreen: React.FC = () => {
     setLoading(false);
   };
 
+  const handleBulkDelete = () => {
+    if (selectedForDelete.length > 0) {
+      deleteBulkNavigationEntriesMutation.mutate({
+        navigationEntryIds: selectedForDelete,
+      });
+
+      setSelectedForDelete([]);
+      setIsBulkDeleteOn(false);
+      setPage(0);
+    }
+    onClose();
+  };
   const prev = () => page > 0 && setPage(page - 1);
   const next = () => !(offset + limit >= count) && setPage(page + 1);
+
+  const isDisabled = useMemo(() => {
+    return selectedForDelete.length === 0;
+  }, [selectedForDelete.length]);
+
+  const isAddOrRemove = useMemo(() => {
+    const truthArr = navigationEntries
+      .map((element: CompleteNavigationEntryDto) => {
+        return selectedForDelete.includes(element.id);
+      })
+      .filter((x) => !x);
+    return truthArr.length > 0;
+  }, [selectedForDelete, navigationEntries]);
 
   return (
     <div className='flex flex-col h-full'>
@@ -167,7 +213,7 @@ const NavigationEntriesScreen: React.FC = () => {
           </div>
         </div>
 
-        <div className='flex py-1'>
+        <div className='flex py-1 justify-between'>
           <div
             className='flex items-center gap-1 p-1 h-[32px] select-none cursor-pointer hover:bg-white rounded-lg'
             data-testid='ia-search-container'
@@ -188,8 +234,100 @@ const NavigationEntriesScreen: React.FC = () => {
               onChange={() => setIsSemantic((value) => !value)}
             />
           </div>
+          <div
+            className='flex items-center gap-1 p-1 h-[32px] select-none cursor-pointer hover:bg-white rounded-lg'
+            data-testid='bulk-delete-container'
+            onClick={() => {
+              setIsBulkDeleteOn((value) => !value);
+              if (isBulkDeleteOn) setSelectedForDelete([]);
+            }}
+          >
+            <BiTrash />
+            <Text className='text-slate-600 mr-1' fontSize='small'>
+              Bulk Delete
+            </Text>
+            <Switch
+              size='sm'
+              aria-label='Bulk Delete'
+              isChecked={isBulkDeleteOn}
+              onChange={() => {
+                setIsBulkDeleteOn((value) => !value);
+                if (isBulkDeleteOn) setSelectedForDelete([]);
+              }}
+            />
+          </div>
         </div>
       </div>
+      {isBulkDeleteOn && (
+        <div className='flex justify-between gap-2 px-2 py-3'>
+          <div className='flex items-center gap-2'>
+            <Button
+              colorScheme='blue'
+              onClick={() => {
+                if (isAddOrRemove)
+                  setSelectedForDelete((oldState) => {
+                    return [
+                      ...oldState,
+                      ...navigationEntries
+                        .filter(
+                          (element: CompleteNavigationEntryDto) =>
+                            !selectedForDelete.includes(element.id),
+                        )
+                        .map((element: CompleteNavigationEntryDto) => {
+                          return element.id;
+                        }),
+                    ];
+                  });
+                else
+                  setSelectedForDelete((oldState) => {
+                    const currentEntries = navigationEntries.map(
+                      (element: CompleteNavigationEntryDto) => {
+                        return element.id;
+                      },
+                    );
+                    let filteredOldState = oldState.filter(
+                      (id) => !currentEntries.includes(id),
+                    );
+                    return filteredOldState;
+                  });
+              }}
+            >
+              {isAddOrRemove ? 'Check page entries' : 'Uncheck page entries'}
+            </Button>
+            <Text className='text-slate-600 mr-1' fontSize='small'>
+              Selected {selectedForDelete.length}
+            </Text>
+          </div>
+
+          <Button isDisabled={isDisabled} colorScheme='red' onClick={onOpen}>
+            <BiTrash />
+          </Button>
+          <Modal isOpen={isOpen} onClose={onClose}>
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>Navigation Entries Bulk Delete</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody>
+                <div>
+                  You are about to delete {selectedForDelete.length} entries.
+                  Please, check if you are not sure about which entries you are
+                  about to delete, go back and check. This action is
+                  irreversible.
+                </div>
+              </ModalBody>
+
+              <ModalFooter>
+                <Button colorScheme='red' mr={3} onClick={handleBulkDelete}>
+                  Delete
+                </Button>
+                <Button variant='ghost' onClick={onClose}>
+                  Close
+                </Button>
+              </ModalFooter>
+            </ModalContent>
+          </Modal>
+        </div>
+      )}
 
       <div
         id='content'
@@ -207,6 +345,26 @@ const NavigationEntriesScreen: React.FC = () => {
                 deleteNavEntry={deleteNavigationEntryMutation.mutate}
                 element={element}
                 isSemantic={isSemantic}
+                deleteProps={{
+                  isDeleteOn: isBulkDeleteOn,
+                  onSelect: (id: number, add: boolean) => {
+                    if (add) {
+                      let newArr = [...selectedForDelete];
+                      newArr.push(id);
+                      setSelectedForDelete(newArr);
+                    } else {
+                      if (selectedForDelete.length == 1) {
+                        setSelectedForDelete([]);
+                      } else {
+                        const updatedArray = selectedForDelete.filter(
+                          (item) => item != id,
+                        );
+                        setSelectedForDelete(updatedArray);
+                      }
+                    }
+                  },
+                  currentSelectedEntries: selectedForDelete,
+                }}
               />
             );
           })
@@ -269,6 +427,11 @@ export interface NavigationEntryProps {
   BrowserIcon: IconType;
   deleteNavEntry: ({ id }: { id: number }) => void;
   isSemantic: boolean;
+  deleteProps?: {
+    isDeleteOn: boolean;
+    onSelect: (id: number, add: boolean) => any;
+    currentSelectedEntries: number[];
+  };
 }
 
 const NavigationEntry: React.FC<NavigationEntryProps> = ({
@@ -276,6 +439,7 @@ const NavigationEntry: React.FC<NavigationEntryProps> = ({
   BrowserIcon,
   deleteNavEntry,
   isSemantic,
+  deleteProps,
 }: NavigationEntryProps) => {
   const [visible, setVisible] = useState<boolean>(false);
 
@@ -287,6 +451,16 @@ const NavigationEntry: React.FC<NavigationEntryProps> = ({
     <div className='flex flex-col w-full bg-white px-2 py-1 rounded-lg mb-1 gap-3'>
       <div key={element.id} className='flex items-center justify-between'>
         <div className='flex gap-2'>
+          {deleteProps && deleteProps.isDeleteOn && (
+            <Checkbox
+              isChecked={deleteProps.currentSelectedEntries.includes(
+                element.id,
+              )}
+              onChange={(r) =>
+                deleteProps.onSelect(element.id, r.target.checked)
+              }
+            />
+          )}
           <div className='flex justify-center items-center'>
             <Icon as={BrowserIcon} boxSize={6} color='gray.600' />
           </div>
@@ -326,16 +500,19 @@ const NavigationEntry: React.FC<NavigationEntryProps> = ({
               onClick={() => setVisible(!visible)}
             />
           )}
-          <IconButton
-            aria-label='delete navigation entry'
-            size='xs'
-            icon={<SmallCloseIcon />}
-            onClick={() => {
-              deleteNavEntry({
-                id: element.id,
-              });
-            }}
-          />
+
+          {deleteProps && !deleteProps.isDeleteOn && (
+            <IconButton
+              aria-label='delete navigation entry'
+              size='xs'
+              icon={<SmallCloseIcon />}
+              onClick={() => {
+                deleteNavEntry({
+                  id: element.id,
+                });
+              }}
+            />
+          )}
         </div>
       </div>
       {isSemantic && element.relevantSegment && visible && (

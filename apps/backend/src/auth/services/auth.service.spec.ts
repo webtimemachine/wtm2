@@ -51,6 +51,7 @@ describe('AuthService', () => {
       createdAt: new Date(),
       updateAt: new Date(),
     },
+    profilePicture: '',
   };
 
   const nonVerifiedUser: CompleteUser = {
@@ -77,6 +78,7 @@ describe('AuthService', () => {
       createdAt: new Date(),
       updateAt: new Date(),
     },
+    profilePicture: '',
   };
 
   const signUpDtoRequest = {
@@ -255,6 +257,7 @@ describe('AuthService', () => {
             createdAt: new Date('2024-04-08T16:58:29.000Z'),
             updateAt: new Date('2024-04-08T16:58:29.000Z'),
           },
+          profilePicture: '',
         },
         session: {
           id: BigInt(1),
