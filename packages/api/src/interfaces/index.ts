@@ -11,6 +11,7 @@ export {
   type GetNavigationEntriesResponse,
   type CreateNavigationEntry,
   type CompleteNavigationEntryDto,
+  type BulkDeleteNavigationEntriesData,
 } from "./navigation-entry.interface";
 export {
   type UpdatePreferenciesData,

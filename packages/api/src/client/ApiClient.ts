@@ -32,6 +32,7 @@ import {
   ChangeUserDisplayName,
 } from "../interfaces";
 import { ChangeUserAvatar } from "@/interfaces/change-user-avatar.interface";
+import { BulkDeleteNavigationEntriesData } from "@/interfaces/navigation-entry.interface";
 
 interface ApiClientOptions {
   getServerUrl: () => Promise<string>;
@@ -623,9 +624,29 @@ export class ApiClient {
       );
       if (res.status !== 200) {
         const errorJson = await res.json();
-        throw new Error(
-          errorJson?.message || "POST Update Display Avatar Error"
-        );
+        throw new Error(errorJson?.message || "POST Update Display Name Error");
+      }
+
+      const response: BasicResponse = await res.json();
+      return response;
+    } catch (error: any) {
+      if (`${error?.message}`.toLowerCase().includes("unauthorized")) {
+        if (this.handleSessionExpired) await this.handleSessionExpired();
+      } else {
+        throw error;
+      }
+    }
+  };
+  deleteBulkNavigationEntry = async (data: BulkDeleteNavigationEntriesData) => {
+    try {
+      const res = await this.securedFetch(`/api/navigation-entry`, {
+        method: "DELETE",
+        body: JSON.stringify(data),
+      });
+
+      if (res.status !== 200) {
+        const errorJson = await res.json();
+        throw new Error(errorJson?.message || "DELETE Navigation entry Error");
       }
 
       const response: BasicResponse = await res.json();

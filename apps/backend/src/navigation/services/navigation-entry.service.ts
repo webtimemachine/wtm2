@@ -359,10 +359,13 @@ export class NavigationEntryService {
               });
 
             if (navigationEntry) {
-              this.indexerService.delete(
-                navigationEntry.url,
-                jwtContext.user.id,
-              );
+              try {
+                await this.indexerService.delete(
+                  navigationEntry.url,
+                  jwtContext.user.id,
+                );
+              } catch (err) {}
+
               const deletedNavigationEntry: NavigationEntry =
                 await this.prismaService.navigationEntry.delete({
                   where: { id: navigationEntryId, userId: jwtContext.user.id },
