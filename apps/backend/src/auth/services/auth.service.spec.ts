@@ -40,6 +40,7 @@ describe('AuthService', () => {
     verificationCode: '1234',
     displayname: 'test',
     passChangedAt: new Date(),
+    profilePicture: 'profilePicture',
     userPreferences: {
       id: BigInt(1),
       userId: BigInt(1),
@@ -67,6 +68,7 @@ describe('AuthService', () => {
     verificationCode: '1234',
     displayname: 'test',
     passChangedAt: new Date(),
+    profilePicture: 'profilePicture',
     userPreferences: {
       id: BigInt(1),
       userId: BigInt(1),
@@ -245,6 +247,7 @@ describe('AuthService', () => {
           updateAt: new Date('2024-04-08T19:50:40.000Z'),
           deletedAt: null,
           displayname: 'test',
+          profilePicture: 'profilePicture',
           passChangedAt: new Date('2024-04-08T16:58:29.000Z'),
           userPreferences: {
             id: BigInt(1),
