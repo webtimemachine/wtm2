@@ -151,7 +151,6 @@ describe('AuthController', () => {
           deletedAt: null,
           displayname: '',
           passChangedAt: new Date(),
-          profilePicture: '',
         },
       };
 
@@ -181,7 +180,6 @@ describe('AuthController', () => {
             displayname: '',
             profilePicture: 'profilePicture',
             passChangedAt: expect.any(Date),
-            profilePicture: '',
           },
         }),
         expect.objectContaining({
