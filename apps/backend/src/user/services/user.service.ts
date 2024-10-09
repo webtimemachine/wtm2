@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
 
 import { JwtContext } from '../../auth/interfaces';
@@ -22,10 +22,11 @@ import { CompleteUserDevice, completeUserDeviceInclude } from '../types';
 
 import { UAParser } from 'ua-parser-js';
 import { AuthService } from '../../auth/services';
+import { CustomLogger } from '../../common/helpers/custom-logger';
 
 @Injectable()
 export class UserService {
-  private readonly logger = new Logger(UserService.name);
+  private readonly logger = new CustomLogger(UserService.name);
 
   constructor(
     private readonly prismaService: PrismaService,

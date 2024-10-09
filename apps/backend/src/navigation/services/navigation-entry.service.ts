@@ -1,7 +1,6 @@
 import {
   ForbiddenException,
   Injectable,
-  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { NavigationEntry, Prisma } from '@prisma/client';
@@ -31,10 +30,11 @@ import { QueryService } from '../../query/services';
 import { ExplicitFilterService } from '../../filter/services';
 import { appEnv } from '../../config';
 import { subDays } from 'date-fns';
+import { CustomLogger } from '../../common/helpers/custom-logger';
 
 @Injectable()
 export class NavigationEntryService {
-  private readonly logger = new Logger(NavigationEntryService.name);
+  private readonly logger = new CustomLogger(NavigationEntryService.name);
 
   constructor(
     private readonly prismaService: PrismaService,

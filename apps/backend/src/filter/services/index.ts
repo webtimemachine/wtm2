@@ -4,10 +4,10 @@ import {
 } from '@langchain/core/output_parsers';
 import { ChatOpenAI } from '@langchain/openai';
 import { ChatPromptTemplate } from '@langchain/core/prompts';
-import { Injectable, HttpException, HttpStatus, Logger } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { PrismaService } from '../../common/services';
 import { appEnv } from '../../config';
-
+import { CustomLogger } from '../../common/helpers/custom-logger';
 export class FlagParser extends BaseOutputParser<boolean> {
   lc_namespace = ['langchain', 'output_parsers'];
   async parse(text: string): Promise<boolean> {
@@ -35,7 +35,9 @@ const filterPrompt = ChatPromptTemplate.fromMessages([
 
 @Injectable()
 export class ExplicitFilterService {
-  private readonly logger: Logger = new Logger(ExplicitFilterService.name);
+  private readonly logger: CustomLogger = new CustomLogger(
+    ExplicitFilterService.name,
+  );
 
   constructor(private readonly prismaService: PrismaService) {}
 

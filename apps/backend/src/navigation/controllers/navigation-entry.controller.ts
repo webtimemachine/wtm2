@@ -4,7 +4,6 @@ import {
   Delete,
   Get,
   HttpCode,
-  Logger,
   Param,
   ParseIntPipe,
   Post,
@@ -35,11 +34,12 @@ import {
   ApiPaginationResponse,
 } from '../../common/decorators';
 import { MessageResponse, PaginationResponse } from '../../common/dtos';
+import { CustomLogger } from '../../common/helpers/custom-logger';
 
 @ApiTags('Navigation Entry')
 @Controller('navigation-entry')
 export class NavigationEntryController {
-  private readonly logger = new Logger(NavigationEntryController.name);
+  private readonly logger = new CustomLogger(NavigationEntryController.name);
 
   constructor(private readonly navigationService: NavigationEntryService) {}
 
