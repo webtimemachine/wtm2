@@ -55,5 +55,26 @@ Copy the `sample.env` to `.env` and `sample.db.env` to `db.env` on the backend f
 17. **AVOID_DOMAIN_LIST**:
     - Example: **`AVOID_DOMAIN_LIST='localhost, www.webtm.io, webtm.vercel.app'`**
     - Usage: Specifies the domains list to avoid to track.
+18. **CRON_SECRET**:
+    - Example: **`CRON_SECRET=4b2cfcf5-cf24-4fa7-b5d0-80920e3ff9ea`**
+    - Usage: Used to secure recurring endpoints executed by scheduled tasks (cron jobs). The `CRON_SECRET` value is extracted from the bearer token in the backend and validated to authorize access to these endpoints. This environment variable is set in Vercel and sent in cron requests to securely authenticate the process.
+19. **DISCORD_LOG_WEBHOOK_URL**:
+    - Example: **`DISCORD_LOG_WEBHOOK_URL=https://discord.com/api/webhooks/your_webhook_url`**
+    - Usage: The URL for the Discord webhook where logs will be sent. This should be the URL of the webhook in the Discord channel where you want to receive log messages.
+20. **DISCORD_LOG**:
+    - Example: **`DISCORD_LOG=true`**
+    - Usage: Enables or disables sending standard log messages to Discord. Set to `true` to activate or `false` to deactivate.
+21. **DISCORD_ERROR**:
+    - Example: **`DISCORD_ERROR=true`**
+    - Usage: Enables or disables sending error messages to Discord. Set to `true` to send error logs to the specified Discord channel.
+22. **DISCORD_WARN**:
+    - Example: **`DISCORD_WARN=true`**
+    - Usage: Enables or disables sending warning messages to Discord. Set to `true` to send warning logs to the specified Discord channel.
+23. **DISCORD_DEBUG**:
+    - Example: **`DISCORD_DEBUG=true`**
+    - Usage: Enables or disables sending debug messages to Discord. Set to `true` to activate debug log messages in the Discord channel.
+24. **DISCORD_VERBOSE**:
+    - Example: **`DISCORD_VERBOSE=true`**
+    - Usage: Enables or disables sending verbose messages to Discord. Set to `true` to send verbose logs to the Discord channel.
 
 You will also need to set this env variables as secrets on your GitHub repository for the db migrations GitHub action to work properly.

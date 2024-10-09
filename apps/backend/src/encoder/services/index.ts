@@ -1,13 +1,14 @@
 import { OpenAI, OpenAIEmbeddings } from '@langchain/openai';
 import { WeaviateLibArgs, WeaviateStore } from '@langchain/weaviate';
 import { Document } from '@langchain/core/documents';
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
 import weaviate from 'weaviate-ts-client';
 import { PrismaService } from '../../common/services';
 import { appEnv } from '../../config';
 import { caption } from '../utils';
 import { SemanticSearchResult } from '../types';
+import { CustomLogger } from '../../common/helpers/custom-logger';
 
 const textSplitter = new RecursiveCharacterTextSplitter({
   chunkSize: 1000,
@@ -25,7 +26,7 @@ const client = weaviate.client({
 
 @Injectable()
 export class IndexerService {
-  private readonly logger = new Logger(IndexerService.name);
+  private readonly logger = new CustomLogger(IndexerService.name);
   private readonly multitenantCollection = 'MultiTenancyCollection';
 
   constructor(private readonly prismaService: PrismaService) {}

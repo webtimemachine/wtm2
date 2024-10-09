@@ -1,9 +1,11 @@
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
-import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JWTPayload, PartialJwtContext } from '../interfaces';
 import { PrismaService } from '../../common/services';
 import { appEnv } from '../../config';
+
+import { CustomLogger } from '../../common/helpers/custom-logger';
 
 const jwtFromRequest = ExtractJwt.fromExtractors([
   ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -14,7 +16,7 @@ export class JwtVerificationTokenStrategy extends PassportStrategy(
   Strategy,
   'jwt-partial-token',
 ) {
-  private readonly logger = new Logger(JwtVerificationTokenStrategy.name);
+  private readonly logger = new CustomLogger(JwtVerificationTokenStrategy.name);
 
   constructor(private readonly prismaService: PrismaService) {
     super({
