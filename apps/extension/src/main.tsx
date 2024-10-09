@@ -6,6 +6,7 @@ import './index.css';
 import { ChakraProvider } from '@chakra-ui/react';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { WebLLMProvider } from './context/webllm.tsx';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -22,7 +23,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <ChakraProvider>
       <QueryClientProvider client={queryClient}>
-        <App />
+        <WebLLMProvider>
+          <App />
+        </WebLLMProvider>
       </QueryClientProvider>
     </ChakraProvider>
   </React.StrictMode>,
