@@ -30,6 +30,7 @@ import { IndexerService } from '../../encoder/services';
 import { QueryService } from '../../query/services';
 import { ExplicitFilterService } from '../../filter/services';
 import { appEnv } from '../../config';
+import { AddContextToNavigationEntryDto } from '../dtos/add-context-to-navigation-entry.dto';
 
 @Injectable()
 export class NavigationEntryService {
@@ -196,6 +197,27 @@ export class NavigationEntryService {
     }
 
     return;
+  }
+
+  async addContextToNavigationEntry(
+    jwtContext: JwtContext,
+    addContextToNavigationEntryDto: AddContextToNavigationEntryDto,
+  ) {
+    try {
+      const { content, url } = addContextToNavigationEntryDto;
+
+      await this.indexerService.index(
+        content,
+        [],
+        url,
+        jwtContext.user.id,
+        false,
+      );
+    } catch (error) {
+      this.logger.error(
+        `An error occurred indexing '${addContextToNavigationEntryDto.url}'. Cause: ${error.message}`,
+      );
+    }
   }
 
   async getNavigationEntry(

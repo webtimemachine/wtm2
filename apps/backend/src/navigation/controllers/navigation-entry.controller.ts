@@ -17,6 +17,7 @@ import {
   CreateNavigationEntryInputDto,
   GetNavigationEntryDto,
   DeleteNavigationEntriesDto,
+  AddContextToNavigationEntryDto,
 } from '../dtos';
 import { NavigationEntryService } from '../services';
 
@@ -54,6 +55,25 @@ export class NavigationEntryController {
     return this.navigationService.createNavigationEntry(
       context,
       createNavigationEntryInputDto,
+    );
+  }
+
+  @ApiInternalServerErrorMessageResponse()
+  @ApiBadRequestMessageResponse()
+  @ApiOkResponse({
+    status: 200,
+    type: CompleteNavigationEntryDto,
+  })
+  @JwtAccessToken([])
+  @HttpCode(200)
+  @Post('/add-context')
+  async addContextToNavigationEntry(
+    @Body() addContextToNavigationEntryDto: AddContextToNavigationEntryDto,
+    @JwtRequestContext() context: JwtContext,
+  ): Promise<void> {
+    return this.navigationService.addContextToNavigationEntry(
+      context,
+      addContextToNavigationEntryDto,
     );
   }
 
