@@ -1,9 +1,14 @@
-import { apiClient } from '../utils/api.client';
 import { DOMtoString, getImages } from '@wtm/utils';
 import { CreateNavigationEntry } from '@wtm/api';
 import * as cheerio from 'cheerio';
 import { convertHtmlToMarkdown } from 'dom-to-semantic-markdown';
 import { AnyNode } from 'domhandler';
+import {
+  ServiceWorkerPayload,
+  SERVICEWORKERMESSAGETYPE,
+} from '../service-workers/types';
+
+const port = chrome.runtime.connect({ name: 'web_llm_service_worker' });
 
 function onUrlChange(callback: () => void) {
   let lastUrl = location.href;
@@ -79,9 +84,9 @@ export const postNavigationEntry = async () => {
         images,
       };
 
-      await apiClient.securedFetch('/api/navigation-entry', {
-        method: 'POST',
-        body: JSON.stringify(navigationEntry),
+      port.postMessage({
+        type: SERVICEWORKERMESSAGETYPE.CREATE_NAVIGATION_ENTRY,
+        navigationEntry,
       });
     }
   } catch (error) {
@@ -89,3 +94,32 @@ export const postNavigationEntry = async () => {
   }
 };
 postNavigationEntry();
+
+port.onMessage.addListener(async function (payload: ServiceWorkerPayload) {
+  if (payload.type === SERVICEWORKERMESSAGETYPE.ENGINE_READY) {
+    const { accessToken, enabledLiteMode, stopTrackingEnabled } =
+      await chrome.storage.local.get([
+        'accessToken',
+        'enabledLiteMode',
+        'stopTrackingEnabled',
+      ]);
+
+    const url = window.location.href;
+
+    if (stopTrackingEnabled) return;
+    if (!accessToken) return;
+    if (enabledLiteMode) return;
+    if (url.startsWith('chrome://')) return;
+
+    const htmlContent = DOMtoString('body');
+
+    const content = getSemanticMarkdownForLLM(htmlContent);
+
+    port.postMessage({
+      type: SERVICEWORKERMESSAGETYPE.GENERATE_COMPLETION,
+      content,
+      url: window.location.href,
+    });
+    return;
+  }
+});

@@ -12,6 +12,7 @@ import {
   CreateNavigationEntryInputDto,
   GetNavigationEntryDto,
   DeleteNavigationEntriesDto,
+  AddContextToNavigationEntryDto,
 } from '../dtos';
 
 import {
@@ -197,6 +198,27 @@ export class NavigationEntryService {
     }
 
     return;
+  }
+
+  async addContextToNavigationEntry(
+    jwtContext: JwtContext,
+    addContextToNavigationEntryDto: AddContextToNavigationEntryDto,
+  ) {
+    try {
+      const { content, url } = addContextToNavigationEntryDto;
+
+      await this.indexerService.index(
+        content,
+        [],
+        url,
+        jwtContext.user.id,
+        false,
+      );
+    } catch (error) {
+      this.logger.error(
+        `An error occurred indexing '${addContextToNavigationEntryDto.url}'. Cause: ${error.message}`,
+      );
+    }
   }
 
   async getNavigationEntry(
