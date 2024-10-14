@@ -1,4 +1,6 @@
-export default {
+import { type JestConfigWithTsJest } from 'ts-jest';
+
+const config: JestConfigWithTsJest = {
   rootDir: 'src',
   preset: 'ts-jest',
   testEnvironment: 'jsdom',
@@ -29,3 +31,5 @@ export default {
   modulePaths: ['<rootDir>/src'],
   testPathIgnorePatterns: ['/node_modules/', '/dist/', '/utils/'],
 };
+
+export default config;
