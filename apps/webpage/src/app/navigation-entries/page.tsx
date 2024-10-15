@@ -516,7 +516,7 @@ const NavigationEntry: React.FC<NavigationEntryProps> = ({
         </div>
       </div>
       {isSemantic && element.relevantSegment && visible && (
-        <RelevantSegment relevantSegment={element.relevantSegment} />
+        <RelevantSegment relevantSegment={element.aiGeneratedContent} />
       )}
     </div>
   );
