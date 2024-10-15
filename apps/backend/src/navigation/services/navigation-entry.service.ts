@@ -207,6 +207,24 @@ export class NavigationEntryService {
     try {
       const { content, url } = addContextToNavigationEntryDto;
 
+      const userPreference = await this.prismaService.userPreferences.findFirst(
+        {
+          where: {
+            userId: jwtContext.user.id,
+          },
+          select: {
+            enableExplicitContentFilter: true,
+          },
+        },
+      );
+
+      if (userPreference?.enableExplicitContentFilter) {
+        await this.explicitFilter.filter(
+          content!,
+          addContextToNavigationEntryDto.url,
+        );
+      }
+
       await this.indexerService.index(
         content,
         [],
