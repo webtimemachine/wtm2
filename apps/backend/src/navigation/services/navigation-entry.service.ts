@@ -72,8 +72,6 @@ export class NavigationEntryService {
       completeNavigationEntry.userDevice,
     );
 
-    console.log('completeNavigationEntry1', completeNavigationEntry);
-
     const completeNavigationEntryDto = plainToInstance(
       CompleteNavigationEntryDto,
       {
