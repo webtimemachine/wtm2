@@ -11,18 +11,12 @@ import {
 import { ServerUrlEditable } from '../components';
 import { useLogin } from '../hooks';
 import { useAuthStore, useNavigation } from '../store';
-import { isLoginRes } from '@wtm/api';
+import { isLoginRes, LoginResponse } from '@wtm/api';
 
 import clsx from 'clsx';
 import { updateIcon } from '../utils/updateIcon';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-declare global {
-  interface Window {
-    webkit: object;
-  }
-}
 
 export const LoginScreen: React.FC<object> = () => {
   updateIcon(false);
@@ -69,9 +63,23 @@ export const LoginScreen: React.FC<object> = () => {
   };
 
   useEffect(() => {
+    const processLogin = async (data: LoginResponse) => {
+      const { serverUrl } = await chrome.storage.local.get(['serverUrl']);
+
+      const message = {
+        refreshToken: data.refreshToken,
+        backUrl: serverUrl,
+        isLogin: true,
+      };
+
+      browser.runtime.sendNativeMessage('com.ttt246llc.wtm', message);
+
+      navigateTo('navigation-entries');
+    };
+
     if (loginMutation.isSuccess)
       if (isLoginRes(loginMutation.data)) {
-        navigateTo('navigation-entries');
+        processLogin(loginMutation.data);
       } else {
         navigateTo('validate-email');
       }

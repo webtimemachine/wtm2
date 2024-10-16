@@ -30,6 +30,7 @@ export interface AuthStore extends AuthState {
   updateServerUrl: (serverUrl: string) => void;
   updateEnabledLiteMode: (enabledLiteMode: boolean) => void;
   updateEnabledStopTracking: (enabledStopTracking: boolean) => void;
+  saveSharedCredentials: (serverUrl: string, refreshToken: string) => void;
 }
 
 export const authStore = createStore<AuthStore>()(
@@ -112,6 +113,17 @@ export const authStore = createStore<AuthStore>()(
             isLoggedIn: true,
             partialToken: '',
             recoveryToken: '',
+          };
+        }),
+      saveSharedCredentials: (serverUrl: string, recoveryToken: string) =>
+        set(() => {
+          return {
+            persistedScreen: '',
+            recoveryEmail: '',
+            partialToken: '',
+            isLoggedIn: true,
+            recoveryToken,
+            serverUrl,
           };
         }),
 

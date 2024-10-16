@@ -158,6 +158,8 @@
 		ED65F6E62C667500002564E2 /* app-icon-grayscale-128.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "app-icon-grayscale-128.png"; path = "../../../app_chrome/app-icon-grayscale-128.png"; sourceTree = "<group>"; };
 		ED65F6E72C667500002564E2 /* content.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = content.js; path = ../../../app_chrome/content.js; sourceTree = "<group>"; };
 		ED65F6E82C667500002564E2 /* content.ts-loader.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = "content.ts-loader.js"; path = "../../../app_chrome/content.ts-loader.js"; sourceTree = "<group>"; };
+		EDCF42162CBD9C0D00CF6DE6 /* wtm (iOS).entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "wtm (iOS).entitlements"; sourceTree = "<group>"; };
+		EDCF42172CBD9C1E00CF6DE6 /* wtm Extension (iOS).entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "wtm Extension (iOS).entitlements"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -195,6 +197,8 @@
 		ED65F6722C6674FD002564E2 = {
 			isa = PBXGroup;
 			children = (
+				EDCF42172CBD9C1E00CF6DE6 /* wtm Extension (iOS).entitlements */,
+				EDCF42162CBD9C0D00CF6DE6 /* wtm (iOS).entitlements */,
 				ED65F6772C6674FD002564E2 /* Shared (App) */,
 				ED65F6802C667500002564E2 /* Shared (Extension) */,
 				ED65F6882C667500002564E2 /* iOS (App) */,
@@ -723,8 +727,10 @@
 		ED65F6C72C667500002564E2 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "wtm Extension (iOS).entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2858MX5336;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "iOS (Extension)/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "wtm Extension";
@@ -753,8 +759,10 @@
 		ED65F6C82C667500002564E2 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "wtm Extension (iOS).entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2858MX5336;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "iOS (Extension)/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "wtm Extension";
@@ -787,8 +795,10 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "wtm (iOS).entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2858MX5336;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "iOS (App)/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = wtm;
@@ -827,8 +837,10 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "wtm (iOS).entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2858MX5336;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "iOS (App)/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = wtm;
