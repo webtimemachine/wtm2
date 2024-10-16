@@ -344,7 +344,6 @@ const NavigationEntriesScreen: React.FC = () => {
                 BrowserIcon={BrowserIcon}
                 deleteNavEntry={deleteNavigationEntryMutation.mutate}
                 element={element}
-                isSemantic={isSemantic}
                 deleteProps={{
                   isDeleteOn: isBulkDeleteOn,
                   onSelect: (id: number, add: boolean) => {
@@ -426,7 +425,6 @@ export interface NavigationEntryProps {
   element: CompleteNavigationEntryDto;
   BrowserIcon: IconType;
   deleteNavEntry: ({ id }: { id: number }) => void;
-  isSemantic: boolean;
   deleteProps?: {
     isDeleteOn: boolean;
     onSelect: (id: number, add: boolean) => any;
@@ -438,7 +436,6 @@ const NavigationEntry: React.FC<NavigationEntryProps> = ({
   element,
   BrowserIcon,
   deleteNavEntry,
-  isSemantic,
   deleteProps,
 }: NavigationEntryProps) => {
   const [visible, setVisible] = useState<boolean>(false);
@@ -490,7 +487,7 @@ const NavigationEntry: React.FC<NavigationEntryProps> = ({
           </div>
         </div>
         <div className='space-x-2 flex items-center justify-center'>
-          {element.relevantSegment && (
+          {element.aiGeneratedContent && (
             <IconButton
               aria-label={
                 visible ? 'hide relevant result' : 'show relevant result'
@@ -515,7 +512,7 @@ const NavigationEntry: React.FC<NavigationEntryProps> = ({
           )}
         </div>
       </div>
-      {isSemantic && element.relevantSegment && visible && (
+      {element.aiGeneratedContent && visible && (
         <RelevantSegment relevantSegment={element.aiGeneratedContent} />
       )}
     </div>
