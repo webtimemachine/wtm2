@@ -231,8 +231,6 @@ export class NavigationEntryService {
 
     const formattedResult = await openai.invoke([formatPrompt]);
 
-    console.log('Creating navigation entry', formattedResult);
-
     if (lastEntry?.url === createNavigationEntryInputDto.url) {
       await this.prismaService.navigationEntry.update({
         where: {
