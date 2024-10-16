@@ -153,8 +153,8 @@ describe('Indexer service', () => {
       const expectedSearchResult = {
         urls: new Set(['source1', 'source2']),
         mostRelevantResults: new Map<string, string>([
-          ['source1', 'relevant content'],
-          ['source2', 'relevant content'],
+          ['source1', 'relevant content 1'],
+          ['source2', 'relevant content 2'],
         ]),
       };
       expect(results).toEqual(expectedSearchResult);
