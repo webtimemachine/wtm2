@@ -206,6 +206,21 @@ const queryParams: GetNavigationEntryDto = {
   isSemantic: true,
 };
 
+jest.mock('@langchain/openai', () => {
+  return {
+    OpenAI: jest.fn().mockImplementation(() => {
+      return {
+        invoke: jest.fn().mockResolvedValue('relevant content'),
+      };
+    }),
+    ChatOpenAI: jest.fn().mockImplementation(() => {
+      return {
+        call: jest.fn(() => Promise.resolve({})),
+      };
+    }),
+  };
+});
+
 describe('NavigationEntryService', () => {
   let navigationEntryService: NavigationEntryService;
   let prismaService: PrismaService;
