@@ -2,13 +2,12 @@
 
 import React, { useEffect } from 'react';
 import { Text, Spinner } from '@chakra-ui/react';
-import { ArrowBackIcon } from '@chakra-ui/icons';
 import { useAuthStore, useNavigation } from '@/store';
 import { useLoginSharedCredentials } from '@/hooks/use-login-shared-credentials.hook';
 import { useSearchParams } from 'next/navigation';
 
 const HoldScreen: React.FC<{}> = () => {
-  const { navigateBack, navigateTo } = useNavigation();
+  const { navigateTo } = useNavigation();
   const searchParams = useSearchParams();
 
   const token = searchParams.get('token');
