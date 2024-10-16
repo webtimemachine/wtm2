@@ -28,7 +28,7 @@ class WebViewController: UIViewController, WKNavigationDelegate {
         if let sharedDefaults = UserDefaults(suiteName: "group.com.ttt246llc.wtm") {
             if let data = sharedDefaults.dictionary(forKey: "messageFromExtension") {
                 
-                if let url = URL(string: "https://webtm.io/hold?token=\(data["refreshToken"] ?? "")&backUrl=\(data["backUrl"] ?? "") ?? "")") {
+                if let url = URL(string: "https://webtm.io/hold?token=\(data["refreshToken"] ?? "")&backUrl=\(data["backUrl"] ?? "")") {
                     let request = URLRequest(url: url)
                     webView.load(request)
                 }
