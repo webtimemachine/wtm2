@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import { Text, Spinner } from '@chakra-ui/react';
 import { useAuthStore, useNavigation } from '@/store';
 import { useLoginSharedCredentials } from '@/hooks/use-login-shared-credentials.hook';
@@ -55,4 +55,13 @@ const HoldScreen: React.FC<{}> = () => {
     </div>
   );
 };
-export default HoldScreen;
+
+const Page = () => {
+  return (
+    <Suspense>
+      <HoldScreen />
+    </Suspense>
+  );
+};
+
+export default Page;
