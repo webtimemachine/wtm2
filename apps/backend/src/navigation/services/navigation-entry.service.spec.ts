@@ -145,6 +145,7 @@ const createdNavigationEntry: CompleteNavigationEntryDto = {
     },
   },
   navigationDate,
+  aiGeneratedContent: 'AI Generated Content',
 };
 
 const mockedEntry: CompleteNavigationEntry = {
@@ -156,6 +157,7 @@ const mockedEntry: CompleteNavigationEntry = {
   userId: BigInt(1),
   userDeviceId: BigInt(1),
   createdAt: new Date('2024-02-09T12:00:00Z'),
+  aiGeneratedContent: 'AI Generated Content 1',
   updateAt: null,
   userDevice: {
     id: BigInt(1),
