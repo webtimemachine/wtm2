@@ -18,5 +18,11 @@
         "Access-Control-Allow-Headers": "X-CSRF-Token, X-Requested-With, Accept, Authorization, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version"
       }
     }
+  ],
+  "crons": [
+    {
+      "path": "/api/navigation-entry/expired",
+      "schedule": "0 0 * * *"
+    }
   ]
 }

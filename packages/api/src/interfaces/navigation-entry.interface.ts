@@ -1,4 +1,4 @@
-import { UserDevice } from './user-device.interface';
+import { UserDevice } from "./user-device.interface";
 
 export interface CompleteNavigationEntryDto {
   id: number;
@@ -11,6 +11,7 @@ export interface CompleteNavigationEntryDto {
   userDevice: UserDevice;
   expirationDate?: Date;
   relevantSegment?: string;
+  aiGeneratedContent: string;
 }
 
 export interface GetNavigationEntriesResponse {
@@ -31,7 +32,9 @@ export interface GetNavigationEntriesData {
 export interface DeleteNavigationEntriesData {
   id: number;
 }
-
+export interface BulkDeleteNavigationEntriesData {
+  navigationEntryIds: number[];
+}
 export interface CreateNavigationEntry {
   url: string;
   navigationDate: string;

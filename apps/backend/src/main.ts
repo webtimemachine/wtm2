@@ -1,4 +1,4 @@
-import { Logger, ValidationPipe } from '@nestjs/common';
+import { ValidationPipe } from '@nestjs/common';
 import { NestFactory, HttpAdapterHost } from '@nestjs/core';
 
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
@@ -13,6 +13,7 @@ import { options } from './swagger-options';
 import * as Sentry from '@sentry/node';
 import { nodeProfilingIntegration } from '@sentry/profiling-node';
 import { SentryFilter } from './sentry.filter';
+import { CustomLogger } from './common/helpers/custom-logger';
 
 const initSentry = () => {
   Sentry.init({
@@ -24,7 +25,7 @@ const initSentry = () => {
 };
 
 async function bootstrap() {
-  const logger = new Logger('bootstrap');
+  const logger = new CustomLogger('bootstrap');
 
   const app = await NestFactory.create(AppModule);
 
@@ -62,6 +63,7 @@ async function bootstrap() {
     .addBearerAuth(bearerAuthJWT, 'refreshToken')
     .addBearerAuth(bearerAuthJWT, 'recoveryToken')
     .addBearerAuth(bearerAuthJWT, 'partialToken')
+    .addBearerAuth(bearerAuthJWT, 'cronJobSecret')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
