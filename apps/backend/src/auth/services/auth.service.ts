@@ -3,7 +3,6 @@ import {
   ConflictException,
   ForbiddenException,
   Injectable,
-  Logger,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';

@@ -68,7 +68,6 @@ export interface NavEntryProps {
   BrowserIcon: IconType;
   deleteNavEntry: ({ id }: { id: number }) => void;
   processOpenLink: (url: string) => Promise<void>;
-  isSemantic: boolean;
 }
 
 const NavigationEntry = ({
@@ -76,7 +75,6 @@ const NavigationEntry = ({
   BrowserIcon,
   deleteNavEntry,
   processOpenLink,
-  isSemantic,
 }: NavEntryProps) => {
   const [visible, setVisible] = useState<boolean>(false);
 
@@ -112,7 +110,7 @@ const NavigationEntry = ({
           </div>
         </div>
         <div className='space-x-2 flex items-center justify-center'>
-          {element.relevantSegment && (
+          {element.aiGeneratedContent && (
             <IconButton
               aria-label={
                 visible ? 'hide relevant result' : 'show relevant result'
@@ -122,6 +120,7 @@ const NavigationEntry = ({
               onClick={() => setVisible(!visible)}
             />
           )}
+
           <IconButton
             aria-label='delete navigation entry'
             size='xs'
@@ -134,8 +133,8 @@ const NavigationEntry = ({
           />
         </div>
       </div>
-      {isSemantic && element.relevantSegment && visible && (
-        <RelevantSegment relevantSegment={element.relevantSegment} />
+      {element.aiGeneratedContent && visible && (
+        <RelevantSegment relevantSegment={element.aiGeneratedContent} />
       )}
     </div>
   );
@@ -287,7 +286,6 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
                   deleteNavEntry={deleteNavigationEntryMutation.mutate}
                   processOpenLink={processOpenLink}
                   element={element}
-                  isSemantic={isSemantic}
                 />
               );
             })
