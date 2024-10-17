@@ -15,6 +15,10 @@ jest.mock('../../hooks', () => ({
   useUpdatePreferences: jest.fn(),
 }));
 
+jest.mock('../../utils/updateIcon', () => ({
+  updateIcon: jest.fn(),
+}));
+
 const mockNavigateBack = jest.fn();
 const mockNavigateTo = jest.fn();
 const mockMutate = jest.fn();
@@ -51,7 +55,11 @@ global.chrome = {
   storage: {
     local: {
       get: jest.fn().mockImplementation(() => {
-        return { enabledLiteMode: false, enabledStopTracking: true };
+        return {
+          enabledLiteMode: false,
+          enabledStopTracking: true,
+          webLLMEnabled: false,
+        };
       }),
       set: jest.fn(),
     },
@@ -156,6 +164,7 @@ describe('PreferencesScreen', () => {
       expect(chrome.storage.local.set).toHaveBeenCalledWith({
         enabledLiteMode: false,
         stopTrackingEnabled: true,
+        webLLMEnabled: false,
       });
     });
   });

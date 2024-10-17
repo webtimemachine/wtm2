@@ -4,7 +4,6 @@ import {
   Delete,
   Get,
   HttpCode,
-  Logger,
   Param,
   ParseIntPipe,
   Post,
@@ -17,10 +16,16 @@ import {
   CreateNavigationEntryInputDto,
   GetNavigationEntryDto,
   DeleteNavigationEntriesDto,
+  AddContextToNavigationEntryDto,
 } from '../dtos';
 import { NavigationEntryService } from '../services';
 
-import { JwtAccessToken, JwtRequestContext } from '../../auth/decorators';
+import {
+  CronJobKey,
+  JwtAccessToken,
+  JwtRequestContext,
+  /*  CronJobKey, */
+} from '../../auth/decorators';
 import { JwtContext } from '../../auth/interfaces';
 
 import {
@@ -30,11 +35,12 @@ import {
   ApiPaginationResponse,
 } from '../../common/decorators';
 import { MessageResponse, PaginationResponse } from '../../common/dtos';
+import { CustomLogger } from '../../common/helpers/custom-logger';
 
 @ApiTags('Navigation Entry')
 @Controller('navigation-entry')
 export class NavigationEntryController {
-  private readonly logger = new Logger(NavigationEntryController.name);
+  private readonly logger = new CustomLogger(NavigationEntryController.name);
 
   constructor(private readonly navigationService: NavigationEntryService) {}
 
@@ -54,6 +60,25 @@ export class NavigationEntryController {
     return this.navigationService.createNavigationEntry(
       context,
       createNavigationEntryInputDto,
+    );
+  }
+
+  @ApiInternalServerErrorMessageResponse()
+  @ApiBadRequestMessageResponse()
+  @ApiOkResponse({
+    status: 200,
+    type: CompleteNavigationEntryDto,
+  })
+  @JwtAccessToken([])
+  @HttpCode(200)
+  @Post('/add-context')
+  async addContextToNavigationEntry(
+    @Body() addContextToNavigationEntryDto: AddContextToNavigationEntryDto,
+    @JwtRequestContext() context: JwtContext,
+  ): Promise<void> {
+    return this.navigationService.addContextToNavigationEntry(
+      context,
+      addContextToNavigationEntryDto,
     );
   }
 
@@ -101,5 +126,14 @@ export class NavigationEntryController {
       context,
       deleteNavigationEntriesDto,
     );
+  }
+
+  @ApiInternalServerErrorMessageResponse()
+  @ApiOkResponse()
+  @CronJobKey()
+  @HttpCode(200)
+  @Post('/expired')
+  deleteExpiredNavigationEntries(): Promise<void> {
+    return this.navigationService.deleteExpiredNavigationEntries();
   }
 }

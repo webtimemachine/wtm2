@@ -2,7 +2,6 @@ import {
   Injectable,
   CanActivate,
   ExecutionContext,
-  Logger,
   ForbiddenException,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -10,9 +9,11 @@ import { Observable } from 'rxjs';
 import { Reflector } from '@nestjs/core';
 import { JwtContext } from '../interfaces';
 
+import { CustomLogger } from '../../common/helpers/custom-logger';
+
 @Injectable()
 export class UserTypesGuard implements CanActivate {
-  private readonly logger = new Logger(UserTypesGuard.name);
+  private readonly logger = new CustomLogger(UserTypesGuard.name);
 
   constructor(private reflector: Reflector) {}
 

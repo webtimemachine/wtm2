@@ -119,6 +119,26 @@ const grayScaleIcons = {
   '128': 'app-icon-grayscale-128.png',
 };
 
+const noTrackingIcons = {
+  '16': 'image.png',
+  '32': 'image.png',
+  '48': 'image.png',
+  '128': 'image.png',
+};
+
+const setCorrectIconByUserPreferences = async () => {
+  const response = await apiClient.getUserPreferences();
+  if (response?.enableStopTracking) {
+    chrome.action.setIcon({
+      path: noTrackingIcons,
+    });
+  } else {
+    chrome.action.setIcon({
+      path: defaultIcons,
+    });
+  }
+};
+
 const refreshAccessToken = async () => {
   try {
     const { accessToken, refreshToken } = await chrome.storage.local.get([
@@ -126,19 +146,23 @@ const refreshAccessToken = async () => {
       'refreshToken',
     ]);
 
+    if (!accessToken || !refreshToken) {
+      chrome.action.setIcon({
+        path: grayScaleIcons,
+      });
+
+      return;
+    }
+
     const isAccessTokenExpired = isTokenExpired(accessToken);
     const isRefreshTokenExpired = isTokenExpired(refreshToken);
 
     if (isAccessTokenExpired && !isRefreshTokenExpired) {
       await apiClient.refresh();
 
-      chrome.action.setIcon({
-        path: defaultIcons,
-      });
-    } else {
-      chrome.action.setIcon({
-        path: grayScaleIcons,
-      });
+      setCorrectIconByUserPreferences();
+    } else if (!isAccessTokenExpired) {
+      setCorrectIconByUserPreferences();
     }
   } catch (error) {
     chrome.action.setIcon({
@@ -156,5 +180,6 @@ chrome.windows.onFocusChanged.addListener(async (windowId) => {
 });
 
 chrome.runtime.onStartup.addListener(() => {
+  refreshAccessToken();
   startInterval();
 });

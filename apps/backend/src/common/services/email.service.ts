@@ -1,9 +1,10 @@
 import { MailerService } from '@nestjs-modules/mailer';
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+import { CustomLogger } from '../../common/helpers/custom-logger';
 
 @Injectable()
 export class EmailService {
-  private logger = new Logger('EmailService');
+  private logger = new CustomLogger('EmailService');
 
   constructor(private readonly mailerService: MailerService) {}
 

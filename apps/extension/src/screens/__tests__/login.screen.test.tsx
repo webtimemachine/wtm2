@@ -48,9 +48,21 @@ jest.mock('@wtm/api', () => ({
   isLoginRes: jest.fn(),
 }));
 
+jest.mock('../../utils/updateIcon', () => ({
+  updateIcon: jest.fn(),
+}));
+
 global.chrome = {
   action: {
     setIcon: jest.fn(),
+  },
+  storage: {
+    local: {
+      get: jest.fn().mockReturnValue('http://example.com'),
+    },
+  },
+  runtime: {
+    sendNativeMessage: jest.fn(),
   },
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 } as any;

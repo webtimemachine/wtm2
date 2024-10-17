@@ -7,6 +7,7 @@ import {
   useLogout,
   useNavigationEntries,
   useHandleSessionExpired,
+  useBulkDeleteNavigationEntries,
 } from '../../../hooks';
 import { CompleteNavigationEntryDto } from '@wtm/api';
 import NavigationEntriesScreen from '../page';
@@ -21,6 +22,7 @@ jest.mock('../../../hooks', () => ({
   useNavigationEntries: jest.fn(),
   useLogout: jest.fn(),
   useHandleSessionExpired: jest.fn(),
+  useBulkDeleteNavigationEntries: jest.fn(),
 }));
 jest.mock('@tanstack/react-query', () => ({
   useQuery: jest.fn(),
@@ -51,7 +53,12 @@ const mockRefetch = jest.fn();
 (useHandleSessionExpired as jest.Mock).mockResolvedValue({
   handleSessionExpired: jest.fn(() => Promise<never>),
 });
-
+(useBulkDeleteNavigationEntries as jest.Mock).mockResolvedValue({
+  deleteBulkNavigationEntriesMutation: {
+    mutate: mockMutate,
+    isSuccess: false,
+  },
+});
 const mockNavigationEntries: CompleteNavigationEntryDto[] = [
   {
     id: 1,
@@ -60,6 +67,7 @@ const mockNavigationEntries: CompleteNavigationEntryDto[] = [
     navigationDate: new Date(),
     liteMode: 'false',
     relevantSegment: 'Relevant Segment 1',
+    aiGeneratedContent: 'AI Generated Content 1',
     userId: 1,
     userDeviceId: 1,
     userDevice: {
@@ -81,6 +89,7 @@ const mockNavigationEntries: CompleteNavigationEntryDto[] = [
     navigationDate: new Date(),
     liteMode: 'true',
     relevantSegment: 'Relevant Segment 2',
+    aiGeneratedContent: 'AI Generated Content 2',
     userId: 1,
     userDeviceId: 1,
     userDevice: {
@@ -157,6 +166,20 @@ describe('NavigationEntriesScreen', () => {
     fireEvent.click(onClickListener);
 
     expect(semanticSwitch).toBeChecked();
+  });
+  test('enables and disables bulk delete', () => {
+    customRender(<NavigationEntriesScreen />);
+    const onClickListener = screen.getByTestId('bulk-delete-container');
+    const bulkDeleteSwitch = screen.getByRole('checkbox', {
+      name: 'Bulk Delete',
+    });
+    fireEvent.click(onClickListener);
+
+    expect(bulkDeleteSwitch).toBeChecked();
+
+    fireEvent.click(onClickListener);
+
+    expect(bulkDeleteSwitch).not.toBeChecked();
   });
 
   test('deletes a navigation entry', async () => {

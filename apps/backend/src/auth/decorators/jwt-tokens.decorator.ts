@@ -14,7 +14,7 @@ import {
 import { UserType } from '@prisma/client';
 import { MessageResponse } from '../../common/dtos';
 import { ApiDocsDescriptions } from '../../common/enums';
-import { UserTypesGuard } from '../guards';
+import { UserTypesGuard, CronJobAuthGuard } from '../guards';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/explicit-module-boundary-types
 export function JwtAccessToken(
@@ -55,6 +55,15 @@ export function JwtRecoveryToken(guards: Type<CanActivate>[] = []) {
   return applyDecorators(
     UseGuards(AuthGuard('jwt-recovery-token'), ...guards),
     ApiBearerAuth('recoveryToken'),
+    ApiUnauthorizedResponse({ description: ApiDocsDescriptions.UNAUTHORIZED }),
+  );
+}
+
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/explicit-module-boundary-types
+export function CronJobKey() {
+  return applyDecorators(
+    UseGuards(CronJobAuthGuard),
+    ApiBearerAuth('cronJobSecret'),
     ApiUnauthorizedResponse({ description: ApiDocsDescriptions.UNAUTHORIZED }),
   );
 }
