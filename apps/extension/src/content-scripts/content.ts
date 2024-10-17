@@ -7,6 +7,7 @@ import {
   ServiceWorkerPayload,
   SERVICEWORKERMESSAGETYPE,
 } from '../service-workers/types';
+import { apiClient } from '../utils/api.client';
 
 const port = chrome.runtime.connect({ name: 'web_llm_service_worker' });
 
@@ -84,9 +85,9 @@ export const postNavigationEntry = async () => {
         images,
       };
 
-      port.postMessage({
-        type: SERVICEWORKERMESSAGETYPE.CREATE_NAVIGATION_ENTRY,
-        navigationEntry,
+      await apiClient.securedFetch('/api/navigation-entry', {
+        method: 'POST',
+        body: JSON.stringify(navigationEntry),
       });
     }
   } catch (error) {
@@ -97,15 +98,17 @@ postNavigationEntry();
 
 port.onMessage.addListener(async function (payload: ServiceWorkerPayload) {
   if (payload.type === SERVICEWORKERMESSAGETYPE.ENGINE_READY) {
-    const { accessToken, enabledLiteMode, stopTrackingEnabled } =
+    const { accessToken, enabledLiteMode, stopTrackingEnabled, webLLMEnabled } =
       await chrome.storage.local.get([
         'accessToken',
         'enabledLiteMode',
         'stopTrackingEnabled',
+        'webLLMEnabled',
       ]);
 
     const url = window.location.href;
 
+    if (!webLLMEnabled) return;
     if (stopTrackingEnabled) return;
     if (!accessToken) return;
     if (enabledLiteMode) return;
