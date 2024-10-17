@@ -19,6 +19,7 @@ interface AuthState {
   recoveryToken: string;
   enabledLiteMode: boolean;
   enabledStopTracking: boolean;
+  webLLMEnabled: boolean;
 }
 
 export interface AuthStore extends AuthState {
@@ -30,6 +31,7 @@ export interface AuthStore extends AuthState {
   updateServerUrl: (serverUrl: string) => void;
   updateEnabledLiteMode: (enabledLiteMode: boolean) => void;
   updateEnabledStopTracking: (enabledStopTracking: boolean) => void;
+  updateWebLLMEnabled: (webLLMEnabled: boolean) => void;
 }
 
 export const authStore = createStore<AuthStore>()(
@@ -46,6 +48,7 @@ export const authStore = createStore<AuthStore>()(
       recoveryToken: '',
       enabledLiteMode: false,
       enabledStopTracking: false,
+      webLLMEnabled: false,
 
       updateEnabledLiteMode: (enabledLiteMode: boolean) =>
         set(() => {
@@ -134,6 +137,9 @@ export const authStore = createStore<AuthStore>()(
             enabledStopTracking,
           };
         }),
+
+      updateWebLLMEnabled: (webLLMEnabled: boolean) =>
+        set(() => ({ webLLMEnabled })),
     }),
     {
       name: 'auth-vanilla-store',
