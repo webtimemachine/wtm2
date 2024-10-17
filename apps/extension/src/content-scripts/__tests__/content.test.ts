@@ -26,18 +26,6 @@ jest.mock('cheerio', () => ({
   Cheerio: jest.fn().mockResolvedValue(''),
 }));
 
-// Mocking the chrome storage local API
-global.chrome = {
-  storage: {
-    local: {
-      get: jest.fn().mockImplementationOnce(() => {
-        return { accessToken: 'mockAccessToken' };
-      }),
-    },
-  },
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-} as any;
-
 describe('postNavigationEntry', () => {
   afterEach(() => {
     jest.clearAllMocks();
@@ -67,21 +55,9 @@ describe('postNavigationEntry', () => {
       'enabledLiteMode',
       'stopTrackingEnabled',
     ]);
-    // expect(apiClient.securedFetch).toHaveBeenCalled();
   });
 
   it('should not post navigation entry when accessToken is not available', async () => {
-    global.chrome = {
-      storage: {
-        local: {
-          get: jest.fn().mockImplementationOnce(() => {
-            return undefined;
-          }),
-        },
-      },
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } as any;
-
     await postNavigationEntry();
 
     expect(apiClient.securedFetch).not.toHaveBeenCalled();
