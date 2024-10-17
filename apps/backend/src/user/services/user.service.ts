@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
 
 import { JwtContext } from '../../auth/interfaces';
@@ -11,6 +11,7 @@ import {
   UserDto,
   UserPreferencesDto,
   ChangeDisplayNameInput,
+  ChangeProfilePictureInput,
 } from '../dtos';
 
 import { plainToClassFromExist, plainToInstance } from 'class-transformer';
@@ -21,10 +22,11 @@ import { CompleteUserDevice, completeUserDeviceInclude } from '../types';
 
 import { UAParser } from 'ua-parser-js';
 import { AuthService } from '../../auth/services';
+import { CustomLogger } from '../../common/helpers/custom-logger';
 
 @Injectable()
 export class UserService {
-  private readonly logger = new Logger(UserService.name);
+  private readonly logger = new CustomLogger(UserService.name);
 
   constructor(
     private readonly prismaService: PrismaService,
@@ -244,6 +246,7 @@ export class UserService {
       message: 'Pasword updated successfully!',
     };
   }
+
   async changeDisplayName(
     jwtContext: JwtContext,
     changeDisplayNameInput: ChangeDisplayNameInput,
@@ -254,6 +257,27 @@ export class UserService {
     return {
       statusCode: 200,
       message: 'Displayname updated successfully!',
+    };
+  }
+
+  async changeProfilePicture(
+    jwtContext: JwtContext,
+    changeProfilePictureInput: ChangeProfilePictureInput,
+  ): Promise<MessageResponse> {
+    const userId = jwtContext.user.id;
+    const { profilePicture } = changeProfilePictureInput;
+    await this.prismaService.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        profilePicture: profilePicture || '',
+      },
+    });
+
+    return {
+      statusCode: 200,
+      message: 'Profile picture updated successfully!',
     };
   }
 }

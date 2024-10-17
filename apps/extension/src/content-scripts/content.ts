@@ -1,11 +1,16 @@
-import { apiClient } from '../utils/api.client';
 import { DOMtoString, getImages } from '@wtm/utils';
 import { CreateNavigationEntry } from '@wtm/api';
 import * as cheerio from 'cheerio';
 import { convertHtmlToMarkdown } from 'dom-to-semantic-markdown';
-
 import { AnyNode } from 'domhandler';
-import { isTokenExpired } from '@wtm/utils';
+import {
+  ServiceWorkerPayload,
+  SERVICEWORKERMESSAGETYPE,
+} from '../service-workers/types';
+import { apiClient } from '../utils/api.client';
+
+const port = chrome.runtime.connect({ name: 'web_llm_service_worker' });
+
 function onUrlChange(callback: () => void) {
   let lastUrl = location.href;
   new MutationObserver(() => {
@@ -91,51 +96,33 @@ export const postNavigationEntry = async () => {
 };
 postNavigationEntry();
 
-const defaultIcons = {
-  '16': 'app-icon-16.png',
-  '32': 'app-icon-32.png',
-  '48': 'app-icon-48.png',
-  '128': 'app-icon-128.png',
-};
+port.onMessage.addListener(async function (payload: ServiceWorkerPayload) {
+  if (payload.type === SERVICEWORKERMESSAGETYPE.ENGINE_READY) {
+    const { accessToken, enabledLiteMode, stopTrackingEnabled, webLLMEnabled } =
+      await chrome.storage.local.get([
+        'accessToken',
+        'enabledLiteMode',
+        'stopTrackingEnabled',
+        'webLLMEnabled',
+      ]);
 
-const grayScaleIcons = {
-  '16': 'app-icon-grayscale-16.png',
-  '32': 'app-icon-grayscale-32.png',
-  '48': 'app-icon-grayscale-48.png',
-  '128': 'app-icon-grayscale-128.png',
-};
+    const url = window.location.href;
 
-const startInterval = () => {
-  setInterval(refreshAccessToken, 60 * 60 * 1000); // 1 hour
-};
+    if (!webLLMEnabled) return;
+    if (stopTrackingEnabled) return;
+    if (!accessToken) return;
+    if (enabledLiteMode) return;
+    if (url.startsWith('chrome://')) return;
 
-const refreshAccessToken = async () => {
-  try {
-    const { accessToken, refreshToken } = await chrome.storage.local.get([
-      'accessToken',
-      'refreshToken',
-    ]);
+    const htmlContent = DOMtoString('body');
 
-    const isAccessTokenExpired = isTokenExpired(accessToken);
-    const isRefreshTokenExpired = isTokenExpired(refreshToken);
+    const content = getSemanticMarkdownForLLM(htmlContent);
 
-    if (isAccessTokenExpired && !isRefreshTokenExpired) {
-      await apiClient.refresh();
-
-      chrome?.action?.setIcon({
-        path: defaultIcons,
-      });
-    } else {
-      chrome?.action?.setIcon({
-        path: grayScaleIcons,
-      });
-    }
-  } catch (error) {
-    chrome?.action?.setIcon({
-      path: grayScaleIcons,
+    port.postMessage({
+      type: SERVICEWORKERMESSAGETYPE.GENERATE_COMPLETION,
+      content,
+      url: window.location.href,
     });
-    console.error(`Unexpected Error in windows onFocusChanged:`, error);
+    return;
   }
-};
-
-startInterval();
+});

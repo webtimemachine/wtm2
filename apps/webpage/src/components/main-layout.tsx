@@ -4,6 +4,7 @@ import React from 'react';
 import {
   Text,
   Icon,
+  Image,
   Divider,
   Button,
   Avatar,
@@ -29,6 +30,7 @@ import { usePathname } from 'next/navigation';
 import { User } from '@wtm/api';
 
 import { clsx } from 'clsx';
+import { getAvatarFromLabel } from '@/utils/get-avatar';
 
 interface Props {
   children?: React.ReactNode;
@@ -42,10 +44,21 @@ export const MainLayout: React.FC<Props> = ({ children }) => {
   const user: User | undefined = basicUserInformationQuery?.data;
 
   const ProfileSection = () => {
+    const currentAvatar = user?.profilePicture;
     const username = user?.displayname;
     return (
-      <div className='flex w-full gap-2'>
-        <Avatar name={user?.email} size='lg' bg='gray.400' />
+      <div className='flex w-full gap-2 '>
+        <div className='flex w-[30%]'>
+          {currentAvatar ? (
+            <Image
+              src={getAvatarFromLabel(currentAvatar).src}
+              className='w-[80%]'
+            />
+          ) : (
+            <Avatar name={user?.email} size='lg' bg='gray.400' />
+          )}
+        </div>
+
         <div className='flex flex-col pt-1'>
           <span className='text-lg font-medium text-card-foreground'>
             {username}
@@ -186,7 +199,7 @@ export const MainLayout: React.FC<Props> = ({ children }) => {
         <SideDrawer />
       </div>
 
-      <div className='hidden md:block'>
+      <div className='hidden md:block w-[20%] sm:w-[50%] lg:w-[20%]'>
         <SideCard />
       </div>
 

@@ -6,6 +6,13 @@ export const useLogout = () => {
 
   const logout = async () => {
     notifyLogout();
+
+    const message = {
+      isLogin: false,
+    };
+
+    chrome.runtime.sendNativeMessage('com.ttt246llc.wtm', message);
+
     navigateTo('login');
   };
 

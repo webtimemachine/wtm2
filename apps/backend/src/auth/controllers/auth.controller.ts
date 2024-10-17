@@ -3,7 +3,6 @@ import {
   Controller,
   Get,
   HttpCode,
-  Logger,
   Post,
   Req,
   UseGuards,
@@ -46,10 +45,12 @@ import { AuthService } from '../services';
 import { CompleteSessionDto } from '../dtos/complete-session.dto';
 import { LogoutSessionInputDto } from '../dtos/logout-session.input.dto';
 
+import { CustomLogger } from '../../common/helpers/custom-logger';
+
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
-  private readonly logger = new Logger(AuthController.name);
+  private readonly logger = new CustomLogger(AuthController.name);
   constructor(private readonly authService: AuthService) {}
 
   @ApiInternalServerErrorMessageResponse()

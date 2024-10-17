@@ -4,4 +4,5 @@ export {
   JwtRecoveryToken,
   JwtRefreshToken,
   JwtPartialToken,
+  CronJobKey,
 } from './jwt-tokens.decorator';
