@@ -22,10 +22,10 @@ const grayScaleIcons = {
 };
 
 const noTrackingIcons = {
-  '16': 'image.png',
-  '32': 'image.png',
-  '48': 'image.png',
-  '128': 'image.png',
+  '16': 'app-icon-no-tracking-16.png',
+  '32': 'app-icon-no-tracking-32.png',
+  '48': 'app-icon-no-tracking-48.png',
+  '128': 'app-icon-no-tracking-128.png',
 };
 
 const setCorrectIconByUserPreferences = async () => {
@@ -82,6 +82,11 @@ chrome.windows.onFocusChanged.addListener(async (windowId) => {
 });
 
 chrome.runtime.onStartup.addListener(() => {
+  refreshAccessToken();
+  startInterval();
+});
+
+chrome.runtime.onInstalled.addListener(() => {
   refreshAccessToken();
   startInterval();
 });
