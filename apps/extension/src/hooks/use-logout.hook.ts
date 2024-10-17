@@ -10,7 +10,8 @@ export const useLogout = () => {
     const message = {
       isLogin: false,
     };
-    browser.runtime.sendNativeMessage('com.ttt246llc.wtm', message);
+
+    chrome.runtime.sendNativeMessage('com.ttt246llc.wtm', message);
 
     navigateTo('login');
   };

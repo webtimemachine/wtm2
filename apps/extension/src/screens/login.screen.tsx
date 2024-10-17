@@ -72,7 +72,7 @@ export const LoginScreen: React.FC<object> = () => {
         isLogin: true,
       };
 
-      browser.runtime.sendNativeMessage('com.ttt246llc.wtm', message);
+      chrome.runtime.sendNativeMessage('com.ttt246llc.wtm', message);
 
       navigateTo('navigation-entries');
     };
