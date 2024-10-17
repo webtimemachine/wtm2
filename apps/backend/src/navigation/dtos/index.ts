@@ -4,3 +4,4 @@ export { CompleteNavigationEntryDto } from './complete-navigation-entry.dto';
 export { DeleteNavigationEntriesDto } from './delete-navigation-entries.input.dto';
 export { GetNavigationEntryDto } from './get-navigation-entry.dto';
 export { SimpleNavigationEntryDto } from './simple-navigation-entry.dto';
+export { AddContextToNavigationEntryDto } from './add-context-to-navigation-entry.dto';
