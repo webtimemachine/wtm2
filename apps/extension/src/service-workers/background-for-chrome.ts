@@ -11,13 +11,9 @@ let engine: MLCEngineInterface | undefined = undefined;
 
 let engineStatus: ENGINESTATUS = ENGINESTATUS.NOT_READY;
 
-console.log('Background script running', {
-  engine,
-});
-
 async function initEngine() {
   try {
-    engine = await CreateMLCEngine('Llama-3.2-1B-Instruct-q4f16_1-MLC', {
+    engine = await CreateMLCEngine('SmolLM-360M-Instruct-q4f16_1-MLC', {
       initProgressCallback: () => {
         if (engineStatus === ENGINESTATUS.NOT_READY) {
           engineStatus = ENGINESTATUS.LOADING;
@@ -42,16 +38,6 @@ chrome.runtime.onConnect.addListener(async (port) => {
 
   port.onMessage.addListener(async (message: ServiceWorkerPayload) => {
     switch (message.type) {
-      case SERVICEWORKERMESSAGETYPE.CREATE_NAVIGATION_ENTRY: {
-        console.log('Creating navigation entry');
-
-        await apiClient.securedFetch('/api/navigation-entry', {
-          method: 'POST',
-          body: JSON.stringify(message.navigationEntry),
-        });
-        break;
-      }
-
       case SERVICEWORKERMESSAGETYPE.GENERATE_COMPLETION: {
         if (!engine) {
           console.error('Engine is not ready');
