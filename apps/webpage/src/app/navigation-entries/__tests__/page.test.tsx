@@ -67,6 +67,7 @@ const mockNavigationEntries: CompleteNavigationEntryDto[] = [
     navigationDate: new Date(),
     liteMode: 'false',
     relevantSegment: 'Relevant Segment 1',
+    aiGeneratedContent: 'AI Generated Content 1',
     userId: 1,
     userDeviceId: 1,
     userDevice: {
@@ -88,6 +89,7 @@ const mockNavigationEntries: CompleteNavigationEntryDto[] = [
     navigationDate: new Date(),
     liteMode: 'true',
     relevantSegment: 'Relevant Segment 2',
+    aiGeneratedContent: 'AI Generated Content 2',
     userId: 1,
     userDeviceId: 1,
     userDevice: {

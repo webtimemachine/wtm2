@@ -43,4 +43,8 @@ export class CompleteNavigationEntryDto {
   @ApiProperty({ required: false })
   @Expose()
   relevantSegment?: string;
+
+  @ApiProperty()
+  @Expose()
+  aiGeneratedContent: string;
 }

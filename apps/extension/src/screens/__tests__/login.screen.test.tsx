@@ -56,6 +56,14 @@ global.chrome = {
   action: {
     setIcon: jest.fn(),
   },
+  storage: {
+    local: {
+      get: jest.fn().mockReturnValue('http://example.com'),
+    },
+  },
+  runtime: {
+    sendNativeMessage: jest.fn(),
+  },
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 } as any;
 

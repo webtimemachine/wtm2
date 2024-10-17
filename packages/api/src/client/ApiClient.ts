@@ -184,9 +184,12 @@ export class ApiClient {
     }
   };
 
-  refresh = async (): Promise<void> => {
-    const serverUrl = await this.getServerUrl();
-    const refreshToken = await this.getRefreshToken();
+  refresh = async (
+    serverUrl?: string,
+    refreshToken?: string,
+  ): Promise<void> => {
+    serverUrl = serverUrl ? serverUrl : await this.getServerUrl();
+    refreshToken = refreshToken ? refreshToken : await this.getRefreshToken();
 
     try {
       const res = await fetch(new URL("/api/auth/refresh", serverUrl), {

@@ -145,6 +145,7 @@ const createdNavigationEntry: CompleteNavigationEntryDto = {
     },
   },
   navigationDate,
+  aiGeneratedContent: 'AI Generated Content',
 };
 
 const mockedEntry: CompleteNavigationEntry = {
@@ -156,6 +157,7 @@ const mockedEntry: CompleteNavigationEntry = {
   userId: BigInt(1),
   userDeviceId: BigInt(1),
   createdAt: new Date('2024-02-09T12:00:00Z'),
+  aiGeneratedContent: 'AI Generated Content 1',
   updateAt: null,
   userDevice: {
     id: BigInt(1),
@@ -203,6 +205,21 @@ const queryParams: GetNavigationEntryDto = {
   query: 'example',
   isSemantic: true,
 };
+
+jest.mock('@langchain/openai', () => {
+  return {
+    OpenAI: jest.fn().mockImplementation(() => {
+      return {
+        invoke: jest.fn().mockResolvedValue('relevant content'),
+      };
+    }),
+    ChatOpenAI: jest.fn().mockImplementation(() => {
+      return {
+        call: jest.fn(() => Promise.resolve({})),
+      };
+    }),
+  };
+});
 
 describe('NavigationEntryService', () => {
   let navigationEntryService: NavigationEntryService;
