@@ -1,4 +1,4 @@
-import { User } from '../interfaces/user-basic-information';
+import { User } from "../interfaces/user-basic-information";
 import {
   BasicResponse,
   CloseActiveSessionsData,
@@ -30,7 +30,9 @@ import {
   VerifyCodeData,
   ChangeUserPassword,
   ChangeUserDisplayName,
-} from '../interfaces';
+} from "../interfaces";
+import { ChangeUserAvatar } from "@/interfaces/change-user-avatar.interface";
+import { BulkDeleteNavigationEntriesData } from "@/interfaces/navigation-entry.interface";
 
 interface ApiClientOptions {
   getServerUrl: () => Promise<string>;
@@ -83,13 +85,13 @@ export class ApiClient {
 
   fetch = async (
     endpoint: string,
-    init: RequestInit = {},
+    init: RequestInit = {}
   ): Promise<Response> => {
     const serverUrl = await this.getServerUrl();
     init = {
       ...init,
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         ...init?.headers,
       },
     };
@@ -100,7 +102,7 @@ export class ApiClient {
 
   securedFetch = async (
     endpoint: string,
-    init: RequestInit = {},
+    init: RequestInit = {}
   ): Promise<Response> => {
     const serverUrl = await this.getServerUrl();
     const accessToken = await this.getAccessToken();
@@ -108,7 +110,7 @@ export class ApiClient {
     init = {
       ...init,
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         ...init?.headers,
       },
     };
@@ -127,16 +129,16 @@ export class ApiClient {
 
       if (res.status === 401) {
         const jsonRes = await res.json();
-        console.error('ApiClient', { endpoint, response: jsonRes });
-        throw new Error('Unauthorized');
+        console.error("ApiClient", { endpoint, response: jsonRes });
+        throw new Error("Unauthorized");
       }
 
       return res;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      if (error?.message === 'Unauthorized') {
+      if (error?.message === "Unauthorized") {
         await this.refresh();
-        console.log('ApiClient Retrying request after refresh', { endpoint });
+        console.log("ApiClient Retrying request after refresh", { endpoint });
         return this.securedFetch(endpoint, init);
       } else {
         throw error;
@@ -145,21 +147,21 @@ export class ApiClient {
   };
 
   login = async (
-    data: LoginData,
+    data: LoginData
   ): Promise<LoginResponse | VerifyEmailResponse> => {
     const serverUrl = await this.getServerUrl();
     try {
-      const res = await fetch(new URL('/api/auth/login', serverUrl), {
-        method: 'POST',
+      const res = await fetch(new URL("/api/auth/login", serverUrl), {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
       });
 
       if (res.status !== 200) {
         const errorJson = await res.json();
-        throw new Error(errorJson?.message || 'Login Error');
+        throw new Error(errorJson?.message || "Login Error");
       }
 
       const loginResponse: LoginResponse | VerifyEmailResponse =
@@ -177,7 +179,7 @@ export class ApiClient {
 
       return loginResponse;
     } catch (error) {
-      console.error('ApiClient login', error);
+      console.error("ApiClient login", error);
       throw error;
     }
   };
@@ -190,22 +192,22 @@ export class ApiClient {
     refreshToken = refreshToken ? refreshToken : await this.getRefreshToken();
 
     try {
-      const res = await fetch(new URL('/api/auth/refresh', serverUrl), {
-        method: 'GET',
+      const res = await fetch(new URL("/api/auth/refresh", serverUrl), {
+        method: "GET",
         headers: {
           Authorization: `Bearer ${refreshToken}`,
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
       });
 
       if (res.status !== 200) {
-        throw new Error('Unauthorized');
+        throw new Error("Unauthorized");
       }
 
       const data = await res.json();
 
       if (!data.accessToken || !data.refreshToken) {
-        throw new Error('Unauthorized');
+        throw new Error("Unauthorized");
       }
 
       await Promise.all([
@@ -213,27 +215,27 @@ export class ApiClient {
         this.setRefreshToken(data.refreshToken),
       ]);
     } catch (error) {
-      console.error('ApiClient Refresh Error', error);
+      console.error("ApiClient Refresh Error", error);
       throw error;
     }
   };
 
   closeActiveSession = async (data: CloseActiveSessionsData) => {
     try {
-      const res = await this.securedFetch('/api/auth/session/logout', {
-        method: 'POST',
+      const res = await this.securedFetch("/api/auth/session/logout", {
+        method: "POST",
         body: JSON.stringify(data),
       });
 
       if (res.status !== 200) {
         const errorJson = await res.json();
-        throw new Error(errorJson?.message || 'POST Update Preferences Error');
+        throw new Error(errorJson?.message || "POST Update Preferences Error");
       }
 
       const response: BasicResponse = await res.json();
       return response;
     } catch (error: any) {
-      if (`${error?.message}`.toLowerCase().includes('unauthorized')) {
+      if (`${error?.message}`.toLowerCase().includes("unauthorized")) {
         if (this.handleSessionExpired) await this.handleSessionExpired();
       } else {
         throw error;
@@ -243,21 +245,21 @@ export class ApiClient {
 
   confirmDeleteAccount = async () => {
     try {
-      const res = await this.securedFetch('/api/user', {
-        method: 'DELETE',
+      const res = await this.securedFetch("/api/user", {
+        method: "DELETE",
       });
 
       if (res.status !== 200) {
         const errorJson = await res.json();
         throw new Error(
-          errorJson?.message || 'DELETE Confirm delete account Error',
+          errorJson?.message || "DELETE Confirm delete account Error"
         );
       }
 
       const response: BasicResponse = await res.json();
       return response;
     } catch (error: any) {
-      if (`${error?.message}`.toLowerCase().includes('unauthorized')) {
+      if (`${error?.message}`.toLowerCase().includes("unauthorized")) {
         if (this.handleSessionExpired) await this.handleSessionExpired();
       } else {
         throw error;
@@ -268,18 +270,18 @@ export class ApiClient {
   deleteNavigationEntry = async (data: DeleteNavigationEntriesData) => {
     try {
       const res = await this.securedFetch(`/api/navigation-entry/${data.id}`, {
-        method: 'DELETE',
+        method: "DELETE",
       });
 
       if (res.status !== 200) {
         const errorJson = await res.json();
-        throw new Error(errorJson?.message || 'DELETE Navigation entry Error');
+        throw new Error(errorJson?.message || "DELETE Navigation entry Error");
       }
 
       const response: BasicResponse = await res.json();
       return response;
     } catch (error: any) {
-      if (`${error?.message}`.toLowerCase().includes('unauthorized')) {
+      if (`${error?.message}`.toLowerCase().includes("unauthorized")) {
         if (this.handleSessionExpired) await this.handleSessionExpired();
       } else {
         throw error;
@@ -289,19 +291,19 @@ export class ApiClient {
 
   getActiveSessions = async () => {
     try {
-      const res = await this.securedFetch('/api/auth/session', {
-        method: 'GET',
+      const res = await this.securedFetch("/api/auth/session", {
+        method: "GET",
       });
 
       if (res.status !== 200) {
         const errorJson = await res.json();
-        throw new Error(errorJson?.message || 'GET Active Session Error');
+        throw new Error(errorJson?.message || "GET Active Session Error");
       }
 
       const response: ActiveSession[] = await res.json();
       return response;
     } catch (error: any) {
-      if (`${error?.message}`.toLowerCase().includes('unauthorized')) {
+      if (`${error?.message}`.toLowerCase().includes("unauthorized")) {
         if (this.handleSessionExpired) await this.handleSessionExpired();
       } else {
         throw error;
@@ -311,19 +313,19 @@ export class ApiClient {
 
   getUserPreferences = async () => {
     try {
-      const res = await this.securedFetch('/api/user/preferences', {
-        method: 'GET',
+      const res = await this.securedFetch("/api/user/preferences", {
+        method: "GET",
       });
 
       if (res.status !== 200) {
         const errorJson = await res.json();
-        throw new Error(errorJson?.message || 'GET User Preferences Error');
+        throw new Error(errorJson?.message || "GET User Preferences Error");
       }
 
       const response: PreferenciesResponse = await res.json();
       return response;
     } catch (error: any) {
-      if (`${error?.message}`.toLowerCase().includes('unauthorized')) {
+      if (`${error?.message}`.toLowerCase().includes("unauthorized")) {
         if (this.handleSessionExpired) await this.handleSessionExpired();
       } else {
         throw error;
@@ -332,7 +334,7 @@ export class ApiClient {
   };
 
   gerVersion = async () => {
-    const res = await this.fetch('/api/version');
+    const res = await this.fetch("/api/version");
     const versionResponse: GetVersionResponse = await res.json();
     return versionResponse;
   };
@@ -341,7 +343,7 @@ export class ApiClient {
     const { offset, limit, query, isSemantic } = params;
 
     const url =
-      '/api/navigation-entry?' +
+      "/api/navigation-entry?" +
       new URLSearchParams({
         offset: offset.toString(),
         limit: limit.toString(),
@@ -350,17 +352,17 @@ export class ApiClient {
       }).toString();
 
     try {
-      const res = await this.securedFetch(url, { method: 'GET' });
+      const res = await this.securedFetch(url, { method: "GET" });
 
       if (res.status !== 200) {
         const errorJson = await res.json();
-        throw new Error(errorJson?.message || 'GET Navigation Entries Error');
+        throw new Error(errorJson?.message || "GET Navigation Entries Error");
       }
 
       const response: GetNavigationEntriesResponse = await res.json();
       return response;
     } catch (error: any) {
-      if (`${error?.message}`.toLowerCase().includes('unauthorized')) {
+      if (`${error?.message}`.toLowerCase().includes("unauthorized")) {
         if (this.handleSessionExpired) await this.handleSessionExpired();
       } else {
         throw error;
@@ -369,8 +371,8 @@ export class ApiClient {
   };
 
   recoverPassword = async (data: RecoverPasswordData) => {
-    const res = await this.fetch('/api/auth/password/recover', {
-      method: 'POST',
+    const res = await this.fetch("/api/auth/password/recover", {
+      method: "POST",
       body: JSON.stringify(data),
     });
 
@@ -385,10 +387,10 @@ export class ApiClient {
 
   resendCode = async () => {
     const partialToken = await this.getPartialToken();
-    if (!partialToken) throw new Error('partialToken is missing');
+    if (!partialToken) throw new Error("partialToken is missing");
 
-    const res = await this.fetch('/api/auth/verify/resend', {
-      method: 'POST',
+    const res = await this.fetch("/api/auth/verify/resend", {
+      method: "POST",
       headers: {
         Authorization: `Bearer ${partialToken}`,
       },
@@ -405,10 +407,10 @@ export class ApiClient {
 
   restorePassword = async (data: RestorePasswordData) => {
     const recoveryToken = await this.getRecoveryToken();
-    if (!recoveryToken) throw new Error('recoveryToken is missing');
+    if (!recoveryToken) throw new Error("recoveryToken is missing");
 
-    const res = await this.fetch('/api/auth/password/restore', {
-      method: 'POST',
+    const res = await this.fetch("/api/auth/password/restore", {
+      method: "POST",
       body: JSON.stringify(data),
       headers: {
         Authorization: `Bearer ${recoveryToken}`,
@@ -431,8 +433,8 @@ export class ApiClient {
   };
 
   signUp = async (data: SignUpData) => {
-    const res = await this.securedFetch('/api/auth/signup', {
-      method: 'POST',
+    const res = await this.securedFetch("/api/auth/signup", {
+      method: "POST",
       body: JSON.stringify(data),
     });
 
@@ -450,19 +452,19 @@ export class ApiClient {
   updateDeviceAlias = async (data: UpdateDeviceAliasData) => {
     try {
       const res = await this.securedFetch(`/api/user/device/${data.id}`, {
-        method: 'PUT',
+        method: "PUT",
         body: JSON.stringify({ deviceAlias: data.deviceAlias }),
       });
 
       if (res.status !== 200) {
         const errorJson = await res.json();
-        throw new Error(errorJson?.message || 'PUT Update Preferences Error');
+        throw new Error(errorJson?.message || "PUT Update Preferences Error");
       }
 
       const response: BasicResponse = await res.json();
       return response;
     } catch (error: any) {
-      if (`${error?.message}`.toLowerCase().includes('unauthorized')) {
+      if (`${error?.message}`.toLowerCase().includes("unauthorized")) {
         if (this.handleSessionExpired) await this.handleSessionExpired();
       } else {
         throw error;
@@ -472,21 +474,21 @@ export class ApiClient {
 
   updatePreferences = async (data: UpdatePreferenciesData) => {
     try {
-      const res = await this.securedFetch('/api/user/preferences', {
-        method: 'PUT',
+      const res = await this.securedFetch("/api/user/preferences", {
+        method: "PUT",
         body: JSON.stringify(data),
       });
 
       if (res.status !== 200) {
         const errorJson = await res.json();
-        throw new Error(errorJson?.message || 'PUT Update Preferences Error');
+        throw new Error(errorJson?.message || "PUT Update Preferences Error");
       }
 
       const response: PreferenciesResponse = await res.json();
       return response;
     } catch (error: unknown) {
       if (error instanceof Error) {
-        if (`${error?.message}`.toLowerCase().includes('unauthorized')) {
+        if (`${error?.message}`.toLowerCase().includes("unauthorized")) {
           if (this.handleSessionExpired) await this.handleSessionExpired();
         } else {
           throw error;
@@ -497,8 +499,8 @@ export class ApiClient {
   };
 
   validateRecoveryCode = async (data: ValidateRecoveryCodeData) => {
-    const res = await this.fetch('/api/auth/password/validate-recovery-code', {
-      method: 'POST',
+    const res = await this.fetch("/api/auth/password/validate-recovery-code", {
+      method: "POST",
       body: JSON.stringify(data),
     });
 
@@ -515,10 +517,10 @@ export class ApiClient {
 
   verificationCode = async (data: VerifyCodeData) => {
     const partialToken = await this.getPartialToken();
-    if (!partialToken) throw new Error('partialToken is missing');
+    if (!partialToken) throw new Error("partialToken is missing");
 
-    const res = await this.fetch('/api/auth/verify', {
-      method: 'POST',
+    const res = await this.fetch("/api/auth/verify", {
+      method: "POST",
       body: JSON.stringify(data),
       headers: {
         Authorization: `Bearer ${partialToken}`,
@@ -542,14 +544,14 @@ export class ApiClient {
 
   getBasicUserInformation = async () => {
     try {
-      const res = await this.securedFetch('/api/user/profile/me', {
-        method: 'GET',
+      const res = await this.securedFetch("/api/user/profile/me", {
+        method: "GET",
       });
 
       if (res.status !== 200) {
         const errorJson = await res.json();
         throw new Error(
-          errorJson?.message || 'GET User Basic Information Error',
+          errorJson?.message || "GET User Basic Information Error"
         );
       }
 
@@ -562,7 +564,7 @@ export class ApiClient {
       };
       return response;
     } catch (error: any) {
-      if (`${error?.message}`.toLowerCase().includes('unauthorized')) {
+      if (`${error?.message}`.toLowerCase().includes("unauthorized")) {
         if (this.handleSessionExpired) await this.handleSessionExpired();
       } else {
         throw error;
@@ -571,19 +573,19 @@ export class ApiClient {
   };
   changeUserPassword = async (data: ChangeUserPassword) => {
     try {
-      const res = await this.securedFetch('/api/user/profile/change-password', {
-        method: 'POST',
+      const res = await this.securedFetch("/api/user/profile/change-password", {
+        method: "POST",
         body: JSON.stringify(data),
       });
       if (res.status !== 200) {
         const errorJson = await res.json();
-        throw new Error(errorJson?.message || 'POST Update Password Error');
+        throw new Error(errorJson?.message || "POST Update Password Error");
       }
 
       const response: BasicResponse = await res.json();
       return response;
     } catch (error: any) {
-      if (`${error?.message}`.toLowerCase().includes('unauthorized')) {
+      if (`${error?.message}`.toLowerCase().includes("unauthorized")) {
         if (this.handleSessionExpired) await this.handleSessionExpired();
       } else {
         throw error;
@@ -593,21 +595,67 @@ export class ApiClient {
   changeUserDisplayName = async (data: ChangeUserDisplayName) => {
     try {
       const res = await this.securedFetch(
-        '/api/user/profile/change-displayname',
+        "/api/user/profile/change-displayname",
         {
-          method: 'POST',
+          method: "POST",
           body: JSON.stringify(data),
-        },
+        }
       );
       if (res.status !== 200) {
         const errorJson = await res.json();
-        throw new Error(errorJson?.message || 'POST Update Display Name Error');
+        throw new Error(errorJson?.message || "POST Update Display Name Error");
       }
 
       const response: BasicResponse = await res.json();
       return response;
     } catch (error: any) {
-      if (`${error?.message}`.toLowerCase().includes('unauthorized')) {
+      if (`${error?.message}`.toLowerCase().includes("unauthorized")) {
+        if (this.handleSessionExpired) await this.handleSessionExpired();
+      } else {
+        throw error;
+      }
+    }
+  };
+  changeUserAvatar = async (data: ChangeUserAvatar) => {
+    try {
+      const res = await this.securedFetch(
+        "/api/user/profile/change-profile-picture",
+        {
+          method: "POST",
+          body: JSON.stringify(data),
+        }
+      );
+      if (res.status !== 200) {
+        const errorJson = await res.json();
+        throw new Error(errorJson?.message || "POST Update Display Name Error");
+      }
+
+      const response: BasicResponse = await res.json();
+      return response;
+    } catch (error: any) {
+      if (`${error?.message}`.toLowerCase().includes("unauthorized")) {
+        if (this.handleSessionExpired) await this.handleSessionExpired();
+      } else {
+        throw error;
+      }
+    }
+  };
+  deleteBulkNavigationEntry = async (data: BulkDeleteNavigationEntriesData) => {
+    try {
+      const res = await this.securedFetch(`/api/navigation-entry`, {
+        method: "DELETE",
+        body: JSON.stringify(data),
+      });
+
+      if (res.status !== 200) {
+        const errorJson = await res.json();
+        throw new Error(errorJson?.message || "DELETE Navigation entry Error");
+      }
+
+      const response: BasicResponse = await res.json();
+      return response;
+    } catch (error: any) {
+      if (`${error?.message}`.toLowerCase().includes("unauthorized")) {
         if (this.handleSessionExpired) await this.handleSessionExpired();
       } else {
         throw error;

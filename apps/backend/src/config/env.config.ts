@@ -35,6 +35,13 @@ const envSchemas = {
   SENTRY_DSN: z.string().optional(),
   SENTRY_AUTH_TOKEN: z.string().optional(),
   AVOID_DOMAIN_LIST: z.string().optional(),
+  CRON_SECRET: z.string().optional(),
+  DISCORD_LOG_WEBHOOK_URL: z.string().optional(),
+  DISCORD_LOG: z.boolean().optional(),
+  DISCORD_ERROR: z.boolean().optional(),
+  DISCORD_WARN: z.boolean().optional(),
+  DISCORD_DEBUG: z.boolean().optional(),
+  DISCORD_VERBOSE: z.boolean().optional(),
 };
 
 const envSchema = z.object({
