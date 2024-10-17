@@ -31,6 +31,7 @@ import { ExplicitFilterService } from '../../filter/services';
 import { appEnv } from '../../config';
 import { subDays } from 'date-fns';
 import { CustomLogger } from '../../common/helpers/custom-logger';
+import { OpenAI } from '@langchain/openai';
 
 @Injectable()
 export class NavigationEntryService {
@@ -83,6 +84,7 @@ export class NavigationEntryService {
           completeNavigationEntry,
         ),
         relevantSegment,
+        aiGeneratedContent: completeNavigationEntry.aiGeneratedContent,
       },
     );
     completeNavigationEntryDto.userDevice = userDeviceDto;
@@ -172,6 +174,61 @@ export class NavigationEntryService {
       },
     });
 
+    const openai = new OpenAI({
+      openAIApiKey: appEnv.OPENAI_ACCESS_TOKEN,
+      modelName: 'gpt-4o-mini',
+      temperature: 0.8,
+    });
+
+    const formatPrompt = `
+      # IDENTITY and PURPOSE
+
+      You are an expert content summarizer. You take semantic markdown content in and output a Markdown formatted summary using the format below. Also, you are an expert code formatter in markdown, making code more legible and well formatted.
+
+      Take a deep breath and think step by step about how to best accomplish this goal using the following steps.
+
+      # OUTPUT SECTIONS
+
+      - Combine all of your understanding of the content into a single, 20-word sentence in a section called Search Summary:.
+
+      - Output the 10 if exists, including most important points of the content as a list with no more than 15 words per point into a section called Main Points:.
+
+      - Output a list of the 5 best takeaways from the content in a section called Takeaways:.
+
+      - Output code must be formatted with Prettier like.
+
+      - Output a section named Code: that shows a list of code present in INPUT content in markdown
+
+      - Output a section named Tags found: that shows in a list of tags you find
+
+      # OUTPUT INSTRUCTIONS
+
+      - Create the output using the formatting above.
+      - You only output human readable Markdown.
+      - Sections MUST be in capital case.
+      - Sections must be h2 to lower.
+      - Output numbered lists, not bullets.
+      - Do not output warnings or notes—just the requested sections.
+      - Do not repeat items in the output sections.
+      - Do not start items with the same opening words.
+      - Do not show Code: section if no code is present on input provided.
+      - You must detect the type of code and add it to code block so markdown styles are applied.
+      - Set codes proper language if you can detect it.
+      - Detect code and apply format to it.
+      - The wrapped tags must be tags that you find from page information.
+      - Tags must be a link that redirects to source url.
+      # INPUT:
+
+      INPUT:
+
+      The search result is:
+
+      ### Source: ${createNavigationEntryInputDto.url}
+      ${content}
+      `;
+
+    const formattedResult = await openai.invoke([formatPrompt]);
+
     if (lastEntry?.url === createNavigationEntryInputDto.url) {
       await this.prismaService.navigationEntry.update({
         where: {
@@ -180,6 +237,7 @@ export class NavigationEntryService {
         data: {
           liteMode,
           userDeviceId: jwtContext.session.userDeviceId,
+          aiGeneratedContent: formattedResult,
           ...entryData,
         },
         include: completeNavigationEntryInclude,
@@ -190,6 +248,7 @@ export class NavigationEntryService {
           liteMode,
           userId: jwtContext.user.id,
           userDeviceId: jwtContext.session.userDeviceId,
+          aiGeneratedContent: formattedResult,
           ...entryData,
         },
         include: completeNavigationEntryInclude,

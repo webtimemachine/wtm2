@@ -11,6 +11,7 @@ export interface CompleteNavigationEntryDto {
   userDevice: UserDevice;
   expirationDate?: Date;
   relevantSegment?: string;
+  aiGeneratedContent: string;
 }
 
 export interface GetNavigationEntriesResponse {
