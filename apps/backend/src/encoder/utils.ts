@@ -10,7 +10,7 @@ import { LLMChain } from 'langchain/chains';
 import { appEnv } from '../config';
 
 const captionerModel = new ChatOpenAI({
-  modelName: 'gpt-4-vision-preview',
+  modelName: 'gpt-4o',
   maxTokens: 256,
   temperature: 0,
   openAIApiKey: appEnv.OPENAI_ACCESS_TOKEN,
