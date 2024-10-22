@@ -24,7 +24,6 @@ import {
   CronJobKey,
   JwtAccessToken,
   JwtRequestContext,
-  /*  CronJobKey, */
 } from '../../auth/decorators';
 import { JwtContext } from '../../auth/interfaces';
 
@@ -132,7 +131,7 @@ export class NavigationEntryController {
   @ApiOkResponse()
   @CronJobKey()
   @HttpCode(200)
-  @Post('/expired')
+  @Get('/expired')
   deleteExpiredNavigationEntries(): Promise<void> {
     return this.navigationService.deleteExpiredNavigationEntries();
   }
