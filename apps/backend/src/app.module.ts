@@ -8,7 +8,7 @@ import { HealthModule } from './health/health.module';
 import { EncoderModule } from './encoder/encoder.module';
 import { QueryModule } from './query/query.module';
 import { ExplicitFilterModule } from './filter/filter.module';
-
+import { SystemModule } from './system/system.module';
 @Module({
   imports: [
     CommonModule,
@@ -18,6 +18,7 @@ import { ExplicitFilterModule } from './filter/filter.module';
     EncoderModule,
     QueryModule,
     ExplicitFilterModule,
+    SystemModule,
   ],
   controllers: [AppController],
   providers: [AppService],

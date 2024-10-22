@@ -9,6 +9,10 @@ jest.mock('../../store', () => ({
   useNavigation: jest.fn(),
 }));
 
+jest.mock('../hooks', () => ({
+  useModelsInformation: jest.fn(),
+}));
+
 const mockNavigateBack = jest.fn();
 (useNavigation as jest.Mock).mockReturnValue({
   navigateBack: mockNavigateBack,
