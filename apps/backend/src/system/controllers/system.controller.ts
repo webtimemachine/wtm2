@@ -8,7 +8,7 @@ export class SystemController {
   constructor(private readonly systemService: SystemService) {}
 
   @Get('/models')
-  AllModelsInformation() {
+  allModelsInformation() {
     return this.systemService.getModelsInformation();
   }
 }
