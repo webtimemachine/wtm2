@@ -186,7 +186,7 @@ export class ApiClient {
 
   refresh = async (
     serverUrl?: string,
-    refreshToken?: string,
+    refreshToken?: string
   ): Promise<void> => {
     serverUrl = serverUrl ? serverUrl : await this.getServerUrl();
     refreshToken = refreshToken ? refreshToken : await this.getRefreshToken();
@@ -650,6 +650,27 @@ export class ApiClient {
       if (res.status !== 200) {
         const errorJson = await res.json();
         throw new Error(errorJson?.message || "DELETE Navigation entry Error");
+      }
+
+      const response: BasicResponse = await res.json();
+      return response;
+    } catch (error: any) {
+      if (`${error?.message}`.toLowerCase().includes("unauthorized")) {
+        if (this.handleSessionExpired) await this.handleSessionExpired();
+      } else {
+        throw error;
+      }
+    }
+  };
+  getModelsInformation = async () => {
+    try {
+      const res = await this.securedFetch(`/api/system/models`, {
+        method: "GET",
+      });
+
+      if (res.status !== 200) {
+        const errorJson = await res.json();
+        throw new Error(errorJson?.message || "Models couldn't be reached");
       }
 
       const response: BasicResponse = await res.json();
