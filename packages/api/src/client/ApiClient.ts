@@ -30,6 +30,7 @@ import {
   VerifyCodeData,
   ChangeUserPassword,
   ChangeUserDisplayName,
+  SystemModels,
 } from "../interfaces";
 import { ChangeUserAvatar } from "@/interfaces/change-user-avatar.interface";
 import { BulkDeleteNavigationEntriesData } from "@/interfaces/navigation-entry.interface";
@@ -672,8 +673,8 @@ export class ApiClient {
         const errorJson = await res.json();
         throw new Error(errorJson?.message || "Models couldn't be reached");
       }
-
-      const response: BasicResponse = await res.json();
+      const awaitedRes: any = await res.json();
+      const response: SystemModels = { ...awaitedRes };
       return response;
     } catch (error: any) {
       if (`${error?.message}`.toLowerCase().includes("unauthorized")) {

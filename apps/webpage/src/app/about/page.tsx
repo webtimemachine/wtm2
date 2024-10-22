@@ -6,15 +6,23 @@ import { Text, Badge } from '@chakra-ui/react';
 import { useAuthStore } from '../../store';
 import { manifestWeb } from '../../manifest-web';
 import { useModelsInformation } from '../../hooks';
+import { BasicResponse, SystemModels } from '@wtm/api';
 
 const AboutWTMScreen: React.FC<object> = () => {
   const [backendURL, setBackendURL] = useState<string>('');
-  const [models, setModels] = useState<any>(null);
+  const [models, setModels] = useState<SystemModels | null>(null);
   const serverUrl = useAuthStore((state) => state.serverUrl);
   const { useModelsInformationMutation } = useModelsInformation();
   useEffect(() => {
     setBackendURL(serverUrl);
-    useModelsInformationMutation.mutateAsync().then((d) => setModels(d));
+    useModelsInformationMutation.mutateAsync().then((d) => {
+      if (d) {
+        const data: SystemModels = d as SystemModels;
+        setModels(data);
+      } else {
+        setModels(null);
+      }
+    });
   }, []);
 
   return (

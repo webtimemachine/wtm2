@@ -3,16 +3,21 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { ChakraProvider } from '@chakra-ui/react';
 import { useNavigation } from '../../store';
 import { AboutWTMScreen } from '../about-wtm.screen';
+import { useModelsInformation } from '../../hooks';
 
 // Mock de useNavigation
 jest.mock('../../store', () => ({
   useNavigation: jest.fn(),
 }));
-
-jest.mock('../hooks', () => ({
+jest.mock('../../hooks', () => ({
   useModelsInformation: jest.fn(),
 }));
-
+const mockMutate = jest.fn().mockResolvedValue(null);
+(useModelsInformation as jest.Mock).mockReturnValue({
+  useModelsInformationMutation: {
+    mutateAsync: mockMutate,
+  },
+});
 const mockNavigateBack = jest.fn();
 (useNavigation as jest.Mock).mockReturnValue({
   navigateBack: mockNavigateBack,

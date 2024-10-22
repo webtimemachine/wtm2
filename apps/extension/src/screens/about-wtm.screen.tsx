@@ -3,11 +3,12 @@ import { Text, IconButton } from '@chakra-ui/react';
 import { ArrowBackIcon } from '@chakra-ui/icons';
 import { useNavigation } from '../store';
 import { useModelsInformation } from '../hooks';
+import { SystemModels } from '@wtm/api';
 export const AboutWTMScreen: React.FC<object> = () => {
   const [backendURL, setBackendURL] = useState<string>('');
   const { navigateBack } = useNavigation();
   const { useModelsInformationMutation } = useModelsInformation();
-  const [models, setModels] = useState<any>(null);
+  const [models, setModels] = useState<SystemModels | null>(null);
   useEffect(() => {
     const getBackendVersion = async () => {
       const { serverUrl } = await chrome.storage.local.get(['serverUrl']);
@@ -15,7 +16,14 @@ export const AboutWTMScreen: React.FC<object> = () => {
     };
 
     getBackendVersion();
-    useModelsInformationMutation.mutateAsync().then((d: any) => setModels(d));
+    useModelsInformationMutation.mutateAsync().then((d) => {
+      if (d) {
+        const data: SystemModels = d as SystemModels;
+        setModels(data);
+      } else {
+        setModels(null);
+      }
+    });
   }, []);
 
   return (
