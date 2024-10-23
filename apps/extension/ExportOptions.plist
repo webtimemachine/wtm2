@@ -3,15 +3,15 @@
 <plist version="1.0">
 <dict>
     <key>method</key>
-    <string>development</string>
+    <string>app-store</string>
     <key>teamID</key>
     <string>2858MX5336</string>
     <key>provisioningProfiles</key>
     <dict>
         <key>com.ttt246llc.wtm</key>
-        <string>Web Time Machine Prov Profile Dev</string>
+        <string>Web Time Machine Prov Profile Prod</string>
         <key>com.ttt246llc.wtm.Extension</key>
-        <string>Web Time Machine Prov Profile Dev Extension</string>
+        <string>Web Time Machine Prov Profile Prod Extension</string>
     </dict>
 </dict>
 </plist>
