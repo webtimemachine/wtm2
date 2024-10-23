@@ -31,8 +31,8 @@ jobs:
 
       - name: Create ZIP files for Chrome and Firefox
         run: |
-          zip -r chrome-extension.zip ./build/app_chrome
-          zip -r firefox-extension.zip ./build/app_firefox
+          zip -r chrome-extension.zip -j ./build/app_chrome/*
+          zip -r firefox-extension.zip -j ./build/app_firefox/*
 
       - name: Update xcode project file
         run: |
