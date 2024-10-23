@@ -99,7 +99,7 @@ jobs:
         run: |
           if [ "`ls -A | grep -i \\.xcworkspace\$`" ]; then filetype_parameter="workspace" && file_to_build="`ls -A | grep -i \\.xcworkspace\$`"; else filetype_parameter="project" && file_to_build="`ls -A | grep -i \\.xcodeproj\$`"; fi
           file_to_build=`echo $file_to_build | awk '{$1=$1;print}'`
-          xcodebuild archive -"$filetype_parameter" "$file_to_build" -scheme "wtm (iOS)" -archivePath "$PWD/build/Web Time Machine.xcarchive" -configuration Release DEVELOPMENT_TEAM=2858MX5336 CODE_SIGN_STYLE=Automatic
+          xcodebuild archive -"$filetype_parameter" "$file_to_build" -scheme "wtm (iOS)" -archivePath "$PWD/build/Web Time Machine.xcarchive" -configuration Release DEVELOPMENT_TEAM=2858MX5336 CODE_SIGN_STYLE=Manual
 
       - name: Export the .ipa File
         working-directory: 'native/app_ios/wtm'
