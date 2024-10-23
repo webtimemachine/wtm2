@@ -31,8 +31,8 @@ jobs:
 
       - name: Create ZIP files for Chrome and Firefox
         run: |
-          zip -r chrome-extension.zip ./build/app_chrome
-          zip -r firefox-extension.zip ./build/app_firefox
+          zip -r chrome-extension.zip -j ./build/app_chrome/*
+          zip -r firefox-extension.zip -j ./build/app_firefox/*
 
       - name: Update xcode project file
         run: |
@@ -51,7 +51,6 @@ jobs:
       - name: Decode and Install Apple Provisioning Profiles and Certificate
         run: |
           echo "${{ secrets.ENCODED_CERTIFICATE }}" | base64 --decode --output cert.p12
-          echo "${{ secrets.ENCODED_CERTIFICATE_DEV }}" | base64 --decode --output cert_dev.p12
           echo "${{ secrets.ENCODED_PROVISIONING_PROFILE_APP }}" | base64 --decode --output app.mobileprovision
           echo "${{ secrets.ENCODED_PROVISIONING_PROFILE_EXTENSION }}" | base64 --decode --output extension.mobileprovision
 
@@ -60,7 +59,6 @@ jobs:
           security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
           security unlock-keychain -p "${{ secrets.KEYCHAIN_PASSWORD }}" $KEYCHAIN_PATH
           security import cert.p12 -P "${{ secrets.P12_PASSWORD }}" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
-          security import cert_dev.p12 -P "${{ secrets.P12_PASSWORD }}" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
           security list-keychains -d user -s $KEYCHAIN_PATH
           security default-keychain -s $KEYCHAIN_PATH
           security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "${{ secrets.KEYCHAIN_PASSWORD }}" $KEYCHAIN_PATH
@@ -70,7 +68,6 @@ jobs:
           cp extension.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
         env:
           ENCODED_CERTIFICATE: ${{ secrets.ENCODED_CERTIFICATE }}
-          ENCODED_CERTIFICATE_DEV: ${{ secrets.ENCODED_CERTIFICATE_DEV }}
           ENCODED_PROVISIONING_PROFILE_APP: ${{ secrets.ENCODED_PROVISIONING_PROFILE_APP }}
           ENCODED_PROVISIONING_PROFILE_EXTENSION: ${{ secrets.ENCODED_PROVISIONING_PROFILE_EXTENSION }}
           KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
@@ -99,12 +96,12 @@ jobs:
         run: |
           if [ "`ls -A | grep -i \\.xcworkspace\$`" ]; then filetype_parameter="workspace" && file_to_build="`ls -A | grep -i \\.xcworkspace\$`"; else filetype_parameter="project" && file_to_build="`ls -A | grep -i \\.xcodeproj\$`"; fi
           file_to_build=`echo $file_to_build | awk '{$1=$1;print}'`
-          xcodebuild archive -"$filetype_parameter" "$file_to_build" -scheme "wtm (iOS)" -archivePath "$PWD/build/Web Time Machine.xcarchive" -configuration Release DEVELOPMENT_TEAM=2858MX5336 CODE_SIGN_STYLE=Automatic
+          xcodebuild archive -"$filetype_parameter" "$file_to_build" -scheme "wtm (iOS)" -archivePath "$PWD/build/Web Time Machine.xcarchive" -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.4' -configuration Release CODE_SIGN_STYLE=Manual
 
       - name: Export the .ipa File
         working-directory: 'native/app_ios/wtm'
         run: |
-          xcodebuild -exportArchive -archivePath "$PWD/build/Web Time Machine.xcarchive" -exportOptionsPlist "$PWD/ExportOptions.plist" DEVELOPMENT_TEAM=2858MX5336 -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.4' -exportPath "$PWD/build"
+          xcodebuild -exportArchive -archivePath "$PWD/build/Web Time Machine.xcarchive" -exportOptionsPlist "$PWD/ExportOptions.plist" -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.4' -exportPath "$PWD/build"
 
       - name: Upload to TestFlight
         env:
