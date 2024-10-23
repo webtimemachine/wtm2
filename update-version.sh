@@ -38,4 +38,8 @@ echo "Updated apps/extension/manifest-firefox.ts -> $NEW_VERSION"
 sed -i '' "s/version: '[0-9]*\.[0-9]*\.[0-9]*'/version: '$NEW_VERSION'/" apps/webpage/src/manifest-web.ts
 echo "Updated apps/webpage/src/manifest-web.ts -> $NEW_VERSION"
 
+# Update marketing version in project.pbxproj
+sed -i '' "s/MARKETING_VERSION: '[0-9]*\.[0-9]*\.[0-9]*'/MARKETING_VERSION: '$NEW_VERSION'/" native/app_ios/wtm/wtm.xcodeproj/project.pbxproj
+echo "Updated native/app_ios/wtm/wtm.xcodeproj/project.pbxproj -> $NEW_VERSION"
+
 echo "Version updated to $NEW_VERSION in all files."
