@@ -81,16 +81,6 @@ jobs:
         working-directory: 'native/app_ios/wtm'
         run: xcodebuild -list
 
-      # - name: Build Safari Extension for Testing
-      #   working-directory: 'native/app_ios/wtm'
-      #   run: |
-      #     xcodebuild build-for-testing -scheme "wtm (iOS)" -sdk iphonesimulator -derivedDataPath './build' -allowProvisioningUpdates
-
-      # - name: Archive the iOS App
-      #   working-directory: 'native/app_ios/wtm'
-      #   run: |
-      #     xcodebuild archive -scheme "wtm (iOS)" -sdk iphoneos -configuration AppStoreDistribution DEVELOPMENT_TEAM=2858MX5336 CODE_SIGN_STYLE=Manual -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.4' archive -archivePath "$PWD/build/Web Time Machine.xcarchive" -allowProvisioningUpdates
-
       - name: Build and archive app
         working-directory: 'native/app_ios/wtm'
         run: |
@@ -111,6 +101,15 @@ jobs:
           echo -n "$API_KEY_BASE64" | base64 --decode -o "./private_keys/AuthKey_${{ secrets.APPSTORE_API_KEY_ID }}.p8"
           xcrun altool --validate-app -f native/app_ios/wtm/build/wtm.ipa -t ios --apiKey ${{ secrets.APPSTORE_API_KEY_ID }} --apiIssuer ${{ secrets.APPSTORE_ISSUER_ID }}
           xcrun altool --upload-app -f native/app_ios/wtm/build/wtm.ipa -t ios --apiKey ${{ secrets.APPSTORE_API_KEY_ID }} --apiIssuer ${{ secrets.APPSTORE_ISSUER_ID }}
+
+      - name: Upload zip to Chrome store
+        uses: mnao305/chrome-extension-upload@v5.0.0
+        with:
+          file-path: chrome-extension.zip
+          extension-id: ${{ secrets.CHROME_EXTENSION_ID }}
+          client-id: ${{ secrets.CHROME_CLIENT_ID }}
+          client-secret: ${{ secrets.CHROME_SECRET }}
+          refresh-token: ${{ secrets.CHROME_REFRESH_TOKEN }}
 
       - name: Create Release
         id: create_release
