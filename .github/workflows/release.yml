@@ -81,16 +81,6 @@ jobs:
         working-directory: 'native/app_ios/wtm'
         run: xcodebuild -list
 
-      # - name: Build Safari Extension for Testing
-      #   working-directory: 'native/app_ios/wtm'
-      #   run: |
-      #     xcodebuild build-for-testing -scheme "wtm (iOS)" -sdk iphonesimulator -derivedDataPath './build' -allowProvisioningUpdates
-
-      # - name: Archive the iOS App
-      #   working-directory: 'native/app_ios/wtm'
-      #   run: |
-      #     xcodebuild archive -scheme "wtm (iOS)" -sdk iphoneos -configuration AppStoreDistribution DEVELOPMENT_TEAM=2858MX5336 CODE_SIGN_STYLE=Manual -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.4' archive -archivePath "$PWD/build/Web Time Machine.xcarchive" -allowProvisioningUpdates
-
       - name: Build and archive app
         working-directory: 'native/app_ios/wtm'
         run: |
