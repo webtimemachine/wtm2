@@ -31,6 +31,7 @@ export enum BROWSERS {
   EDGE = 'Microsoft Edge',
   CHROME = 'Google Chrome',
   SAFARI = 'Apple Safari',
+  BRAVE = 'Brave',
   UNKNOWN = 'Unknown',
 }
 
@@ -43,6 +44,7 @@ const browserMap: { [key: string]: BROWSERS } = {
   Edge: BROWSERS.EDGE,
   Chrome: BROWSERS.CHROME,
   Safari: BROWSERS.SAFARI,
+  Brave: BROWSERS.BRAVE,
 };
 
 export const getSupportedBrowserFromDevice = (
@@ -142,6 +144,14 @@ export const isMobile = () => {
 export function getBrowser() {
   if (typeof navigator === 'undefined') {
     return BROWSERS.UNKNOWN;
+  }
+
+  if (
+    (navigator as any).userAgentData?.brands?.some(
+      (elem: any) => elem?.brand == 'Brave',
+    )
+  ) {
+    return BROWSERS.BRAVE;
   }
 
   const userAgent = navigator.userAgent;
