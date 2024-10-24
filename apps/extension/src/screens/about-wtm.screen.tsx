@@ -7,7 +7,7 @@ import { SystemModels } from '@wtm/api';
 export const AboutWTMScreen: React.FC<object> = () => {
   const [backendURL, setBackendURL] = useState<string>('');
   const { navigateBack } = useNavigation();
-  const { useModelsInformationMutation } = useModelsInformation();
+  const { data } = useModelsInformation();
   const [models, setModels] = useState<SystemModels | null>(null);
   useEffect(() => {
     const getBackendVersion = async () => {
@@ -16,15 +16,10 @@ export const AboutWTMScreen: React.FC<object> = () => {
     };
 
     getBackendVersion();
-    useModelsInformationMutation.mutateAsync().then((d) => {
-      if (d) {
-        const data: SystemModels = d as SystemModels;
-        setModels(data);
-      } else {
-        setModels(null);
-      }
-    });
-  }, []);
+    if (data) {
+      setModels(data);
+    }
+  }, [data]);
 
   return (
     <>
