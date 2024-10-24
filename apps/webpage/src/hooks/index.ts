@@ -19,3 +19,4 @@ export { useDeleteNavigationEntry } from './use-delete-navigation-entry.hook';
 export { useHandleSessionExpired } from './use-handle-session-expired.hook';
 export { useGetBasicUserInformation } from './use-get-user-basic-information.hook';
 export { useBulkDeleteNavigationEntries } from './use-bulk-delete.hook';
+export { useModelsInformation } from './get-system-models.hook';
