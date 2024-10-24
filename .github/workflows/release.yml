@@ -102,6 +102,15 @@ jobs:
           xcrun altool --validate-app -f native/app_ios/wtm/build/wtm.ipa -t ios --apiKey ${{ secrets.APPSTORE_API_KEY_ID }} --apiIssuer ${{ secrets.APPSTORE_ISSUER_ID }}
           xcrun altool --upload-app -f native/app_ios/wtm/build/wtm.ipa -t ios --apiKey ${{ secrets.APPSTORE_API_KEY_ID }} --apiIssuer ${{ secrets.APPSTORE_ISSUER_ID }}
 
+      - name: Upload zip to Chrome store
+        uses: mnao305/chrome-extension-upload@v5.0.0
+        with:
+          file-path: chrome-extension.zip
+          extension-id: ${{ secrets.CHROME_EXTENSION_ID }}
+          client-id: ${{ secrets.CHROME_CLIENT_ID }}
+          client-secret: ${{ secrets.CHROME_SECRET }}
+          refresh-token: ${{ secrets.CHROME_REFRESH_TOKEN }}
+
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
