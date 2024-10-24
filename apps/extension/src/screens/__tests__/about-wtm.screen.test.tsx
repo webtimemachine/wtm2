@@ -12,11 +12,9 @@ jest.mock('../../store', () => ({
 jest.mock('../../hooks', () => ({
   useModelsInformation: jest.fn(),
 }));
-const mockMutate = jest.fn().mockResolvedValue(null);
 (useModelsInformation as jest.Mock).mockReturnValue({
-  useModelsInformationMutation: {
-    mutateAsync: mockMutate,
-  },
+  text_processing_model: 'gpt-4o-mini',
+  image_processing_model: 'gpt-4o',
 });
 const mockNavigateBack = jest.fn();
 (useNavigation as jest.Mock).mockReturnValue({
