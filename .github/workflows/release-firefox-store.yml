@@ -1,13 +1,13 @@
 on:
   push:
     tags:
-      - 'release-chrome'
+      - 'release-firefox'
 
-name: Create Chrome Extension Release
+name: Create Firefox Extension Release
 
 jobs:
-  build-chrome:
-    name: Create Chrome Extension Release
+  build-firefox:
+    name: Create Firefox Extension Release
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -32,15 +32,15 @@ jobs:
       - name: Run turbo build
         run: turbo run build --filter=@wtm/extension...
 
-      - name: Create ZIP file for Chrome
+      - name: Create ZIP file for Firefox
         run: |
-          zip -r chrome-extension.zip -j ./build/app_chrome/*
+          zip -r firefox-extension.zip -j ./build/app_firefox/*
 
       - name: Upload & release
-        uses: mnao305/chrome-extension-upload@v5.0.0
+        uses: trmcnvn/firefox-addon@v1
         with:
-          file-path: chrome-extension.zip
-          extension-id: ${{ secrets.CHROME_EXTENSION_ID }}
-          client-id: ${{ secrets.CHROME_CLIENT_ID }}
-          client-secret: ${{ secrets.CHROME_SECRET }}
-          refresh-token: ${{ secrets.CHROME_REFRESH_TOKEN }}
+          uuid: '{5790cffd-a2b7-4cb6-ad05-c5b955ddee3e}'
+          xpi: firefox-extension.zip
+          manifest: ./build/app_firefox/manifest.json
+          api-key: ${{ secrets.FIREFOX_JWT_ISSUER }}
+          api-secret: ${{ secrets.FIREFOX_JWT_SECRET }}
