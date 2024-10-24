@@ -5,8 +5,6 @@ import { DownloadButton } from './download-button';
 import { MdCheckCircle } from 'react-icons/md';
 
 export const Landing: React.FC = () => {
-  //
-
   return (
     <div className='space-y-20'>
       <div className='flex flex-col md:flex-row gap-8'>
