@@ -64,6 +64,13 @@ global.chrome = {
       set: jest.fn(),
     },
   },
+  runtime: {
+    connect: jest.fn().mockImplementation(() => {
+      return {
+        postMessage: jest.fn(),
+      };
+    }),
+  },
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 } as any;
 
