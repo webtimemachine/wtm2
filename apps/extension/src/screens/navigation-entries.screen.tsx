@@ -354,80 +354,90 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
               />
             </div>
           </div>
-        </div>
-        {isBulkDeleteOn && (
-          <div className='flex justify-between gap-2 px-2 py-3'>
-            <div className='flex items-center gap-2'>
-              <Button
-                colorScheme='blue'
-                onClick={() => {
-                  if (isAddOrRemove)
-                    setSelectedForDelete((oldState) => {
-                      return [
-                        ...oldState,
-                        ...navigationEntries
-                          .filter(
-                            (element: CompleteNavigationEntryDto) =>
-                              !selectedForDelete.includes(element.id),
-                          )
-                          .map((element: CompleteNavigationEntryDto) => {
+
+          {isBulkDeleteOn && (
+            <div className='flex justify-between w-full gap-2 px-2 pb-3'>
+              <div className='flex items-center gap-2'>
+                <Button
+                  colorScheme='blue'
+                  size='sm'
+                  onClick={() => {
+                    if (isAddOrRemove)
+                      setSelectedForDelete((oldState) => {
+                        return [
+                          ...oldState,
+                          ...navigationEntries
+                            .filter(
+                              (element: CompleteNavigationEntryDto) =>
+                                !selectedForDelete.includes(element.id),
+                            )
+                            .map((element: CompleteNavigationEntryDto) => {
+                              return element.id;
+                            }),
+                        ];
+                      });
+                    else
+                      setSelectedForDelete((oldState) => {
+                        const currentEntries = navigationEntries.map(
+                          (element: CompleteNavigationEntryDto) => {
                             return element.id;
-                          }),
-                      ];
-                    });
-                  else
-                    setSelectedForDelete((oldState) => {
-                      const currentEntries = navigationEntries.map(
-                        (element: CompleteNavigationEntryDto) => {
-                          return element.id;
-                        },
-                      );
-                      const filteredOldState = oldState.filter(
-                        (id) => !currentEntries.includes(id),
-                      );
-                      return filteredOldState;
-                    });
-                }}
+                          },
+                        );
+                        const filteredOldState = oldState.filter(
+                          (id) => !currentEntries.includes(id),
+                        );
+                        return filteredOldState;
+                      });
+                  }}
+                >
+                  {isAddOrRemove
+                    ? 'Check page entries'
+                    : 'Uncheck page entries'}
+                </Button>
+                <Text className='text-slate-600 mr-1' fontSize='small'>
+                  Selected {selectedForDelete.length}
+                </Text>
+              </div>
+
+              <Button
+                isDisabled={isDisabled}
+                colorScheme='red'
+                size='sm'
+                onClick={onOpen}
               >
-                {isAddOrRemove ? 'Check page entries' : 'Uncheck page entries'}
+                <BiTrash />
               </Button>
-              <Text className='text-slate-600 mr-1' fontSize='small'>
-                Selected {selectedForDelete.length}
-              </Text>
+              <Modal isOpen={isOpen} onClose={onClose}>
+                <ModalOverlay />
+                <ModalContent>
+                  <ModalHeader>Navigation Entries Bulk Delete</ModalHeader>
+                  <ModalCloseButton />
+                  <ModalBody>
+                    <div>
+                      You are about to delete {selectedForDelete.length}{' '}
+                      entries. Please, check if you are not sure about which
+                      entries you are about to delete, go back and check. This
+                      action is irreversible.
+                    </div>
+                  </ModalBody>
+
+                  <ModalFooter>
+                    <Button colorScheme='red' mr={3} onClick={handleBulkDelete}>
+                      Delete
+                    </Button>
+                    <Button variant='ghost' onClick={onClose}>
+                      Close
+                    </Button>
+                  </ModalFooter>
+                </ModalContent>
+              </Modal>
             </div>
+          )}
+        </div>
 
-            <Button isDisabled={isDisabled} colorScheme='red' onClick={onOpen}>
-              <BiTrash />
-            </Button>
-            <Modal isOpen={isOpen} onClose={onClose}>
-              <ModalOverlay />
-              <ModalContent>
-                <ModalHeader>Navigation Entries Bulk Delete</ModalHeader>
-                <ModalCloseButton />
-                <ModalBody>
-                  <div>
-                    You are about to delete {selectedForDelete.length} entries.
-                    Please, check if you are not sure about which entries you
-                    are about to delete, go back and check. This action is
-                    irreversible.
-                  </div>
-                </ModalBody>
-
-                <ModalFooter>
-                  <Button colorScheme='red' mr={3} onClick={handleBulkDelete}>
-                    Delete
-                  </Button>
-                  <Button variant='ghost' onClick={onClose}>
-                    Close
-                  </Button>
-                </ModalFooter>
-              </ModalContent>
-            </Modal>
-          </div>
-        )}
         <div
           id='content'
-          className='flex flex-col w-full h-full min-h-[350px] overflow-y-auto scrollbar pr-1'
+          className='flex flex-col w-full h-full overflow-y-auto scrollbar pr-1'
         >
           {navigationEntries && navigationEntries.length ? (
             navigationEntries.map((element: CompleteNavigationEntryDto) => {

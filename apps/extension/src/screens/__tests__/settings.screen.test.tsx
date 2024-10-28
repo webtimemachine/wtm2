@@ -43,7 +43,6 @@ describe('SettingsScreen', () => {
     expect(screen.getByText('Settings')).toBeInTheDocument();
     expect(screen.getByText('Preferences')).toBeInTheDocument();
     expect(screen.getByText('Active Sessions')).toBeInTheDocument();
-    expect(screen.getByText('Open in new tab')).toBeInTheDocument();
     expect(screen.getByText('About WebTM')).toBeInTheDocument();
     expect(screen.getByText('Delete account')).toBeInTheDocument();
     expect(screen.getByText('Logout')).toBeInTheDocument();
@@ -75,16 +74,6 @@ describe('SettingsScreen', () => {
 
     fireEvent.click(screen.getByText('Delete account'));
     expect(mockNavigateTo).toHaveBeenCalledWith('confirm-delete-account');
-  });
-
-  test('opens new tab with current URL when "Open in new tab" is clicked', () => {
-    jest.spyOn(global.window, 'open');
-    customRender(<SettingsScreen />);
-
-    const openInNewTab = screen.getByText('Open in new tab');
-    fireEvent.click(openInNewTab);
-
-    expect(global.window.open).toHaveBeenCalled();
   });
 
   test('calls logout when logout button is clicked', () => {
