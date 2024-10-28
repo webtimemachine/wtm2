@@ -199,7 +199,7 @@ export const MainLayout: React.FC<Props> = ({ children }) => {
         <SideDrawer />
       </div>
 
-      <div className='hidden md:block w-[20%] sm:w-[50%] lg:w-[20%]'>
+      <div className='hidden md:block w-[320px]'>
         <SideCard />
       </div>
 
