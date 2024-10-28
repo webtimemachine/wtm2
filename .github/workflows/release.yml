@@ -111,6 +111,15 @@ jobs:
           client-secret: ${{ secrets.CHROME_SECRET }}
           refresh-token: ${{ secrets.CHROME_REFRESH_TOKEN }}
 
+      - name: Upload zip to Firefox store
+        uses: trmcnvn/firefox-addon@v1
+        with:
+          uuid: '{5790cffd-a2b7-4cb6-ad05-c5b955ddee3e}'
+          xpi: firefox-extension.zip
+          manifest: ./build/app_firefox/manifest.json
+          api-key: ${{ secrets.FIREFOX_JWT_ISSUER }}
+          api-secret: ${{ secrets.FIREFOX_JWT_SECRET }}
+
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
