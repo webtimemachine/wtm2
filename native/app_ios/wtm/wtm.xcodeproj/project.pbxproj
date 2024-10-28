@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		544D8F402C6ACBC700C4FBF8 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544D8F3F2C6ACBC700C4FBF8 /* WebViewController.swift */; };
 		54AE752B2C8601F800225B0F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54AE75292C8601F800225B0F /* ViewController.swift */; };
+		D7B084E32CD0179F0037CF7A /* service-worker-loader.js in Resources */ = {isa = PBXBuildFile; fileRef = D7B084E22CD0179F0037CF7A /* service-worker-loader.js */; };
+		D7B084E42CD0179F0037CF7A /* service-worker-loader.js in Resources */ = {isa = PBXBuildFile; fileRef = D7B084E22CD0179F0037CF7A /* service-worker-loader.js */; };
+		D7B084E52CD0179F0037CF7A /* service-worker-loader.js in Resources */ = {isa = PBXBuildFile; fileRef = D7B084E22CD0179F0037CF7A /* service-worker-loader.js */; };
+		D7B084E62CD0179F0037CF7A /* service-worker-loader.js in Resources */ = {isa = PBXBuildFile; fileRef = D7B084E22CD0179F0037CF7A /* service-worker-loader.js */; };
 		ED65F68A2C667500002564E2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED65F6892C667500002564E2 /* AppDelegate.swift */; };
 		ED65F68C2C667500002564E2 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED65F68B2C667500002564E2 /* SceneDelegate.swift */; };
 		ED65F68F2C667500002564E2 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = ED65F68E2C667500002564E2 /* Base */; };
@@ -116,6 +120,7 @@
 /* Begin PBXFileReference section */
 		544D8F3F2C6ACBC700C4FBF8 /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 		54AE75292C8601F800225B0F /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		D7B084E22CD0179F0037CF7A /* service-worker-loader.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "service-worker-loader.js"; sourceTree = "<group>"; };
 		ED65F67A2C6674FD002564E2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = Base; path = ../Base.lproj/Main.html; sourceTree = "<group>"; };
 		ED65F67B2C6674FD002564E2 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 		ED65F67C2C6674FD002564E2 /* Style.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = Style.css; sourceTree = "<group>"; };
@@ -294,6 +299,7 @@
 		ED65F6D42C667500002564E2 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				D7B084E22CD0179F0037CF7A /* service-worker-loader.js */,
 				ED65F6D52C667500002564E2 /* app-icon-grayscale-64.png */,
 				ED65F6D62C667500002564E2 /* app-icon-48.png */,
 				ED65F6D72C667500002564E2 /* popup.js */,
@@ -451,6 +457,7 @@
 				ED65F6C02C667500002564E2 /* Assets.xcassets in Resources */,
 				ED65F6922C667500002564E2 /* Base in Resources */,
 				ED65F6BA2C667500002564E2 /* Style.css in Resources */,
+				D7B084E32CD0179F0037CF7A /* service-worker-loader.js in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -458,6 +465,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D7B084E42CD0179F0037CF7A /* service-worker-loader.js in Resources */,
 				ED65F6B92C667500002564E2 /* Icon.png in Resources */,
 				ED65F6BB2C667500002564E2 /* Style.css in Resources */,
 				ED65F69E2C667500002564E2 /* Base in Resources */,
@@ -471,6 +479,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D7B084E52CD0179F0037CF7A /* service-worker-loader.js in Resources */,
 				ED65F70E2C667500002564E2 /* app-icon-grayscale-128.png in Resources */,
 				ED65F6FE2C667500002564E2 /* app-icon-48.png in Resources */,
 				ED65F7092C667500002564E2 /* app-icon-grayscale-32.png in Resources */,
@@ -498,6 +507,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D7B084E62CD0179F0037CF7A /* service-worker-loader.js in Resources */,
 				ED65F6FA2C667500002564E2 /* app-icon-grayscale-128.png in Resources */,
 				ED65F6EA2C667500002564E2 /* app-icon-48.png in Resources */,
 				ED65F6F52C667500002564E2 /* app-icon-grayscale-32.png in Resources */,
@@ -800,7 +810,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "2858MX5336";
+				DEVELOPMENT_TEAM = 2858MX5336;
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 2858MX5336;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "iOS (App)/Info.plist";
