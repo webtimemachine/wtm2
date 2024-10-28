@@ -8,7 +8,6 @@ import { useNavigation } from '../store';
 import { LuSettings2, LuPersonStanding } from 'react-icons/lu';
 import { BsPersonLock, BsInfoCircle } from 'react-icons/bs';
 import { FaRegTrashAlt, FaSignOutAlt } from 'react-icons/fa';
-import { PiTabs } from 'react-icons/pi';
 
 export const SettingsScreen: React.FC<object> = () => {
   const { navigateBack, navigateTo } = useNavigation();
