@@ -85,7 +85,7 @@ export interface NavEntryProps {
   processOpenLink: (url: string) => Promise<void>;
   deleteProps?: {
     isDeleteOn: boolean;
-    onSelect: (id: number, add: boolean) => any;
+    onSelect: (id: number, add: boolean) => void;
     currentSelectedEntries: number[];
   };
 }
@@ -382,7 +382,7 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
                           return element.id;
                         },
                       );
-                      let filteredOldState = oldState.filter(
+                      const filteredOldState = oldState.filter(
                         (id) => !currentEntries.includes(id),
                       );
                       return filteredOldState;
@@ -445,8 +445,8 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
                     isDeleteOn: isBulkDeleteOn,
                     onSelect: (id: number, add: boolean) => {
                       if (add) {
-                        let newArr = [...selectedForDelete];
-                        newArr.push(id);
+                        const newArr = [...selectedForDelete, id];
+
                         setSelectedForDelete(newArr);
                       } else {
                         if (selectedForDelete.length == 1) {
