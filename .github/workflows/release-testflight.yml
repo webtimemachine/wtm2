@@ -1,7 +1,7 @@
 on:
   push:
     tags:
-      - 'release-ios'
+      - 'ios-release-*'
 
 name: Create iOS Extension Release
 
