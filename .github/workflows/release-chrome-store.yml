@@ -1,7 +1,7 @@
 on:
   push:
     tags:
-      - 'release-chrome'
+      - 'chrome-release-*'
 
 name: Create Chrome Extension Release
 
