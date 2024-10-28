@@ -2,7 +2,6 @@ import React from 'react';
 
 import { useNavigation } from './store';
 import clsx from 'clsx';
-import { isMobile } from '@wtm/utils';
 
 const App: React.FC<object> = () => {
   const { CurrentScreen } = useNavigation();
