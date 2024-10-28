@@ -1,7 +1,7 @@
 on:
   push:
     tags:
-      - 'release-firefox'
+      - 'firefox-release-*'
 
 name: Create Firefox Extension Release
 

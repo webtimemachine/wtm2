@@ -1,0 +1,92 @@
+on:
+  push:
+    tags:
+      - 'ios-release-*'
+
+name: Create iOS Extension Release
+
+jobs:
+  build:
+    name: Create iOS Extension Release
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install TurboRepo and dependencies
+        run: |
+          npm install turbo --global
+          npm install
+
+      - name: Cache turbo build setup
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
+
+      - name: Run turbo build
+        run: turbo run build --filter=@wtm/extension...
+
+      - name: Update xcode project file
+        run: |
+          sed -i '' 's/PRODUCT_BUNDLE_IDENTIFIER = com.ttt246llc.wtm;/PRODUCT_BUNDLE_IDENTIFIER = com.ttt246llc.wtm;\nPROVISIONING_PROFILE_SPECIFIER = "Web Time Machine Prov Profile Prod";/' ./native/app_ios/wtm/wtm.xcodeproj/project.pbxproj
+          sed -i '' 's/PRODUCT_BUNDLE_IDENTIFIER = com.ttt246llc.wtm.Extension;/PRODUCT_BUNDLE_IDENTIFIER = com.ttt246llc.wtm.Extension;\nPROVISIONING_PROFILE_SPECIFIER = "Web Time Machine Prov Profile Prod Extension";/' ./native/app_ios/wtm/wtm.xcodeproj/project.pbxproj
+
+      - name: Install Dependencies
+        run: brew install coreutils
+
+      - name: Decode and Install Apple Provisioning Profiles and Certificate
+        run: |
+          echo "${{ secrets.ENCODED_CERTIFICATE }}" | base64 --decode --output cert.p12
+          echo "${{ secrets.ENCODED_PROVISIONING_PROFILE_APP }}" | base64 --decode --output app.mobileprovision
+          echo "${{ secrets.ENCODED_PROVISIONING_PROFILE_EXTENSION }}" | base64 --decode --output extension.mobileprovision
+
+          KEYCHAIN_PATH=$RUNNER_TEMP/my_temporary.keychain
+          security create-keychain -p "${{ secrets.KEYCHAIN_PASSWORD }}" $KEYCHAIN_PATH
+          security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
+          security unlock-keychain -p "${{ secrets.KEYCHAIN_PASSWORD }}" $KEYCHAIN_PATH
+          security import cert.p12 -P "${{ secrets.P12_PASSWORD }}" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
+          security list-keychains -d user -s $KEYCHAIN_PATH
+          security default-keychain -s $KEYCHAIN_PATH
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "${{ secrets.KEYCHAIN_PASSWORD }}" $KEYCHAIN_PATH
+
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          cp app.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
+          cp extension.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
+        env:
+          ENCODED_CERTIFICATE: ${{ secrets.ENCODED_CERTIFICATE }}
+          ENCODED_PROVISIONING_PROFILE_APP: ${{ secrets.ENCODED_PROVISIONING_PROFILE_APP }}
+          ENCODED_PROVISIONING_PROFILE_EXTENSION: ${{ secrets.ENCODED_PROVISIONING_PROFILE_EXTENSION }}
+          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+          P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
+
+      - name: Copy ExportOptions.plist file
+        working-directory: 'apps/extension'
+        run: cp ExportOptions.plist ../../native/app_ios/wtm
+
+      - name: List all schemes
+        working-directory: 'native/app_ios/wtm'
+        run: xcodebuild -list
+
+      - name: Build and archive app
+        working-directory: 'native/app_ios/wtm'
+        run: |
+          if [ "`ls -A | grep -i \\.xcworkspace\$`" ]; then filetype_parameter="workspace" && file_to_build="`ls -A | grep -i \\.xcworkspace\$`"; else filetype_parameter="project" && file_to_build="`ls -A | grep -i \\.xcodeproj\$`"; fi
+          file_to_build=`echo $file_to_build | awk '{$1=$1;print}'`
+          xcodebuild archive -"$filetype_parameter" "$file_to_build" -scheme "wtm (iOS)" -archivePath "$PWD/build/Web Time Machine.xcarchive" -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.4' -configuration Release CODE_SIGN_STYLE=Manual
+
+      - name: Export the .ipa File
+        working-directory: 'native/app_ios/wtm'
+        run: |
+          xcodebuild -exportArchive -archivePath "$PWD/build/Web Time Machine.xcarchive" -exportOptionsPlist "$PWD/ExportOptions.plist" -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.4' -exportPath "$PWD/build"
+
+      - name: Upload to TestFlight
+        env:
+          API_KEY_BASE64: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
+        run: |
+          mkdir -p ./private_keys
+          echo -n "$API_KEY_BASE64" | base64 --decode -o "./private_keys/AuthKey_${{ secrets.APPSTORE_API_KEY_ID }}.p8"
+          xcrun altool --validate-app -f native/app_ios/wtm/build/wtm.ipa -t ios --apiKey ${{ secrets.APPSTORE_API_KEY_ID }} --apiIssuer ${{ secrets.APPSTORE_ISSUER_ID }}
+          xcrun altool --upload-app -f native/app_ios/wtm/build/wtm.ipa -t ios --apiKey ${{ secrets.APPSTORE_API_KEY_ID }} --apiIssuer ${{ secrets.APPSTORE_ISSUER_ID }}
