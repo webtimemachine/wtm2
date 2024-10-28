@@ -111,12 +111,6 @@ export const CustomDrawer = ({
                     Active Sessions
                   </MenuItem>
                   <MenuItem
-                    icon={<Icon as={PiTabs} boxSize={5} color='gray.600' />}
-                    onClick={() => window.open(window.location.href, '_blank')}
-                  >
-                    Open in new tab
-                  </MenuItem>
-                  <MenuItem
                     icon={
                       <Icon as={BsInfoCircle} boxSize={5} color='gray.600' />
                     }

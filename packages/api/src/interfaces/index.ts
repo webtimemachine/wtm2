@@ -55,3 +55,4 @@ export { type ChangeUserPassword } from "./change-user-password.interface";
 export { type ChangeUserDisplayName } from "./change-user-displayname.interface";
 export { type ChangeUserAvatar } from "./change-user-avatar.interface";
 export { type User } from "./user-basic-information";
+export { type SystemModels } from "./system-models.interface";

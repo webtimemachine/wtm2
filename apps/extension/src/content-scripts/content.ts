@@ -5,7 +5,7 @@ import { convertHtmlToMarkdown } from 'dom-to-semantic-markdown';
 import { AnyNode } from 'domhandler';
 import {
   ServiceWorkerPayload,
-  SERVICEWORKERMESSAGETYPE,
+  SERVICE_WORKER_MESSAGE_TYPE,
 } from '../service-workers/types';
 import { apiClient } from '../utils/api.client';
 
@@ -97,7 +97,7 @@ export const postNavigationEntry = async () => {
 postNavigationEntry();
 
 port.onMessage.addListener(async function (payload: ServiceWorkerPayload) {
-  if (payload.type === SERVICEWORKERMESSAGETYPE.ENGINE_READY) {
+  if (payload.type === SERVICE_WORKER_MESSAGE_TYPE.engineReady) {
     const { accessToken, enabledLiteMode, stopTrackingEnabled, webLLMEnabled } =
       await chrome.storage.local.get([
         'accessToken',
@@ -119,7 +119,7 @@ port.onMessage.addListener(async function (payload: ServiceWorkerPayload) {
     const content = getSemanticMarkdownForLLM(htmlContent);
 
     port.postMessage({
-      type: SERVICEWORKERMESSAGETYPE.GENERATE_COMPLETION,
+      type: SERVICE_WORKER_MESSAGE_TYPE.generateCompletion,
       content,
       url: window.location.href,
     });
