@@ -51,13 +51,6 @@ export const SettingsScreen: React.FC<object> = () => {
           </div>
           <div
             className='flex gap-2 items-center w-full p-2 select-none bg-white rounded-lg cursor-pointer'
-            onClick={() => window.open(window.location.href, '_blank')}
-          >
-            <Icon as={PiTabs} boxSize={5} color='gray.600' />
-            <Text fontSize='medium'>Open in new tab</Text>
-          </div>
-          <div
-            className='flex gap-2 items-center w-full p-2 select-none bg-white rounded-lg cursor-pointer'
             onClick={() => navigateTo('about-wtm')}
           >
             <Icon as={BsInfoCircle} boxSize={5} color='gray.600' />

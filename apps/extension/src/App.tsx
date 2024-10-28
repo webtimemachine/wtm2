@@ -1,23 +1,15 @@
 import React from 'react';
-import { useMediaQuery } from '@chakra-ui/react';
 
 import { useNavigation } from './store';
-import { isMobile } from '@wtm/utils';
 import clsx from 'clsx';
+import { isMobile } from '@wtm/utils';
 
 const App: React.FC<object> = () => {
   const { CurrentScreen } = useNavigation();
-  const [isLargerThan800] = useMediaQuery('(min-width: 800px)');
 
   return (
-    <div className='flex w-full min-h-screen bg-slate-100'>
-      <div
-        className={clsx([
-          'flex w-full min-h-screen',
-          isLargerThan800 && 'mx-[auto] max-w-[1080px]',
-          !isMobile() && 'min-w-[500px]',
-        ])}
-      >
+    <div className='flex min-h-screen bg-slate-100'>
+      <div className={clsx(['flex w-[550px] min-h-screen '])}>
         <CurrentScreen />
       </div>
     </div>
