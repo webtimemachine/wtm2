@@ -1,13 +1,13 @@
 on:
   push:
     tags:
-      - 'v*'
+      - 'ios-release-*'
 
-name: Create Release and Upload Release Assets
+name: Create iOS Extension Release
 
 jobs:
   build:
-    name: Create Release and Upload Release Assets
+    name: Create iOS Extension Release
     runs-on: macos-latest
     steps:
       - name: Checkout code
@@ -29,21 +29,10 @@ jobs:
       - name: Run turbo build
         run: turbo run build --filter=@wtm/extension...
 
-      - name: Create ZIP files for Chrome and Firefox
-        run: |
-          zip -r chrome-extension.zip -j ./build/app_chrome/*
-          zip -r firefox-extension.zip -j ./build/app_firefox/*
-
       - name: Update xcode project file
         run: |
           sed -i '' 's/PRODUCT_BUNDLE_IDENTIFIER = com.ttt246llc.wtm;/PRODUCT_BUNDLE_IDENTIFIER = com.ttt246llc.wtm;\nPROVISIONING_PROFILE_SPECIFIER = "Web Time Machine Prov Profile Prod";/' ./native/app_ios/wtm/wtm.xcodeproj/project.pbxproj
           sed -i '' 's/PRODUCT_BUNDLE_IDENTIFIER = com.ttt246llc.wtm.Extension;/PRODUCT_BUNDLE_IDENTIFIER = com.ttt246llc.wtm.Extension;\nPROVISIONING_PROFILE_SPECIFIER = "Web Time Machine Prov Profile Prod Extension";/' ./native/app_ios/wtm/wtm.xcodeproj/project.pbxproj
-
-      - name: Run turbo build for backend
-        run: turbo run build --filter=@wtm/backend
-
-      - name: Zip backend build
-        run: zip -r backend.zip ./build/backend
 
       - name: Install Dependencies
         run: brew install coreutils
@@ -101,67 +90,3 @@ jobs:
           echo -n "$API_KEY_BASE64" | base64 --decode -o "./private_keys/AuthKey_${{ secrets.APPSTORE_API_KEY_ID }}.p8"
           xcrun altool --validate-app -f native/app_ios/wtm/build/wtm.ipa -t ios --apiKey ${{ secrets.APPSTORE_API_KEY_ID }} --apiIssuer ${{ secrets.APPSTORE_ISSUER_ID }}
           xcrun altool --upload-app -f native/app_ios/wtm/build/wtm.ipa -t ios --apiKey ${{ secrets.APPSTORE_API_KEY_ID }} --apiIssuer ${{ secrets.APPSTORE_ISSUER_ID }}
-
-      - name: Upload zip to Chrome store
-        uses: mnao305/chrome-extension-upload@v5.0.0
-        with:
-          file-path: chrome-extension.zip
-          extension-id: ${{ secrets.CHROME_EXTENSION_ID }}
-          client-id: ${{ secrets.CHROME_CLIENT_ID }}
-          client-secret: ${{ secrets.CHROME_SECRET }}
-          refresh-token: ${{ secrets.CHROME_REFRESH_TOKEN }}
-
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: Web Time Machine Release ${{ github.ref }}
-          draft: false
-          prerelease: false
-
-      - name: Upload Release Chrome extension Asset
-        id: upload-release-asset-chrome
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: chrome-extension.zip
-          asset_name: chrome-extension.zip
-          asset_content_type: application/zip
-
-      - name: Upload Release Firefox extension Asset
-        id: upload-release-asset-firefox
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: firefox-extension.zip
-          asset_name: firefox-extension.zip
-          asset_content_type: application/zip
-
-      - name: Upload Release Backend Asset
-        id: upload-release-asset-backend
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: backend.zip
-          asset_name: backend.zip
-          asset_content_type: application/zip
-
-      - name: Upload .ipa to Release
-        id: upload-release-asset-ipa
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: 'native/app_ios/wtm/build/wtm.ipa'
-          asset_name: wtm.ipa
-          asset_content_type: application/octet-stream

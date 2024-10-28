@@ -4,7 +4,7 @@ import { BROWSERS, getBrowser } from '@wtm/utils';
 import { Button, Link } from '@chakra-ui/react';
 import NextLink from 'next/link';
 import { ReactElement, useEffect, useState } from 'react';
-import { FaChrome, FaFirefox, FaSafari } from 'react-icons/fa6';
+import { FaBrave, FaChrome, FaFirefox, FaSafari } from 'react-icons/fa6';
 
 interface DownloadButtonProps {}
 
@@ -34,6 +34,13 @@ export const BROWSER_DATA: {
     text: 'Download for Safari',
     icon: <FaSafari />,
     colorScheme: 'blackAlpha',
+  },
+  [BROWSERS.BRAVE]: {
+    downloadLink:
+      'https://chrome.google.com/webstore/detail/dfijieibikhpelmfhkjmihgfgpoeigch',
+    text: 'Download for Brave',
+    colorScheme: 'red',
+    icon: <FaBrave />,
   },
 };
 

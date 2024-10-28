@@ -2,11 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { Text, IconButton } from '@chakra-ui/react';
 import { ArrowBackIcon } from '@chakra-ui/icons';
 import { useNavigation } from '../store';
-
+import { useModelsInformation } from '../hooks';
+import { SystemModels } from '@wtm/api';
 export const AboutWTMScreen: React.FC<object> = () => {
   const [backendURL, setBackendURL] = useState<string>('');
   const { navigateBack } = useNavigation();
-
+  const { data } = useModelsInformation();
+  const [models, setModels] = useState<SystemModels | null>(null);
   useEffect(() => {
     const getBackendVersion = async () => {
       const { serverUrl } = await chrome.storage.local.get(['serverUrl']);
@@ -14,7 +16,10 @@ export const AboutWTMScreen: React.FC<object> = () => {
     };
 
     getBackendVersion();
-  }, []);
+    if (data) {
+      setModels(data);
+    }
+  }, [data]);
 
   return (
     <>
@@ -40,6 +45,18 @@ export const AboutWTMScreen: React.FC<object> = () => {
             <Text fontSize='medium'>
               <span className='font-bold'>Backend URL:</span>{' '}
               {backendURL || '-'}
+            </Text>
+          </div>
+          <div className='flex gap-2 items-center w-full p-2 select-none bg-white rounded-lg'>
+            <Text fontSize='medium'>
+              <span className='font-bold'>Text Processing LLM Model:</span>{' '}
+              {models && models.text_processing_model}
+            </Text>
+          </div>
+          <div className='flex gap-2 items-center w-full p-2 select-none bg-white rounded-lg'>
+            <Text fontSize='medium'>
+              <span className='font-bold'>Image Processing LLM Model:</span>{' '}
+              {models && models.image_processing_model}
             </Text>
           </div>
           <div

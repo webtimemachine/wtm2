@@ -1,0 +1,46 @@
+on:
+  push:
+    tags:
+      - 'firefox-release-*'
+
+name: Create Firefox Extension Release
+
+jobs:
+  build-firefox:
+    name: Create Firefox Extension Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 20
+
+      - name: Install TurboRepo and dependencies
+        run: |
+          npm install turbo --global
+          npm install
+
+      - name: Cache turbo build setup
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
+
+      - name: Run turbo build
+        run: turbo run build --filter=@wtm/extension...
+
+      - name: Create ZIP file for Firefox
+        run: |
+          zip -r firefox-extension.zip -j ./build/app_firefox/*
+
+      - name: Upload & release
+        uses: trmcnvn/firefox-addon@v1
+        with:
+          uuid: '{5790cffd-a2b7-4cb6-ad05-c5b955ddee3e}'
+          xpi: firefox-extension.zip
+          manifest: ./build/app_firefox/manifest.json
+          api-key: ${{ secrets.FIREFOX_JWT_ISSUER }}
+          api-secret: ${{ secrets.FIREFOX_JWT_SECRET }}

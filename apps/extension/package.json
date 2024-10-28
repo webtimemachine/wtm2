@@ -1,7 +1,7 @@
 {
   "name": "@wtm/extension",
   "private": true,
-  "version": "1.6.2",
+  "version": "1.6.4",
   "type": "module",
   "scripts": {
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.tsx\" \"test/**/*.ts\"",
@@ -46,7 +46,7 @@
     "zustand": "^4.5.2"
   },
   "devDependencies": {
-    "@crxjs/vite-plugin": "^2.0.0-beta.21",
+    "@crxjs/vite-plugin": "^2.0.0-beta.26",
     "@testing-library/dom": "^10.1.0",
     "@testing-library/jest-dom": "^6.4.3",
     "@testing-library/react": "^15.0.6",

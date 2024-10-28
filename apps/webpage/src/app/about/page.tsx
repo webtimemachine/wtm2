@@ -5,15 +5,21 @@ import { Text, Badge } from '@chakra-ui/react';
 
 import { useAuthStore } from '../../store';
 import { manifestWeb } from '../../manifest-web';
+import { useModelsInformation } from '../../hooks';
+import { SystemModels } from '@wtm/api';
 
 const AboutWTMScreen: React.FC<object> = () => {
   const [backendURL, setBackendURL] = useState<string>('');
-
+  const [models, setModels] = useState<SystemModels | undefined>(undefined);
   const serverUrl = useAuthStore((state) => state.serverUrl);
+  const { data } = useModelsInformation();
 
   useEffect(() => {
     setBackendURL(serverUrl);
-  }, []);
+    if (data) {
+      setModels(data);
+    }
+  }, [data, serverUrl]);
 
   return (
     <div className='flex flex-col h-full'>
@@ -43,6 +49,19 @@ const AboutWTMScreen: React.FC<object> = () => {
         <div className='flex gap-2 items-center w-full p-2 select-none bg-white rounded-lg'>
           <Text fontSize='medium'>
             <span className='font-bold'>Backend URL:</span> {backendURL || '-'}
+          </Text>
+        </div>
+
+        <div className='flex gap-2 items-center w-full p-2 select-none bg-white rounded-lg'>
+          <Text fontSize='medium'>
+            <span className='font-bold'>Text Processing LLM Model:</span>{' '}
+            {models && models.text_processing_model}
+          </Text>
+        </div>
+        <div className='flex gap-2 items-center w-full p-2 select-none bg-white rounded-lg'>
+          <Text fontSize='medium'>
+            <span className='font-bold'>Image Processing LLM Model:</span>{' '}
+            {models && models.image_processing_model}
           </Text>
         </div>
         <div
