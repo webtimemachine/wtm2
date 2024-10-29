@@ -32,7 +32,7 @@ jobs:
       - name: Create ZIP files for Chrome and Firefox
         run: |
           (cd ./build/app_chrome && zip -r ../../chrome-extension.zip .)
-          zip -r firefox-extension.zip -j ./build/app_firefox/*
+          (cd ./build/app_firefox && zip -r ../../firefox-extension.zip .)
 
       - name: Update xcode project file
         run: |
