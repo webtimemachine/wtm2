@@ -4,31 +4,37 @@ import { apiClient } from '../utils/api.client';
 import { CreateMLCEngine, MLCEngineInterface } from '@mlc-ai/web-llm';
 import {
   ENGINE_STATUS,
+  PORT,
   SERVICE_WORKER_MESSAGE_TYPE,
   ServiceWorkerPayload,
 } from './types';
 let engine: MLCEngineInterface | undefined = undefined;
 
-let engineStatus: ENGINE_STATUS = ENGINE_STATUS.NOT_READY;
+let engineStatus: ENGINE_STATUS = ENGINE_STATUS.notReady;
 
 async function initEngine() {
   try {
     engine = await CreateMLCEngine('SmolLM-360M-Instruct-q4f16_1-MLC', {
       initProgressCallback: () => {
-        if (engineStatus === ENGINE_STATUS.NOT_READY) {
-          engineStatus = ENGINE_STATUS.LOADING;
+        if (engineStatus === ENGINE_STATUS.notReady) {
+          engineStatus = ENGINE_STATUS.loading;
         }
       },
     });
 
-    engineStatus = ENGINE_STATUS.READY;
+    engineStatus = ENGINE_STATUS.ready;
   } catch (error) {
     console.error('Error initializing engine', error);
   }
 }
 
 chrome.runtime.onConnect.addListener(async (port) => {
-  if (engineStatus === ENGINE_STATUS.NOT_READY) {
+  if (port.name !== PORT.serviceWorker) {
+    console.log('Invalid port name');
+    return;
+  }
+
+  if (engineStatus === ENGINE_STATUS.notReady) {
     try {
       await initEngine();
       port.postMessage({
@@ -71,6 +77,17 @@ chrome.runtime.onConnect.addListener(async (port) => {
             content: response,
             url,
           }),
+        });
+
+        break;
+      }
+
+      case SERVICE_WORKER_MESSAGE_TYPE.createNavigationEntry: {
+        const navigationEntry = message.navigationEntry;
+
+        await apiClient.securedFetch('/api/navigation-entry', {
+          method: 'POST',
+          body: JSON.stringify(navigationEntry),
         });
 
         break;
