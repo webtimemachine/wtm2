@@ -11,13 +11,7 @@ export const metadata: Metadata = {
 export default function ContactUsPage() {
   return (
     <Stack justifyContent={'center'} alignItems={'center'} justify={'center'}>
-      <Stack
-        paddingX={{ base: 0, md: 20 }}
-        paddingY={5}
-        border={'1px'}
-        borderColor={'gray.300'}
-        className='py-5 px-8 lg:px-20 flex flex-col items-center gap-6 rounded-lg shadow-lg'
-      >
+      <Stack className='py-5 sm:px-8 lg:px-20 flex flex-col items-center gap-6 rounded-lg sm:border sm:border-gray-300 sm:shadow-lg'>
         <Heading as='h1' size={'xl'} fontWeight={'semibold'}>
           Contact Us
         </Heading>
