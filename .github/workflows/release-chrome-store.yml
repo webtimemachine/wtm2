@@ -34,7 +34,7 @@ jobs:
 
       - name: Create ZIP file for Chrome
         run: |
-          zip -r chrome-extension.zip -j ./build/app_chrome/*
+          zip -r chrome-extension.zip ./build/app_chrome
 
       - name: Upload & release
         uses: mnao305/chrome-extension-upload@v5.0.0
