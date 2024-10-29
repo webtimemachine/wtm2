@@ -1,14 +1,23 @@
 import {
   Button,
+  Checkbox,
   Icon,
   IconButton,
   Input,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Spinner,
   Switch,
   Text,
+  useDisclosure,
   useToast,
 } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import {
   ChevronDownIcon,
@@ -22,7 +31,11 @@ import { BsStars } from 'react-icons/bs';
 import { IconType } from 'react-icons';
 
 import { CompleteNavigationEntryDto } from '@wtm/api';
-import { useDeleteNavigationEntry, useNavigationEntries } from '../hooks';
+import {
+  useBulkDeleteNavigationEntries,
+  useDeleteNavigationEntry,
+  useNavigationEntries,
+} from '../hooks';
 
 import { useNavigation } from '../store';
 import { getBrowserIconFromDevice } from '@wtm/utils';
@@ -31,6 +44,7 @@ import clsx from 'clsx';
 
 import { updateIcon } from '../utils/updateIcon';
 import Markdown from 'react-markdown';
+import { BiTrash } from 'react-icons/bi';
 
 const truncateString = (str: string, maxLength: number) => {
   return str.length <= maxLength ? str : str.slice(0, maxLength) + '...';
@@ -69,6 +83,11 @@ export interface NavEntryProps {
   BrowserIcon: IconType;
   deleteNavEntry: ({ id }: { id: number }) => void;
   processOpenLink: (url: string) => Promise<void>;
+  deleteProps?: {
+    isDeleteOn: boolean;
+    onSelect: (id: number, add: boolean) => void;
+    currentSelectedEntries: number[];
+  };
 }
 
 const NavigationEntry = ({
@@ -76,6 +95,7 @@ const NavigationEntry = ({
   BrowserIcon,
   deleteNavEntry,
   processOpenLink,
+  deleteProps,
 }: NavEntryProps) => {
   const [visible, setVisible] = useState<boolean>(false);
 
@@ -83,6 +103,16 @@ const NavigationEntry = ({
     <div className='flex flex-col w-full bg-white px-2 py-1 rounded-lg mb-1 gap-3'>
       <div key={element.id} className='flex items-center justify-between'>
         <div className='flex gap-2'>
+          {deleteProps && deleteProps.isDeleteOn && (
+            <Checkbox
+              isChecked={deleteProps.currentSelectedEntries.includes(
+                element.id,
+              )}
+              onChange={(r) =>
+                deleteProps.onSelect(element.id, r.target.checked)
+              }
+            />
+          )}
           <div className='flex justify-center items-center'>
             <Icon as={BrowserIcon} boxSize={6} color='gray.600' />
           </div>
@@ -122,16 +152,18 @@ const NavigationEntry = ({
             />
           )}
 
-          <IconButton
-            aria-label='delete navigation entry'
-            size='xs'
-            icon={<SmallCloseIcon />}
-            onClick={() => {
-              deleteNavEntry({
-                id: element.id,
-              });
-            }}
-          />
+          {deleteProps && !deleteProps.isDeleteOn && (
+            <IconButton
+              aria-label='delete navigation entry'
+              size='xs'
+              icon={<SmallCloseIcon />}
+              onClick={() => {
+                deleteNavEntry({
+                  id: element.id,
+                });
+              }}
+            />
+          )}
         </div>
       </div>
       {element.aiGeneratedContent && visible && (
@@ -150,11 +182,15 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
   const LIMIT = 16;
   const [page, setPage] = useState<number>(0);
   const [query, setQuery] = useState<string>('');
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [selectedForDelete, setSelectedForDelete] = useState<number[]>([]);
+  const [isBulkDeleteOn, setIsBulkDeleteOn] = useState<boolean>(false);
   const [isSemantic, setIsSemantic] = useState<boolean>(true);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const offset = page * LIMIT;
   const limit = LIMIT;
-
+  const { deleteBulkNavigationEntriesMutation } =
+    useBulkDeleteNavigationEntries();
   const { deleteNavigationEntryMutation } = useDeleteNavigationEntry();
   const { navigationEntriesQuery } = useNavigationEntries({
     offset,
@@ -169,7 +205,12 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
 
   useEffect(() => {
     navigationEntriesQuery.refetch();
-  }, [page, isSemantic, deleteNavigationEntryMutation.isSuccess]);
+  }, [
+    page,
+    isSemantic,
+    deleteNavigationEntryMutation.isSuccess,
+    deleteBulkNavigationEntriesMutation?.isSuccess,
+  ]);
 
   useEffect(() => {
     if (navigationEntriesQuery.isError) {
@@ -190,7 +231,18 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
     await navigationEntriesQuery.refetch();
     setIsLoading(false);
   };
+  const handleBulkDelete = () => {
+    if (selectedForDelete.length > 0) {
+      deleteBulkNavigationEntriesMutation.mutate({
+        navigationEntryIds: selectedForDelete,
+      });
 
+      setSelectedForDelete([]);
+      setIsBulkDeleteOn(false);
+      setPage(0);
+    }
+    onClose();
+  };
   const prev = () => page > 0 && setPage(page - 1);
   const next = () => !(offset + limit >= count) && setPage(page + 1);
 
@@ -202,7 +254,18 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
       chrome.tabs.create({ url, active: true });
     }
   };
+  const isDisabled = useMemo(() => {
+    return selectedForDelete.length === 0;
+  }, [selectedForDelete.length]);
 
+  const isAddOrRemove = useMemo(() => {
+    const truthArr = navigationEntries
+      .map((element: CompleteNavigationEntryDto) => {
+        return selectedForDelete.includes(element.id);
+      })
+      .filter((x) => !x);
+    return truthArr.length > 0;
+  }, [selectedForDelete, navigationEntries]);
   return (
     <>
       <div className='flex flex-col px-5 py-3 items-center w-full min-h-[600px] h-screen'>
@@ -245,7 +308,7 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
             </div>
           </div>
 
-          <div className='flex py-1'>
+          <div className='flex py-1 justify-between'>
             <div
               className='flex items-center gap-1 p-1 h-[32px] select-none cursor-pointer hover:bg-white rounded-lg'
               data-testid='ia-search-container'
@@ -268,12 +331,113 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
                 onChange={() => setIsSemantic((value) => !value)}
               />
             </div>
+            <div
+              className='flex items-center gap-1 p-1 h-[32px] select-none cursor-pointer hover:bg-white rounded-lg'
+              data-testid='bulk-delete-container'
+              onClick={() => {
+                setIsBulkDeleteOn((value) => !value);
+                if (isBulkDeleteOn) setSelectedForDelete([]);
+              }}
+            >
+              <BiTrash />
+              <Text className='text-slate-600 mr-1' fontSize='small'>
+                Bulk Delete
+              </Text>
+              <Switch
+                size='sm'
+                aria-label='Bulk Delete'
+                isChecked={isBulkDeleteOn}
+                onChange={() => {
+                  setIsBulkDeleteOn((value) => !value);
+                  if (isBulkDeleteOn) setSelectedForDelete([]);
+                }}
+              />
+            </div>
           </div>
+
+          {isBulkDeleteOn && (
+            <div className='flex justify-between w-full gap-2 px-2 pb-3'>
+              <div className='flex items-center gap-2'>
+                <Button
+                  colorScheme='blue'
+                  size='sm'
+                  onClick={() => {
+                    if (isAddOrRemove)
+                      setSelectedForDelete((oldState) => {
+                        return [
+                          ...oldState,
+                          ...navigationEntries
+                            .filter(
+                              (element: CompleteNavigationEntryDto) =>
+                                !selectedForDelete.includes(element.id),
+                            )
+                            .map((element: CompleteNavigationEntryDto) => {
+                              return element.id;
+                            }),
+                        ];
+                      });
+                    else
+                      setSelectedForDelete((oldState) => {
+                        const currentEntries = navigationEntries.map(
+                          (element: CompleteNavigationEntryDto) => {
+                            return element.id;
+                          },
+                        );
+                        const filteredOldState = oldState.filter(
+                          (id) => !currentEntries.includes(id),
+                        );
+                        return filteredOldState;
+                      });
+                  }}
+                >
+                  {isAddOrRemove
+                    ? 'Check page entries'
+                    : 'Uncheck page entries'}
+                </Button>
+                <Text className='text-slate-600 mr-1' fontSize='small'>
+                  Selected {selectedForDelete.length}
+                </Text>
+              </div>
+
+              <Button
+                isDisabled={isDisabled}
+                colorScheme='red'
+                size='sm'
+                onClick={onOpen}
+              >
+                <BiTrash />
+              </Button>
+              <Modal isOpen={isOpen} onClose={onClose}>
+                <ModalOverlay />
+                <ModalContent>
+                  <ModalHeader>Navigation Entries Bulk Delete</ModalHeader>
+                  <ModalCloseButton />
+                  <ModalBody>
+                    <div>
+                      You are about to delete {selectedForDelete.length}{' '}
+                      entries. Please, check if you are not sure about which
+                      entries you are about to delete, go back and check. This
+                      action is irreversible.
+                    </div>
+                  </ModalBody>
+
+                  <ModalFooter>
+                    <Button colorScheme='red' mr={3} onClick={handleBulkDelete}>
+                      Delete
+                    </Button>
+                    <Button variant='ghost' onClick={onClose}>
+                      Close
+                    </Button>
+                  </ModalFooter>
+                </ModalContent>
+              </Modal>
+            </div>
+          )}
         </div>
 
         <div
           id='content'
-          className='flex flex-col w-full h-full min-h-[350px] overflow-y-auto scrollbar pr-1'
+          className='flex flex-col w-full h-full overflow-y-auto scrollbar pr-1'
         >
           {navigationEntries && navigationEntries.length ? (
             navigationEntries.map((element: CompleteNavigationEntryDto) => {
@@ -287,6 +451,26 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
                   deleteNavEntry={deleteNavigationEntryMutation.mutate}
                   processOpenLink={processOpenLink}
                   element={element}
+                  deleteProps={{
+                    isDeleteOn: isBulkDeleteOn,
+                    onSelect: (id: number, add: boolean) => {
+                      if (add) {
+                        const newArr = [...selectedForDelete, id];
+
+                        setSelectedForDelete(newArr);
+                      } else {
+                        if (selectedForDelete.length == 1) {
+                          setSelectedForDelete([]);
+                        } else {
+                          const updatedArray = selectedForDelete.filter(
+                            (item) => item != id,
+                          );
+                          setSelectedForDelete(updatedArray);
+                        }
+                      }
+                    },
+                    currentSelectedEntries: selectedForDelete,
+                  }}
                 />
               );
             })

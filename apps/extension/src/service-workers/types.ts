@@ -1,31 +1,35 @@
 import { CreateNavigationEntry } from '@wtm/api';
 
-export enum SERVICEWORKERMESSAGETYPE {
-  ENGINE_READY = 'engine_ready',
-  COMPLETION_RESULT = 'completion_result',
-  GENERATE_COMPLETION = 'generate_completion',
-  CREATE_NAVIGATION_ENTRY = 'create_navigation_entry',
+export enum SERVICE_WORKER_MESSAGE_TYPE {
+  engineReady = 'engine_ready',
+  completionResult = 'completion_result',
+  generateCompletion = 'generate_completion',
+  createNavigationEntry = 'create_navigation_entry',
+  updateExtensionIcon = 'update_extension_icon',
 }
 
 export type ServiceWorkerPayload =
   | {
-      type: SERVICEWORKERMESSAGETYPE.ENGINE_READY;
+      type: SERVICE_WORKER_MESSAGE_TYPE.engineReady;
     }
   | {
-      type: SERVICEWORKERMESSAGETYPE.GENERATE_COMPLETION;
+      type: SERVICE_WORKER_MESSAGE_TYPE.generateCompletion;
       content: string;
       url: string;
     }
   | {
-      type: SERVICEWORKERMESSAGETYPE.COMPLETION_RESULT;
+      type: SERVICE_WORKER_MESSAGE_TYPE.completionResult;
       result: string;
     }
   | {
-      type: SERVICEWORKERMESSAGETYPE.CREATE_NAVIGATION_ENTRY;
+      type: SERVICE_WORKER_MESSAGE_TYPE.createNavigationEntry;
       navigationEntry: CreateNavigationEntry;
+    }
+  | {
+      type: SERVICE_WORKER_MESSAGE_TYPE.updateExtensionIcon;
     };
 
-export enum ENGINESTATUS {
+export enum ENGINE_STATUS {
   READY = 'ready',
   NOT_READY = 'not_ready',
   LOADING = 'loading',
