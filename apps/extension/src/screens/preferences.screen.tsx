@@ -69,6 +69,11 @@ export const PreferencesScreen: React.FC<object> = () => {
       stopTrackingEnabled,
       webLLMEnabled,
     });
+
+    const port = chrome.runtime.connect({
+      name: 'save_preferences_connection',
+    });
+    port.postMessage({ type: 'update_extension_icon' });
   };
 
   useEffect(() => {

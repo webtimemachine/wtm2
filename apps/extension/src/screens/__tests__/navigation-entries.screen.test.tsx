@@ -2,7 +2,11 @@ import React from 'react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { ChakraProvider } from '@chakra-ui/react';
 import { useNavigation } from '../../store';
-import { useDeleteNavigationEntry, useNavigationEntries } from '../../hooks';
+import {
+  useDeleteNavigationEntry,
+  useNavigationEntries,
+  useBulkDeleteNavigationEntries,
+} from '../../hooks';
 import { CompleteNavigationEntryDto } from '@wtm/api';
 import { NavigationEntriesScreen } from '../navigation-entries.screen';
 
@@ -14,6 +18,7 @@ jest.mock('../../store', () => ({
 jest.mock('../../hooks', () => ({
   useDeleteNavigationEntry: jest.fn(),
   useNavigationEntries: jest.fn(),
+  useBulkDeleteNavigationEntries: jest.fn(),
 }));
 
 jest.mock('@wtm/utils', () => ({
@@ -38,7 +43,12 @@ const mockRefetch = jest.fn();
     isSuccess: false,
   },
 });
-
+(useBulkDeleteNavigationEntries as jest.Mock).mockResolvedValue({
+  deleteBulkNavigationEntriesMutation: {
+    mutate: mockMutate,
+    isSuccess: false,
+  },
+});
 global.chrome = {
   action: {
     setIcon: jest.fn(),
@@ -171,7 +181,20 @@ describe('NavigationEntriesScreen', () => {
       expect(mockMutate).toHaveBeenCalledWith({ id: 1 });
     });
   });
+  test('enables and disables bulk delete', () => {
+    customRender(<NavigationEntriesScreen />);
+    const onClickListener = screen.getByTestId('bulk-delete-container');
+    const bulkDeleteSwitch = screen.getByRole('checkbox', {
+      name: 'Bulk Delete',
+    });
+    fireEvent.click(onClickListener);
 
+    expect(bulkDeleteSwitch).toBeChecked();
+
+    fireEvent.click(onClickListener);
+
+    expect(bulkDeleteSwitch).not.toBeChecked();
+  });
   test('pagination works correctly', async () => {
     customRender(<NavigationEntriesScreen />);
 

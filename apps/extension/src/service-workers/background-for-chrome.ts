@@ -3,42 +3,45 @@ import { apiClient } from '../utils/api.client';
 
 import { CreateMLCEngine, MLCEngineInterface } from '@mlc-ai/web-llm';
 import {
-  ENGINESTATUS,
-  SERVICEWORKERMESSAGETYPE,
+  ENGINE_STATUS,
+  SERVICE_WORKER_MESSAGE_TYPE,
   ServiceWorkerPayload,
 } from './types';
 let engine: MLCEngineInterface | undefined = undefined;
 
-let engineStatus: ENGINESTATUS = ENGINESTATUS.NOT_READY;
+let engineStatus: ENGINE_STATUS = ENGINE_STATUS.NOT_READY;
 
 async function initEngine() {
   try {
     engine = await CreateMLCEngine('SmolLM-360M-Instruct-q4f16_1-MLC', {
       initProgressCallback: () => {
-        if (engineStatus === ENGINESTATUS.NOT_READY) {
-          engineStatus = ENGINESTATUS.LOADING;
+        if (engineStatus === ENGINE_STATUS.NOT_READY) {
+          engineStatus = ENGINE_STATUS.LOADING;
         }
       },
     });
 
-    engineStatus = ENGINESTATUS.READY;
+    engineStatus = ENGINE_STATUS.READY;
   } catch (error) {
     console.error('Error initializing engine', error);
   }
 }
 
 chrome.runtime.onConnect.addListener(async (port) => {
-  if (engineStatus === ENGINESTATUS.NOT_READY) {
-    await initEngine();
+  if (engineStatus === ENGINE_STATUS.NOT_READY) {
+    try {
+      await initEngine();
+      port.postMessage({
+        type: SERVICE_WORKER_MESSAGE_TYPE.engineReady,
+      });
+    } catch (error) {
+      console.error(error);
+    }
   }
-
-  port.postMessage({
-    type: SERVICEWORKERMESSAGETYPE.ENGINE_READY,
-  });
 
   port.onMessage.addListener(async (message: ServiceWorkerPayload) => {
     switch (message.type) {
-      case SERVICEWORKERMESSAGETYPE.GENERATE_COMPLETION: {
+      case SERVICE_WORKER_MESSAGE_TYPE.generateCompletion: {
         if (!engine) {
           console.error('Engine is not ready');
           return;
@@ -72,6 +75,10 @@ chrome.runtime.onConnect.addListener(async (port) => {
 
         break;
       }
+
+      case SERVICE_WORKER_MESSAGE_TYPE.updateExtensionIcon:
+        setCorrectIconByUserPreferences();
+        break;
 
       default:
         break;
