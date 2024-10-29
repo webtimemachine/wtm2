@@ -10,7 +10,7 @@ import { Dock, DockIcon } from '@/components/ui/dock';
 const images = [
   {
     name: 'Home',
-    img: '/webtm.png',
+    img: '/webtm-nav-entries',
   },
   {
     name: 'Search',
