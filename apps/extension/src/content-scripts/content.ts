@@ -6,10 +6,12 @@ import { AnyNode } from 'domhandler';
 import {
   ServiceWorkerPayload,
   SERVICE_WORKER_MESSAGE_TYPE,
+  PORT,
 } from '../service-workers/types';
-import { apiClient } from '../utils/api.client';
 
-const port = chrome.runtime.connect({ name: 'web_llm_service_worker' });
+const serviceWorkerPort = chrome.runtime.connect({
+  name: PORT.serviceWorker,
+});
 
 function onUrlChange(callback: () => void) {
   let lastUrl = location.href;
@@ -85,9 +87,9 @@ export const postNavigationEntry = async () => {
         images,
       };
 
-      await apiClient.securedFetch('/api/navigation-entry', {
-        method: 'POST',
-        body: JSON.stringify(navigationEntry),
+      serviceWorkerPort.postMessage({
+        type: SERVICE_WORKER_MESSAGE_TYPE.createNavigationEntry,
+        navigationEntry,
       });
     }
   } catch (error) {
@@ -96,7 +98,9 @@ export const postNavigationEntry = async () => {
 };
 postNavigationEntry();
 
-port.onMessage.addListener(async function (payload: ServiceWorkerPayload) {
+serviceWorkerPort.onMessage.addListener(async function (
+  payload: ServiceWorkerPayload,
+) {
   if (payload.type === SERVICE_WORKER_MESSAGE_TYPE.engineReady) {
     const { accessToken, enabledLiteMode, stopTrackingEnabled, webLLMEnabled } =
       await chrome.storage.local.get([
@@ -108,17 +112,20 @@ port.onMessage.addListener(async function (payload: ServiceWorkerPayload) {
 
     const url = window.location.href;
 
-    if (!webLLMEnabled) return;
-    if (stopTrackingEnabled) return;
-    if (!accessToken) return;
-    if (enabledLiteMode) return;
-    if (url.startsWith('chrome://')) return;
+    const webLLMDisabled =
+      !webLLMEnabled ||
+      stopTrackingEnabled ||
+      !accessToken ||
+      enabledLiteMode ||
+      url.startsWith('chrome://');
+
+    if (webLLMDisabled) return;
 
     const htmlContent = DOMtoString('body');
 
     const content = getSemanticMarkdownForLLM(htmlContent);
 
-    port.postMessage({
+    serviceWorkerPort.postMessage({
       type: SERVICE_WORKER_MESSAGE_TYPE.generateCompletion,
       content,
       url: window.location.href,

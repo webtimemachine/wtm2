@@ -30,7 +30,11 @@ export type ServiceWorkerPayload =
     };
 
 export enum ENGINE_STATUS {
-  READY = 'ready',
-  NOT_READY = 'not_ready',
-  LOADING = 'loading',
+  ready = 'ready',
+  notReady = 'not_ready',
+  loading = 'loading',
+}
+
+export enum PORT {
+  serviceWorker = 'webtm_service_worker',
 }
