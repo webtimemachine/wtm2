@@ -11,10 +11,12 @@ export default function Downloads() {
       justify={'center'}
       w='100%'
     >
-      <div className='border border-gray-300 w-full p-10 rounded-lg space-y-8 shadow-lg'>
+      <div className='sm:border sm:border-gray-300 w-full p-10 rounded-lg space-y-8 sm:shadow-lg'>
         <Stack className='text-center'>
-          <h1 className='font-semibold text-4xl'>Downloads</h1>
-          <h2>Download WebTM for your favorite browser</h2>
+          <h1 className='font-semibold text-2xl sm:text-4xl'>Downloads</h1>
+          <h2 className='text-sm sm:text-base'>
+            Download WebTM for your favorite browser
+          </h2>
         </Stack>
 
         <Stack alignItems={'center'}>
