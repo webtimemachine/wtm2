@@ -10,6 +10,9 @@ export const manifestFirefox: ManifestV3Export = {
     gecko: {
       id: '{5790cffd-a2b7-4cb6-ad05-c5b955ddee3e}',
     },
+    gecko_android: {
+      id: '{5790cffd-a2b7-4cb6-ad05-c5b955ddee3e}',
+    },
   },
   permissions: ['tabs', 'activeTab', 'storage', 'scripting'],
   action: {
