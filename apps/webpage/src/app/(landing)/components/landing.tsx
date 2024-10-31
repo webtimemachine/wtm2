@@ -9,15 +9,15 @@ import { Dock, DockIcon } from '@/components/ui/dock';
 
 const images = [
   {
-    name: 'Home',
+    name: 'Nav Entries View',
     img: '/webtm-nav-entries.png',
   },
   {
-    name: 'Search',
+    name: 'Search View',
     img: '/webtm-search.png',
   },
   {
-    name: 'Preferences',
+    name: 'Preferences View',
     img: '/webtm-preferences.png',
   },
 ];
@@ -161,7 +161,7 @@ export const Landing: React.FC = () => {
         id='photos'
         className='sm:p-10 sm:bg-white/30 sm:border sm:border-neutral-300 sm:rounded-lg sm:shadow-lg relative sm:overflow-hidden gap-10 flex flex-col w-full'
       >
-        <div className='flex flex-col sm:flex-row gap-4'>
+        <div className='flex flex-col sm:flex-row gap-4 sm:justify-evenly'>
           {images.map((image, idx) => (
             <BlurFade
               key={image.img}
@@ -170,7 +170,7 @@ export const Landing: React.FC = () => {
               inView
             >
               <Image
-                className='size-full rounded-lg object-contain'
+                className='size-full rounded-lg object-cover'
                 width={600}
                 height={600}
                 src={image.img}
