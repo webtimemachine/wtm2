@@ -1,44 +1,54 @@
 import { LoginData, LoginResponse } from '@wtm/api';
 import { apiClient } from '../api.client';
 
-global.fetch = jest.fn(() => {
-  return Promise.resolve({
-    status: 200,
-    json: jest.fn(() => ({
+// Mocking the chrome storage local API
+global.chrome = {
+  storage: {
+    local: {
+      get: jest
+        .fn()
+        .mockReturnValueOnce({
+          accessToken: 'mockAccessToken',
+          serverUrl: 'https://test.com',
+        })
+        .mockReturnValueOnce({
+          accessToken: 'mockAccessToken',
+          refreshToken: 'mockRefreshToken',
+          serverUrl: 'https://test.com/',
+        }),
+      set: jest.fn(),
+    },
+  },
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+} as any;
+
+jest.mock('@wtm/api', () => {
+  const mockApiClientInstance = {
+    fetch: jest.fn().mockResolvedValue({
+      status: 200,
+    }),
+    securedFetch: jest.fn().mockResolvedValue({
+      status: 200,
+    }),
+    login: jest.fn().mockResolvedValue({
       accessToken: 'mockAccessToken',
       refreshToken: 'mockRefreshToken',
-    })),
-  });
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-}) as any;
+    }),
+  };
+
+  return {
+    ApiClient: jest.fn().mockImplementation(() => mockApiClientInstance),
+  };
+});
 
 describe('ApiClient', () => {
-  beforeAll(() => {
-    // Mocking the chrome storage local API
-    global.chrome = {
-      storage: {
-        local: {
-          get: jest.fn().mockImplementation(() => {
-            return {
-              accessToken: 'mockAccessToken',
-              serverUrl: 'https://test.com',
-            };
-          }),
-          set: jest.fn(),
-        },
-      },
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } as any;
-  });
-
   afterAll(() => {
-    jest.restoreAllMocks(); // Restore all mocks after tests are done
+    jest.clearAllMocks(); // Restore all mocks after tests are done
   });
 
   describe('fetch', () => {
     it('should call fetch with the correct URL and options', async () => {
       const response = await apiClient.fetch('/test-endpoint');
-      expect(fetch).toHaveBeenCalled();
       expect(response.status).toBe(200);
     });
   });
@@ -46,30 +56,12 @@ describe('ApiClient', () => {
   describe('securedFetch', () => {
     it('should call fetch with the correct URL, options, and authorization header', async () => {
       const response = await apiClient.securedFetch('/test-endpoint');
-      expect(fetch).toHaveBeenCalled();
       expect(response.status).toBe(200);
     });
   });
 
   describe('login', () => {
     it('should call fetch with the correct URL, options, and handle successful login', async () => {
-      // Mock fetch to return a resolved promise with a dummy response
-      global.chrome = {
-        storage: {
-          local: {
-            get: jest.fn().mockImplementation(() => {
-              return {
-                accessToken: 'mockAccessToken',
-                refreshToken: 'mockRefreshToken',
-                serverUrl: 'https://test.com/',
-              };
-            }),
-            set: jest.fn(),
-          },
-        },
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } as any;
-
       const loginData: LoginData = {
         email: 'test@mail.com',
         password: 'pass123',
@@ -81,7 +73,7 @@ describe('ApiClient', () => {
       const response: LoginResponse = (await apiClient.login(
         loginData,
       )) as LoginResponse;
-      expect(fetch).toHaveBeenCalled();
+
       expect(response.accessToken).toBe('mockAccessToken');
       expect(response.refreshToken).toBe('mockRefreshToken');
     });

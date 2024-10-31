@@ -31,25 +31,12 @@ describe('ServerUrlEditable', () => {
   });
 
   test('renders the component with the default value', () => {
-    jest.mock('../../hooks', () => ({
-      useServerUrl: {
-        serverUrl: 'http://example.com',
-        setServerUrl: mockSetServerUrl,
-      },
-    }));
     customRender(<ServerUrlEditable />, {});
 
     expect(screen.getByText('http://example.com')).toBeInTheDocument();
   });
 
   test('allows editing and saving a valid URL', () => {
-    jest.mock('../../hooks', () => ({
-      useServerUrl: {
-        serverUrl: 'http://example.com',
-        setServerUrl: mockSetServerUrl,
-      },
-    }));
-
     customRender(<ServerUrlEditable />, {});
 
     fireEvent.click(screen.getByLabelText('Edit'));
