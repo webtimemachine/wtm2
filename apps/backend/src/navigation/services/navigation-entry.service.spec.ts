@@ -211,7 +211,15 @@ jest.mock('@langchain/openai', () => {
   return {
     OpenAI: jest.fn().mockImplementation(() => {
       return {
-        invoke: jest.fn().mockResolvedValue('relevant content'),
+        invoke: jest.fn().mockResolvedValue(
+          JSON.stringify({
+            data: {
+              content: 'relevant content',
+              tags: [],
+              source: 'example1.com',
+            },
+          }),
+        ),
       };
     }),
     ChatOpenAI: jest.fn().mockImplementation(() => {
@@ -318,9 +326,24 @@ describe('NavigationEntryService', () => {
       prismaService.navigationEntry.findFirst = jest
         .fn()
         .mockReturnValue(createdNavigationEntry);
-      prismaService.navigationEntry.update = jest
+      prismaService.$transaction = jest
         .fn()
-        .mockReturnValue(createdNavigationEntry);
+        .mockImplementation(async (callback) => {
+          prismaService.navigationEntry.update = jest
+            .fn()
+            .mockResolvedValueOnce(createdNavigationEntry);
+
+          prismaService.entryTag.deleteMany = jest
+            .fn()
+            .mockResolvedValueOnce({ count: 1 });
+
+          prismaService.navigationEntry.create = jest
+            .fn()
+            .mockResolvedValueOnce(createdNavigationEntry);
+
+          return callback(prismaService);
+        });
+
       prismaService.userPreferences.findFirst = jest.fn().mockResolvedValue({
         enableImageEncoding: true,
         enableExplicitContentFilter: true,
