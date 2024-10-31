@@ -34,7 +34,7 @@ jobs:
 
       - name: Create ZIP file for Firefox
         run: |
-          zip -r firefox-extension.zip -j ./build/app_firefox/*
+          (cd ./build/app_firefox && zip -r ../../firefox-extension.zip .)
 
       - name: Upload & release
         uses: trmcnvn/firefox-addon@v1

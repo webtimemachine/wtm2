@@ -522,6 +522,7 @@ export class NavigationEntryService {
                   lt: expirationDate,
                 },
               },
+              take: 50,
             });
 
             await Promise.allSettled(
