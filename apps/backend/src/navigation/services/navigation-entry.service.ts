@@ -33,7 +33,15 @@ import { appEnv } from '../../config';
 import { subDays } from 'date-fns';
 import { CustomLogger } from '../../common/helpers/custom-logger';
 import { OpenAI } from '@langchain/openai';
-
+import { z } from 'zod';
+const SummaryPromptSchema = z.object({
+  data: z.object({
+    content: z.string(),
+    tags: z.array(z.string()),
+    source: z.string(),
+  }),
+});
+type SummaryPromptResponse = z.infer<typeof SummaryPromptSchema>;
 @Injectable()
 export class NavigationEntryService {
   private readonly logger = new CustomLogger(NavigationEntryService.name);
@@ -72,7 +80,6 @@ export class NavigationEntryService {
       jwtContext,
       completeNavigationEntry.userDevice,
     );
-
     const completeNavigationEntryDto = plainToInstance(
       CompleteNavigationEntryDto,
       {
@@ -86,6 +93,9 @@ export class NavigationEntryService {
         ),
         relevantSegment,
         aiGeneratedContent: completeNavigationEntry.aiGeneratedContent,
+        tags:
+          completeNavigationEntry?.entryTags?.map((entry) => entry.tag.name) ||
+          [],
       },
     );
     completeNavigationEntryDto.userDevice = userDeviceDto;
@@ -116,7 +126,30 @@ export class NavigationEntryService {
       return navigationEntryExpirationInDays;
     }
   }
-
+  private async saveTags(
+    navEntry: NavigationEntry,
+    parsedData: SummaryPromptResponse,
+    prismaClient: Prisma.TransactionClient,
+  ) {
+    const tags = parsedData.data.tags;
+    await Promise.all(
+      tags.map(async (tag) => {
+        const savedTag = await prismaClient.tag.upsert({
+          create: {
+            name: tag,
+          },
+          where: { name: tag },
+          update: {},
+        });
+        await prismaClient.entryTag.create({
+          data: {
+            entryId: navEntry.id,
+            tagId: savedTag.id,
+          },
+        });
+      }),
+    );
+  }
   async createNavigationEntry(
     jwtContext: JwtContext,
     createNavigationEntryInputDto: CreateNavigationEntryInputDto,
@@ -190,20 +223,16 @@ export class NavigationEntryService {
 
       # OUTPUT SECTIONS
 
-      - Combine all of your understanding of the content into a single, 20-word sentence in a section called Search Summary:.
-
+      - Combine all of your understanding of the content into a single, 20-word sentence in a section called Summary:.
       - Output the 10 if exists, including most important points of the content as a list with no more than 15 words per point into a section called Main Points:.
-
       - Output a list of the 5 best takeaways from the content in a section called Takeaways:.
-
       - Output code must be formatted with Prettier like.
-
       - Output a section named Code: that shows a list of code present in INPUT content in markdown
-
-      - Output a section named Tags found: that shows in a list of tags you find
+      - All previous outputs must be inside a property called content, which contains a single string with all the markdown
+      - Output a property on the object called tags that shows in a list of the most relevant tags present in the input content
+      - Output a property on the object called source that has the link of the content in a string
 
       # OUTPUT INSTRUCTIONS
-
       - Create the output using the formatting above.
       - You only output human readable Markdown.
       - Sections MUST be in capital case.
@@ -218,6 +247,14 @@ export class NavigationEntryService {
       - Detect code and apply format to it.
       - The wrapped tags must be tags that you find from page information.
       - Tags must be a link that redirects to source url.
+      - The object result must be in JSON format
+      - Object must be clean, the response starts with { and finishes with }
+      - Objects value is: data
+      - Object MUST have the following unique properties inside data: content, tags, source
+      - Each tag in object must be a list of strings
+      - Each tags name must be un uppercase, if a space or a . separates 2 words, apply a _ for separating
+      - Quantity of tags must be lower to 5
+      - Tags language must be en english, no matter the language of the content.
       # INPUT:
 
       INPUT:
@@ -229,32 +266,48 @@ export class NavigationEntryService {
       `;
 
     const formattedResult = await openai.invoke([formatPrompt]);
+    const jsonParseFormattedResult = JSON.parse(formattedResult);
+    const parsedData = SummaryPromptSchema.safeParse(jsonParseFormattedResult);
 
-    if (lastEntry?.url === createNavigationEntryInputDto.url) {
-      await this.prismaService.navigationEntry.update({
-        where: {
-          id: lastEntry.id,
-        },
-        data: {
-          liteMode,
-          userDeviceId: jwtContext.session.userDeviceId,
-          aiGeneratedContent: formattedResult,
-          ...entryData,
-        },
-        include: completeNavigationEntryInclude,
-      });
-    } else {
-      await this.prismaService.navigationEntry.create({
-        data: {
-          liteMode,
-          userId: jwtContext.user.id,
-          userDeviceId: jwtContext.session.userDeviceId,
-          aiGeneratedContent: formattedResult,
-          ...entryData,
-        },
-        include: completeNavigationEntryInclude,
-      });
-    }
+    await this.prismaService.$transaction(async (prismaClient) => {
+      if (
+        lastEntry?.url === createNavigationEntryInputDto.url &&
+        parsedData.success
+      ) {
+        const navEntry = await prismaClient.navigationEntry.update({
+          where: {
+            id: lastEntry.id,
+          },
+          data: {
+            liteMode,
+            userDeviceId: jwtContext.session.userDeviceId,
+            aiGeneratedContent: parsedData.data?.data.content,
+            ...entryData,
+          },
+          include: completeNavigationEntryInclude,
+        });
+        await prismaClient.entryTag.deleteMany({
+          where: {
+            entryId: navEntry.id,
+          },
+        });
+        await this.saveTags(navEntry, parsedData.data, prismaClient);
+      } else {
+        if (parsedData.success) {
+          const navEntry = await prismaClient.navigationEntry.create({
+            data: {
+              liteMode,
+              userId: jwtContext.user.id,
+              userDeviceId: jwtContext.session.userDeviceId,
+              aiGeneratedContent: parsedData.data?.data.content,
+              ...entryData,
+            },
+            include: completeNavigationEntryInclude,
+          });
+          await this.saveTags(navEntry, parsedData.data, prismaClient);
+        }
+      }
+    });
 
     return;
   }

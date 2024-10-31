@@ -123,10 +123,11 @@ model NavigationEntry {
   userDeviceId BigInt
   userDevice   UserDevice @relation(fields: [userDeviceId], references: [id])
 
-  createdAt           DateTime                @default(now()) @db.Timestamptz(0)
-  updateAt            DateTime?               @updatedAt @db.Timestamptz(0)
-  aiGeneratedContent  String                  @db.Text @default("")
-  queries             NavigationEntryQuery[]
+  createdAt          DateTime               @default(now()) @db.Timestamptz(0)
+  updateAt           DateTime?              @updatedAt @db.Timestamptz(0)
+  aiGeneratedContent String                 @default("") @db.Text
+  queries            NavigationEntryQuery[]
+  entryTags          EntryTag[]
 
   @@map("navigation_entry")
 }
@@ -157,4 +158,22 @@ model BlackList {
   flaggedAt DateTime @default(now()) @db.Timestamptz(0)
 
   @@map("black_list")
+}
+
+model EntryTag {
+  id      BigInt          @id @default(autoincrement())
+  entryId BigInt
+  tagId   BigInt
+  entry   NavigationEntry @relation(fields: [entryId], references: [id], onDelete: Cascade)
+  tag     Tag             @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@map("entry_tag")
+}
+
+model Tag {
+  id        BigInt     @id @default(autoincrement())
+  name      String     @unique @db.VarChar()
+  entryTags EntryTag[]
+
+  @@map("tag")
 }

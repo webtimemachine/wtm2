@@ -12,6 +12,7 @@ export interface CompleteNavigationEntryDto {
   expirationDate?: Date;
   relevantSegment?: string;
   aiGeneratedContent: string;
+  tags?: string[];
 }
 
 export interface GetNavigationEntriesResponse {
