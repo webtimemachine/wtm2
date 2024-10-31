@@ -98,8 +98,8 @@ const RelevantSegment = ({
       </Text>
       <div className='w-full flex justify-center items-center gap-5 flex-wrap'>
         {tags &&
-          tags.map((tag: string) => (
-            <Badge colorScheme={getRandomColor()}>
+          tags.map((tag: string, index: number) => (
+            <Badge key={index} colorScheme={getRandomColor()}>
               {tag.replace('_', ' ')}
             </Badge>
           ))}
