@@ -3,11 +3,14 @@ import { ManifestV3Export } from '@crxjs/vite-plugin';
 export const manifestFirefox: ManifestV3Export = {
   manifest_version: 3,
   name: 'WebTM',
-  version: '1.6.4',
+  version: '1.6.6',
   description:
     'WebTM is a cross-platform solution to integrate the navigation history between desktop and mobile web browsers.',
   browser_specific_settings: {
     gecko: {
+      id: '{5790cffd-a2b7-4cb6-ad05-c5b955ddee3e}',
+    },
+    gecko_android: {
       id: '{5790cffd-a2b7-4cb6-ad05-c5b955ddee3e}',
     },
   },

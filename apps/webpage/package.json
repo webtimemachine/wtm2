@@ -1,6 +1,6 @@
 {
   "name": "@wtm/webpage",
-  "version": "1.6.4",
+  "version": "1.6.6",
   "private": true,
   "scripts": {
     "dev": "next dev",
