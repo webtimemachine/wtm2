@@ -146,6 +146,7 @@ const createdNavigationEntry: CompleteNavigationEntryDto = {
   },
   navigationDate,
   aiGeneratedContent: 'AI Generated Content',
+  tags: [],
 };
 
 const mockedEntry: CompleteNavigationEntry = {
@@ -277,29 +278,25 @@ describe('NavigationEntryService', () => {
       const mockIndex = jest
         .spyOn(indexerService, 'index')
         .mockImplementation();
-
       const mockFilter = jest
         .spyOn(explicitFilterService, 'filter')
         .mockImplementation();
-
       prismaService.navigationEntry.findFirst = jest
         .fn()
         .mockReturnValue(mockedEntry);
       prismaService.navigationEntry.create = jest
         .fn()
         .mockReturnValue(createdNavigationEntry);
-
       prismaService.navigationEntry.count = jest.fn().mockReturnValue(1);
       prismaService.userPreferences.findFirst = jest.fn().mockResolvedValue({
         enableImageEncoding: true,
         enableExplicitContentFilter: true,
       });
-
       await navigationEntryService.createNavigationEntry(
         jwtContext,
         createNavigationEntryInputDto,
       );
-
+      console.log('asd');
       expect(mockIndex).toHaveBeenCalledWith(
         'Test content',
         [],
@@ -312,12 +309,10 @@ describe('NavigationEntryService', () => {
         'https://example.com',
       );
     });
-
     it('should create a new navigation entry successfully on repetitive entry', async () => {
       const mockIndex = jest
         .spyOn(indexerService, 'index')
         .mockImplementation();
-
       const mockFilter = jest
         .spyOn(explicitFilterService, 'filter')
         .mockImplementation();
@@ -331,12 +326,10 @@ describe('NavigationEntryService', () => {
         enableImageEncoding: true,
         enableExplicitContentFilter: true,
       });
-
       await navigationEntryService.createNavigationEntry(
         jwtContext,
         createNavigationEntryInputDto,
       );
-
       expect(mockIndex).toHaveBeenCalledWith(
         'Test content',
         [],
