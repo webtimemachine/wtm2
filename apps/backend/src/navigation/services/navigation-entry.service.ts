@@ -266,11 +266,7 @@ export class NavigationEntryService {
       `;
 
     const formattedResult = await openai.invoke([formatPrompt]);
-
-    let jsonParseFormattedResult;
-    try {
-      jsonParseFormattedResult = JSON.parse(formattedResult);
-    } catch (error) {}
+    const jsonParseFormattedResult = JSON.parse(formattedResult);
 
     const parsedData = SummaryPromptSchema.safeParse(jsonParseFormattedResult);
 
