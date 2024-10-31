@@ -266,7 +266,12 @@ export class NavigationEntryService {
       `;
 
     const formattedResult = await openai.invoke([formatPrompt]);
-    const jsonParseFormattedResult = JSON.parse(formattedResult);
+
+    let jsonParseFormattedResult;
+    try {
+      jsonParseFormattedResult = JSON.parse(formattedResult);
+    } catch (error) {}
+
     const parsedData = SummaryPromptSchema.safeParse(jsonParseFormattedResult);
 
     await this.prismaService.$transaction(async (prismaClient) => {
