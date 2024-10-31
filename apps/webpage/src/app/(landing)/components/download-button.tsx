@@ -1,10 +1,11 @@
 'use client';
 
 import { BROWSERS, getBrowser } from '@wtm/utils';
-import { Button, Link } from '@chakra-ui/react';
+import { Link } from '@chakra-ui/react';
 import NextLink from 'next/link';
 import { ReactElement, useEffect, useState } from 'react';
 import { FaBrave, FaChrome, FaFirefox, FaSafari } from 'react-icons/fa6';
+import ShimmerButton from '@/components/ui/shimmer-button';
 
 interface DownloadButtonProps {}
 
@@ -59,9 +60,7 @@ export const DownloadButton: React.FC<DownloadButtonProps> = ({}) => {
     <>
       {browserName === BROWSERS.UNKNOWN && (
         <Link as={NextLink} href='/downloads'>
-          <Button w='100%' colorScheme='blue'>
-            Download for your browser
-          </Button>
+          <ShimmerButton>Download for your browser</ShimmerButton>
         </Link>
       )}
       {browserName !== BROWSERS.UNKNOWN && (
@@ -70,13 +69,12 @@ export const DownloadButton: React.FC<DownloadButtonProps> = ({}) => {
           target='_blank'
           rel='noreferrer'
         >
-          <Button
-            w='100%'
-            colorScheme='yellow'
-            leftIcon={BROWSER_DATA[browserName].icon}
-          >
-            {BROWSER_DATA[browserName].text}
-          </Button>
+          <ShimmerButton background='#3182CE' className='hover:underline'>
+            <div className='flex items-center gap-2'>
+              {BROWSER_DATA[browserName].icon}
+              {BROWSER_DATA[browserName].text}
+            </div>
+          </ShimmerButton>
         </Link>
       )}
     </>
