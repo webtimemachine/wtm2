@@ -296,7 +296,6 @@ describe('NavigationEntryService', () => {
         jwtContext,
         createNavigationEntryInputDto,
       );
-      console.log('asd');
       expect(mockIndex).toHaveBeenCalledWith(
         'Test content',
         [],
