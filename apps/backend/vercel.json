@@ -22,7 +22,7 @@
   "crons": [
     {
       "path": "/api/navigation-entry/expired",
-      "schedule": "0 0 * * *"
+      "schedule": "*/30 0-3 * * *"
     }
   ]
 }
