@@ -292,10 +292,17 @@ describe('NavigationEntryService', () => {
       prismaService.navigationEntry.findFirst = jest
         .fn()
         .mockReturnValue(mockedEntry);
-      prismaService.navigationEntry.create = jest
+      prismaService.$transaction = jest
         .fn()
-        .mockReturnValue(createdNavigationEntry);
-      prismaService.navigationEntry.count = jest.fn().mockReturnValue(1);
+        .mockImplementation(async (callback) => {
+          prismaService.navigationEntry.create = jest
+            .fn()
+            .mockResolvedValueOnce(createdNavigationEntry);
+
+          prismaService.navigationEntry.count = jest.fn().mockReturnValue(1);
+
+          return callback(prismaService);
+        });
       prismaService.userPreferences.findFirst = jest.fn().mockResolvedValue({
         enableImageEncoding: true,
         enableExplicitContentFilter: true,
