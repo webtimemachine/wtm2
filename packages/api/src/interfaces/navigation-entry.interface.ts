@@ -12,6 +12,7 @@ export interface CompleteNavigationEntryDto {
   expirationDate?: Date;
   relevantSegment?: string;
   aiGeneratedContent: string;
+  tags?: string[];
 }
 
 export interface GetNavigationEntriesResponse {
@@ -27,6 +28,7 @@ export interface GetNavigationEntriesData {
   limit: number;
   query: string;
   isSemantic: boolean;
+  tag?: string;
 }
 
 export interface DeleteNavigationEntriesData {
