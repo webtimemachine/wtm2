@@ -99,15 +99,17 @@ const RelevantSegment = ({
       <Text textAlign={'center'} py={5}>
         Relevant tags found
       </Text>
-      <div className='w-full flex justify-center items-center gap-5 flex-wrap'>
+
+      <div className='w-full flex justify-center items-center gap-5 flex-wrap '>
         {tags &&
           tags.map((tag: string, index: number) => (
             <Badge
               onClick={() => setTag(tag)}
               key={index}
               colorScheme={getRandomColor()}
+              className='cursor-pointer'
             >
-              {tag.replace('_', ' ')}
+              <Text>{tag.replace('_', ' ')}</Text>
             </Badge>
           ))}
       </div>
@@ -377,7 +379,7 @@ const NavigationEntriesScreen: React.FC = () => {
         className='flex flex-col w-full h-full min-h-[350px] overflow-y-auto scrollbar pr-1'
       >
         {tag && tag.length > 0 && (
-          <div className='flex items-center gap-2'>
+          <div className='flex items-center gap-2 my-3'>
             <span className='text-sm '>Selected Tag:</span>{' '}
             <Badge colorScheme={getRandomColor()}>
               {tag.replace('_', ' ')}
