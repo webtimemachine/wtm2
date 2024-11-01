@@ -1,6 +1,8 @@
 import {
+  Badge,
   Button,
   Checkbox,
+  Divider,
   Icon,
   IconButton,
   Input,
@@ -66,11 +68,46 @@ const getPreProcessedMarkDown = (relevantSegment: string) => {
   markdown = markdown.replace(/\n{2,}/g, '\n\n');
   return markdown || '';
 };
-const RelevantSegment = ({ relevantSegment }: { relevantSegment: string }) => {
+const RelevantSegment = ({
+  relevantSegment,
+  tags,
+}: {
+  relevantSegment: string;
+  tags?: string[];
+}) => {
   const markdown = getPreProcessedMarkDown(relevantSegment);
+  const colorTags: { [key: number]: string } = {
+    0: 'teal',
+    1: 'red',
+    2: 'orange',
+    3: 'green',
+    4: 'purple',
+    5: 'yellow',
+    6: 'blue',
+    7: 'cyan',
+    8: 'pink',
+  };
+  const getRandomColor = (): string => {
+    const keys = Object.keys(colorTags).map(Number) as Array<
+      keyof typeof colorTags
+    >;
+    const randomKey = keys[Math.floor(Math.random() * keys.length)];
+    return colorTags[randomKey];
+  };
   return (
     <div>
-      <p className='font-semibold mb-4'>Most relevant match</p>
+      <Text textAlign={'center'} py={5} fontSize={'large'}>
+        Relevant tags found
+      </Text>
+      <div className='w-full flex justify-center items-center gap-5 flex-wrap'>
+        {tags &&
+          tags.map((tag: string, index: number) => (
+            <Badge key={index} colorScheme={getRandomColor()}>
+              {tag.replace('_', ' ')}
+            </Badge>
+          ))}
+      </div>
+      <Divider py={5} />
       <div className='markdown-content'>
         <Markdown>{markdown}</Markdown>
       </div>
@@ -167,7 +204,10 @@ const NavigationEntry = ({
         </div>
       </div>
       {element.aiGeneratedContent && visible && (
-        <RelevantSegment relevantSegment={element.aiGeneratedContent} />
+        <RelevantSegment
+          relevantSegment={element.aiGeneratedContent}
+          tags={element.tags}
+        />
       )}
     </div>
   );
