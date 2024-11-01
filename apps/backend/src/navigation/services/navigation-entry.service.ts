@@ -356,8 +356,7 @@ export class NavigationEntryService {
     jwtContext: JwtContext,
     queryParams: GetNavigationEntryDto,
   ): Promise<PaginationResponse<CompleteNavigationEntryDto>> {
-    const { limit, offset, query, isSemantic } = queryParams;
-
+    const { limit, offset, query, isSemantic, tag } = queryParams;
     const navigationEntryExpirationInDays =
       this.getNavigationEntryExpirationInDays(jwtContext.user);
 
@@ -377,7 +376,9 @@ export class NavigationEntryService {
             query,
             jwtContext.user.id,
           );
-          whereQuery = { url: { in: [...searchResults.urls!] } };
+          whereQuery = {
+            url: { in: [...searchResults.urls!] },
+          };
           mostRelevantResults = searchResults.mostRelevantResults;
         } catch (error: unknown) {
           if (
@@ -415,6 +416,18 @@ export class NavigationEntryService {
       },
     });
 
+    whereQuery = {
+      ...whereQuery,
+      ...(tag && {
+        entryTags: {
+          some: {
+            tag: {
+              name: tag,
+            },
+          },
+        },
+      }),
+    };
     const completeNavigationEntries: CompleteNavigationEntry[] =
       await this.prismaService.navigationEntry.findMany({
         where: {
