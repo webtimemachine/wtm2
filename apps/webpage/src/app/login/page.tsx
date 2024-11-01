@@ -35,7 +35,6 @@ const LoginScreen: React.FC<{}> = () => {
   const [emailError, setEmailError] = useState('');
 
   const authState = readAuthStateFromLocal();
-  const { navigateTo: navigateToScreen } = useNavigation();
 
   const validateInputs = () => {
     let emailErrorFound = false;
@@ -80,7 +79,7 @@ const LoginScreen: React.FC<{}> = () => {
   // For redirection if user is logged in.
   useEffect(() => {
     if (authState && authState.isLoggedIn) {
-      navigateToScreen('navigation-entries');
+      navigateTo('navigation-entries');
     }
   }, [authState]);
 

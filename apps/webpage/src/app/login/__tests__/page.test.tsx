@@ -4,7 +4,6 @@ import { ChakraProvider } from '@chakra-ui/react';
 import { useLogin } from '../../../hooks';
 import { useAuthStore, useNavigation } from '../../../store';
 import LoginScreen from '../page';
-import { isLoginRes } from '@wtm/api';
 
 // Mock de ServerUrlEditable
 jest.mock('../../../components', () => ({
@@ -26,7 +25,7 @@ jest.mock('../../../store', () => ({
 jest.mock('clsx');
 
 jest.mock('@wtm/api', () => ({
-  isLoginRes: jest.fn(),
+  isLoginRes: jest.fn().mockReturnValueOnce(true).mockReturnValueOnce(false),
 }));
 
 jest.mock('@wtm/utils', () => ({
@@ -98,6 +97,22 @@ describe('LoginScreen', () => {
     jest.clearAllMocks();
   });
 
+  test('navigates to correct screen on success', async () => {
+    customRender(<LoginScreen />);
+
+    await waitFor(() =>
+      expect(mockNavigateTo).toHaveBeenCalledWith('navigation-entries'),
+    );
+  });
+
+  test('navigates to validate-email when login response with partialToken', async () => {
+    customRender(<LoginScreen />);
+
+    await waitFor(() =>
+      expect(mockNavigateTo).toHaveBeenCalledWith('validate-email'),
+    );
+  });
+
   test('renders the component with initial state', () => {
     customRender(<LoginScreen />);
 
@@ -160,30 +175,6 @@ describe('LoginScreen', () => {
     const signInButton = screen.getByText('Sign In') as HTMLButtonElement;
 
     expect(signInButton.disabled).toBeTruthy();
-  });
-
-  test('navigates to correct screen on success', async () => {
-    (isLoginRes as jest.MockedFunction<typeof isLoginRes>).mockReturnValue(
-      true,
-    );
-
-    customRender(<LoginScreen />);
-
-    await waitFor(() =>
-      expect(mockNavigateTo).toHaveBeenCalledWith('navigation-entries'),
-    );
-  });
-
-  test('navigates to validate-email when login response with partialToken', async () => {
-    (isLoginRes as jest.MockedFunction<typeof isLoginRes>).mockReturnValue(
-      false,
-    );
-
-    customRender(<LoginScreen />);
-
-    await waitFor(() =>
-      expect(mockNavigateTo).toHaveBeenCalledWith('validate-email'),
-    );
   });
 
   test('toggles password visibility', () => {

@@ -14,7 +14,10 @@ jest.mock('@wtm/utils', () => ({
 
 jest.mock('../../utils/api.client', () => ({
   apiClient: {
-    securedFetch: jest.fn(),
+    securedFetch: jest.fn().mockResolvedValueOnce({
+      status: 200,
+      json: jest.fn(),
+    }),
   },
 }));
 
@@ -34,11 +37,6 @@ describe('postNavigationEntry', () => {
   it('should post navigation entry successfully when accessToken is available and URL is valid', async () => {
     const mockUrl = 'https://example.com';
     const mockTitle = 'Example Title';
-
-    (apiClient.securedFetch as jest.Mock).mockResolvedValueOnce({
-      status: 200,
-      json: jest.fn(),
-    });
 
     global.window = Object.create(window);
     Object.defineProperty(window, 'location', {
