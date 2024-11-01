@@ -28,6 +28,7 @@ export interface GetNavigationEntriesData {
   limit: number;
   query: string;
   isSemantic: boolean;
+  tag?: string;
 }
 
 export interface DeleteNavigationEntriesData {
