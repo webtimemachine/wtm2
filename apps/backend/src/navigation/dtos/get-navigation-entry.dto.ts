@@ -17,4 +17,10 @@ export class GetNavigationEntryDto extends GetPaginationsParamsDto {
     return value === 'true' ? true : false;
   })
   isSemantic: boolean;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsString()
+  @Type(() => String)
+  tag?: string;
 }
