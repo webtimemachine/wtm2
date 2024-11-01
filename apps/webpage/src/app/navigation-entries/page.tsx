@@ -379,7 +379,7 @@ const NavigationEntriesScreen: React.FC = () => {
         className='flex flex-col w-full h-full min-h-[350px] overflow-y-auto scrollbar pr-1'
       >
         {tag && tag.length > 0 && (
-          <div className='flex items-center gap-2 my-3'>
+          <div className='flex items-center gap-2 py-3'>
             <span className='text-sm '>Selected Tag:</span>{' '}
             <Badge colorScheme={getRandomColor()}>
               {tag.replace('_', ' ')}
