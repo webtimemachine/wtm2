@@ -195,7 +195,7 @@ jobs:
       - name: Download iOS artifact
         uses: actions/download-artifact@v3
         with:
-          name: backend-build-zip
+          name: webtm-ipa
           path: .
 
       - name: Create Release
@@ -245,6 +245,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: 'webtm.ipa'
-          asset_name: webtm.ipa
+          asset_path: 'wtm.ipa'
+          asset_name: wtm.ipa
           asset_content_type: application/octet-stream
