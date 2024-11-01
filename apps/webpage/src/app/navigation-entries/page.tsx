@@ -47,6 +47,25 @@ import clsx from 'clsx';
 
 import Markdown from 'react-markdown';
 import { BiTrash } from 'react-icons/bi';
+import { CgCloseO } from 'react-icons/cg';
+const getRandomColor = (): string => {
+  const colorTags: { [key: number]: string } = {
+    0: 'teal',
+    1: 'red',
+    2: 'orange',
+    3: 'green',
+    4: 'purple',
+    5: 'yellow',
+    6: 'blue',
+    7: 'cyan',
+    8: 'pink',
+  };
+  const keys = Object.keys(colorTags).map(Number) as Array<
+    keyof typeof colorTags
+  >;
+  const randomKey = keys[Math.floor(Math.random() * keys.length)];
+  return colorTags[randomKey];
+};
 const getPreProcessedMarkDown = (relevantSegment: string) => {
   const emptyListPatterns = [
     /\*\n(\*\n)*/g, // matches lines with only *
@@ -65,19 +84,36 @@ const getPreProcessedMarkDown = (relevantSegment: string) => {
   return markdown || '';
 };
 
-const RelevantSegment = ({ relevantSegment }: { relevantSegment: string }) => {
+const RelevantSegment = ({
+  relevantSegment,
+  tags,
+  setTag,
+}: {
+  relevantSegment: string;
+  tags?: string[];
+  setTag: (tag: string) => void;
+}) => {
   const markdown = getPreProcessedMarkDown(relevantSegment);
-
   return (
     <div>
-      <div className='relative p-5'>
-        <Divider />
-        <div className='absolute left-1/2 top-0 h-full transform -translate-x-1/2 bg-white px-4 flex justify-center items-center'>
-          <p className='font-bold truncate text-gray-600'>
-            Most relevant match
-          </p>
-        </div>
+      <Text textAlign={'center'} py={5}>
+        Relevant tags found
+      </Text>
+
+      <div className='w-full flex justify-center items-center gap-5 flex-wrap '>
+        {tags &&
+          tags.map((tag: string, index: number) => (
+            <Badge
+              onClick={() => setTag(tag)}
+              key={index}
+              colorScheme={getRandomColor()}
+              className='cursor-pointer'
+            >
+              <Text>{tag.replace('_', ' ')}</Text>
+            </Badge>
+          ))}
       </div>
+      <Divider py={5} />
       <div className='markdown-content'>
         <Markdown>{markdown}</Markdown>
       </div>
@@ -96,6 +132,7 @@ const NavigationEntriesScreen: React.FC = () => {
   const [page, setPage] = useState<number>(0);
   const [query, setQuery] = useState<string>('');
   const [isSemantic, setIsSemantic] = useState<boolean>(true);
+  const [tag, setTag] = useState<string>('');
   const [isBulkDeleteOn, setIsBulkDeleteOn] = useState<boolean>(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [loading, setLoading] = useState<boolean>(false);
@@ -111,6 +148,7 @@ const NavigationEntriesScreen: React.FC = () => {
     limit,
     query,
     isSemantic,
+    tag,
   });
 
   const navigationEntries = navigationEntriesQuery?.data?.items || [];
@@ -124,6 +162,7 @@ const NavigationEntriesScreen: React.FC = () => {
     isSemantic,
     deleteNavigationEntryMutation?.isSuccess,
     deleteBulkNavigationEntriesMutation?.isSuccess,
+    tag,
   ]);
 
   useEffect(() => {
@@ -173,7 +212,6 @@ const NavigationEntriesScreen: React.FC = () => {
       .filter((x) => !x);
     return truthArr.length > 0;
   }, [selectedForDelete, navigationEntries]);
-
   return (
     <div className='flex flex-col h-full'>
       <div className='flex flex-col w-full'>
@@ -340,6 +378,23 @@ const NavigationEntriesScreen: React.FC = () => {
         id='content'
         className='flex flex-col w-full h-full min-h-[350px] overflow-y-auto scrollbar pr-1'
       >
+        {tag && tag.length > 0 && (
+          <div className='flex items-center gap-2 py-3'>
+            <span className='text-sm '>Selected Tag:</span>{' '}
+            <Badge colorScheme={getRandomColor()}>
+              {tag.replace('_', ' ')}
+            </Badge>
+            <Tooltip label={'Remove tag'}>
+              <Button
+                size={'small'}
+                variant={'link'}
+                onClick={() => setTag('')}
+              >
+                <CgCloseO />
+              </Button>
+            </Tooltip>
+          </div>
+        )}
         {navigationEntries && navigationEntries.length ? (
           navigationEntries.map((element: CompleteNavigationEntryDto, i) => {
             const BrowserIcon = getBrowserIconFromDevice(
@@ -371,6 +426,7 @@ const NavigationEntriesScreen: React.FC = () => {
                   },
                   currentSelectedEntries: selectedForDelete,
                 }}
+                setTag={setTag}
               />
             );
           })
@@ -437,6 +493,7 @@ export interface NavigationEntryProps {
     onSelect: (id: number, add: boolean) => any;
     currentSelectedEntries: number[];
   };
+  setTag: (tag: string) => void;
 }
 
 const NavigationEntry: React.FC<NavigationEntryProps> = ({
@@ -444,13 +501,17 @@ const NavigationEntry: React.FC<NavigationEntryProps> = ({
   BrowserIcon,
   deleteNavEntry,
   deleteProps,
+  setTag,
 }: NavigationEntryProps) => {
   const [visible, setVisible] = useState<boolean>(false);
 
   useEffect(() => {
     setVisible(false);
   }, [element]);
-
+  const variatedSetTag = (tag: string) => {
+    setTag(tag);
+    setVisible(false);
+  };
   return (
     <div className='flex flex-col w-full bg-white px-2 py-1 rounded-lg mb-1 gap-3'>
       <div key={element.id} className='flex items-center justify-between'>
@@ -520,7 +581,11 @@ const NavigationEntry: React.FC<NavigationEntryProps> = ({
         </div>
       </div>
       {element.aiGeneratedContent && visible && (
-        <RelevantSegment relevantSegment={element.aiGeneratedContent} />
+        <RelevantSegment
+          relevantSegment={element.aiGeneratedContent}
+          tags={element?.tags}
+          setTag={variatedSetTag}
+        />
       )}
     </div>
   );
