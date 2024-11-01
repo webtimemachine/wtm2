@@ -32,6 +32,12 @@ jobs:
           name: chrome-build-zip
           path: chrome-extension.zip
 
+      - name: Upload ExportOptions artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: export-options-file
+          path: apps/extension/ExportOptions.plist
+
       - name: Upload Firefox artifact
         uses: actions/upload-artifact@v3
         with:
@@ -129,6 +135,12 @@ jobs:
         run: |
           unzip chrome-extension.zip -d app_chrome
           rm chrome-extension.zip
+
+      - name: Download ExportOptions artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: export-options-file
+          path: 'native/app_ios/wtm/'
 
       - name: Build and archive iOS app
         working-directory: 'native/app_ios/wtm'
