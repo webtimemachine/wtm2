@@ -368,6 +368,7 @@ export class NavigationEntryService {
       );
     }
     let whereQuery: Prisma.NavigationEntryWhereInput = {};
+
     let mostRelevantResults: Map<string, string> | undefined = undefined;
     if (isSemantic) {
       if (query) {
@@ -409,13 +410,6 @@ export class NavigationEntryService {
       };
     }
 
-    const count: number = await this.prismaService.navigationEntry.count({
-      where: {
-        userId: jwtContext.user.id,
-        ...whereQuery,
-      },
-    });
-
     whereQuery = {
       ...whereQuery,
       ...(tag && {
@@ -428,6 +422,14 @@ export class NavigationEntryService {
         },
       }),
     };
+
+    const count: number = await this.prismaService.navigationEntry.count({
+      where: {
+        userId: jwtContext.user.id,
+        ...whereQuery,
+      },
+    });
+
     const completeNavigationEntries: CompleteNavigationEntry[] =
       await this.prismaService.navigationEntry.findMany({
         where: {
