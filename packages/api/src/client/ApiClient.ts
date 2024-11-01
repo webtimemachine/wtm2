@@ -349,7 +349,7 @@ export class ApiClient {
         offset: offset.toString(),
         limit: limit.toString(),
         isSemantic: String(isSemantic),
-        tag: String(tag),
+        ...(tag && { tag }),
         ...(query && { query: query }),
       }).toString();
 
