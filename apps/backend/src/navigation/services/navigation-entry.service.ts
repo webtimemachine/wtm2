@@ -594,19 +594,18 @@ export class NavigationEntryService {
               take: 50,
             });
 
-            await Promise.allSettled(
-              entries.map(async (entry) => {
-                const { url, userId, id } = entry;
-                try {
-                  await this.indexerService.delete(url, userId);
-                  await this.prismaService.navigationEntry.delete({
-                    where: { id, userId },
-                  });
-                } catch (error) {
-                  console.error(`Error deleting entry ${id}:`, error);
-                }
-              }),
-            );
+            const entriesToDelete = entries.map((entry) => entry.id);
+            const uniqueUrls = [...new Set(entries.map((entry) => entry.url))];
+
+            await this.prismaService.navigationEntry.deleteMany({
+              where: {
+                id: {
+                  in: entriesToDelete,
+                },
+              },
+            });
+
+            await this.indexerService.bulkDelete(uniqueUrls, userId);
           } catch (error) {
             console.error(`Error getting entries of user ${userId}:`, error);
           }
