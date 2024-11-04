@@ -1,7 +1,7 @@
+import { CreateMLCEngine, MLCEngineInterface } from '@mlc-ai/web-llm';
 import { isTokenExpired } from '@wtm/utils';
 import { apiClient } from '../utils/api.client';
 
-import { CreateMLCEngine, MLCEngineInterface } from '@mlc-ai/web-llm';
 import {
   EngineStatus,
   Ports,
@@ -11,8 +11,16 @@ import {
 
 let engine: MLCEngineInterface | undefined = undefined;
 let engineStatus: EngineStatus = EngineStatus.NOT_READY;
-let intervalId: NodeJS.Timeout;
 
+let intervalId: NodeJS.Timeout;
+const startInterval = () => {
+  intervalId = setInterval(refreshAccessToken, 60 * 60 * 1000);
+};
+
+/**
+ * Adds a listener for incoming connections to the service worker.
+ * @param {chrome.runtime.Port} port - The port connecting to the service worker.
+ */
 chrome.runtime.onConnect.addListener(async (port) => {
   if (port.name !== Ports.SERVICE_WORKER) {
     console.log('Invalid port name');
@@ -30,6 +38,10 @@ chrome.runtime.onConnect.addListener(async (port) => {
     }
   }
 
+  /**
+   * Handles messages received on the port.
+   * @param {ServiceWorkerPayload} message - The message received from the port.
+   */
   port.onMessage.addListener(async (message: ServiceWorkerPayload) => {
     switch (message.type) {
       case ServiceWorkerMessageType.GENERATE_COMPLETION: {
@@ -105,6 +117,10 @@ chrome.runtime.onInstalled.addListener(() => {
   startInterval();
 });
 
+/**
+ * Initializes the MLCEngine for use in generating completions.
+ * @returns {Promise<void>} A promise that resolves when the engine is initialized.
+ */
 const initEngine = async () => {
   try {
     engine = await CreateMLCEngine('SmolLM-360M-Instruct-q4f16_1-MLC', {
@@ -119,10 +135,6 @@ const initEngine = async () => {
   } catch (error) {
     console.error('Error initializing engine', error);
   }
-};
-
-const startInterval = () => {
-  intervalId = setInterval(refreshAccessToken, 60 * 60 * 1000);
 };
 
 const defaultIcons = {
@@ -146,6 +158,14 @@ const noTrackingIcons = {
   '128': 'app-icon-no-tracking-128.png',
 };
 
+/**
+ * Sets the extension icon based on the user's preferences.
+ * If the "stop tracking" preference is enabled, a no-tracking icon is used.
+ * Otherwise, a default icon is set.
+ * @async
+ * @function setCorrectIconByUserPreferences
+ * @returns {Promise<void>} Resolves when the icon has been set.
+ */
 const setCorrectIconByUserPreferences = async () => {
   const response = await apiClient.getUserPreferences();
   if (response?.enableStopTracking) {
@@ -159,6 +179,14 @@ const setCorrectIconByUserPreferences = async () => {
   }
 };
 
+/**
+ * Refreshes the access token if needed and updates the extension icon accordingly.
+ * If the access token is expired and the refresh token is still valid, it refreshes the access token.
+ * If no tokens are found or both are expired, the icon is set to grayscale.
+ * @async
+ * @function refreshAccessToken
+ * @returns {Promise<void>} Resolves when the token check and potential refresh are complete.
+ */
 const refreshAccessToken = async () => {
   try {
     const { accessToken, refreshToken } = await chrome.storage.local.get([
