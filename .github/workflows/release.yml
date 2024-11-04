@@ -44,23 +44,23 @@ jobs:
           name: firefox-build-zip
           path: firefox-extension.zip
 
-      # - name: Upload Chrome Extension to Store
-      #   uses: mnao305/chrome-extension-upload@v5.0.0
-      #   with:
-      #     file-path: chrome-extension.zip
-      #     extension-id: ${{ secrets.CHROME_EXTENSION_ID }}
-      #     client-id: ${{ secrets.CHROME_CLIENT_ID }}
-      #     client-secret: ${{ secrets.CHROME_SECRET }}
-      #     refresh-token: ${{ secrets.CHROME_REFRESH_TOKEN }}
+      - name: Upload Chrome Extension to Store
+        uses: mnao305/chrome-extension-upload@v5.0.0
+        with:
+          file-path: chrome-extension.zip
+          extension-id: ${{ secrets.CHROME_EXTENSION_ID }}
+          client-id: ${{ secrets.CHROME_CLIENT_ID }}
+          client-secret: ${{ secrets.CHROME_SECRET }}
+          refresh-token: ${{ secrets.CHROME_REFRESH_TOKEN }}
 
-      # - name: Upload Firefox Extension to Store
-      #   uses: trmcnvn/firefox-addon@v1
-      #   with:
-      #     uuid: '{5790cffd-a2b7-4cb6-ad05-c5b955ddee3e}'
-      #     xpi: firefox-extension.zip
-      #     manifest: ./build/app_firefox/manifest.json
-      #     api-key: ${{ secrets.FIREFOX_JWT_ISSUER }}
-      #     api-secret: ${{ secrets.FIREFOX_JWT_SECRET }}
+      - name: Upload Firefox Extension to Store
+        uses: trmcnvn/firefox-addon@v1
+        with:
+          uuid: '{5790cffd-a2b7-4cb6-ad05-c5b955ddee3e}'
+          xpi: firefox-extension.zip
+          manifest: ./build/app_firefox/manifest.json
+          api-key: ${{ secrets.FIREFOX_JWT_ISSUER }}
+          api-secret: ${{ secrets.FIREFOX_JWT_SECRET }}
 
   build_backend:
     name: Build Backend
