@@ -16,7 +16,7 @@ describe('caption function', () => {
       .spyOn(BaseChain.prototype, 'invoke')
       .mockResolvedValue(mockResponse);
 
-    const result = await caption('mocked-image-url');
+    const result = await caption('http://mocked-image-url.png');
 
     expect(result).toBe('Mocked captioned text');
     expect(mockInvoke).toHaveBeenCalledWith({
