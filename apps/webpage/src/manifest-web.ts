@@ -1,6 +1,6 @@
 export const manifestWeb = {
   name: 'WebTM',
-  version: '1.6.7',
+  version: '1.6.8',
   description:
     'WebTM is a cross-platform solution to integrate the navigation history between desktop and mobile web browsers.',
 };
