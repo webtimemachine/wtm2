@@ -4,7 +4,9 @@ import { apiClient } from '../utils/api.client';
 import * as cheerio from 'cheerio';
 import { convertHtmlToMarkdown } from 'dom-to-semantic-markdown';
 import { AnyNode } from 'domhandler';
+
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
 const getSemanticMarkdownForLLM = (
   data: string | AnyNode | AnyNode[] | Buffer,
 ) => {

@@ -5,12 +5,12 @@ import { convertHtmlToMarkdown } from 'dom-to-semantic-markdown';
 import { AnyNode } from 'domhandler';
 import {
   ServiceWorkerPayload,
-  SERVICE_WORKER_MESSAGE_TYPE,
-  PORT,
+  ServiceWorkerMessageType,
+  Ports,
 } from '../service-workers/types';
 
 const serviceWorkerPort = chrome.runtime.connect({
-  name: PORT.serviceWorker,
+  name: Ports.SERVICE_WORKER,
 });
 
 function onUrlChange(callback: () => void) {
@@ -88,7 +88,7 @@ export const postNavigationEntry = async () => {
       };
 
       serviceWorkerPort.postMessage({
-        type: SERVICE_WORKER_MESSAGE_TYPE.createNavigationEntry,
+        type: ServiceWorkerMessageType.CREATE_NAVIGATION_ENTRY,
         navigationEntry,
       });
     }
@@ -101,7 +101,7 @@ postNavigationEntry();
 serviceWorkerPort.onMessage.addListener(async function (
   payload: ServiceWorkerPayload,
 ) {
-  if (payload.type === SERVICE_WORKER_MESSAGE_TYPE.engineReady) {
+  if (payload.type === ServiceWorkerMessageType.ENGINE_READY) {
     const { accessToken, enabledLiteMode, stopTrackingEnabled, webLLMEnabled } =
       await chrome.storage.local.get([
         'accessToken',
@@ -126,7 +126,7 @@ serviceWorkerPort.onMessage.addListener(async function (
     const content = getSemanticMarkdownForLLM(htmlContent);
 
     serviceWorkerPort.postMessage({
-      type: SERVICE_WORKER_MESSAGE_TYPE.generateCompletion,
+      type: ServiceWorkerMessageType.GENERATE_COMPLETION,
       content,
       url: window.location.href,
     });

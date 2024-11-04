@@ -3,42 +3,27 @@ import { apiClient } from '../utils/api.client';
 
 import { CreateMLCEngine, MLCEngineInterface } from '@mlc-ai/web-llm';
 import {
-  ENGINE_STATUS,
-  PORT,
-  SERVICE_WORKER_MESSAGE_TYPE,
+  EngineStatus,
+  Ports,
+  ServiceWorkerMessageType,
   ServiceWorkerPayload,
 } from './types';
+
 let engine: MLCEngineInterface | undefined = undefined;
-
-let engineStatus: ENGINE_STATUS = ENGINE_STATUS.notReady;
-
-async function initEngine() {
-  try {
-    engine = await CreateMLCEngine('SmolLM-360M-Instruct-q4f16_1-MLC', {
-      initProgressCallback: () => {
-        if (engineStatus === ENGINE_STATUS.notReady) {
-          engineStatus = ENGINE_STATUS.loading;
-        }
-      },
-    });
-
-    engineStatus = ENGINE_STATUS.ready;
-  } catch (error) {
-    console.error('Error initializing engine', error);
-  }
-}
+let engineStatus: EngineStatus = EngineStatus.NOT_READY;
+let intervalId: NodeJS.Timeout;
 
 chrome.runtime.onConnect.addListener(async (port) => {
-  if (port.name !== PORT.serviceWorker) {
+  if (port.name !== Ports.SERVICE_WORKER) {
     console.log('Invalid port name');
     return;
   }
 
-  if (engineStatus === ENGINE_STATUS.notReady) {
+  if (engineStatus === EngineStatus.NOT_READY) {
     try {
       await initEngine();
       port.postMessage({
-        type: SERVICE_WORKER_MESSAGE_TYPE.engineReady,
+        type: ServiceWorkerMessageType.ENGINE_READY,
       });
     } catch (error) {
       console.error(error);
@@ -47,7 +32,7 @@ chrome.runtime.onConnect.addListener(async (port) => {
 
   port.onMessage.addListener(async (message: ServiceWorkerPayload) => {
     switch (message.type) {
-      case SERVICE_WORKER_MESSAGE_TYPE.generateCompletion: {
+      case ServiceWorkerMessageType.GENERATE_COMPLETION: {
         if (!engine) {
           console.error('Engine is not ready');
           return;
@@ -82,7 +67,7 @@ chrome.runtime.onConnect.addListener(async (port) => {
         break;
       }
 
-      case SERVICE_WORKER_MESSAGE_TYPE.createNavigationEntry: {
+      case ServiceWorkerMessageType.CREATE_NAVIGATION_ENTRY: {
         const navigationEntry = message.navigationEntry;
 
         await apiClient.securedFetch('/api/navigation-entry', {
@@ -93,7 +78,7 @@ chrome.runtime.onConnect.addListener(async (port) => {
         break;
       }
 
-      case SERVICE_WORKER_MESSAGE_TYPE.updateExtensionIcon:
+      case ServiceWorkerMessageType.UPDATE_EXTENSION_ICON:
         setCorrectIconByUserPreferences();
         break;
 
@@ -103,7 +88,38 @@ chrome.runtime.onConnect.addListener(async (port) => {
   });
 });
 
-let intervalId: NodeJS.Timeout;
+chrome.windows.onFocusChanged.addListener(async (windowId) => {
+  if (windowId !== chrome.windows.WINDOW_ID_NONE) {
+    clearInterval(intervalId);
+    startInterval();
+  }
+});
+
+chrome.runtime.onStartup.addListener(() => {
+  refreshAccessToken();
+  startInterval();
+});
+
+chrome.runtime.onInstalled.addListener(() => {
+  refreshAccessToken();
+  startInterval();
+});
+
+const initEngine = async () => {
+  try {
+    engine = await CreateMLCEngine('SmolLM-360M-Instruct-q4f16_1-MLC', {
+      initProgressCallback: () => {
+        if (engineStatus === EngineStatus.NOT_READY) {
+          engineStatus = EngineStatus.LOADING;
+        }
+      },
+    });
+
+    engineStatus = EngineStatus.READY;
+  } catch (error) {
+    console.error('Error initializing engine', error);
+  }
+};
 
 const startInterval = () => {
   intervalId = setInterval(refreshAccessToken, 60 * 60 * 1000);
@@ -175,20 +191,3 @@ const refreshAccessToken = async () => {
     console.error(`Unexpected Error in windows onFocusChanged:`, error);
   }
 };
-
-chrome.windows.onFocusChanged.addListener(async (windowId) => {
-  if (windowId !== chrome.windows.WINDOW_ID_NONE) {
-    clearInterval(intervalId);
-    startInterval();
-  }
-});
-
-chrome.runtime.onStartup.addListener(() => {
-  refreshAccessToken();
-  startInterval();
-});
-
-chrome.runtime.onInstalled.addListener(() => {
-  refreshAccessToken();
-  startInterval();
-});
