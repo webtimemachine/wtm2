@@ -156,6 +156,7 @@ export class IndexerService {
         new OpenAIEmbeddings({ openAIApiKey: appEnv.OPENAI_ACCESS_TOKEN }),
         await this.vectorStoreArgs(userId),
       );
+
       // remove the chunks/documents related to the given URL
       store.delete({
         filter: {
@@ -167,5 +168,22 @@ export class IndexerService {
         },
       });
     }
+  }
+
+  async bulkDelete(urls: string[], userId: bigint) {
+    const store = await WeaviateStore.fromExistingIndex(
+      new OpenAIEmbeddings({ openAIApiKey: appEnv.OPENAI_ACCESS_TOKEN }),
+      await this.vectorStoreArgs(userId),
+    );
+
+    store.delete({
+      filter: {
+        where: {
+          operator: 'ContainsAll',
+          path: ['source'],
+          valueTextArray: urls,
+        },
+      },
+    });
   }
 }
