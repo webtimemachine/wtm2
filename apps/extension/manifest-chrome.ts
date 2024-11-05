@@ -18,7 +18,7 @@ export const manifestChrome: ManifestV3Export = {
     '128': 'app-icon-128.png',
   },
   background: {
-    service_worker: 'src/service-workers/background-for-chrome.ts',
+    service_worker: 'src/service-workers/background.ts',
     type: 'module',
   },
   content_scripts: [
