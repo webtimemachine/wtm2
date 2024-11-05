@@ -11,7 +11,7 @@ export const manifestFirefox: ManifestV3Export = {
       id: '{5790cffd-a2b7-4cb6-ad05-c5b955ddee3e}',
     },
   },
-  permissions: ['tabs', 'activeTab', 'storage', 'scripting'],
+  permissions: ['tabs', 'activeTab', 'storage', 'scripting', 'nativeMessaging'],
   action: {
     default_popup: 'index.html',
   },
@@ -30,7 +30,15 @@ export const manifestFirefox: ManifestV3Export = {
     {
       resources: ['*.png', '*.jpg', '*.jpeg', '*.svg', '*.webp'],
       matches: ['*://*/*'],
-      use_dynamic_url: true,
     },
   ],
+  content_scripts: [
+    {
+      matches: ['*://*/*'],
+      js: ['src/content-scripts/content.ts'],
+    },
+  ],
+  content_security_policy: {
+    extension_pages: "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'",
+  },
 } as ManifestV3Export;

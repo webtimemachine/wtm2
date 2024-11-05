@@ -147,14 +147,11 @@ serviceWorkerPort.onMessage.addListener(async function (
 
     const url = window.location.href;
 
-    const webLLMDisabled =
-      !webLLMEnabled ||
-      stopTrackingEnabled ||
-      !accessToken ||
-      enabledLiteMode ||
-      url.startsWith('chrome://');
-
-    if (webLLMDisabled) return;
+    if (!webLLMEnabled) return;
+    if (stopTrackingEnabled) return;
+    if (!accessToken) return;
+    if (enabledLiteMode) return;
+    if (url.startsWith('chrome://')) return;
 
     const htmlContent = DOMtoString('body');
 
