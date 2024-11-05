@@ -95,15 +95,19 @@ export class IndexerService {
       let extraDocuments: Document[] = [];
       if (enableImageEncoding) {
         this.logger.debug('Getting text embeddings of images');
-        extraDocuments = await Promise.all(
-          images.map(async (image) => {
-            const captionResult = await caption(image);
-            return new Document({
-              pageContent: captionResult,
-              metadata: { source: url },
-            });
-          }),
-        );
+        try {
+          extraDocuments = await Promise.all(
+            images.map(async (image) => {
+              const captionResult = await caption(image);
+              return new Document({
+                pageContent: captionResult,
+                metadata: { source: url },
+              });
+            }),
+          );
+        } catch (error) {
+          this.logger.warn(error);
+        }
       }
       this.logger.debug(`Indexing chunks of '${url}'`);
       const documents = await textSplitter.createDocuments(
@@ -111,7 +115,6 @@ export class IndexerService {
         [{ source: url }],
       );
       const documentChunks = await textSplitter.splitDocuments(documents);
-
       await WeaviateStore.fromDocuments(
         [...documentChunks, ...extraDocuments],
         new OpenAIEmbeddings({ openAIApiKey: appEnv.OPENAI_ACCESS_TOKEN }),
