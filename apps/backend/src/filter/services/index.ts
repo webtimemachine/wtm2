@@ -62,7 +62,7 @@ export class ExplicitFilterService {
     try {
       if (!hasExplicitContent) {
         // invoke the LLM if the URL has not been blacklisted yet
-        if (await this.isExplicit(content)) {
+        if (content.length <= 128000 && (await this.isExplicit(content))) {
           // blacklist the URL
           await this.prismaService.blackList.create({
             data: { url: url },
