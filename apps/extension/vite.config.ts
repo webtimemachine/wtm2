@@ -6,7 +6,9 @@ import { manifestChrome } from './manifest-chrome';
 import { manifestFirefox } from './manifest-firefox';
 
 const browser = process.env.BROWSER || 'chrome';
-const manifest = browser === 'firefox' ? manifestFirefox : manifestChrome;
+const isFirefox = browser === 'firefox';
+
+const manifest = isFirefox ? manifestFirefox : manifestChrome;
 
 // https://vitejs.dev/config/
 export default defineConfig({
