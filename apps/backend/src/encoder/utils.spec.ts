@@ -16,11 +16,11 @@ describe('caption function', () => {
       .spyOn(BaseChain.prototype, 'invoke')
       .mockResolvedValue(mockResponse);
 
-    const result = await caption('mocked-image-url');
+    const result = await caption('data:image/png;test');
 
     expect(result).toBe('Mocked captioned text');
     expect(mockInvoke).toHaveBeenCalledWith({
-      image: 'mocked-image-url',
+      image: 'data:image/png;test',
     });
   });
 });
