@@ -138,6 +138,7 @@ const NavigationEntry = ({
   useEffect(() => {
     setVisible(false);
   }, [element]);
+  //comment
   return (
     <div className='flex flex-col w-full bg-white px-2 py-1 rounded-lg mb-1 gap-3'>
       <div key={element.id} className='flex items-center justify-between'>
