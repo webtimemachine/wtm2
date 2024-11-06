@@ -274,31 +274,28 @@ export class NavigationEntryService {
 
     const parsedData = SummaryPromptSchema.safeParse(jsonParseFormattedResult);
 
-    await this.prismaService.$transaction(async (prismaClient) => {
-      if (
-        lastEntry?.url === createNavigationEntryInputDto.url &&
-        parsedData.success
-      ) {
-        const navEntry = await prismaClient.navigationEntry.update({
-          where: {
-            id: lastEntry.id,
-          },
-          data: {
-            liteMode,
-            userDeviceId: jwtContext.session.userDeviceId,
-            aiGeneratedContent: parsedData.data?.data.content,
-            ...entryData,
-          },
-          include: completeNavigationEntryInclude,
-        });
-        await prismaClient.entryTag.deleteMany({
-          where: {
-            entryId: navEntry.id,
-          },
-        });
-        await this.saveTags(navEntry, parsedData.data, prismaClient);
-      } else {
-        if (parsedData.success) {
+    if (parsedData.success) {
+      await this.prismaService.$transaction(async (prismaClient) => {
+        if (lastEntry?.url === createNavigationEntryInputDto.url) {
+          const navEntry = await prismaClient.navigationEntry.update({
+            where: {
+              id: lastEntry.id,
+            },
+            data: {
+              liteMode,
+              userDeviceId: jwtContext.session.userDeviceId,
+              aiGeneratedContent: parsedData.data?.data.content,
+              ...entryData,
+            },
+            include: completeNavigationEntryInclude,
+          });
+          await prismaClient.entryTag.deleteMany({
+            where: {
+              entryId: navEntry.id,
+            },
+          });
+          await this.saveTags(navEntry, parsedData.data, prismaClient);
+        } else {
           const navEntry = await prismaClient.navigationEntry.create({
             data: {
               liteMode,
@@ -311,9 +308,10 @@ export class NavigationEntryService {
           });
           await this.saveTags(navEntry, parsedData.data, prismaClient);
         }
-      }
-    });
-
+      });
+    } else {
+      console.error('Error parsing formatted result:', parsedData.error);
+    }
     return;
   }
 
