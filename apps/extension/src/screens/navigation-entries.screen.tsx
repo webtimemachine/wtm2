@@ -96,9 +96,11 @@ const RelevantSegment = ({
   };
   return (
     <div>
-      <Text textAlign={'center'} py={5} fontSize={'large'}>
-        Relevant tags found
-      </Text>
+      {tags && tags.length > 0 && (
+        <Text textAlign={'center'} py={5} fontSize={'large'}>
+          Relevant tags found
+        </Text>
+      )}
       <div className='w-full flex justify-center items-center gap-5 flex-wrap'>
         {tags &&
           tags.map((tag: string, index: number) => (
