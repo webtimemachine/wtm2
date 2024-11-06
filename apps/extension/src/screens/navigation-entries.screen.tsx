@@ -135,7 +135,9 @@ const NavigationEntry = ({
   deleteProps,
 }: NavEntryProps) => {
   const [visible, setVisible] = useState<boolean>(false);
-
+  useEffect(() => {
+    setVisible(false);
+  }, [element]);
   return (
     <div className='flex flex-col w-full bg-white px-2 py-1 rounded-lg mb-1 gap-3'>
       <div key={element.id} className='flex items-center justify-between'>
