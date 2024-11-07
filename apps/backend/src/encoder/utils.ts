@@ -36,7 +36,27 @@ const mainPrompt = ChatPromptTemplate.fromMessages([
 const chain = new LLMChain({ llm: captionerModel, prompt: mainPrompt });
 
 export const caption = async (image: string): Promise<string> => {
-  // HTTP URL or base64 image
+  const allowedMimeTypes = [
+    'image/png',
+    'image/jpeg',
+    'image/gif',
+    'image/webp',
+  ];
+  let mimeType: string | null = null;
+
+  if (image.startsWith('data:')) {
+    mimeType = image.substring(5, image.indexOf(';'));
+  } else if (image.startsWith('http')) {
+    const response = await fetch(image, { method: 'HEAD' });
+    mimeType = response.headers.get('content-type');
+  }
+
+  if (!mimeType || !allowedMimeTypes.includes(mimeType)) {
+    throw new Error(
+      'Unsupported image format. Allowed formats: png, jpeg, gif, webp.',
+    );
+  }
+
   const response = await chain.invoke({
     image,
   });

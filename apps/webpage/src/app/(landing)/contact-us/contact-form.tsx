@@ -28,15 +28,27 @@ export const ContactForm = () => {
   return (
     <form id='contact-form' onSubmit={handleSubmit}>
       <FormControl isRequired>
-        <Stack wrap={'wrap'} justifyContent={'center'} direction={'row'}>
-          <Input type='text' id='name' placeholder='Your Name' name='name' />
+        <Stack
+          wrap={'wrap'}
+          justifyContent={'center'}
+          direction={'row'}
+          gap={6}
+        >
+          <Input
+            type='text'
+            borderColor={'gray.300'}
+            id='name'
+            placeholder='Your Name'
+            name='name'
+          />
           <Input
             type='email'
+            borderColor={'gray.300'}
             id='email'
             placeholder='Your Email'
             name='email'
           />
-          <Select id='query-type' name='query-type'>
+          <Select borderColor={'gray.300'} id='query-type' name='query-type'>
             <option value=''>-- Please select an option --</option>
             <option value='Technical Support'>Technical Support</option>
             <option value='Delete Account Request'>
@@ -46,16 +58,20 @@ export const ContactForm = () => {
           </Select>
           <Input
             type='text'
+            borderColor={'gray.300'}
             id='subject'
             placeholder='Subject'
             name='subject'
           />
           <Textarea
             placeholder='Leave a message here'
+            borderColor={'gray.300'}
             id='message'
             name='message'
           />
-          <Button type='submit'>Send Message</Button>
+          <Button colorScheme='blue' type='submit'>
+            Send Message
+          </Button>
         </Stack>
       </FormControl>
     </form>

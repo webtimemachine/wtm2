@@ -29,7 +29,7 @@ const config: JestConfigWithTsJest = {
     'node',
   ],
   modulePaths: ['<rootDir>/src'],
-  testPathIgnorePatterns: ['/node_modules/', '/dist/', '/utils/'],
+  testPathIgnorePatterns: ['/node_modules/', '/dist/'],
 };
 
 export default config;

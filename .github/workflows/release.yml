@@ -6,9 +6,9 @@ on:
 name: Create Release and Upload Release Assets
 
 jobs:
-  build:
-    name: Create Release and Upload Release Assets
-    runs-on: macos-latest
+  build_extensions:
+    name: Build Chrome and Firefox Extensions
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -18,15 +18,7 @@ jobs:
           npm install turbo --global
           npm install
 
-      - name: Cache turbo build setup
-        uses: actions/cache@v4
-        with:
-          path: .turbo
-          key: ${{ runner.os }}-turbo-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-turbo-
-
-      - name: Run turbo build
+      - name: Run turbo build for extensions
         run: turbo run build --filter=@wtm/extension...
 
       - name: Create ZIP files for Chrome and Firefox
@@ -34,19 +26,84 @@ jobs:
           (cd ./build/app_chrome && zip -r ../../chrome-extension.zip .)
           (cd ./build/app_firefox && zip -r ../../firefox-extension.zip .)
 
-      - name: Update xcode project file
+      - name: Upload Chrome artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: chrome-build-zip
+          path: chrome-extension.zip
+
+      - name: Upload ExportOptions artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: export-options-file
+          path: apps/extension/ExportOptions.plist
+
+      - name: Upload Firefox artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: firefox-build-zip
+          path: firefox-extension.zip
+
+      - name: Upload Chrome Extension to Store
+        uses: mnao305/chrome-extension-upload@v5.0.0
+        with:
+          file-path: chrome-extension.zip
+          extension-id: ${{ secrets.CHROME_EXTENSION_ID }}
+          client-id: ${{ secrets.CHROME_CLIENT_ID }}
+          client-secret: ${{ secrets.CHROME_SECRET }}
+          refresh-token: ${{ secrets.CHROME_REFRESH_TOKEN }}
+
+      - name: Upload Firefox Extension to Store
+        uses: trmcnvn/firefox-addon@v1
+        with:
+          uuid: '{5790cffd-a2b7-4cb6-ad05-c5b955ddee3e}'
+          xpi: firefox-extension.zip
+          manifest: ./build/app_firefox/manifest.json
+          api-key: ${{ secrets.FIREFOX_JWT_ISSUER }}
+          api-secret: ${{ secrets.FIREFOX_JWT_SECRET }}
+
+  build_backend:
+    name: Build Backend
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
         run: |
-          sed -i '' 's/PRODUCT_BUNDLE_IDENTIFIER = com.ttt246llc.wtm;/PRODUCT_BUNDLE_IDENTIFIER = com.ttt246llc.wtm;\nPROVISIONING_PROFILE_SPECIFIER = "Web Time Machine Prov Profile Prod";/' ./native/app_ios/wtm/wtm.xcodeproj/project.pbxproj
-          sed -i '' 's/PRODUCT_BUNDLE_IDENTIFIER = com.ttt246llc.wtm.Extension;/PRODUCT_BUNDLE_IDENTIFIER = com.ttt246llc.wtm.Extension;\nPROVISIONING_PROFILE_SPECIFIER = "Web Time Machine Prov Profile Prod Extension";/' ./native/app_ios/wtm/wtm.xcodeproj/project.pbxproj
+          npm install turbo --global
+          npm install
 
       - name: Run turbo build for backend
         run: turbo run build --filter=@wtm/backend
 
       - name: Zip backend build
-        run: zip -r backend.zip ./build/backend
+        run: (cd ./build/backend && zip -r ../../backend.zip .)
 
-      - name: Install Dependencies
-        run: brew install coreutils
+      - name: Upload Backend artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: backend-build-zip
+          path: backend.zip
+
+  build_ios:
+    name: Build and Upload iOS App
+    runs-on: macos-latest
+    needs: build_extensions
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: |
+          brew install coreutils
+          npm install turbo --global
+          npm install
+
+      - name: Update xcode project file
+        run: |
+          sed -i '' 's/PRODUCT_BUNDLE_IDENTIFIER = com.ttt246llc.wtm;/PRODUCT_BUNDLE_IDENTIFIER = com.ttt246llc.wtm;\nPROVISIONING_PROFILE_SPECIFIER = "Web Time Machine Prov Profile Prod";/' ./native/app_ios/wtm/wtm.xcodeproj/project.pbxproj
+          sed -i '' 's/PRODUCT_BUNDLE_IDENTIFIER = com.ttt246llc.wtm.Extension;/PRODUCT_BUNDLE_IDENTIFIER = com.ttt246llc.wtm.Extension;\nPROVISIONING_PROFILE_SPECIFIER = "Web Time Machine Prov Profile Prod Extension";/' ./native/app_ios/wtm/wtm.xcodeproj/project.pbxproj
 
       - name: Decode and Install Apple Provisioning Profiles and Certificate
         run: |
@@ -66,32 +123,40 @@ jobs:
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp app.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
           cp extension.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
-        env:
-          ENCODED_CERTIFICATE: ${{ secrets.ENCODED_CERTIFICATE }}
-          ENCODED_PROVISIONING_PROFILE_APP: ${{ secrets.ENCODED_PROVISIONING_PROFILE_APP }}
-          ENCODED_PROVISIONING_PROFILE_EXTENSION: ${{ secrets.ENCODED_PROVISIONING_PROFILE_EXTENSION }}
-          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
-          P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
 
-      - name: Copy ExportOptions.plist file
-        working-directory: 'apps/extension'
-        run: cp ExportOptions.plist ../../native/app_ios/wtm
+      - name: Download Chrome artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: chrome-build-zip
+          path: 'native/'
 
-      - name: List all schemes
-        working-directory: 'native/app_ios/wtm'
-        run: xcodebuild -list
+      - name: Unzip Chrome artifact
+        working-directory: 'native'
+        run: |
+          unzip chrome-extension.zip -d app_chrome
+          rm chrome-extension.zip
 
-      - name: Build and archive app
+      - name: Download ExportOptions artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: export-options-file
+          path: 'native/app_ios/wtm/'
+
+      - name: Build and archive iOS app
         working-directory: 'native/app_ios/wtm'
         run: |
-          if [ "`ls -A | grep -i \\.xcworkspace\$`" ]; then filetype_parameter="workspace" && file_to_build="`ls -A | grep -i \\.xcworkspace\$`"; else filetype_parameter="project" && file_to_build="`ls -A | grep -i \\.xcodeproj\$`"; fi
-          file_to_build=`echo $file_to_build | awk '{$1=$1;print}'`
-          xcodebuild archive -"$filetype_parameter" "$file_to_build" -scheme "wtm (iOS)" -archivePath "$PWD/build/Web Time Machine.xcarchive" -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.4' -configuration Release CODE_SIGN_STYLE=Manual
+          xcodebuild archive -project "wtm.xcodeproj" -scheme "wtm (iOS)" -archivePath "$PWD/build/Web Time Machine.xcarchive" -configuration Release CODE_SIGN_STYLE=Manual
 
       - name: Export the .ipa File
         working-directory: 'native/app_ios/wtm'
         run: |
-          xcodebuild -exportArchive -archivePath "$PWD/build/Web Time Machine.xcarchive" -exportOptionsPlist "$PWD/ExportOptions.plist" -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.4' -exportPath "$PWD/build"
+          xcodebuild -exportArchive -archivePath "$PWD/build/Web Time Machine.xcarchive" -exportOptionsPlist "$PWD/ExportOptions.plist" -exportPath "$PWD/build"
+
+      - name: Upload iOS artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: webtm-ipa
+          path: native/app_ios/wtm/build/wtm.ipa
 
       - name: Upload to TestFlight
         env:
@@ -102,23 +167,37 @@ jobs:
           xcrun altool --validate-app -f native/app_ios/wtm/build/wtm.ipa -t ios --apiKey ${{ secrets.APPSTORE_API_KEY_ID }} --apiIssuer ${{ secrets.APPSTORE_ISSUER_ID }}
           xcrun altool --upload-app -f native/app_ios/wtm/build/wtm.ipa -t ios --apiKey ${{ secrets.APPSTORE_API_KEY_ID }} --apiIssuer ${{ secrets.APPSTORE_ISSUER_ID }}
 
-      - name: Upload zip to Chrome store
-        uses: mnao305/chrome-extension-upload@v5.0.0
-        with:
-          file-path: chrome-extension.zip
-          extension-id: ${{ secrets.CHROME_EXTENSION_ID }}
-          client-id: ${{ secrets.CHROME_CLIENT_ID }}
-          client-secret: ${{ secrets.CHROME_SECRET }}
-          refresh-token: ${{ secrets.CHROME_REFRESH_TOKEN }}
+  release:
+    name: Create GitHub Release and Upload Assets
+    needs: [build_extensions, build_backend, build_ios]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-      - name: Upload zip to Firefox store
-        uses: trmcnvn/firefox-addon@v1
+      - name: Download Chrome artifact
+        uses: actions/download-artifact@v3
         with:
-          uuid: '{5790cffd-a2b7-4cb6-ad05-c5b955ddee3e}'
-          xpi: firefox-extension.zip
-          manifest: ./build/app_firefox/manifest.json
-          api-key: ${{ secrets.FIREFOX_JWT_ISSUER }}
-          api-secret: ${{ secrets.FIREFOX_JWT_SECRET }}
+          name: chrome-build-zip
+          path: .
+
+      - name: Download Firefox artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: firefox-build-zip
+          path: .
+
+      - name: Download Backend artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: backend-build-zip
+          path: .
+
+      - name: Download iOS artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: webtm-ipa
+          path: .
 
       - name: Create Release
         id: create_release
@@ -131,8 +210,7 @@ jobs:
           draft: false
           prerelease: false
 
-      - name: Upload Release Chrome extension Asset
-        id: upload-release-asset-chrome
+      - name: Upload Chrome Extension Asset to Release
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -142,8 +220,7 @@ jobs:
           asset_name: chrome-extension.zip
           asset_content_type: application/zip
 
-      - name: Upload Release Firefox extension Asset
-        id: upload-release-asset-firefox
+      - name: Upload Firefox Extension Asset to Release
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -153,8 +230,7 @@ jobs:
           asset_name: firefox-extension.zip
           asset_content_type: application/zip
 
-      - name: Upload Release Backend Asset
-        id: upload-release-asset-backend
+      - name: Upload Backend Asset to Release
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -164,13 +240,12 @@ jobs:
           asset_name: backend.zip
           asset_content_type: application/zip
 
-      - name: Upload .ipa to Release
-        id: upload-release-asset-ipa
+      - name: Upload iOS IPA Asset
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: 'native/app_ios/wtm/build/wtm.ipa'
+          asset_path: 'wtm.ipa'
           asset_name: wtm.ipa
           asset_content_type: application/octet-stream

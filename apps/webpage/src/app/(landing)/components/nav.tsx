@@ -38,7 +38,7 @@ export const Nav = () => {
     'text-xs capitalize sm:text-sm text-gray-600 hover:text-gray-900';
   const currentRouteStyle = 'text-gray-900 font-medium';
 
-  if (!isMounted) return null;
+  if (!isMounted) return <div className='h-14'></div>;
 
   return (
     <div className='w-full flex justify-between rounded-xl py-2 sm:px-3'>
@@ -66,7 +66,12 @@ export const Nav = () => {
             </Link>
           ))}
         <Link href={Routes.LOGIN}>
-          <Button colorScheme='yellow' size='sm'>
+          <Button
+            bgColor={'#3182CE'}
+            colorScheme='blue'
+            color={'white'}
+            size='sm'
+          >
             Dashboard
           </Button>
         </Link>
