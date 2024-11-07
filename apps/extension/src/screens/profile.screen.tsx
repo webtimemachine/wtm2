@@ -490,29 +490,27 @@ export const ProfileScreen: React.FC<object> = () => {
   };
 
   return (
-    <div className='flex flex-col h-full w-full justify-center items-center'>
-      <div className='flex flex-col h-full w-2/3'>
-        <div className='flex w-full justify-start pb-4 items-center'>
-          <IconButton aria-label='Back icon' onClick={() => navigateBack()}>
-            <ArrowBackIcon boxSize={5} />
-          </IconButton>
-          <div className='flex flex-col leading-none w-full justify-center items-center px-[40px] mb-5 h-[40px]'>
-            <Text
-              fontSize={{ base: 'x-large', md: 'xx-large' }}
-              fontWeight={'bold'}
-            >
-              Profile
-            </Text>
-          </div>
+    <div className='flex flex-col h-full w-full px-5 py-3 justify-center items-center'>
+      <div className='flex w-full justify-start pb-4 gap-4 items-center'>
+        <IconButton aria-label='Back icon' onClick={() => navigateBack()}>
+          <ArrowBackIcon boxSize={5} />
+        </IconButton>
+        <div className='flex flex-col leading-none w-full justify-center items-center pr-[40px] mb-5 h-[40px]'>
+          <Text
+            fontSize={{ base: 'x-large', md: 'xx-large' }}
+            fontWeight={'bold'}
+          >
+            Profile
+          </Text>
         </div>
-        {user ? (
-          <ProfileCard />
-        ) : (
-          <div className='flex w-full h-full items-center justify-center'>
-            <Spinner size={'lg'} />
-          </div>
-        )}
       </div>
+      {user ? (
+        <ProfileCard />
+      ) : (
+        <div className='flex w-full h-full items-center justify-center'>
+          <Spinner size={'lg'} />
+        </div>
+      )}
     </div>
   );
 };
