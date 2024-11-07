@@ -5,6 +5,9 @@ type FirefoxManifestV3Export = ManifestV3Export & {
     gecko: {
       id: string;
     };
+    gecko_android: {
+      id: string;
+    };
   };
 };
 
@@ -14,6 +17,9 @@ export const manifestFirefox: FirefoxManifestV3Export = {
   ...baseManifest,
   browser_specific_settings: {
     gecko: {
+      id: '{5790cffd-a2b7-4cb6-ad05-c5b955ddee3e}',
+    },
+    gecko_android: {
       id: '{5790cffd-a2b7-4cb6-ad05-c5b955ddee3e}',
     },
   },

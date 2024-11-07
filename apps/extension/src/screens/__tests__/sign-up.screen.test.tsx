@@ -25,7 +25,6 @@ jest.mock('@wtm/utils', () => ({
 
 const mockNavigateBack = jest.fn();
 const mockMutate = jest.fn();
-const mockIsPending = jest.fn();
 
 (useNavigation as jest.Mock).mockReturnValue({
   navigateBack: mockNavigateBack,
@@ -34,7 +33,7 @@ const mockIsPending = jest.fn();
 (useSignUp as jest.Mock).mockReturnValue({
   signUpMutation: {
     mutate: mockMutate,
-    isPending: mockIsPending,
+    isPending: false,
   },
 });
 
@@ -43,6 +42,10 @@ const customRender = (ui: React.ReactElement) => {
 };
 
 describe('SignUpScreen', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   test('renders the component with initial state', () => {
     customRender(<SignUpScreen />);
 
@@ -63,13 +66,6 @@ describe('SignUpScreen', () => {
 
   test('shows error message for invalid email', async () => {
     customRender(<SignUpScreen />);
-
-    (useSignUp as jest.Mock).mockReturnValue({
-      signUpMutation: {
-        mutate: mockMutate,
-        isPending: false,
-      },
-    });
 
     const emailInput = screen.getByPlaceholderText('Email');
     fireEvent.change(emailInput, { target: { value: 'invalid-email' } });
@@ -96,13 +92,6 @@ describe('SignUpScreen', () => {
   });
 
   test('shows error message for invalid password', async () => {
-    (useSignUp as jest.Mock).mockReturnValue({
-      signUpMutation: {
-        mutate: mockMutate,
-        isPending: false,
-      },
-    });
-
     customRender(<SignUpScreen />);
 
     const emailInput = screen.getByPlaceholderText('Email');
@@ -126,13 +115,6 @@ describe('SignUpScreen', () => {
   });
 
   test('shows error message for non-matching passwords', async () => {
-    (useSignUp as jest.Mock).mockReturnValue({
-      signUpMutation: {
-        mutate: mockMutate,
-        isPending: false,
-      },
-    });
-
     customRender(<SignUpScreen />);
 
     const emailInput = screen.getByPlaceholderText('Email');
@@ -156,13 +138,6 @@ describe('SignUpScreen', () => {
   });
 
   test('calls signUpMutation when inputs are valid', async () => {
-    (useSignUp as jest.Mock).mockReturnValue({
-      signUpMutation: {
-        mutate: mockMutate,
-        isPending: false,
-      },
-    });
-
     customRender(<SignUpScreen />);
 
     const emailInput = screen.getByPlaceholderText('Email');
@@ -188,13 +163,6 @@ describe('SignUpScreen', () => {
   });
 
   test('password tooltip works correctly', async () => {
-    (useSignUp as jest.Mock).mockReturnValue({
-      signUpMutation: {
-        mutate: mockMutate,
-        isPending: false,
-      },
-    });
-
     customRender(<SignUpScreen />);
     const emailInput = screen.getByPlaceholderText('Email');
     fireEvent.change(emailInput, { target: { value: 'test@example.com' } });

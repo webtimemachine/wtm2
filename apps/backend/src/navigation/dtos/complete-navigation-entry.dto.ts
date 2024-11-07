@@ -47,4 +47,11 @@ export class CompleteNavigationEntryDto {
   @ApiProperty()
   @Expose()
   aiGeneratedContent: string;
+
+  @ApiProperty({
+    required: false,
+    isArray: true,
+  })
+  @Expose()
+  tags?: string[];
 }
