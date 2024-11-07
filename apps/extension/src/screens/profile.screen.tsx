@@ -30,8 +30,7 @@ import {
 import { useGetBasicUserInformation } from '../hooks/use-get-user-basic-information.hook';
 import React from 'react';
 import CustomInputBox from '../components/custom-input-box.component';
-import { useChangeUserPassword } from '../hooks/use-change-user-password.hook';
-import { BsKey, BsPerson } from 'react-icons/bs';
+import { BsPerson } from 'react-icons/bs';
 import { useChangeUserDisplayName } from '../hooks/use-change-user-displayname.hook';
 import { relativeTime } from '@wtm/utils';
 import { ArrowBackIcon } from '@chakra-ui/icons';
@@ -45,10 +44,10 @@ import MaleOne from '../assets/Avatars/male_one.png';
 import MaleTwo from '../assets/Avatars/male_two.png';
 import FemaleOne from '../assets/Avatars/female_one.png';
 import FemaleTwo from '../assets/Avatars/female_two.png';
+import ChangePasswordModal from '../components/change-password-modal.component';
 export const ProfileScreen: React.FC<object> = () => {
   const { navigateBack } = useNavigation();
   const { basicUserInformationQuery } = useGetBasicUserInformation();
-  const { changeUserPasswordMutation } = useChangeUserPassword();
   const { changeUserDisplayNameMutation } = useChangeUserDisplayName();
   const user = basicUserInformationQuery.data;
   const { changeUserAvatarMutation } = useChangeUserAvatar();
@@ -58,123 +57,6 @@ export const ProfileScreen: React.FC<object> = () => {
     MaleTwo: MaleTwo,
     FemaleOne: FemaleOne,
     FemaleTwo: FemaleTwo,
-  };
-  const ChangePasswordModal = () => {
-    const { isOpen, onOpen, onClose } = useDisclosure();
-    const [newPassword, setNewPassword] = useState('');
-    const [reNewPassword, setReNewPassword] = useState('');
-    const [oldPassword, setOldPassword] = useState('');
-    const handleNewPasswordChange = (e: {
-      target: { value: React.SetStateAction<string> };
-    }) => setNewPassword(e.target.value);
-    const handleOldPasswordChange = (e: {
-      target: { value: React.SetStateAction<string> };
-    }) => setOldPassword(e.target.value);
-    const handleReNewPasswordChange = (e: {
-      target: { value: React.SetStateAction<string> };
-    }) => setReNewPassword(e.target.value);
-    const isError = newPassword !== reNewPassword;
-    useEffect(() => {
-      if (!isOpen) {
-        setNewPassword('');
-        setOldPassword('');
-        setReNewPassword('');
-      }
-    }, [isOpen]);
-    const verifyFields = () => {
-      return (
-        newPassword &&
-        oldPassword &&
-        reNewPassword &&
-        newPassword.length > 3 &&
-        oldPassword.length > 3 &&
-        reNewPassword.length > 3
-      );
-    };
-    const handleSubmit = () => {
-      if (verifyFields()) {
-        changeUserPasswordMutation.mutate({
-          oldPassword: oldPassword,
-          newPassword: newPassword,
-        });
-      }
-    };
-
-    return (
-      <>
-        <Button
-          size='sm'
-          onClick={onOpen}
-          className='flex justify-between items-center gap-2'
-        >
-          <BsKey /> Change password
-        </Button>
-
-        <Modal
-          isOpen={isOpen}
-          onClose={onClose}
-          size={{ base: 'full', md: 'md' }}
-        >
-          <ModalOverlay />
-          <ModalContent>
-            <ModalHeader>Change the password</ModalHeader>
-            <ModalCloseButton />
-            <ModalBody>
-              <FormControl isInvalid={isError}>
-                <FormLabel>Old Password</FormLabel>
-                <Input
-                  type='password'
-                  value={oldPassword}
-                  onChange={handleOldPasswordChange}
-                />
-                <FormHelperText>
-                  Please enter your password for change.
-                </FormHelperText>
-                <Divider my={2} />
-                <FormLabel>New Password</FormLabel>
-                <Input
-                  type='password'
-                  value={newPassword}
-                  onChange={handleNewPasswordChange}
-                />
-                <FormLabel pt={2}>Re-enter new Password</FormLabel>
-                <Input
-                  type='password'
-                  value={reNewPassword}
-                  onChange={handleReNewPasswordChange}
-                />
-                {!isError ? (
-                  <FormHelperText>
-                    Password must be between 4 to 8 characters, it must have a
-                    Symbol, an Uppercase and Lowercase.
-                  </FormHelperText>
-                ) : (
-                  <FormErrorMessage>
-                    {"Passwords don't match."}
-                  </FormErrorMessage>
-                )}
-              </FormControl>
-            </ModalBody>
-
-            <ModalFooter>
-              <div className='flex w-full justify-center md:justify-end'>
-                <Button
-                  colorScheme='blue'
-                  mr={3}
-                  onClick={handleSubmit}
-                  disabled={isError}
-                >
-                  Change
-                </Button>
-                <Button variant='ghost' onClick={onClose}>
-                  Close
-                </Button>
-              </div>
-            </ModalFooter>
-          </ModalContent>
-        </Modal>
-      </>
-    );
   };
 
   const ChangeDisplayNameModal = () => {
