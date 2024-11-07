@@ -176,9 +176,13 @@ export class NavigationEntryService {
           select: {
             enableImageEncoding: true,
             enableExplicitContentFilter: true,
+            enableStopTracking: true,
           },
         },
       );
+      if (userPreference?.enableStopTracking) {
+        return;
+      }
 
       if (userPreference?.enableExplicitContentFilter) {
         await this.explicitFilter.filter(
