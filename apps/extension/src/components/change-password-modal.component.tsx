@@ -86,6 +86,7 @@ const ChangePasswordModal = () => {
             <FormControl isInvalid={isError}>
               <FormLabel>Old Password</FormLabel>
               <Input
+                data-testid='old-password-field'
                 type='password'
                 value={oldPassword}
                 onChange={handleOldPasswordChange}
@@ -96,12 +97,14 @@ const ChangePasswordModal = () => {
               <Divider my={2} />
               <FormLabel>New Password</FormLabel>
               <Input
+                data-testid='new-password-field'
                 type='password'
                 value={newPassword}
                 onChange={handleNewPasswordChange}
               />
               <FormLabel pt={2}>Re-enter new Password</FormLabel>
               <Input
+                data-testid='confirm-password-field'
                 type='password'
                 value={reNewPassword}
                 onChange={handleReNewPasswordChange}
@@ -124,10 +127,16 @@ const ChangePasswordModal = () => {
                 mr={3}
                 onClick={handleSubmit}
                 disabled={isError}
+                data-testid='change-button'
               >
                 Change
               </Button>
-              <Button variant='ghost' onClick={onClose}>
+
+              <Button
+                variant='ghost'
+                onClick={onClose}
+                data-testid='close-modal-button'
+              >
                 Close
               </Button>
             </div>
