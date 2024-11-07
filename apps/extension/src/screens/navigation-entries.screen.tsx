@@ -96,9 +96,11 @@ const RelevantSegment = ({
   };
   return (
     <div>
-      <Text textAlign={'center'} py={5} fontSize={'large'}>
-        Relevant tags found
-      </Text>
+      {tags && tags.length > 0 && (
+        <Text textAlign={'center'} py={5} fontSize={'large'}>
+          Relevant tags found
+        </Text>
+      )}
       <div className='w-full flex justify-center items-center gap-5 flex-wrap'>
         {tags &&
           tags.map((tag: string, index: number) => (
@@ -135,7 +137,9 @@ const NavigationEntry = ({
   deleteProps,
 }: NavEntryProps) => {
   const [visible, setVisible] = useState<boolean>(false);
-
+  useEffect(() => {
+    setVisible(false);
+  }, [element]);
   return (
     <div className='flex flex-col w-full bg-white px-2 py-1 rounded-lg mb-1 gap-3'>
       <div key={element.id} className='flex items-center justify-between'>
