@@ -5,9 +5,11 @@ import ChangePasswordModal from '../change-password-modal.component';
 const mockChangeUserPasswordMutation = jest.fn();
 
 jest.mock('../../hooks', () => ({
-  useChangeUserPassword: jest.fn(() => ({
-    changeUserPasswordMutation: { mutate: mockChangeUserPasswordMutation },
-  })),
+  useChangeUserPassword: jest.fn().mockReturnValue({
+    changeUserPasswordMutation: {
+      mutate: () => mockChangeUserPasswordMutation(),
+    },
+  }),
   useHandleSessionExpired: jest.fn(() => ({
     handleSessionExpired: jest.fn(),
   })),
@@ -17,7 +19,9 @@ jest.mock('@tanstack/react-query', () => ({
   useQueryClient: jest.fn(() => ({
     queryClient: { invalidateQueries: jest.fn() },
   })),
-  useMutation: jest.fn(),
+  useMutation: jest.fn().mockImplementation(() => ({
+    mutate: () => mockChangeUserPasswordMutation(),
+  })),
 }));
 
 const renderWithChakra = (ui: JSX.Element) => {
@@ -37,10 +41,10 @@ jest.mock('@wtm/api', () => {
 
 describe('ChangePasswordModal', () => {
   beforeEach(() => {
-    mockChangeUserPasswordMutation.mockClear();
+    jest.clearAllMocks();
   });
 
-  it('renders change password button and opens modal on click', () => {
+  test('renders change password button and opens modal on click', () => {
     renderWithChakra(<ChangePasswordModal />);
     const openButton = screen.getByText(/change password/i);
     expect(openButton).toBeInTheDocument();
@@ -49,7 +53,7 @@ describe('ChangePasswordModal', () => {
     expect(screen.getByText(/change the password/i)).toBeInTheDocument();
   });
 
-  it('shows error when new passwords do not match', async () => {
+  test('shows error when new passwords do not match', async () => {
     renderWithChakra(<ChangePasswordModal />);
     fireEvent.click(screen.getByText(/change password/i));
 
@@ -68,7 +72,7 @@ describe('ChangePasswordModal', () => {
     );
   });
 
-  it('enables submit button when passwords match and fields are valid', () => {
+  test('enables submit button when passwords match and fields are valid', () => {
     renderWithChakra(<ChangePasswordModal />);
     fireEvent.click(screen.getByText(/change password/i));
 
@@ -86,31 +90,7 @@ describe('ChangePasswordModal', () => {
     expect(submitButton).not.toBeDisabled();
   });
 
-  // it('calls changeUserPasswordMutation on submit when form is valid', async () => {
-  //   renderWithChakra(<ChangePasswordModal />);
-  //   fireEvent.click(screen.getByText(/change password/i));
-
-  //   const oldPasswordInput = screen.getByTestId('old-password-field');
-  //   const newPasswordInput = screen.getByTestId('new-password-field');
-  //   const reNewPasswordInput = screen.getByTestId('confirm-password-field');
-
-  //   fireEvent.change(oldPasswordInput, {
-  //     target: { value: 'OldPassword123!' },
-  //   });
-  //   fireEvent.change(newPasswordInput, { target: { value: 'Pass123!' } });
-  //   fireEvent.change(reNewPasswordInput, { target: { value: 'Pass123!' } });
-
-  //   fireEvent.click(screen.getByTestId('change-button'));
-
-  //   await waitFor(() =>
-  //     expect(mockChangeUserPasswordMutation).toHaveBeenCalledWith({
-  //       oldPassword: 'OldPassword123!',
-  //       newPassword: 'Pass123!',
-  //     }),
-  //   );
-  // });
-
-  it('closes modal when close button is clicked', () => {
+  test('closes modal when close button is clicked', () => {
     renderWithChakra(<ChangePasswordModal />);
     fireEvent.click(screen.getByText(/change password/i));
 
