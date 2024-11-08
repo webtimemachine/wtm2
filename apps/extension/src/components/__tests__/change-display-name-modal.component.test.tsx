@@ -5,7 +5,6 @@ import {
 } from '../../hooks';
 import ChangeDisplayNameModal from '../change-display-name-modal.component';
 
-// Mock de los hooks
 jest.mock('../../hooks', () => ({
   useChangeUserDisplayName: jest.fn(),
   useGetBasicUserInformation: jest.fn(),
@@ -32,13 +31,13 @@ describe('ChangeDisplayNameModal', () => {
     jest.clearAllMocks();
   });
 
-  test('abre el modal al hacer clic en el botón', () => {
+  test('open the modal on button click', () => {
     render(<ChangeDisplayNameModal />);
     fireEvent.click(screen.getByText(/Change display name/i));
     expect(screen.getByText(/Change the displayname/i)).toBeInTheDocument();
   });
 
-  test('muestra un mensaje de error cuando el nuevo nombre es igual al actual', () => {
+  test('shows an error message when the new name is the same as the current one', () => {
     render(<ChangeDisplayNameModal />);
     fireEvent.click(screen.getByText(/Change display name/i));
 
@@ -50,7 +49,7 @@ describe('ChangeDisplayNameModal', () => {
     ).toBeInTheDocument();
   });
 
-  test('habilita el botón de cambio cuando se ingresa un nombre diferente al actual', () => {
+  test('enables the toggle button when a name other than the current one is entered', () => {
     render(<ChangeDisplayNameModal />);
     fireEvent.click(screen.getByText(/Change display name/i));
 
