@@ -32,8 +32,8 @@ import {
   ChangeUserDisplayName,
   SystemModels,
 } from "../interfaces";
-import { ChangeUserAvatar } from "@/interfaces/change-user-avatar.interface";
-import { BulkDeleteNavigationEntriesData } from "@/interfaces/navigation-entry.interface";
+import { ChangeUserAvatar } from "../interfaces/change-user-avatar.interface";
+import { BulkDeleteNavigationEntriesData } from "../interfaces/navigation-entry.interface";
 
 interface ApiClientOptions {
   getServerUrl: () => Promise<string>;
