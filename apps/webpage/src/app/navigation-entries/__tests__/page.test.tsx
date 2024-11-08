@@ -134,7 +134,6 @@ describe('NavigationEntriesScreen', () => {
     customRender(<NavigationEntriesScreen />);
 
     expect(screen.getByPlaceholderText('Search')).toBeInTheDocument();
-    expect(screen.getByText('AI Search')).toBeInTheDocument();
     expect(screen.getAllByText(/Test Entry/i)).toHaveLength(2);
   });
 
@@ -155,18 +154,6 @@ describe('NavigationEntriesScreen', () => {
     });
   });
 
-  test('enables and disables semantic search', () => {
-    customRender(<NavigationEntriesScreen />);
-    const onClickListener = screen.getByTestId('ia-search-container');
-    const semanticSwitch = screen.getByRole('checkbox', { name: 'AI Search' });
-    fireEvent.click(onClickListener);
-
-    expect(semanticSwitch).not.toBeChecked();
-
-    fireEvent.click(onClickListener);
-
-    expect(semanticSwitch).toBeChecked();
-  });
   test('enables and disables bulk delete', () => {
     customRender(<NavigationEntriesScreen />);
     const onClickListener = screen.getByTestId('bulk-delete-container');

@@ -29,7 +29,6 @@ import {
   SettingsIcon,
   SmallCloseIcon,
 } from '@chakra-ui/icons';
-import { BsStars } from 'react-icons/bs';
 import { IconType } from 'react-icons';
 
 import { CompleteNavigationEntryDto } from '@wtm/api';
@@ -41,8 +40,6 @@ import {
 
 import { useNavigation } from '../store';
 import { getBrowserIconFromDevice } from '@wtm/utils';
-
-import clsx from 'clsx';
 
 import { updateIcon } from '../utils/updateIcon';
 import Markdown from 'react-markdown';
@@ -229,7 +226,6 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedForDelete, setSelectedForDelete] = useState<number[]>([]);
   const [isBulkDeleteOn, setIsBulkDeleteOn] = useState<boolean>(false);
-  const [isSemantic, setIsSemantic] = useState<boolean>(true);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const offset = page * LIMIT;
   const limit = LIMIT;
@@ -240,7 +236,6 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
     offset,
     limit,
     query,
-    isSemantic,
   });
 
   const navigationEntries = navigationEntriesQuery?.data?.items || [];
@@ -251,7 +246,6 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
     navigationEntriesQuery.refetch();
   }, [
     page,
-    isSemantic,
     deleteNavigationEntryMutation.isSuccess,
     deleteBulkNavigationEntriesMutation?.isSuccess,
   ]);
@@ -353,28 +347,6 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
           </div>
 
           <div className='flex py-1 justify-between'>
-            <div
-              className='flex items-center gap-1 p-1 h-[32px] select-none cursor-pointer hover:bg-white rounded-lg'
-              data-testid='ia-search-container'
-              onClick={() => setIsSemantic((value) => !value)}
-            >
-              <Icon
-                className={clsx([
-                  isSemantic ? 'fill-blue-500' : 'fill-gray-500',
-                ])}
-                as={BsStars}
-                boxSize={4}
-              />
-              <Text className='text-slate-600 mr-1' fontSize='small'>
-                AI Search
-              </Text>
-              <Switch
-                size='sm'
-                aria-label='AI Search'
-                isChecked={isSemantic}
-                onChange={() => setIsSemantic((value) => !value)}
-              />
-            </div>
             <div
               className='flex items-center gap-1 p-1 h-[32px] select-none cursor-pointer hover:bg-white rounded-lg'
               data-testid='bulk-delete-container'
