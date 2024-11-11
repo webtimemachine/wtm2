@@ -171,6 +171,8 @@ export class IndexerService {
   }
 
   async bulkDelete(urls: string[], userId: bigint) {
+    if (urls.length === 0) return;
+
     const store = await WeaviateStore.fromExistingIndex(
       new OpenAIEmbeddings({ openAIApiKey: appEnv.OPENAI_ACCESS_TOKEN }),
       await this.vectorStoreArgs(userId),
