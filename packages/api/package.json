@@ -1,12 +1,8 @@
 {
-  "type": "module",
   "name": "@wtm/api",
   "version": "1.0.0",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "src/index.ts",
   "scripts": {
-    "dev": "nodemon --watch src --exec \"npm run build\"",
-    "build": "rimraf ./dist && tsc"
   },
   "keywords": [],
   "author": "",
@@ -14,9 +10,6 @@
   "description": "",
   "devDependencies": {
     "@types/node": "^22.5.4",
-    "nodemon": "^3.1.4",
-    "rimraf": "^6.0.1",
-    "ts-node": "^10.9.2",
     "typescript": "^5.6.2"
   }
 }

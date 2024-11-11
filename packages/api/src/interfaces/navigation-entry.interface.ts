@@ -27,7 +27,6 @@ export interface GetNavigationEntriesData {
   offset: number;
   limit: number;
   query: string;
-  isSemantic: boolean;
   tag?: string;
 }
 

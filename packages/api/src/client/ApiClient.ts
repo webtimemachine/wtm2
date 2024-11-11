@@ -32,8 +32,8 @@ import {
   ChangeUserDisplayName,
   SystemModels,
 } from "../interfaces";
-import { ChangeUserAvatar } from "@/interfaces/change-user-avatar.interface";
-import { BulkDeleteNavigationEntriesData } from "@/interfaces/navigation-entry.interface";
+import { ChangeUserAvatar } from "../interfaces/change-user-avatar.interface";
+import { BulkDeleteNavigationEntriesData } from "../interfaces/navigation-entry.interface";
 
 interface ApiClientOptions {
   getServerUrl: () => Promise<string>;
@@ -341,14 +341,13 @@ export class ApiClient {
   };
 
   getNavigationEntries = async (params: GetNavigationEntriesData) => {
-    const { offset, limit, query, isSemantic, tag } = params;
+    const { offset, limit, query, tag } = params;
 
     const url =
       "/api/navigation-entry?" +
       new URLSearchParams({
         offset: offset.toString(),
         limit: limit.toString(),
-        isSemantic: String(isSemantic),
         ...(tag && { tag }),
         ...(query && { query: query }),
       }).toString();
