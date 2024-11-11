@@ -20,8 +20,5 @@ jobs:
       - name: Install dependencies
         run: npm install --workspaces
 
-      - name: Build all packages
-        run: npm run build --workspace=packages/
-
       - name: Run Webpage Tests
         run: npm run test:cov --workspace=@wtm/webpage
