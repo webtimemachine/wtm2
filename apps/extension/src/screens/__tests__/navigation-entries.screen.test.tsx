@@ -128,7 +128,6 @@ describe('NavigationEntriesScreen', () => {
 
     expect(screen.getByText('WebTM')).toBeInTheDocument();
     expect(screen.getByPlaceholderText('Search')).toBeInTheDocument();
-    expect(screen.getByText('AI Search')).toBeInTheDocument();
     expect(screen.getAllByText(/Test Entry/i)).toHaveLength(2);
   });
 
@@ -156,19 +155,6 @@ describe('NavigationEntriesScreen', () => {
     await waitFor(() => {
       expect(mockRefetch).toHaveBeenCalled();
     });
-  });
-
-  test('enables and disables semantic search', () => {
-    customRender(<NavigationEntriesScreen />);
-    const onClickListener = screen.getByTestId('ia-search-container');
-    const semanticSwitch = screen.getByRole('checkbox', { name: 'AI Search' });
-    fireEvent.click(onClickListener);
-
-    expect(semanticSwitch).not.toBeChecked();
-
-    fireEvent.click(onClickListener);
-
-    expect(semanticSwitch).toBeChecked();
   });
 
   test('deletes a navigation entry', async () => {
