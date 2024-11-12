@@ -166,56 +166,6 @@ export class NavigationEntryService {
     const { content, images, ...entryData } = createNavigationEntryInputDto;
 
     const liteMode = !content;
-
-    if (!liteMode) {
-      const userPreference = await this.prismaService.userPreferences.findFirst(
-        {
-          where: {
-            userId: jwtContext.user.id,
-          },
-          select: {
-            enableImageEncoding: true,
-            enableExplicitContentFilter: true,
-            enableStopTracking: true,
-          },
-        },
-      );
-      if (userPreference?.enableStopTracking) {
-        return;
-      }
-
-      if (userPreference?.enableExplicitContentFilter) {
-        await this.explicitFilter.filter(
-          content!,
-          createNavigationEntryInputDto.url,
-        );
-      }
-
-      try {
-        await this.indexerService.index(
-          content!,
-          images,
-          createNavigationEntryInputDto.url,
-          jwtContext.user.id,
-          userPreference?.enableImageEncoding || false,
-        );
-      } catch (error) {
-        this.logger.error(
-          `An error occurred indexing '${createNavigationEntryInputDto.url}'. Cause: ${error.message}`,
-        );
-      }
-    }
-
-    const lastEntry = await this.prismaService.navigationEntry.findFirst({
-      where: {
-        userId: jwtContext.user.id,
-      },
-      take: 1,
-      orderBy: {
-        navigationDate: 'desc',
-      },
-    });
-
     const openai = new OpenAI({
       openAIApiKey: appEnv.OPENAI_ACCESS_TOKEN,
       modelName: 'gpt-4o-mini',
@@ -277,6 +227,56 @@ export class NavigationEntryService {
     const jsonParseFormattedResult = JSON.parse(formattedResult);
 
     const parsedData = SummaryPromptSchema.safeParse(jsonParseFormattedResult);
+    if (!liteMode) {
+      const userPreference = await this.prismaService.userPreferences.findFirst(
+        {
+          where: {
+            userId: jwtContext.user.id,
+          },
+          select: {
+            enableImageEncoding: true,
+            enableExplicitContentFilter: true,
+            enableStopTracking: true,
+          },
+        },
+      );
+      if (userPreference?.enableStopTracking) {
+        return;
+      }
+
+      if (userPreference?.enableExplicitContentFilter) {
+        await this.explicitFilter.filter(
+          content!,
+          createNavigationEntryInputDto.url,
+        );
+      }
+
+      try {
+        console.log(parsedData);
+        if (parsedData.success)
+          await this.indexerService.index(
+            parsedData.data.data.content,
+            images,
+            createNavigationEntryInputDto.url,
+            jwtContext.user.id,
+            userPreference?.enableImageEncoding || false,
+          );
+      } catch (error) {
+        this.logger.error(
+          `An error occurred indexing '${createNavigationEntryInputDto.url}'. Cause: ${error.message}`,
+        );
+      }
+    }
+
+    const lastEntry = await this.prismaService.navigationEntry.findFirst({
+      where: {
+        userId: jwtContext.user.id,
+      },
+      take: 1,
+      orderBy: {
+        navigationDate: 'desc',
+      },
+    });
 
     if (parsedData.success) {
       await this.prismaService.$transaction(async (prismaClient) => {
