@@ -16,7 +16,7 @@ jest.mock('../../../hooks', () => ({
 }));
 (useModelsInformation as jest.Mock).mockReturnValue({
   text_processing_model: 'gpt-4o-mini',
-  image_processing_model: 'gpt-4o',
+  image_processing_model: 'gpt-4o-mini',
 });
 
 const mockNavigateBack = jest.fn();
