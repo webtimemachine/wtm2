@@ -7,13 +7,11 @@ import {
   Button,
   Divider,
   Spinner,
-  Flex,
 } from '@chakra-ui/react';
 import { ArrowBackIcon } from '@chakra-ui/icons';
 import { useGetPreferences, useUpdatePreferences } from '../hooks';
 import { useNavigation } from '../store';
 import { updateIcon } from '../utils/updateIcon';
-import { GrTest } from 'react-icons/gr';
 
 export const PreferencesScreen: React.FC<object> = () => {
   const [enabled, setEnabled] = useState(false);
@@ -226,40 +224,6 @@ export const PreferencesScreen: React.FC<object> = () => {
                   Enable to stop tracking your search history.
                 </Text>
               </div>
-              <Divider />
-              <Flex
-                marginBottom={1}
-                marginTop={5}
-                gap={1}
-                alignItems={'center'}
-              >
-                <Text fontSize={'large'} fontWeight={700}>
-                  Labs
-                </Text>
-                <GrTest size={20} />
-              </Flex>
-              <Divider />
-              <div className='flex flex-col w-full py-2'>
-                <div className='flex flex-row w-full justify-between pb-2'>
-                  <Text fontSize={'medium'} fontWeight={700}>
-                    Enable WebLLM
-                  </Text>
-                  <Switch
-                    size='md'
-                    isChecked={webLLMEnabled}
-                    aria-label='Enable WebLLM'
-                    onChange={(e) => setWebLLMEnabled(e.target.checked)}
-                  />
-                </div>
-                <Text fontSize={14}>
-                  Enable to use WebLLM for better search results
-                </Text>
-                <Text fontSize={10}>
-                  Note: This feature is still in development, it may consume
-                  more resources.
-                </Text>
-              </div>
-
               <Divider />
             </div>
             <div className='pb-8 pt-4'>
