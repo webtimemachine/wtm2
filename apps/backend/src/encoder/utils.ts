@@ -10,7 +10,7 @@ import { LLMChain } from 'langchain/chains';
 import { appEnv } from '../config';
 
 const captionerModel = new ChatOpenAI({
-  modelName: 'gpt-4o',
+  modelName: 'gpt-4o-mini',
   maxTokens: 256,
   temperature: 0,
   openAIApiKey: appEnv.OPENAI_ACCESS_TOKEN,
@@ -28,7 +28,7 @@ const humanPrompt = new HumanMessagePromptTemplate([
 
 const mainPrompt = ChatPromptTemplate.fromMessages([
   SystemMessagePromptTemplate.fromTemplate(
-    'You are an image captioner, returning a 20 words summary about what you see in any image. REMEMBER to keep it short',
+    'You are an image captioner, returning a 30 words summary about what you see in any image. REMEMBER to keep it short',
   ),
   humanPrompt,
 ]);
@@ -60,5 +60,6 @@ export const caption = async (image: string): Promise<string> => {
   const response = await chain.invoke({
     image,
   });
+
   return response['text'];
 };
