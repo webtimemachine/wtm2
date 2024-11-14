@@ -8,7 +8,7 @@ export class SystemService {
   getModelsInformation() {
     const models = {
       text_processing_model: 'gpt-4o-mini',
-      image_processing_model: 'gpt-4o',
+      image_processing_model: 'gpt-4o-mini',
     };
     return models;
   }
