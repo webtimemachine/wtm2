@@ -26,6 +26,7 @@
   "license": "ISC",
   "devDependencies": {
     "cross-env": "^7.0.3",
+    "puppeteer": "^19.11.1",
     "turbo": "^2.1.1"
   },
   "workspaces": [

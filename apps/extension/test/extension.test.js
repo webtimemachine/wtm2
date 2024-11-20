@@ -7,11 +7,12 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-console.log("Extension Path:", extensionPath); // Log the path for debugging
 
 (async () => {
     // Specify the path to the extension directory
-    const extensionPath = path.resolve(__dirname, '..');  // Root directory of the extension
+    const extensionPath = path.resolve(__dirname, '../../../native/app_chrome');  // Root directory of the extension
+
+    console.log("Extension Path:", extensionPath); // Log the path for debugging
 
     // Launch a new instance of Chrome with the extension loaded
     const browser = await puppeteer.launch({

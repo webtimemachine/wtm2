@@ -20,7 +20,8 @@
     "lint:fix": "eslint --fix . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "test": "jest --passWithNoTests",
-    "test:cov": "jest --passWithNoTests --coverage"
+    "test:cov": "jest --passWithNoTests --coverage",
+    "test:extension": "node test/extension.test.js"
   },
   "dependencies": {
     "@chakra-ui/icons": "^2.1.1",
@@ -76,4 +77,5 @@
     "typescript": "^5.0.2",
     "vite": "^4.4.5"
   }
+
 }
