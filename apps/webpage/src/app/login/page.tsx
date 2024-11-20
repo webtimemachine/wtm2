@@ -19,6 +19,8 @@ import { isLoginRes } from '@wtm/api';
 import clsx from 'clsx';
 import { readAuthStateFromLocal } from '../../store/auth.store';
 import { AtSignIcon, LockIcon } from '@chakra-ui/icons';
+import Link from 'next/link';
+import { AuthLayout } from '@/components/auth-layout';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -84,28 +86,29 @@ const LoginScreen: React.FC<{}> = () => {
   }, [authState]);
 
   return (
-    <div className='flex justify-center items-center h-screen'>
-      <div className='flex flex-col p-3 md:p-8 py-10 items-center md:h-1/3 max-w-6xl min-w-[360px] w-1/3 md:min-h-[500px] bg-white rounded-md shadow-2xl transition-shadow filter drop-shadow'>
-        <div className='pb-4'>
-          <Text fontSize={'xx-large'} fontWeight={'bold'}>
-            WebTM
-          </Text>
-        </div>
+    <AuthLayout>
+      <Link href='/'>
+        <Text fontSize={'xx-large'} fontWeight={'bold'}>
+          WebTM<span className='text-[#3182CE]'>.</span>
+        </Text>
+      </Link>
+
+      <div className='flex flex-col gap-1 w-full'>
         <div className='pb-4 flex w-full'>
           <ServerUrlEditable />
         </div>
-
         <FormControl isInvalid={!!emailError}>
           <div
             className={clsx(['flex flex-col w-full', !emailError && 'pb-4'])}
           >
-            <InputGroup>
-              <InputLeftAddon>
+            <InputGroup colorScheme='blue'>
+              <InputLeftAddon bgColor={'blue.500'} textColor={'white'}>
                 <AtSignIcon />
               </InputLeftAddon>
               <Input
                 type='text'
                 name='email'
+                colorScheme='blue'
                 placeholder='Email'
                 value={email}
                 autoCapitalize={'off'}
@@ -122,14 +125,15 @@ const LoginScreen: React.FC<{}> = () => {
           </div>
         </FormControl>
 
-        <div className='flex flex-col w-full pb-4'>
-          <InputGroup size='md'>
-            <InputLeftAddon>
+        <div className='flex flex-col w-full'>
+          <InputGroup size='md' colorScheme='blue'>
+            <InputLeftAddon bgColor={'blue.500'} textColor={'white'}>
               <LockIcon />
             </InputLeftAddon>
             <Input
               pr='4.5rem'
               type={showPass ? 'text' : 'password'}
+              colorScheme='blue'
               name='password'
               placeholder='Enter password'
               value={password}
@@ -140,6 +144,7 @@ const LoginScreen: React.FC<{}> = () => {
               <Button
                 h='1.75rem'
                 size='sm'
+                colorScheme='blue'
                 onClick={() => setShowPass(!showPass)}
               >
                 {showPass ? 'Hide' : 'Show'}
@@ -148,34 +153,37 @@ const LoginScreen: React.FC<{}> = () => {
           </InputGroup>
         </div>
 
-        <div className='flex flex-row w-full justify-between pb-4'>
+        <div className='flex flex-row w-full justify-between mt-2'>
           <Text
             fontSize={'small'}
-            className='hover:cursor-pointer hover:underline'
+            className='hover:cursor-pointer hover:underline font-medium hover:text-[#3182CE] hover:font-bold'
             onClick={() => navigateTo('forgot-password')}
           >
             Forgot password?
           </Text>
-          <Text
-            fontSize={'small'}
-            className='hover:cursor-pointer hover:underline'
-            onClick={() => navigateTo('sign-up')}
-          >
-            Sign up
-          </Text>
-        </div>
-        <div className='flex gap-4'>
-          <Button
-            colorScheme='blue'
-            onClick={() => handleLogin()}
-            isDisabled={!email || !password || !!emailError}
-            isLoading={loginMutation.isPending}
-          >
-            Sign In
-          </Button>
         </div>
       </div>
-    </div>
+      <div className='flex gap-2 w-full mt-auto'>
+        <Button
+          onClick={() => handleLogin()}
+          isDisabled={!email || !password || !!emailError}
+          isLoading={loginMutation.isPending}
+          className='w-full'
+          colorScheme='blue'
+        >
+          Sign In
+        </Button>
+        <Button
+          colorScheme='blue'
+          variant={'outline'}
+          isLoading={loginMutation.isPending}
+          className='w-full'
+          onClick={() => navigateTo('sign-up')}
+        >
+          Sign Up
+        </Button>
+      </div>
+    </AuthLayout>
   );
 };
 export default LoginScreen;
