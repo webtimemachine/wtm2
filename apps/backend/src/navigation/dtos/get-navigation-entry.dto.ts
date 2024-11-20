@@ -10,14 +10,6 @@ export class GetNavigationEntryDto extends GetPaginationsParamsDto {
   @IsString()
   @Type(() => String)
   query?: string;
-  @ApiProperty({ default: false, required: false })
-  @IsOptional()
-  @IsBoolean()
-  @Transform(({ value }) => {
-    // a transform function was provided because `IsBoolean` didn't work properly
-    return value === 'true' ? true : false;
-  })
-  isSemantic: boolean;
 
   @ApiProperty({ required: false })
   @IsOptional()
