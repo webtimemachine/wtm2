@@ -30,10 +30,12 @@ const EditableControls = () => {
       <IconButton
         {...getSubmitButtonProps()}
         aria-label='Save'
+        colorScheme='green'
         icon={<CheckIcon />}
       />
       <IconButton
         aria-label='Cancel'
+        colorScheme='red'
         icon={<CloseIcon />}
         {...getCancelButtonProps()}
       />
@@ -44,6 +46,7 @@ const EditableControls = () => {
         aria-label='Edit'
         size='sm'
         icon={<EditIcon />}
+        colorScheme='blue'
         {...getEditButtonProps()}
       />
     </div>
@@ -64,6 +67,7 @@ export const ServerUrlEditable = () => {
         fontSize='lg'
         width='100%'
         onChange={(e) => setValue(e)}
+        colorScheme='blue'
         onSubmit={() => {
           try {
             let url = new URL(value).href;
@@ -88,7 +92,7 @@ export const ServerUrlEditable = () => {
           <div
             className={clsx([
               'flex-1 w-full',
-              '[&>span]:px-3 [&>span]:py-[6px] [&>span]:w-full [&>span]:bg-slate-200 [&>span]:rounded-lg',
+              '[&>span]:px-3 [&>span]:py-[6px] [&>span]:w-full [&>span]:border [&>span]:border-[#E2E8F0] [&>span]:rounded-lg',
             ])}
           >
             <EditablePreview />
