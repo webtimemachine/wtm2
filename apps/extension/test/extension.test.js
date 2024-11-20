@@ -18,8 +18,8 @@ const __dirname = path.dirname(__filename);
     const browser = await puppeteer.launch({
         headless: false, // We use headless: false to see the browser while testing; set to true for CI or headless testing.
         args: [
-            `--disable-extensions-except=${extensionPath}`,
-            `--load-extension=${extensionPath}`,
+            `--disable-extensions-except=/home/liza_saravia/wtm2/native/app_chrome`,
+            `--load-extension=/home/liza_saravia/wtm2/native/app_chrome`,
         ],
     });
 
@@ -27,7 +27,7 @@ const __dirname = path.dirname(__filename);
     const page = await browser.newPage();
 
     // Open a new tab and navigate to a test URL, or any page where your extension should work
-    await page.goto('https://www.example.com');
+    await page.goto('https://example.org');
 
     // Allow time for extension scripts to load; can be optimized
     await page.waitForTimeout(1000);
@@ -47,6 +47,6 @@ const __dirname = path.dirname(__filename);
         console.error('Extension button not found!');
     }
 
-    // Close the browser after the test is done
-    await browser.close();
+    // // Close the browser after the test is done
+    // await browser.close();
 })();
