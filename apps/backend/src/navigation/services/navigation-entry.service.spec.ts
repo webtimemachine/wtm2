@@ -204,7 +204,6 @@ const queryParams: GetNavigationEntryDto = {
   limit: 10,
   offset: 0,
   query: 'example',
-  isSemantic: true,
 };
 
 jest.mock('@langchain/openai', () => {
