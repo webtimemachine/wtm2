@@ -121,7 +121,7 @@ describe('LoginScreen', () => {
     expect(screen.getByPlaceholderText('Email')).toBeInTheDocument();
     expect(screen.getByPlaceholderText('Enter password')).toBeInTheDocument();
     expect(screen.getByText('Forgot password?')).toBeInTheDocument();
-    expect(screen.getByText('Sign up')).toBeInTheDocument();
+    expect(screen.getByText('Sign Up')).toBeInTheDocument();
   });
 
   test('validates email input', () => {
@@ -209,7 +209,7 @@ describe('LoginScreen', () => {
   test('navigates to sign up screen', () => {
     customRender(<LoginScreen />);
 
-    const signUpLink = screen.getByText('Sign up') as HTMLElement;
+    const signUpLink = screen.getByText('Sign Up') as HTMLElement;
 
     fireEvent.click(signUpLink);
 
