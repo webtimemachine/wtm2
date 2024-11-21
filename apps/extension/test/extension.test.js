@@ -10,7 +10,7 @@ const __dirname = path.dirname(__filename);
 
 (async () => {
     // Specify the path to the extension directory
-    const extensionPath = path.resolve(__dirname, '../../../native/app_chrome');  // Root directory of the extension
+    const extensionPath = path.resolve(__dirname, '../../../native/app_chrome');  // Root directory of the extension and manifest
 
     console.log("Extension Path:", extensionPath); // Log the path for debugging
 
@@ -27,25 +27,72 @@ const __dirname = path.dirname(__filename);
     const page = await browser.newPage();
 
     // Open a new tab and navigate to a test URL, or any page where your extension should work
-    await page.goto('https://example.org');
+    await page.goto('https://webtm.io/');
 
     // Allow time for extension scripts to load; can be optimized
     await page.waitForTimeout(1000);
 
     // Locate elements from your extension UI, if any, using the Chrome DevTools extension API or page selectors
-    // For example, let's say your extension adds a button with the id 'my-extension-button'
-    const button = await page.$('#my-extension-button');
-    if (button) {
-        // Interact with your extension as a user would
-        await button.click();
+    
+    // Define the path to your manifest file
+    const manifestPath = path.resolve(__dirname, '../../../native/app_chrome/manifest.json');
+    
+    // Define the required fields for the manifest
+    const requiredFields = [
+        'manifest_version',
+        'name',
+        'version',
+        'description',
+        'permissions'
+    ];
 
-        // Add assertions to confirm expected behavior
-        // For instance, checking if a certain text or element is present after the click
-        const result = await page.$eval('#result-element', el => el.textContent);
-        console.log(result); // Adjust assertions as needed to validate behavior
-    } else {
-        console.error('Extension button not found!');
+    // Utility function to load and parse the manifest file
+    function loadManifest() {
+        try {
+        const manifestData = fs.readFileSync(manifestPath, 'utf-8');
+        return JSON.parse(manifestData);
+        } catch (error) {
+        console.error("Error reading the manifest file:", error);
+        return null;
+        }
     }
+
+    // Validation function to check for required fields
+function validateManifest(manifest) {
+    let allChecksPassed = true;
+  
+    requiredFields.forEach(field => {
+      if (!manifest.hasOwnProperty(field)) {
+        console.error(`❌ Missing required field: ${field}`);
+        allChecksPassed = false;
+      } else {
+        console.log(`✅ Found required field: ${field}`);
+      }
+    });
+    return allChecksPassed;
+}
+
+// Run the manifest validation test
+function runManifestValidationTest() {
+    console.log("Running Manifest Validation Test...");
+  
+    const manifest = loadManifest();
+    if (!manifest) {
+      console.error("Failed to load manifest. Aborting test.");
+      return;
+    }
+  
+    const result = validateManifest(manifest);
+  
+    if (result) {
+      console.log("🎉 Manifest validation test passed!");
+    } else {
+      console.error("❌ Manifest validation test failed.");
+    }
+  }
+  
+  // Execute the test when the script runs
+  runManifestValidationTest();
 
     // // Close the browser after the test is done
     // await browser.close();
