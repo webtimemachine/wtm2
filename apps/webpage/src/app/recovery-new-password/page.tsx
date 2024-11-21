@@ -20,6 +20,7 @@ import { LuLogIn } from 'react-icons/lu';
 import { useAuthStore, useNavigation } from '@/store';
 import { useRestorePassword } from '@/hooks';
 import { BiKey } from 'react-icons/bi';
+import { AuthLayout } from '@/components/auth-layout';
 
 const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[^\s]{8,20}$/;
 const passwordRegexMessage =
@@ -95,136 +96,132 @@ const RecoveryNewPassword: React.FC<{}> = () => {
   }, [restorePasswordMutation.isSuccess]);
 
   return (
-    <div className='flex justify-center items-center h-screen'>
-      <div className='flex flex-col p-3 md:p-8 py-10 items-center md:h-1/3 max-w-6xl min-w-[360px] w-1/3 md:min-h-[500px] bg-white rounded-md shadow-2xl transition-shadow filter drop-shadow'>
-        <div className='flex w-full justify-start pb-4 gap-4 items-center'>
-          <IconButton aria-label='Back icon'>
-            <Icon
-              className='rotate-180'
-              as={LuLogIn}
-              boxSize={5}
-              onClick={() => {
-                navigateTo('login');
-              }}
-            />
-          </IconButton>
+    <AuthLayout>
+      <div className='flex w-full justify-start pb-4 gap-4 items-center'>
+        <IconButton colorScheme='blue' aria-label='Back icon'>
+          <Icon
+            className='rotate-180'
+            as={LuLogIn}
+            boxSize={5}
+            onClick={() => {
+              navigateTo('login');
+            }}
+          />
+        </IconButton>
 
-          <div className='flex w-full justify-center pr-[40px]'>
-            <Text fontSize={'xx-large'} fontWeight={'bold'}>
-              New Password
-            </Text>
-          </div>
-        </div>
-
-        <div className='flex w-full pb-4 gap-2 items-center'>
-          <div className='[&>p]:px-3 [&>p]:py-[6px] [&>p]:w-full [&>p]:bg-slate-200 [&>p]:rounded-lg'>
-            <Text fontSize='medium'>Email: {recoveryEmail}</Text>
-          </div>
-        </div>
-
-        <FormControl isInvalid={!!passwordError}>
-          <div className='flex flex-col w-full pb-4'>
-            <InputGroup size='md'>
-              <InputLeftAddon>
-                <BiKey />
-              </InputLeftAddon>
-              <Input
-                pr='4.5rem'
-                type={showPass ? 'text' : 'password'}
-                name='password'
-                placeholder='Enter password'
-                value={password}
-                onChange={(event) => {
-                  setPassword(event.target.value);
-                  if (passwordError) setPasswordError('');
-                }}
-                backgroundColor={'white'}
-              />
-              <InputRightElement width='4.5rem'>
-                <Button
-                  h='1.75rem'
-                  size='sm'
-                  onClick={() => setShowPass(!showPass)}
-                >
-                  {showPass ? 'Hide' : 'Show'}
-                </Button>
-              </InputRightElement>
-            </InputGroup>
-            <div className='[&>div]:mt-1 [&>div]:mb-1 flex gap-2 select-none'>
-              <FormErrorMessage>{passwordError}</FormErrorMessage>
-              {!!passwordError && (
-                <div>
-                  <Tooltip
-                    bg='red.600'
-                    label={passwordRegexMessage}
-                    isOpen={passTooltipIsOpen}
-                    hasArrow
-                  >
-                    <InfoIcon
-                      color='red.600'
-                      onMouseEnter={passTooltipOnOpen}
-                      onMouseLeave={passTooltipOnClose}
-                      onClick={passTooltipOnToggle}
-                    />
-                  </Tooltip>
-                </div>
-              )}
-            </div>
-          </div>
-        </FormControl>
-
-        <FormControl isInvalid={!!confirmPassError}>
-          <div className='flex flex-col w-full pb-4'>
-            <InputGroup size='md'>
-              <InputLeftAddon>
-                <BiKey />
-              </InputLeftAddon>
-              <Input
-                pr='4.5rem'
-                type={showConfirmPass ? 'text' : 'password'}
-                name='password'
-                placeholder='Confirm password'
-                value={confirmPassword}
-                onChange={(event) => {
-                  setConformPassword(event.target.value);
-                  if (confirmPassError) setConfirmPassError('');
-                }}
-                backgroundColor={'white'}
-              />
-              <InputRightElement width='4.5rem'>
-                <Button
-                  h='1.75rem'
-                  size='sm'
-                  onClick={() => setShowConfirmPass(!showConfirmPass)}
-                >
-                  {showConfirmPass ? 'Hide' : 'Show'}
-                </Button>
-              </InputRightElement>
-            </InputGroup>
-            <div className='[&>div]:mt-1 [&>div]:mb-1 select-none'>
-              <FormErrorMessage>{confirmPassError}</FormErrorMessage>
-            </div>
-          </div>
-        </FormControl>
-
-        <div className='flex gap-4 pt-2'>
-          <Button
-            colorScheme='blue'
-            onClick={() => handleRestorePassword()}
-            isDisabled={
-              !password ||
-              !!passwordError ||
-              !confirmPassword ||
-              !!confirmPassError
-            }
-            isLoading={restorePasswordMutation.isPending}
-            loadingText='Updating'
-          >
-            Update Password
-          </Button>
+        <div className='flex w-full justify-center pr-[40px]'>
+          <Text fontSize={'x-large'} fontWeight={'bold'}>
+            New Password
+          </Text>
         </div>
       </div>
-    </div>
+
+      <div className='flex w-full pb-4 gap-2 items-center'>
+        <div className='[&>p]:px-3 [&>p]:py-[6px] [&>p]:w-full [&>p]:border [&>p]:border-[#E2E8F0] w-full [&>p]:rounded-lg'>
+          <Text fontSize='medium'>Email: {recoveryEmail}</Text>
+        </div>
+      </div>
+
+      <FormControl isInvalid={!!passwordError}>
+        <div className='flex flex-col w-full pb-4'>
+          <InputGroup size='md'>
+            <InputLeftAddon bgColor={'blue.500'} textColor={'white'}>
+              <BiKey />
+            </InputLeftAddon>
+            <Input
+              pr='4.5rem'
+              type={showPass ? 'text' : 'password'}
+              name='password'
+              placeholder='Enter password'
+              value={password}
+              onChange={(event) => {
+                setPassword(event.target.value);
+                if (passwordError) setPasswordError('');
+              }}
+              backgroundColor={'white'}
+            />
+            <InputRightElement width='4.5rem'>
+              <Button
+                h='1.75rem'
+                size='sm'
+                onClick={() => setShowPass(!showPass)}
+                colorScheme='blue'
+              >
+                {showPass ? 'Hide' : 'Show'}
+              </Button>
+            </InputRightElement>
+          </InputGroup>
+          <div className='[&>div]:mt-1 [&>div]:mb-1 flex gap-2 select-none'>
+            <FormErrorMessage>{passwordError}</FormErrorMessage>
+            {!!passwordError && (
+              <div>
+                <Tooltip
+                  bg='red.600'
+                  label={passwordRegexMessage}
+                  isOpen={passTooltipIsOpen}
+                  hasArrow
+                >
+                  <InfoIcon
+                    color='red.600'
+                    onMouseEnter={passTooltipOnOpen}
+                    onMouseLeave={passTooltipOnClose}
+                    onClick={passTooltipOnToggle}
+                  />
+                </Tooltip>
+              </div>
+            )}
+          </div>
+        </div>
+      </FormControl>
+
+      <FormControl isInvalid={!!confirmPassError}>
+        <div className='flex flex-col w-full pb-4'>
+          <InputGroup size='md'>
+            <InputLeftAddon bgColor={'blue.500'} textColor={'white'}>
+              <BiKey />
+            </InputLeftAddon>
+            <Input
+              pr='4.5rem'
+              type={showConfirmPass ? 'text' : 'password'}
+              name='password'
+              placeholder='Confirm password'
+              value={confirmPassword}
+              onChange={(event) => {
+                setConformPassword(event.target.value);
+                if (confirmPassError) setConfirmPassError('');
+              }}
+              backgroundColor={'white'}
+            />
+            <InputRightElement width='4.5rem'>
+              <Button
+                h='1.75rem'
+                size='sm'
+                onClick={() => setShowConfirmPass(!showConfirmPass)}
+                colorScheme='blue'
+              >
+                {showConfirmPass ? 'Hide' : 'Show'}
+              </Button>
+            </InputRightElement>
+          </InputGroup>
+          <div className='[&>div]:mt-1 [&>div]:mb-1 select-none'>
+            <FormErrorMessage>{confirmPassError}</FormErrorMessage>
+          </div>
+        </div>
+      </FormControl>
+
+      <Button
+        colorScheme='blue'
+        onClick={() => handleRestorePassword()}
+        isDisabled={
+          !password || !!passwordError || !confirmPassword || !!confirmPassError
+        }
+        isLoading={restorePasswordMutation.isPending}
+        loadingText='Updating'
+        className='w-full mt-auto'
+      >
+        Update Password
+      </Button>
+    </AuthLayout>
   );
 };
 export default RecoveryNewPassword;
