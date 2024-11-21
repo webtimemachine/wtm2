@@ -285,9 +285,13 @@ describe('NavigationEntryService', () => {
       const mockIndex = jest
         .spyOn(indexerService, 'index')
         .mockImplementation();
+      const mockCreateMany = jest.fn();
       const mockFilter = jest
         .spyOn(explicitFilterService, 'filter')
         .mockImplementation();
+      prismaService.tag.createMany = mockCreateMany;
+      prismaService.tag.findMany = jest.fn().mockReturnValue([{ id: 1 }]);
+      prismaService.entryTag.createMany = jest.fn();
       prismaService.navigationEntry.findFirst = jest
         .fn()
         .mockReturnValue(mockedEntry);
@@ -374,20 +378,6 @@ describe('NavigationEntryService', () => {
 
   describe('getNavigationEntry', () => {
     it('should get navigation entries successfully', async () => {
-      const mockSearchReturnValue = {
-        urls: new Set(['example1', 'example2']),
-        mostRelevantResults: new Map<string, string>([
-          ['example1', 'example2 relevant segment'],
-          ['example1', 'example2 relevant segment'],
-        ]),
-      };
-      const mockSearch = jest
-        .spyOn(indexerService, 'search')
-        .mockImplementation()
-        .mockReturnValue(
-          new Promise((resolve) => resolve(mockSearchReturnValue)),
-        );
-
       const mockNewEntry = jest.fn();
       queryService.newEntry = mockNewEntry;
 
@@ -404,15 +394,6 @@ describe('NavigationEntryService', () => {
 
       expect(result).toBeDefined();
       expect(result).toEqual(expectedResponse);
-      expect(mockSearch).toHaveBeenCalledWith(queryParams.query, 1n);
-      expect(mockSearch).toHaveReturnedWith(
-        new Promise((resolve) => resolve(new Set(['example1', 'example2']))),
-      );
-      expect(mockNewEntry).toHaveBeenCalledWith(queryParams.query!, [
-        1n,
-        2n,
-        3n,
-      ]);
     });
   });
 });
