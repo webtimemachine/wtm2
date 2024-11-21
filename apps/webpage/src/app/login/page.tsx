@@ -20,7 +20,7 @@ import clsx from 'clsx';
 import { readAuthStateFromLocal } from '../../store/auth.store';
 import { AtSignIcon, LockIcon } from '@chakra-ui/icons';
 import Link from 'next/link';
-import { AuthLayout } from '@/components/auth-layout';
+import { AuthLayout } from '../../components/auth-layout';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
