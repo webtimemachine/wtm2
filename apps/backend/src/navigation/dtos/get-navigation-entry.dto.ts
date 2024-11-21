@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Type, Transform } from 'class-transformer';
-import { IsOptional, IsString, IsBoolean } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsOptional, IsString } from 'class-validator';
 
 import { GetPaginationsParamsDto } from '../../common/dtos';
 
