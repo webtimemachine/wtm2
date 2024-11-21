@@ -362,7 +362,7 @@ export class NavigationEntryService {
     jwtContext: JwtContext,
     queryParams: GetNavigationEntryDto,
   ): Promise<PaginationResponse<CompleteNavigationEntryDto>> {
-    const { limit, offset, query, isSemantic, tag } = queryParams;
+    const { limit, offset, query, tag } = queryParams;
     const navigationEntryExpirationInDays =
       this.getNavigationEntryExpirationInDays(jwtContext.user);
 
@@ -375,46 +375,25 @@ export class NavigationEntryService {
     }
     let whereQuery: Prisma.NavigationEntryWhereInput = {};
 
-    let mostRelevantResults: Map<string, string> | undefined = undefined;
-    if (isSemantic) {
-      if (query) {
-        try {
-          const searchResults = await this.indexerService.search(
-            query,
-            jwtContext.user.id,
-          );
-          whereQuery = {
-            url: { in: [...searchResults.urls!] },
-          };
-          mostRelevantResults = searchResults.mostRelevantResults;
-        } catch (error: unknown) {
-          if (
-            error instanceof Error &&
-            error.message.includes('Cannot query field')
-          ) {
-            this.logger.warn(`Ignoring AI search, schema does not exist yet`);
-          } else throw error;
-        }
-      }
-    } else {
-      const queryFilter: Prisma.StringFilter<'NavigationEntry'> = {
-        contains: query,
-        mode: 'insensitive',
-      };
+    const mostRelevantResults: Map<string, string> | undefined = undefined;
 
-      whereQuery = {
-        ...(query !== undefined
-          ? { OR: [{ url: queryFilter }, { title: queryFilter }] }
-          : {}),
-        ...(expirationThreshold
-          ? {
-              navigationDate: {
-                gte: expirationThreshold,
-              },
-            }
-          : {}),
-      };
-    }
+    const queryFilter: Prisma.StringFilter<'NavigationEntry'> = {
+      contains: query,
+      mode: 'insensitive',
+    };
+
+    whereQuery = {
+      ...(query !== undefined
+        ? { OR: [{ url: queryFilter }, { title: queryFilter }] }
+        : {}),
+      ...(expirationThreshold
+        ? {
+            navigationDate: {
+              gte: expirationThreshold,
+            },
+          }
+        : {}),
+    };
 
     whereQuery = {
       ...whereQuery,
@@ -457,7 +436,7 @@ export class NavigationEntryService {
         mostRelevantResults,
       );
 
-    if (query && count > 0 && isSemantic)
+    if (query && count > 0)
       await this.queryService.newEntry(
         query,
         completeNavigationEntries.map((entry) => entry.id),
