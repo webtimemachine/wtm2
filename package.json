@@ -1,6 +1,6 @@
 {
   "name": "wtm",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "description": "",
   "scripts": {
     "test": "turbo run test",

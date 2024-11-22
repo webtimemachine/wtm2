@@ -16,11 +16,12 @@ import {
   Spinner,
   Switch,
   Text,
+  Tooltip,
   useDisclosure,
   useToast,
 } from '@chakra-ui/react';
 import React, { useEffect, useMemo, useState } from 'react';
-
+import { CgCloseO } from 'react-icons/cg';
 import {
   ChevronDownIcon,
   ChevronLeftIcon,
@@ -45,6 +46,25 @@ import { updateIcon } from '../utils/updateIcon';
 import Markdown from 'react-markdown';
 import { BiTrash } from 'react-icons/bi';
 
+const getRandomColor = (): string => {
+  const colorTags: { [key: number]: string } = {
+    0: 'teal',
+    1: 'red',
+    2: 'orange',
+    3: 'green',
+    4: 'purple',
+    5: 'yellow',
+    6: 'blue',
+    7: 'cyan',
+    8: 'pink',
+  };
+  const keys = Object.keys(colorTags).map(Number) as Array<
+    keyof typeof colorTags
+  >;
+  const randomKey = keys[Math.floor(Math.random() * keys.length)];
+  return colorTags[randomKey];
+};
+
 const truncateString = (str: string, maxLength: number) => {
   return str.length <= maxLength ? str : str.slice(0, maxLength) + '...';
 };
@@ -68,9 +88,11 @@ const getPreProcessedMarkDown = (relevantSegment: string) => {
 const RelevantSegment = ({
   relevantSegment,
   tags,
+  setTag,
 }: {
   relevantSegment: string;
   tags?: string[];
+  setTag: (tag: string) => void;
 }) => {
   const markdown = getPreProcessedMarkDown(relevantSegment);
   const colorTags: { [key: number]: string } = {
@@ -101,7 +123,12 @@ const RelevantSegment = ({
       <div className='w-full flex justify-center items-center gap-5 flex-wrap'>
         {tags &&
           tags.map((tag: string, index: number) => (
-            <Badge key={index} colorScheme={getRandomColor()}>
+            <Badge
+              key={index}
+              colorScheme={getRandomColor()}
+              onClick={() => setTag(tag)}
+              className='cursor-pointer'
+            >
               {tag.replace('_', ' ')}
             </Badge>
           ))}
@@ -124,6 +151,7 @@ export interface NavEntryProps {
     onSelect: (id: number, add: boolean) => void;
     currentSelectedEntries: number[];
   };
+  setTag: (tag: string) => void;
 }
 
 const NavigationEntry = ({
@@ -132,11 +160,16 @@ const NavigationEntry = ({
   deleteNavEntry,
   processOpenLink,
   deleteProps,
+  setTag,
 }: NavEntryProps) => {
   const [visible, setVisible] = useState<boolean>(false);
   useEffect(() => {
     setVisible(false);
   }, [element]);
+  const variatedSetTag = (tag: string) => {
+    setTag(tag);
+    setVisible(false);
+  };
   return (
     <div className='flex flex-col w-full bg-white px-2 py-1 rounded-lg mb-1 gap-3'>
       <div key={element.id} className='flex items-center justify-between'>
@@ -208,6 +241,7 @@ const NavigationEntry = ({
         <RelevantSegment
           relevantSegment={element.aiGeneratedContent}
           tags={element.tags}
+          setTag={variatedSetTag}
         />
       )}
     </div>
@@ -223,6 +257,7 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
   const LIMIT = 16;
   const [page, setPage] = useState<number>(0);
   const [query, setQuery] = useState<string>('');
+  const [tag, setTag] = useState<string>('');
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedForDelete, setSelectedForDelete] = useState<number[]>([]);
   const [isBulkDeleteOn, setIsBulkDeleteOn] = useState<boolean>(false);
@@ -236,6 +271,7 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
     offset,
     limit,
     query,
+    tag,
   });
 
   const navigationEntries = navigationEntriesQuery?.data?.items || [];
@@ -248,6 +284,7 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
     page,
     deleteNavigationEntryMutation.isSuccess,
     deleteBulkNavigationEntriesMutation?.isSuccess,
+    tag,
   ]);
 
   useEffect(() => {
@@ -455,6 +492,23 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
           id='content'
           className='flex flex-col w-full h-full overflow-y-auto scrollbar pr-1'
         >
+          {tag && tag.length > 0 && (
+            <div className='flex items-center gap-2 py-3'>
+              <span className='text-sm '>Selected Tag:</span>{' '}
+              <Badge colorScheme={getRandomColor()}>
+                {tag.replace('_', ' ')}
+              </Badge>
+              <Tooltip label={'Remove tag'}>
+                <Button
+                  size={'small'}
+                  variant={'link'}
+                  onClick={() => setTag('')}
+                >
+                  <CgCloseO />
+                </Button>
+              </Tooltip>
+            </div>
+          )}
           {navigationEntries && navigationEntries.length ? (
             navigationEntries.map((element: CompleteNavigationEntryDto) => {
               const BrowserIcon = getBrowserIconFromDevice(
@@ -487,6 +541,7 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
                     },
                     currentSelectedEntries: selectedForDelete,
                   }}
+                  setTag={setTag}
                 />
               );
             })
