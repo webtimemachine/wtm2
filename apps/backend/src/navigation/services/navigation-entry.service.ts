@@ -18,6 +18,10 @@ import {
 import {
   CompleteNavigationEntry,
   completeNavigationEntryInclude,
+  countNavigationEntriesQueryRaw,
+  navigationEntriesQueryRaw,
+  RawCompleteNavigationEntry,
+  transformRawToCompleteNavigationEntries,
 } from '../types';
 
 import { MessageResponse, PaginationResponse } from '../../common/dtos';
@@ -362,7 +366,8 @@ export class NavigationEntryService {
     jwtContext: JwtContext,
     queryParams: GetNavigationEntryDto,
   ): Promise<PaginationResponse<CompleteNavigationEntryDto>> {
-    const { limit, offset, query, tag } = queryParams;
+    const { limit, offset, tag } = queryParams;
+    const query = queryParams.query ? queryParams.query.trim() : undefined;
     const navigationEntryExpirationInDays =
       this.getNavigationEntryExpirationInDays(jwtContext.user);
 
@@ -375,59 +380,81 @@ export class NavigationEntryService {
     }
     let whereQuery: Prisma.NavigationEntryWhereInput = {};
 
-    const mostRelevantResults: Map<string, string> | undefined = undefined;
+    let mostRelevantResults: Map<string, string> | undefined = undefined;
 
-    const queryFilter: Prisma.StringFilter<'NavigationEntry'> = {
-      contains: query,
-      mode: 'insensitive',
-    };
+    let count: number = 0;
+    let completeNavigationEntries: CompleteNavigationEntry[] = [];
 
-    whereQuery = {
-      ...(query !== undefined
-        ? { OR: [{ url: queryFilter }, { title: queryFilter }] }
-        : {}),
-      ...(expirationThreshold
-        ? {
-            navigationDate: {
-              gte: expirationThreshold,
-            },
-          }
-        : {}),
-    };
+    if (query) {
+      const tokens = query
+        .toLowerCase()
+        .split(' ')
+        .filter((v) => v);
 
-    whereQuery = {
-      ...whereQuery,
-      ...(tag && {
-        entryTags: {
-          some: {
-            tag: {
-              name: tag,
+      const tsqueryTerm = tokens.join(' | ');
+      const similarTerm = `%(${tokens.join('|')})%`;
+
+      const keywords = tsqueryTerm;
+      const similarPattern = similarTerm;
+
+      const countResult: { count: number }[] =
+        await this.prismaService.$queryRawUnsafe(
+          countNavigationEntriesQueryRaw,
+          keywords,
+          similarPattern,
+          similarPattern,
+        );
+
+      const rawCompleteNavigationEntries: RawCompleteNavigationEntry[] =
+        await this.prismaService.$queryRawUnsafe(
+          navigationEntriesQueryRaw,
+          keywords,
+          similarPattern,
+          similarPattern,
+          limit,
+          offset,
+        );
+
+      const entriesResult = transformRawToCompleteNavigationEntries(
+        rawCompleteNavigationEntries,
+      );
+
+      count = countResult?.[0].count || 0;
+      completeNavigationEntries = entriesResult;
+    } else {
+      whereQuery = {
+        ...(tag && {
+          entryTags: {
+            some: {
+              tag: {
+                name: tag,
+              },
             },
           },
-        },
-      }),
-    };
+        }),
+      };
 
-    const count: number = await this.prismaService.navigationEntry.count({
-      where: {
-        userId: jwtContext.user.id,
-        ...whereQuery,
-      },
-    });
-
-    const completeNavigationEntries: CompleteNavigationEntry[] =
-      await this.prismaService.navigationEntry.findMany({
+      count = await this.prismaService.navigationEntry.count({
         where: {
           userId: jwtContext.user.id,
           ...whereQuery,
         },
-        include: completeNavigationEntryInclude,
-        skip: offset,
-        take: limit,
-        orderBy: {
-          navigationDate: 'desc',
-        },
       });
+
+      completeNavigationEntries =
+        await this.prismaService.navigationEntry.findMany({
+          where: {
+            userId: jwtContext.user.id,
+            ...whereQuery,
+          },
+          include: completeNavigationEntryInclude,
+          skip: offset,
+          take: limit,
+          orderBy: {
+            navigationDate: 'desc',
+          },
+        });
+    }
 
     const completeNavigationEntryDtos =
       NavigationEntryService.completeNavigationEntriesToDtos(
@@ -436,11 +463,12 @@ export class NavigationEntryService {
         mostRelevantResults,
       );
 
-    if (query && count > 0)
+    if (query && count > 0) {
       await this.queryService.newEntry(
         query,
         completeNavigationEntries.map((entry) => entry.id),
       );
+    }
 
     return plainToInstance(PaginationResponse<CompleteNavigationEntryDto>, {
       offset,
