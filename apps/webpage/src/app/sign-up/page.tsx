@@ -34,6 +34,7 @@ import { useNavigation } from '@/store';
 import { generateSecurePassword } from '@wtm/utils';
 import { cn } from '@wtm/utils';
 import { BiAt, BiKey, BiRename } from 'react-icons/bi';
+import { AuthLayout } from '@/components/auth-layout';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[^\s]{8,20}$/;
@@ -159,18 +160,22 @@ const SignUpScreen: React.FC<{}> = () => {
   };
 
   return (
-    <div className='flex justify-center items-center h-screen'>
-      <div className='flex flex-col p-3 md:p-8 py-10 items-center md:h-1/3 max-w-6xl min-w-[360px] w-1/3 md:min-h-[500px] bg-white rounded-md shadow-2xl transition-shadow filter drop-shadow'>
-        <div className='flex w-full justify-start pb-4 gap-4 items-center'>
-          <IconButton aria-label='Back icon' onClick={() => navigateBack()}>
-            <ArrowBackIcon boxSize={5} />
-          </IconButton>
-          <div className='flex w-full justify-center pr-[40px]'>
-            <Text fontSize={'xx-large'} fontWeight={'bold'}>
-              Sign Up
-            </Text>
-          </div>
+    <AuthLayout>
+      <div className='flex w-full justify-start pb-4 gap-4 items-center'>
+        <IconButton
+          colorScheme='blue'
+          aria-label='Back icon'
+          onClick={() => navigateBack()}
+        >
+          <ArrowBackIcon boxSize={5} />
+        </IconButton>
+        <div className='flex w-full justify-center pr-[40px]'>
+          <Text fontSize={'xx-large'} fontWeight={'bold'}>
+            Sign Up
+          </Text>
         </div>
+      </div>
+      <div className='flex flex-col gap-1'>
         <div className='pb-4 flex w-full'>
           <ServerUrlEditable />
         </div>
@@ -182,7 +187,7 @@ const SignUpScreen: React.FC<{}> = () => {
             ])}
           >
             <InputGroup>
-              <InputLeftAddon>
+              <InputLeftAddon bgColor={'blue.500'} textColor={'white'}>
                 <BiRename />
               </InputLeftAddon>
               <Input
@@ -206,7 +211,7 @@ const SignUpScreen: React.FC<{}> = () => {
         <FormControl isInvalid={!!emailError}>
           <div className={cn(['flex flex-col w-full', !emailError && 'pb-4'])}>
             <InputGroup>
-              <InputLeftAddon>
+              <InputLeftAddon bgColor={'blue.500'} textColor={'white'}>
                 <BiAt />
               </InputLeftAddon>
               <Input
@@ -230,7 +235,7 @@ const SignUpScreen: React.FC<{}> = () => {
         <FormControl isInvalid={!!passwordError}>
           <div className='flex flex-col w-full pb-4 '>
             <InputGroup size='md'>
-              <InputLeftAddon>
+              <InputLeftAddon bgColor={'blue.500'} textColor={'white'}>
                 <BiKey />
               </InputLeftAddon>
               <Popover
@@ -296,6 +301,7 @@ const SignUpScreen: React.FC<{}> = () => {
                   h='1.75rem'
                   size='sm'
                   onClick={() => setShowPass(!showPass)}
+                  colorScheme='blue'
                 >
                   {showPass ? 'Hide' : 'Show'}
                 </Button>
@@ -325,7 +331,7 @@ const SignUpScreen: React.FC<{}> = () => {
         <FormControl isInvalid={!!confirmPassError}>
           <div className='flex flex-col w-full pb-4 '>
             <InputGroup size='md'>
-              <InputLeftAddon>
+              <InputLeftAddon bgColor={'blue.500'} textColor={'white'}>
                 <BiKey />
               </InputLeftAddon>
               <Input
@@ -345,6 +351,7 @@ const SignUpScreen: React.FC<{}> = () => {
                   h='1.75rem'
                   size='sm'
                   onClick={() => setShowConfirmPass(!showConfirmPass)}
+                  colorScheme='blue'
                 >
                   {showConfirmPass ? 'Hide' : 'Show'}
                 </Button>
@@ -355,25 +362,23 @@ const SignUpScreen: React.FC<{}> = () => {
             </div>
           </div>
         </FormControl>
-        <div className='flex gap-4'>
-          <Button
-            colorScheme='blue'
-            onClick={() => handleSignUp()}
-            isDisabled={
-              !email ||
-              !password ||
-              !confirmPassword ||
-              !!emailError ||
-              !!passwordError ||
-              !!confirmPassError
-            }
-            isLoading={signUpMutation.isPending}
-          >
-            Sign Up
-          </Button>
-        </div>
+        <Button
+          colorScheme='blue'
+          onClick={() => handleSignUp()}
+          isDisabled={
+            !email ||
+            !password ||
+            !confirmPassword ||
+            !!emailError ||
+            !!passwordError ||
+            !!confirmPassError
+          }
+          isLoading={signUpMutation.isPending}
+        >
+          Sign Up
+        </Button>
       </div>
-    </div>
+    </AuthLayout>
   );
 };
 export default SignUpScreen;
