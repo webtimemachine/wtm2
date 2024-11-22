@@ -1,7 +1,6 @@
 import { CreateNavigationEntry } from '@wtm/api';
 
 export enum ServiceWorkerMessageType {
-  ENGINE_READY = 'engine_ready',
   COMPLETION_RESULT = 'completion_result',
   GENERATE_COMPLETION = 'generate_completion',
   CREATE_NAVIGATION_ENTRY = 'create_navigation_entry',
@@ -9,9 +8,6 @@ export enum ServiceWorkerMessageType {
 }
 
 export type ServiceWorkerPayload =
-  | {
-      type: ServiceWorkerMessageType.ENGINE_READY;
-    }
   | {
       type: ServiceWorkerMessageType.GENERATE_COMPLETION;
       content: string;
