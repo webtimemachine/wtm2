@@ -1,16 +1,7 @@
-import { CreateMLCEngine, MLCEngineInterface } from '@mlc-ai/web-llm';
 import { isTokenExpired } from '@wtm/utils';
 import { apiClient } from '../utils/api.client';
 
-import {
-  EngineStatus,
-  Ports,
-  ServiceWorkerMessageType,
-  ServiceWorkerPayload,
-} from './types';
-
-let engine: MLCEngineInterface | undefined = undefined;
-let engineStatus: EngineStatus = EngineStatus.NOT_READY;
+import { Ports, ServiceWorkerMessageType, ServiceWorkerPayload } from './types';
 
 let intervalId: NodeJS.Timeout;
 const startInterval = () => {
@@ -27,60 +18,12 @@ chrome.runtime.onConnect.addListener(async (port) => {
     return;
   }
 
-  const { webLLMEnabled } = await chrome.storage.local.get(['webLLMEnabled']);
-
-  if (engineStatus === EngineStatus.NOT_READY && webLLMEnabled) {
-    try {
-      await initEngine();
-      port.postMessage({
-        type: ServiceWorkerMessageType.ENGINE_READY,
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
   /**
    * Handles messages received on the port.
    * @param {ServiceWorkerPayload} message - The message received from the port.
    */
   port.onMessage.addListener(async (message: ServiceWorkerPayload) => {
     switch (message.type) {
-      case ServiceWorkerMessageType.GENERATE_COMPLETION: {
-        if (!engine) {
-          console.error('Engine is not ready');
-          return;
-        }
-
-        const result = await engine.chat.completions.create({
-          messages: [
-            {
-              role: 'system',
-              content:
-                "You will be provided with a webpage's content in semantic markdown format. Your task is to analyze the markdown and generate a brief summary of the key points in 3 to 5 sentences. The summary should be concise and focus on the most important information presented in the content.",
-            },
-            {
-              role: 'user',
-              content: message.content,
-            },
-          ],
-        });
-
-        const response = result.choices.at(0)?.message.content;
-
-        const url = message.url;
-
-        await apiClient.securedFetch('/api/navigation-entry/add-context', {
-          method: 'POST',
-          body: JSON.stringify({
-            content: response,
-            url,
-          }),
-        });
-
-        break;
-      }
-
       case ServiceWorkerMessageType.CREATE_NAVIGATION_ENTRY: {
         const navigationEntry = message.navigationEntry;
 
@@ -118,26 +61,6 @@ chrome.runtime.onInstalled.addListener(() => {
   refreshAccessToken();
   startInterval();
 });
-
-/**
- * Initializes the MLCEngine for use in generating completions.
- * @returns {Promise<void>} A promise that resolves when the engine is initialized.
- */
-const initEngine = async () => {
-  try {
-    engine = await CreateMLCEngine('SmolLM-360M-Instruct-q4f16_1-MLC', {
-      initProgressCallback: () => {
-        if (engineStatus === EngineStatus.NOT_READY) {
-          engineStatus = EngineStatus.LOADING;
-        }
-      },
-    });
-
-    engineStatus = EngineStatus.READY;
-  } catch (error) {
-    console.error('Error initializing engine', error);
-  }
-};
 
 const defaultIcons = {
   '16': 'app-icon-16.png',

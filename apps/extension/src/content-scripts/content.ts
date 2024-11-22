@@ -2,14 +2,10 @@ import * as cheerio from 'cheerio';
 import { AnyNode } from 'domhandler';
 import { convertHtmlToMarkdown } from 'dom-to-semantic-markdown';
 
-import { DOMtoString, getImages } from '@wtm/utils';
+import { getImages } from '@wtm/utils';
 import { CreateNavigationEntry } from '@wtm/api';
 
-import {
-  ServiceWorkerPayload,
-  ServiceWorkerMessageType,
-  Ports,
-} from '../service-workers/types';
+import { ServiceWorkerMessageType, Ports } from '../service-workers/types';
 
 /**
  * Extracts and converts the HTML content of a webpage to semantic markdown, removing unwanted elements.
@@ -70,11 +66,11 @@ export const postNavigationEntry = async () => {
     if (stopTrackingEnabled) return;
 
     if (accessToken && url && !url.startsWith('chrome://')) {
-      const htmlContent = DOMtoString('body');
+      const htmlContent = document.querySelector('body')?.outerHTML;
       const images = getImages();
 
       const content =
-        enabledLiteMode == undefined || !enabledLiteMode
+        (enabledLiteMode == undefined || !enabledLiteMode) && htmlContent
           ? getSemanticMarkdownForLLM(htmlContent)
           : '';
 
@@ -126,42 +122,4 @@ onUrlChange(() => postNavigationEntry());
  */
 const serviceWorkerPort = chrome.runtime.connect({
   name: Ports.SERVICE_WORKER,
-});
-
-/**
- * Listens for messages from the service worker and handles actions based on the message type.
- * Specifically, if the service worker indicates that the engine is ready, it checks if Web LLM processing should be initiated.
- * @param {ServiceWorkerPayload} payload - The message payload received from the service worker.
- */
-serviceWorkerPort.onMessage.addListener(async function (
-  payload: ServiceWorkerPayload,
-) {
-  if (payload.type === ServiceWorkerMessageType.ENGINE_READY) {
-    const { accessToken, enabledLiteMode, stopTrackingEnabled, webLLMEnabled } =
-      await chrome.storage.local.get([
-        'accessToken',
-        'enabledLiteMode',
-        'stopTrackingEnabled',
-        'webLLMEnabled',
-      ]);
-
-    const url = window.location.href;
-
-    if (!webLLMEnabled) return;
-    if (stopTrackingEnabled) return;
-    if (!accessToken) return;
-    if (enabledLiteMode) return;
-    if (url.startsWith('chrome://')) return;
-
-    const htmlContent = DOMtoString('body');
-
-    const content = getSemanticMarkdownForLLM(htmlContent);
-
-    serviceWorkerPort.postMessage({
-      type: ServiceWorkerMessageType.GENERATE_COMPLETION,
-      content,
-      url: window.location.href,
-    });
-    return;
-  }
 });
