@@ -110,10 +110,13 @@ model Session {
 }
 
 model NavigationEntry {
-  id       BigInt  @id @default(autoincrement())
-  url      String  @db.VarChar()
-  title    String  @db.VarChar()
-  liteMode Boolean @default(false)
+  id         BigInt  @id @default(autoincrement())
+  url        String  @db.VarChar()
+  title      String  @db.VarChar()
+  titleLower String  @default(dbgenerated()) @map("titleLower") @db.VarChar()
+  liteMode   Boolean @default(false)
+
+  tsvectorGeneratedContent Unsupported("tsvector") @default(dbgenerated())
 
   userId BigInt
   user   User   @relation(fields: [userId], references: [id])
