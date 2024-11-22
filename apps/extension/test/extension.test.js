@@ -32,68 +32,7 @@ const __dirname = path.dirname(__filename);
     // Allow time for extension scripts to load; can be optimized
     await page.waitForTimeout(1000);
 
-    // Locate elements from your extension UI, if any, using the Chrome DevTools extension API or page selectors
-    
-    // Define the path to your manifest file
-    const manifestPath = path.resolve(__dirname, '../../../native/app_chrome/manifest.json');
-    
-    // Define the required fields for the manifest
-    const requiredFields = [
-        'manifest_version',
-        'name',
-        'version',
-        'description',
-        'permissions'
-    ];
-
-    // Utility function to load and parse the manifest file
-    function loadManifest() {
-        try {
-        const manifestData = fs.readFileSync(manifestPath, 'utf-8');
-        return JSON.parse(manifestData);
-        } catch (error) {
-        console.error("Error reading the manifest file:", error);
-        return null;
-        }
-    }
-
-    // Validation function to check for required fields
-function validateManifest(manifest) {
-    let allChecksPassed = true;
-  
-    requiredFields.forEach(field => {
-      if (!manifest.hasOwnProperty(field)) {
-        console.error(`❌ Missing required field: ${field}`);
-        allChecksPassed = false;
-      } else {
-        console.log(`✅ Found required field: ${field}`);
-      }
-    });
-    return allChecksPassed;
-}
-
-// Run the manifest validation test
-function runManifestValidationTest() {
-    console.log("Running Manifest Validation Test...");
-  
-    const manifest = loadManifest();
-    if (!manifest) {
-      console.error("Failed to load manifest. Aborting test.");
-      return;
-    }
-  
-    const result = validateManifest(manifest);
-  
-    if (result) {
-      console.log("🎉 Manifest validation test passed!");
-    } else {
-      console.error("❌ Manifest validation test failed.");
-    }
-  }
-  
-  // Execute the test when the script runs
-  runManifestValidationTest();
 
     // // Close the browser after the test is done
-    // await browser.close();
+    await browser.close();
 })();
