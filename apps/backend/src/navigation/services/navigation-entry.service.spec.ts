@@ -13,7 +13,7 @@ import {
   CreateNavigationEntryInputDto,
   GetNavigationEntryDto,
 } from '../dtos';
-import { CompleteNavigationEntry } from '../types';
+import { CompleteNavigationEntry, RawCompleteNavigationEntry } from '../types';
 import { NavigationEntryService } from './navigation-entry.service';
 
 import { QueryService } from '../../query/services';
@@ -153,6 +153,7 @@ const mockedEntry: CompleteNavigationEntry = {
   id: BigInt(1),
   url: 'example1.com',
   title: 'Example Title 1',
+  titleLower: 'example title 1',
   liteMode: true,
   navigationDate: new Date('2024-02-09T12:00:00Z'),
   userId: BigInt(1),
@@ -180,10 +181,51 @@ const mockedEntry: CompleteNavigationEntry = {
   },
 };
 
+const mockedRawEntry: RawCompleteNavigationEntry = {
+  navigationEntryId: BigInt(1),
+  navigationEntryUrl: 'example1.com',
+  navigationEntryTitle: 'Example Title 1',
+  navigationEntryTitleLower: 'example title 1',
+  navigationEntryLiteMode: true,
+  navigationEntryNavigationDate: new Date('2024-02-09T12:00:00Z'),
+  navigationEntryUserId: BigInt(1),
+  navigationEntryUserDeviceId: BigInt(1),
+  navigationEntryCreatedAt: new Date('2024-02-09T12:00:00Z'),
+  navigationEntryAIGeneratedContent: 'AI Generated Content 1',
+  navigationEntryUpdateAt: null,
+  userDeviceId: BigInt(1),
+  userDeviceUserId: BigInt(1),
+  userDeviceDeviceId: BigInt(1),
+  userDeviceDeviceAlias: 'Personal Computer',
+  userDeviceCreatedAt: new Date(),
+  userDeviceUpdateAt: new Date(),
+
+  deviceId: BigInt(1),
+  deviceDeviceKey: '123',
+  deviceUserAgent:
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+  deviceUserAgentData:
+    '{"brands":[{"brand":"Chromium","version":"124"},{"brand":"Google Chrome","version":"124"},{"brand":"Not-A.Brand","version":"99"}],"mobile":false,"platform":"Windows"}',
+  deviceCreatedAt: new Date(),
+  deviceUpdateAt: new Date(),
+
+  entryTagId: null,
+  entryTagEntryId: null,
+  entryTagTagId: null,
+  tagId: null,
+  tagName: null,
+};
+
 const mockedEntries: CompleteNavigationEntry[] = [
   mockedEntry,
   { ...mockedEntry, id: BigInt(2) },
   { ...mockedEntry, id: BigInt(3) },
+];
+
+const mockedRawEntries: RawCompleteNavigationEntry[] = [
+  mockedRawEntry,
+  { ...mockedRawEntry, navigationEntryId: BigInt(2) },
+  { ...mockedRawEntry, navigationEntryId: BigInt(3) },
 ];
 
 const completeNavigationEntriesDtos =
@@ -384,9 +426,23 @@ describe('NavigationEntryService', () => {
       prismaService.navigationEntry.count = jest
         .fn()
         .mockReturnValue(mockedEntries.length);
+
       prismaService.navigationEntry.findMany = jest
         .fn()
         .mockReturnValue(mockedEntries);
+
+      prismaService.$queryRawUnsafe = jest.fn((query: string) => {
+        if (query.toLocaleLowerCase().includes('count')) {
+          return Promise.resolve([{ count: mockedRawEntries.length }]);
+        }
+
+        if (query.toLocaleLowerCase().includes('select')) {
+          return Promise.resolve(mockedRawEntries);
+        }
+
+        return Promise.reject(new Error(`Unexpected query: ${query}`));
+      }) as unknown as typeof prismaService.$queryRawUnsafe;
+
       const result = await navigationEntryService.getNavigationEntry(
         jwtContext,
         queryParams,
