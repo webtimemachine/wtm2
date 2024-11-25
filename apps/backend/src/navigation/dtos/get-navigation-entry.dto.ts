@@ -15,5 +15,11 @@ export class GetNavigationEntryDto extends GetPaginationsParamsDto {
   @IsOptional()
   @IsString()
   @Type(() => String)
+  queryTsVector?: string;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsString()
+  @Type(() => String)
   tag?: string;
 }
