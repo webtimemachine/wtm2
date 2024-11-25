@@ -1,38 +1,41 @@
 // test/extension.test.js
-import puppeteer from 'puppeteer';
-import path from 'path';
-import { fileURLToPath } from 'url';
+const puppeteer = require('puppeteer');
+const path = require('path');
 
-// Use fileURLToPath to convert import.meta.url to a file path
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+let browser;
+let page;
 
+describe('Chrome Extension E2E Tests', () => {
+    beforeAll(async () => {
+        const extensionPath = path.resolve(__dirname, '../../../native/app_chrome');
+        console.log("Extension Path:", extensionPath);
 
-(async () => {
-    // Specify the path to the extension directory
-    const extensionPath = path.resolve(__dirname, '../../../native/app_chrome');  // Root directory of the extension and manifest
+        browser = await puppeteer.launch({
+            headless: false,
+            args: [
+                `--disable-extensions-except=${extensionPath}`,
+                `--load-extension=${extensionPath}`,
+            ],
+        });
 
-    console.log("Extension Path:", extensionPath); // Log the path for debugging
+        page = await browser.newPage();
+        await page.goto('https://webtm.io/');
+        await page.waitForTimeout(1000);
+    }, 20000); // Increase timeout to 20 seconds
 
-    // Launch a new instance of Chrome with the extension loaded
-    const browser = await puppeteer.launch({
-        headless: false, // We use headless: false to see the browser while testing; set to true for CI or headless testing.
-        args: [
-            `--disable-extensions-except=/home/liza_saravia/wtm2/native/app_chrome`,
-            `--load-extension=/home/liza_saravia/wtm2/native/app_chrome`,
-        ],
+    afterAll(async () => {
+        await browser.close();
     });
 
-    // Create a new page (tab) to interact with your extension
-    const page = await browser.newPage();
+    test('Landing page renders correctly', async () => {
+        // Verify the page title matches metadata
+        const title = await page.title();
+        expect(title).toBe('WebTM | Home'); // Replace with the expected page title if different
 
-    // Open a new tab and navigate to a test URL, or any page where your extension should work
-    await page.goto('https://webtm.io/');
-
-    // Allow time for extension scripts to load; can be optimized
-    await page.waitForTimeout(1000);
-
-
-    // // Close the browser after the test is done
-    await browser.close();
-})();
+        // Check for specific text or an element unique to the Landing component
+        const landingText = await page.evaluate(() => {
+            return document.body.textContent.includes("Time Machine for your browser");
+        });
+        expect(landingText).toBe(true);
+    });
+});
