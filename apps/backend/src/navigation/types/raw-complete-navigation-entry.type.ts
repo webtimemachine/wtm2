@@ -3,9 +3,12 @@ import { CompleteNavigationEntry } from './complete-navigation-entry.type';
 export const countNavigationEntriesQueryRaw = `
   SELECT count(*) FROM navigation_entry ne 
   WHERE 
-    ne."tsvectorGeneratedContent" @@ to_tsquery('english', $1) OR 
-    ne."titleLower" SIMILAR TO $2 OR 
-    ne."url" SIMILAR TO $3;
+      ne."userId" = $1 AND
+    (
+      ne."tsvectorGeneratedContent" @@ to_tsquery('english', $2) OR 
+      ne."titleLower" SIMILAR TO $3 OR 
+      ne."url" SIMILAR TO $4
+    )
   `;
 
 export const navigationEntriesQueryRaw = `
@@ -48,11 +51,15 @@ export const navigationEntriesQueryRaw = `
   LEFT JOIN tag t ON
     et."tagId" = t.id
   WHERE 
-    ne."tsvectorGeneratedContent" @@ to_tsquery('english', $1) OR 
-    ne."titleLower" SIMILAR TO $2 OR 
-    ne."url" SIMILAR TO $3
-  LIMIT $4 
-  OFFSET $5;
+    ne."userId" = $1 AND
+    (
+      ne."tsvectorGeneratedContent" @@ to_tsquery('english', $2) OR 
+      ne."titleLower" SIMILAR TO $3 OR 
+      ne."url" SIMILAR TO $4
+    )
+  ORDER BY "navigationEntryNavigationDate" DESC
+  LIMIT $5 
+  OFFSET $6;
   `;
 
 export interface RawCompleteNavigationEntry {

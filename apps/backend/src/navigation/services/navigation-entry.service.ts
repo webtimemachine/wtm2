@@ -384,6 +384,7 @@ export class NavigationEntryService {
 
     let count: number = 0;
     let completeNavigationEntries: CompleteNavigationEntry[] = [];
+    const userId = jwtContext.user.id;
 
     if (query) {
       const tokens = query
@@ -400,6 +401,7 @@ export class NavigationEntryService {
       const countResult: { count: number }[] =
         await this.prismaService.$queryRawUnsafe(
           countNavigationEntriesQueryRaw,
+          userId,
           keywords,
           similarPattern,
           similarPattern,
@@ -408,6 +410,7 @@ export class NavigationEntryService {
       const rawCompleteNavigationEntries: RawCompleteNavigationEntry[] =
         await this.prismaService.$queryRawUnsafe(
           navigationEntriesQueryRaw,
+          userId,
           keywords,
           similarPattern,
           similarPattern,
@@ -436,7 +439,7 @@ export class NavigationEntryService {
 
       count = await this.prismaService.navigationEntry.count({
         where: {
-          userId: jwtContext.user.id,
+          userId,
           ...whereQuery,
         },
       });
@@ -444,7 +447,7 @@ export class NavigationEntryService {
       completeNavigationEntries =
         await this.prismaService.navigationEntry.findMany({
           where: {
-            userId: jwtContext.user.id,
+            userId,
             ...whereQuery,
           },
           include: completeNavigationEntryInclude,
