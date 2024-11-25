@@ -1,55 +1,56 @@
-import puppeteer from 'puppeteer';
+const puppeteer = require('puppeteer');
 
-(async () => {
-  const appUrl = 'https://webtm.io';  
-  const browserTypes = ['chrome', 'firefox', 'safari', 'brave'];
-  
-  const browser = await puppeteer.launch({
-    headless: 'new',
-    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+const appUrl = 'https://webtm.io';
+const browserTypes = ['chrome', 'firefox', 'safari', 'brave'];
+
+const browserSelectors = {
+  chrome: 'a[href*="chrome.google.com/webstore"]',
+  firefox: 'a[href*="addons.mozilla.org"]',
+  safari: 'a[href*="apps.apple.com"]',
+  brave: 'a[href*="chrome.google.com/webstore"]',
+};
+
+describe('Browser Type Button Tests', () => {
+  let browser;
+  let page;
+
+  beforeAll(async () => {
+    browser = await puppeteer.launch({
+      headless: 'new',
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    });
+    page = await browser.newPage();
+    await page.goto(appUrl);
   });
-  
-  const page = await browser.newPage();
-  await page.goto(appUrl);
-  
-  for (const browserType of browserTypes) {
+
+  afterAll(async () => {
+    await browser.close();
+  });
+
+  test.each(browserTypes)('should display the correct button for %s', async (browserType) => {
     console.log(`Testing for browser type: ${browserType}`);
 
-    // Inject JavaScript to set the browser type in localStorage, emulating `getBrowser()` results
+    // Set browser type in localStorage
     await page.evaluate((browserType) => {
       localStorage.setItem('browserName', browserType);
     }, browserType);
 
-    // Reload the page so that the app re-evaluates the browser type
+    // Reload the page to apply changes
     await page.reload();
 
-    // Wait for the button to appear (modify the selector based on inspection results)
-    let buttonSelector;
-    switch (browserType) {
-      case 'chrome':
-        buttonSelector = 'a[href*="chrome.google.com/webstore"]'; 
-        break;
-      case 'firefox':
-        buttonSelector = 'a[href*="addons.mozilla.org"]';
-        break;
-      case 'safari':
-        buttonSelector = 'a[href*="apps.apple.com"]';
-        break;
-      case 'brave':
-        buttonSelector = 'a[href*="chrome.google.com/webstore"]';
-        break;
-      default:
-        console.error(`Unknown browser type: ${browserType}`);
-        continue;
+    // Get the selector for the current browser type
+    const buttonSelector = browserSelectors[browserType];
+    if (!buttonSelector) {
+      throw new Error(`Unknown browser type: ${browserType}`);
     }
 
     try {
+      // Check if the button is present
       await page.waitForSelector(buttonSelector, { timeout: 3000 });
       console.log(`✅ ${browserType} button test passed.`);
     } catch (error) {
       console.error(`❌ ${browserType} button test failed.`);
+      throw error; // Fail the test if the button is not found
     }
-  }
-
-  await browser.close();
-})();
+  });
+});
