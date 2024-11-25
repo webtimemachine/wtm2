@@ -266,7 +266,7 @@ const NavigationEntriesScreen: React.FC = () => {
               boxSize={4}
             />
             <Text className='text-slate-600 mr-1' fontSize='small'>
-              Search using tsVector
+              Enhance search
             </Text>
             <Switch
               size='sm'
