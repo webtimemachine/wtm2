@@ -497,7 +497,7 @@ export class NavigationEntryService {
       offset,
       limit,
       count,
-      userQuery,
+      query: userQuery,
       items: completeNavigationEntryDtos,
     });
   }
