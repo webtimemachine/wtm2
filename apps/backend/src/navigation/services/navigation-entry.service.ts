@@ -366,8 +366,10 @@ export class NavigationEntryService {
     jwtContext: JwtContext,
     queryParams: GetNavigationEntryDto,
   ): Promise<PaginationResponse<CompleteNavigationEntryDto>> {
-    const { limit, offset, tag } = queryParams;
-    const query = queryParams.query ? queryParams.query.trim() : undefined;
+    const { limit, offset, tag, query } = queryParams;
+    const queryTsVector = queryParams.queryTsVector
+      ? queryParams.queryTsVector.trim()
+      : undefined;
     const navigationEntryExpirationInDays =
       this.getNavigationEntryExpirationInDays(jwtContext.user);
 
@@ -380,13 +382,31 @@ export class NavigationEntryService {
     }
     let whereQuery: Prisma.NavigationEntryWhereInput = {};
 
-    let mostRelevantResults: Map<string, string> | undefined = undefined;
+    const mostRelevantResults: Map<string, string> | undefined = undefined;
+
+    const queryFilter: Prisma.StringFilter<'NavigationEntry'> = {
+      contains: query,
+      mode: 'insensitive',
+    };
+
+    whereQuery = {
+      ...(query !== undefined
+        ? { OR: [{ url: queryFilter }, { title: queryFilter }] }
+        : {}),
+      ...(expirationThreshold
+        ? {
+            navigationDate: {
+              gte: expirationThreshold,
+            },
+          }
+        : {}),
+    };
 
     let count: number = 0;
     let completeNavigationEntries: CompleteNavigationEntry[] = [];
 
-    if (query) {
-      const tokens = query
+    if (queryTsVector) {
+      const tokens = queryTsVector
         .toLowerCase()
         .split(' ')
         .filter((v) => v);
@@ -423,6 +443,7 @@ export class NavigationEntryService {
       completeNavigationEntries = entriesResult;
     } else {
       whereQuery = {
+        ...whereQuery,
         ...(tag && {
           entryTags: {
             some: {
@@ -463,9 +484,11 @@ export class NavigationEntryService {
         mostRelevantResults,
       );
 
-    if (query && count > 0) {
+    const userQuery = query ? query : queryTsVector;
+
+    if (userQuery && count > 0) {
       await this.queryService.newEntry(
-        query,
+        userQuery,
         completeNavigationEntries.map((entry) => entry.id),
       );
     }
@@ -474,7 +497,7 @@ export class NavigationEntryService {
       offset,
       limit,
       count,
-      query,
+      userQuery,
       items: completeNavigationEntryDtos,
     });
   }
