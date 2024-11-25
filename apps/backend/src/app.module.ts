@@ -6,7 +6,6 @@ import { UserModule } from './user/user.module';
 import { NavigationModule } from './navigation/navigation.module';
 import { HealthModule } from './health/health.module';
 import { EncoderModule } from './encoder/encoder.module';
-import { QueryModule } from './query/query.module';
 import { ExplicitFilterModule } from './filter/filter.module';
 import { SystemModule } from './system/system.module';
 @Module({
@@ -16,7 +15,6 @@ import { SystemModule } from './system/system.module';
     NavigationModule,
     HealthModule,
     EncoderModule,
-    QueryModule,
     ExplicitFilterModule,
     SystemModule,
   ],
