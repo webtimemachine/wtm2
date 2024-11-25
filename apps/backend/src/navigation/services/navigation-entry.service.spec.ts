@@ -16,9 +16,6 @@ import {
 import { CompleteNavigationEntry, RawCompleteNavigationEntry } from '../types';
 import { NavigationEntryService } from './navigation-entry.service';
 
-import { QueryService } from '../../query/services';
-import { QueryTestingModule } from '../../query/query.testing.module';
-
 import { IndexerService } from '../../encoder/services';
 import { EncoderTestingModule } from '../../encoder/encoder.testing.module';
 
@@ -275,7 +272,6 @@ describe('NavigationEntryService', () => {
   let navigationEntryService: NavigationEntryService;
   let prismaService: PrismaService;
   let indexerService: IndexerService;
-  let queryService: QueryService;
   let explicitFilterService: ExplicitFilterService;
 
   const prismaClient = new PrismaClient();
@@ -286,7 +282,6 @@ describe('NavigationEntryService', () => {
       imports: [
         commonTestModule,
         EncoderTestingModule.forTest(commonTestModule),
-        QueryTestingModule.forTest(commonTestModule),
         ExplicitFilterTestingModule.forTest(commonTestModule),
       ],
       providers: [NavigationEntryService],
@@ -297,7 +292,6 @@ describe('NavigationEntryService', () => {
     );
     prismaService = module.get<PrismaService>(PrismaService);
     indexerService = module.get<IndexerService>(IndexerService);
-    queryService = module.get<QueryService>(QueryService);
     explicitFilterService = module.get<ExplicitFilterService>(
       ExplicitFilterService,
     );
@@ -315,9 +309,6 @@ describe('NavigationEntryService', () => {
     expect(indexerService).toBeDefined();
   });
 
-  it('queryService should be defined', () => {
-    expect(queryService).toBeDefined();
-  });
   it('explicitFilterService should be defined', () => {
     expect(explicitFilterService).toBeDefined();
   });
@@ -420,9 +411,6 @@ describe('NavigationEntryService', () => {
 
   describe('getNavigationEntry', () => {
     it('should get navigation entries successfully', async () => {
-      const mockNewEntry = jest.fn();
-      queryService.newEntry = mockNewEntry;
-
       prismaService.navigationEntry.count = jest
         .fn()
         .mockReturnValue(mockedEntries.length);
