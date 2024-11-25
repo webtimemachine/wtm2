@@ -341,7 +341,7 @@ export class ApiClient {
   };
 
   getNavigationEntries = async (params: GetNavigationEntriesData) => {
-    const { offset, limit, query, tag, isSemantic } = params;
+    const { offset, limit, query, tag, isEnhanceSearch } = params;
 
     const url =
       '/api/navigation-entry?' +
@@ -349,8 +349,8 @@ export class ApiClient {
         offset: offset.toString(),
         limit: limit.toString(),
         ...(tag && { tag }),
-        ...(query && !isSemantic && { query: query }),
-        ...(query && isSemantic && { queryTsVector: query }),
+        ...(query && !isEnhanceSearch && { query: query }),
+        ...(query && isEnhanceSearch && { queryTsVector: query }),
       }).toString();
 
     try {

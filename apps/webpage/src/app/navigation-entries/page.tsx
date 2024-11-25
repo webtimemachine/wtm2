@@ -134,7 +134,7 @@ const NavigationEntriesScreen: React.FC = () => {
   const [page, setPage] = useState<number>(0);
   const [query, setQuery] = useState<string>('');
   const [tag, setTag] = useState<string>('');
-  const [isSemantic, setIsSemantic] = useState<boolean>(false);
+  const [isEnhanceSearch, setIsEnhanceSearch] = useState<boolean>(false);
 
   const [isBulkDeleteOn, setIsBulkDeleteOn] = useState<boolean>(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -150,7 +150,7 @@ const NavigationEntriesScreen: React.FC = () => {
     offset,
     limit,
     query,
-    isSemantic,
+    isEnhanceSearch,
     tag,
   });
 
@@ -162,7 +162,7 @@ const NavigationEntriesScreen: React.FC = () => {
     navigationEntriesQuery.refetch();
   }, [
     page,
-    isSemantic,
+    isEnhanceSearch,
     deleteNavigationEntryMutation?.isSuccess,
     deleteBulkNavigationEntriesMutation?.isSuccess,
     tag,
@@ -258,10 +258,12 @@ const NavigationEntriesScreen: React.FC = () => {
           <div
             className='flex items-center gap-1 p-1 h-[32px] select-none cursor-pointer hover:bg-white rounded-lg'
             data-testid='ia-search-container'
-            onClick={() => setIsSemantic((value) => !value)}
+            onClick={() => setIsEnhanceSearch((value) => !value)}
           >
             <Icon
-              className={clsx([isSemantic ? 'fill-blue-500' : 'fill-gray-500'])}
+              className={clsx([
+                isEnhanceSearch ? 'fill-blue-500' : 'fill-gray-500',
+              ])}
               as={BsStars}
               boxSize={4}
             />
@@ -270,9 +272,9 @@ const NavigationEntriesScreen: React.FC = () => {
             </Text>
             <Switch
               size='sm'
-              aria-label='AI Search'
-              isChecked={isSemantic}
-              onChange={() => setIsSemantic((value) => !value)}
+              aria-label='Enhance search'
+              isChecked={isEnhanceSearch}
+              onChange={() => setIsEnhanceSearch((value) => !value)}
             />
           </div>
           <div
