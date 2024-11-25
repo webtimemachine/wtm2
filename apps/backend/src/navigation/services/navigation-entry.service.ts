@@ -78,7 +78,6 @@ export class NavigationEntryService {
   static completeNavigationEntryToDto(
     jwtContext: JwtContext,
     completeNavigationEntry: CompleteNavigationEntry,
-    relevantSegment?: string,
   ): CompleteNavigationEntryDto {
     const userDeviceDto = UserService.userDeviceToDto(
       jwtContext,
@@ -95,7 +94,6 @@ export class NavigationEntryService {
           jwtContext.user,
           completeNavigationEntry,
         ),
-        relevantSegment,
         aiGeneratedContent: completeNavigationEntry.aiGeneratedContent,
         tags:
           completeNavigationEntry?.entryTags?.map((entry) => entry.tag.name) ||
@@ -109,13 +107,11 @@ export class NavigationEntryService {
   static completeNavigationEntriesToDtos(
     jwtContext: JwtContext,
     completeNavigationEntries: CompleteNavigationEntry[],
-    relevantSegments?: Map<string, string>,
   ): CompleteNavigationEntryDto[] {
     return completeNavigationEntries.map((completeNavigationEntry) =>
       NavigationEntryService.completeNavigationEntryToDto(
         jwtContext,
         completeNavigationEntry,
-        relevantSegments?.get(completeNavigationEntry.url || ''),
       ),
     );
   }
@@ -362,8 +358,6 @@ export class NavigationEntryService {
     }
     let whereQuery: Prisma.NavigationEntryWhereInput = {};
 
-    const mostRelevantResults: Map<string, string> | undefined = undefined;
-
     const queryFilter: Prisma.StringFilter<'NavigationEntry'> = {
       contains: query,
       mode: 'insensitive',
@@ -464,7 +458,6 @@ export class NavigationEntryService {
       NavigationEntryService.completeNavigationEntriesToDtos(
         jwtContext,
         completeNavigationEntries,
-        mostRelevantResults,
       );
 
     const userQuery = query ? query : queryTsVector;
