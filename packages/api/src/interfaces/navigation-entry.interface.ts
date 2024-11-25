@@ -1,4 +1,4 @@
-import { UserDevice } from "./user-device.interface";
+import { UserDevice } from './user-device.interface';
 
 export interface CompleteNavigationEntryDto {
   id: number;
@@ -27,6 +27,7 @@ export interface GetNavigationEntriesData {
   offset: number;
   limit: number;
   query: string;
+  isEnhanceSearch: boolean;
   tag?: string;
 }
 
