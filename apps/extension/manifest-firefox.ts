@@ -1,11 +1,20 @@
 import { ManifestV3Export } from '@crxjs/vite-plugin';
 
-export const manifestFirefox: ManifestV3Export = {
-  manifest_version: 3,
-  name: 'WebTM',
-  version: '1.6.7',
-  description:
-    'WebTM is a cross-platform solution to integrate the navigation history between desktop and mobile web browsers.',
+type FirefoxManifestV3Export = ManifestV3Export & {
+  browser_specific_settings: {
+    gecko: {
+      id: string;
+    };
+    gecko_android: {
+      id: string;
+    };
+  };
+};
+
+import { baseManifest } from './manifest-base';
+
+export const manifestFirefox: FirefoxManifestV3Export = {
+  ...baseManifest,
   browser_specific_settings: {
     gecko: {
       id: '{5790cffd-a2b7-4cb6-ad05-c5b955ddee3e}',
@@ -13,17 +22,6 @@ export const manifestFirefox: ManifestV3Export = {
     gecko_android: {
       id: '{5790cffd-a2b7-4cb6-ad05-c5b955ddee3e}',
     },
-  },
-  permissions: ['tabs', 'activeTab', 'storage', 'scripting'],
-  action: {
-    default_popup: 'index.html',
-  },
-  host_permissions: ['<all_urls>'],
-  icons: {
-    '16': 'app-icon-16.png',
-    '32': 'app-icon-32.png',
-    '48': 'app-icon-48.png',
-    '128': 'app-icon-128.png',
   },
   background: {
     scripts: ['src/service-workers/background.ts'],
@@ -33,7 +31,6 @@ export const manifestFirefox: ManifestV3Export = {
     {
       resources: ['*.png', '*.jpg', '*.jpeg', '*.svg', '*.webp'],
       matches: ['*://*/*'],
-      use_dynamic_url: true,
     },
   ],
-} as ManifestV3Export;
+} as FirefoxManifestV3Export;

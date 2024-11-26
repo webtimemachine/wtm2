@@ -18,6 +18,10 @@ import {
 import {
   CompleteNavigationEntry,
   completeNavigationEntryInclude,
+  countNavigationEntriesQueryRaw,
+  navigationEntriesQueryRaw,
+  RawCompleteNavigationEntry,
+  transformRawToCompleteNavigationEntries,
 } from '../types';
 
 import { MessageResponse, PaginationResponse } from '../../common/dtos';
@@ -132,24 +136,26 @@ export class NavigationEntryService {
     prismaClient: Prisma.TransactionClient,
   ) {
     const tags = parsedData.data.tags;
-    await Promise.all(
-      tags.map(async (tag) => {
-        const savedTag = await prismaClient.tag.upsert({
-          create: {
-            name: tag,
-          },
-          where: { name: tag },
-          update: {},
-        });
-        await prismaClient.entryTag.create({
-          data: {
-            entryId: navEntry.id,
-            tagId: savedTag.id,
-          },
-        });
-      }),
-    );
+
+    await prismaClient.tag.createMany({
+      data: tags.map((tagName) => ({ name: tagName })),
+      skipDuplicates: true,
+    });
+
+    const allTags = await prismaClient.tag.findMany({
+      where: { name: { in: tags } },
+      select: { id: true },
+    });
+
+    await prismaClient.entryTag.createMany({
+      data: allTags.map((tag) => ({
+        entryId: navEntry.id,
+        tagId: tag.id,
+      })),
+      skipDuplicates: true,
+    });
   }
+
   async createNavigationEntry(
     jwtContext: JwtContext,
     createNavigationEntryInputDto: CreateNavigationEntryInputDto,
@@ -174,15 +180,21 @@ export class NavigationEntryService {
           select: {
             enableImageEncoding: true,
             enableExplicitContentFilter: true,
+            enableStopTracking: true,
           },
         },
       );
+      if (userPreference?.enableStopTracking) {
+        return;
+      }
+
       if (userPreference?.enableExplicitContentFilter) {
         await this.explicitFilter.filter(
           content!,
           createNavigationEntryInputDto.url,
         );
       }
+
       try {
         await this.indexerService.index(
           content!,
@@ -216,13 +228,13 @@ export class NavigationEntryService {
 
     const formatPrompt = `
       # IDENTITY and PURPOSE
-
+  
       You are an expert content summarizer. You take semantic markdown content in and output a Markdown formatted summary using the format below. Also, you are an expert code formatter in markdown, making code more legible and well formatted.
-
+  
       Take a deep breath and think step by step about how to best accomplish this goal using the following steps.
-
+  
       # OUTPUT SECTIONS
-
+  
       - Combine all of your understanding of the content into a single, 20-word sentence in a section called Summary:.
       - Output the 10 if exists, including most important points of the content as a list with no more than 15 words per point into a section called Main Points:.
       - Output a list of the 5 best takeaways from the content in a section called Takeaways:.
@@ -231,7 +243,7 @@ export class NavigationEntryService {
       - All previous outputs must be inside a property called content, which contains a single string with all the markdown
       - Output a property on the object called tags that shows in a list of the most relevant tags present in the input content
       - Output a property on the object called source that has the link of the content in a string
-
+  
       # OUTPUT INSTRUCTIONS
       - Create the output using the formatting above.
       - You only output human readable Markdown.
@@ -256,11 +268,11 @@ export class NavigationEntryService {
       - Quantity of tags must be lower to 5
       - Tags language must be en english, no matter the language of the content.
       # INPUT:
-
+  
       INPUT:
-
+  
       The search result is:
-
+  
       ### Source: ${createNavigationEntryInputDto.url}
       ${content}
       `;
@@ -270,31 +282,28 @@ export class NavigationEntryService {
 
     const parsedData = SummaryPromptSchema.safeParse(jsonParseFormattedResult);
 
-    await this.prismaService.$transaction(async (prismaClient) => {
-      if (
-        lastEntry?.url === createNavigationEntryInputDto.url &&
-        parsedData.success
-      ) {
-        const navEntry = await prismaClient.navigationEntry.update({
-          where: {
-            id: lastEntry.id,
-          },
-          data: {
-            liteMode,
-            userDeviceId: jwtContext.session.userDeviceId,
-            aiGeneratedContent: parsedData.data?.data.content,
-            ...entryData,
-          },
-          include: completeNavigationEntryInclude,
-        });
-        await prismaClient.entryTag.deleteMany({
-          where: {
-            entryId: navEntry.id,
-          },
-        });
-        await this.saveTags(navEntry, parsedData.data, prismaClient);
-      } else {
-        if (parsedData.success) {
+    if (parsedData.success) {
+      await this.prismaService.$transaction(async (prismaClient) => {
+        if (lastEntry?.url === createNavigationEntryInputDto.url) {
+          const navEntry = await prismaClient.navigationEntry.update({
+            where: {
+              id: lastEntry.id,
+            },
+            data: {
+              liteMode,
+              userDeviceId: jwtContext.session.userDeviceId,
+              aiGeneratedContent: parsedData.data?.data.content,
+              ...entryData,
+            },
+            include: completeNavigationEntryInclude,
+          });
+          await prismaClient.entryTag.deleteMany({
+            where: {
+              entryId: navEntry.id,
+            },
+          });
+          await this.saveTags(navEntry, parsedData.data, prismaClient);
+        } else {
           const navEntry = await prismaClient.navigationEntry.create({
             data: {
               liteMode,
@@ -307,9 +316,10 @@ export class NavigationEntryService {
           });
           await this.saveTags(navEntry, parsedData.data, prismaClient);
         }
-      }
-    });
-
+      });
+    } else {
+      console.error('Error parsing formatted result:', parsedData.error);
+    }
     return;
   }
 
@@ -356,7 +366,10 @@ export class NavigationEntryService {
     jwtContext: JwtContext,
     queryParams: GetNavigationEntryDto,
   ): Promise<PaginationResponse<CompleteNavigationEntryDto>> {
-    const { limit, offset, query, isSemantic, tag } = queryParams;
+    const { limit, offset, tag, query } = queryParams;
+    const queryTsVector = queryParams.queryTsVector
+      ? queryParams.queryTsVector.trim()
+      : undefined;
     const navigationEntryExpirationInDays =
       this.getNavigationEntryExpirationInDays(jwtContext.user);
 
@@ -368,79 +381,104 @@ export class NavigationEntryService {
       );
     }
     let whereQuery: Prisma.NavigationEntryWhereInput = {};
-    let mostRelevantResults: Map<string, string> | undefined = undefined;
-    if (isSemantic) {
-      if (query) {
-        try {
-          const searchResults = await this.indexerService.search(
-            query,
-            jwtContext.user.id,
-          );
-          whereQuery = {
-            url: { in: [...searchResults.urls!] },
-          };
-          mostRelevantResults = searchResults.mostRelevantResults;
-        } catch (error: unknown) {
-          if (
-            error instanceof Error &&
-            error.message.includes('Cannot query field')
-          ) {
-            this.logger.warn(`Ignoring AI search, schema does not exist yet`);
-          } else throw error;
-        }
-      }
-    } else {
-      const queryFilter: Prisma.StringFilter<'NavigationEntry'> = {
-        contains: query,
-        mode: 'insensitive',
-      };
 
-      whereQuery = {
-        ...(query !== undefined
-          ? { OR: [{ url: queryFilter }, { title: queryFilter }] }
-          : {}),
-        ...(expirationThreshold
-          ? {
-              navigationDate: {
-                gte: expirationThreshold,
-              },
-            }
-          : {}),
-      };
-    }
+    const mostRelevantResults: Map<string, string> | undefined = undefined;
 
-    const count: number = await this.prismaService.navigationEntry.count({
-      where: {
-        userId: jwtContext.user.id,
-        ...whereQuery,
-      },
-    });
+    const queryFilter: Prisma.StringFilter<'NavigationEntry'> = {
+      contains: query,
+      mode: 'insensitive',
+    };
 
     whereQuery = {
-      ...whereQuery,
-      ...(tag && {
-        entryTags: {
-          some: {
-            tag: {
-              name: tag,
+      ...(query !== undefined
+        ? { OR: [{ url: queryFilter }, { title: queryFilter }] }
+        : {}),
+      ...(expirationThreshold
+        ? {
+            navigationDate: {
+              gte: expirationThreshold,
+            },
+          }
+        : {}),
+    };
+
+    let count: number = 0;
+    let completeNavigationEntries: CompleteNavigationEntry[] = [];
+    const userId = jwtContext.user.id;
+
+    if (queryTsVector) {
+      const tokens = queryTsVector
+        .toLowerCase()
+        .split(' ')
+        .filter((v) => v);
+
+      const tsqueryTerm = tokens.join(' | ');
+      const similarTerm = `%(${tokens.join('|')})%`;
+
+      const keywords = tsqueryTerm;
+      const similarPattern = similarTerm;
+
+      const countResult: { count: number }[] =
+        await this.prismaService.$queryRawUnsafe(
+          countNavigationEntriesQueryRaw,
+          userId,
+          keywords,
+          similarPattern,
+          similarPattern,
+        );
+
+      const rawCompleteNavigationEntries: RawCompleteNavigationEntry[] =
+        await this.prismaService.$queryRawUnsafe(
+          navigationEntriesQueryRaw,
+          userId,
+          keywords,
+          similarPattern,
+          similarPattern,
+          limit,
+          offset,
+        );
+
+      const entriesResult = transformRawToCompleteNavigationEntries(
+        rawCompleteNavigationEntries,
+      );
+
+      count = countResult?.[0].count || 0;
+      completeNavigationEntries = entriesResult;
+    } else {
+      whereQuery = {
+        ...whereQuery,
+        ...(tag && {
+          entryTags: {
+            some: {
+              tag: {
+                name: tag,
+              },
             },
           },
-        },
-      }),
-    };
-    const completeNavigationEntries: CompleteNavigationEntry[] =
-      await this.prismaService.navigationEntry.findMany({
+        }),
+      };
+
+      count = await this.prismaService.navigationEntry.count({
         where: {
-          userId: jwtContext.user.id,
+          userId,
           ...whereQuery,
         },
-        include: completeNavigationEntryInclude,
-        skip: offset,
-        take: limit,
-        orderBy: {
-          navigationDate: 'desc',
-        },
       });
+
+      completeNavigationEntries =
+        await this.prismaService.navigationEntry.findMany({
+          where: {
+            userId,
+            ...whereQuery,
+          },
+          include: completeNavigationEntryInclude,
+          skip: offset,
+          take: limit,
+          orderBy: {
+            navigationDate: 'desc',
+          },
+        });
+    }
 
     const completeNavigationEntryDtos =
       NavigationEntryService.completeNavigationEntriesToDtos(
@@ -449,17 +487,20 @@ export class NavigationEntryService {
         mostRelevantResults,
       );
 
-    if (query && count > 0 && isSemantic)
+    const userQuery = query ? query : queryTsVector;
+
+    if (userQuery && count > 0) {
       await this.queryService.newEntry(
-        query,
+        userQuery,
         completeNavigationEntries.map((entry) => entry.id),
       );
+    }
 
     return plainToInstance(PaginationResponse<CompleteNavigationEntryDto>, {
       offset,
       limit,
       count,
-      query,
+      query: userQuery,
       items: completeNavigationEntryDtos,
     });
   }
@@ -496,58 +537,31 @@ export class NavigationEntryService {
   ): Promise<MessageResponse> {
     const { navigationEntryIds } = deleteNavigationEntriesDto;
 
-    const { deletedNavigationEntries } = await this.prismaService.$transaction(
-      async (prismaClient) => {
-        const entriesThatDontBelongToCurrentUser =
-          await prismaClient.navigationEntry.findMany({
-            where: {
-              id: {
-                in: navigationEntryIds,
-              },
-              userId: {
-                not: jwtContext.user.id,
-              },
-            },
-          });
-
-        if (entriesThatDontBelongToCurrentUser?.length > 0) {
-          throw new ForbiddenException();
-        }
-
-        const deletedNavigationEntries: NavigationEntry[] = [];
-        await Promise.all(
-          navigationEntryIds.map(async (navigationEntryId) => {
-            const navigationEntry =
-              await this.prismaService.navigationEntry.findUnique({
-                where: {
-                  userId: jwtContext.user.id,
-                  id: navigationEntryId,
-                },
-              });
-
-            if (navigationEntry) {
-              try {
-                await this.indexerService.delete(
-                  navigationEntry.url,
-                  jwtContext.user.id,
-                );
-              } catch (err) {}
-
-              const deletedNavigationEntry: NavigationEntry =
-                await this.prismaService.navigationEntry.delete({
-                  where: { id: navigationEntryId, userId: jwtContext.user.id },
-                });
-              deletedNavigationEntries.push(deletedNavigationEntry);
-            }
-          }),
-        );
-
-        return { deletedNavigationEntries };
+    const entries = await this.prismaService.navigationEntry.findMany({
+      where: {
+        id: { in: navigationEntryIds },
+        userId: jwtContext.user.id,
       },
-    );
+    });
+
+    if (entries.length !== navigationEntryIds.length) {
+      throw new ForbiddenException();
+    }
+
+    await this.prismaService.$transaction(async (prismaClient) => {
+      await prismaClient.navigationEntry.deleteMany({
+        where: {
+          id: { in: navigationEntryIds },
+          userId: jwtContext.user.id,
+        },
+      });
+
+      const urlsToDelete = entries.map((entry) => entry.url);
+      await this.indexerService.bulkDelete(urlsToDelete, jwtContext.user.id);
+    });
 
     return plainToInstance(MessageResponse, {
-      message: `${deletedNavigationEntries.length} navigation entries has been deleted`,
+      message: `${entries.length} navigation entries have been deleted`,
     });
   }
 
@@ -592,19 +606,18 @@ export class NavigationEntryService {
               take: 50,
             });
 
-            await Promise.allSettled(
-              entries.map(async (entry) => {
-                const { url, userId, id } = entry;
-                try {
-                  await this.indexerService.delete(url, userId);
-                  await this.prismaService.navigationEntry.delete({
-                    where: { id, userId },
-                  });
-                } catch (error) {
-                  console.error(`Error deleting entry ${id}:`, error);
-                }
-              }),
-            );
+            const entriesToDelete = entries.map((entry) => entry.id);
+            const uniqueUrls = [...new Set(entries.map((entry) => entry.url))];
+
+            await this.prismaService.navigationEntry.deleteMany({
+              where: {
+                id: {
+                  in: entriesToDelete,
+                },
+              },
+            });
+
+            await this.indexerService.bulkDelete(uniqueUrls, userId);
           } catch (error) {
             console.error(`Error getting entries of user ${userId}:`, error);
           }

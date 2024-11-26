@@ -2,7 +2,6 @@ name: Run Backend Tests
 
 on:
   pull_request:
-    branches: ['develop']
     paths: ['apps/backend/**']
 
 jobs:
@@ -20,9 +19,6 @@ jobs:
 
       - name: Install dependencies
         run: npm install --workspaces
-
-      - name: Build all packages
-        run: npm run build --workspace=packages/
 
       - name: Run Backend Tests
         run: npm run test:cov --workspace=@wtm/backend

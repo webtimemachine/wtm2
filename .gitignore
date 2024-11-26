@@ -16,5 +16,7 @@ dist
 ./backend
 ./webpage
 
+.vscode
+
 # NATIVE
 native/app_ios/wtm/wtm.xcodeproj/xcuserdata/

@@ -96,9 +96,11 @@ const RelevantSegment = ({
   const markdown = getPreProcessedMarkDown(relevantSegment);
   return (
     <div>
-      <Text textAlign={'center'} py={5}>
-        Relevant tags found
-      </Text>
+      {tags && tags.length > 0 && (
+        <Text textAlign={'center'} py={5}>
+          Relevant tags found
+        </Text>
+      )}
 
       <div className='w-full flex justify-center items-center gap-5 flex-wrap '>
         {tags &&
@@ -131,8 +133,9 @@ const NavigationEntriesScreen: React.FC = () => {
   const LIMIT = 16;
   const [page, setPage] = useState<number>(0);
   const [query, setQuery] = useState<string>('');
-  const [isSemantic, setIsSemantic] = useState<boolean>(true);
   const [tag, setTag] = useState<string>('');
+  const [isEnhanceSearch, setIsEnhanceSearch] = useState<boolean>(false);
+
   const [isBulkDeleteOn, setIsBulkDeleteOn] = useState<boolean>(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [loading, setLoading] = useState<boolean>(false);
@@ -147,7 +150,7 @@ const NavigationEntriesScreen: React.FC = () => {
     offset,
     limit,
     query,
-    isSemantic,
+    isEnhanceSearch,
     tag,
   });
 
@@ -159,7 +162,7 @@ const NavigationEntriesScreen: React.FC = () => {
     navigationEntriesQuery.refetch();
   }, [
     page,
-    isSemantic,
+    isEnhanceSearch,
     deleteNavigationEntryMutation?.isSuccess,
     deleteBulkNavigationEntriesMutation?.isSuccess,
     tag,
@@ -255,21 +258,23 @@ const NavigationEntriesScreen: React.FC = () => {
           <div
             className='flex items-center gap-1 p-1 h-[32px] select-none cursor-pointer hover:bg-white rounded-lg'
             data-testid='ia-search-container'
-            onClick={() => setIsSemantic((value) => !value)}
+            onClick={() => setIsEnhanceSearch((value) => !value)}
           >
             <Icon
-              className={clsx([isSemantic ? 'fill-blue-500' : 'fill-gray-500'])}
+              className={clsx([
+                isEnhanceSearch ? 'fill-blue-500' : 'fill-gray-500',
+              ])}
               as={BsStars}
               boxSize={4}
             />
             <Text className='text-slate-600 mr-1' fontSize='small'>
-              AI Search
+              Enhance search
             </Text>
             <Switch
               size='sm'
-              aria-label='AI Search'
-              isChecked={isSemantic}
-              onChange={() => setIsSemantic((value) => !value)}
+              aria-label='Enhance search'
+              isChecked={isEnhanceSearch}
+              onChange={() => setIsEnhanceSearch((value) => !value)}
             />
           </div>
           <div

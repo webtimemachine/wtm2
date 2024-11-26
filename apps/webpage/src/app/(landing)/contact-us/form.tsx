@@ -1,32 +1,42 @@
 'use client';
 
+import React, { useRef } from 'react';
 import {
-  Button,
   FormControl,
+  Stack,
   Input,
   Select,
-  Stack,
   Textarea,
+  useToast,
 } from '@chakra-ui/react';
-import { FormEvent } from 'react';
+import { SubmitButton } from './submit-button';
 
-export const ContactForm = () => {
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
+interface ContactFormProps {
+  action: (formData: FormData) => Promise<void>;
+}
 
-    const form = e.currentTarget as HTMLFormElement;
-    const formData = new FormData(form);
-    const data = Object.fromEntries(formData.entries());
+export const ContactForm: React.FC<ContactFormProps> = ({ action }) => {
+  const toast = useToast();
 
-    const messageBody = `Name: ${data.name} \n Email: ${data.email} \n Query Type: ${data['query-type']} \n Subject: ${data.subject} \n Message: ${data.message}`;
-    const mailtoLink = `mailto:info@webtimemachine.io?subject=${encodeURIComponent(
-      data.subject as string,
-    )}&body=${encodeURIComponent(messageBody)}`;
-    window.open(mailtoLink, '_blank');
+  const formRef = useRef<HTMLFormElement>(null);
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    await action(formData);
+    if (formRef.current) {
+      formRef.current.reset();
+    }
+
+    toast({
+      colorScheme: 'green',
+      title: 'Message Sent',
+      description: 'Your message has been sent successfully.',
+    });
   };
 
   return (
-    <form id='contact-form' onSubmit={handleSubmit}>
+    <form id='contact-form' ref={formRef} onSubmit={handleSubmit}>
       <FormControl isRequired>
         <Stack
           wrap={'wrap'}
@@ -69,9 +79,7 @@ export const ContactForm = () => {
             id='message'
             name='message'
           />
-          <Button colorScheme='blue' type='submit'>
-            Send Message
-          </Button>
+          <SubmitButton />
         </Stack>
       </FormControl>
     </form>

@@ -34,6 +34,10 @@ echo "Updated apps/extension/manifest-chrome.ts -> $NEW_VERSION"
 sed -i '' "s/version: '[0-9]*\.[0-9]*\.[0-9]*'/version: '$NEW_VERSION'/" apps/extension/manifest-firefox.ts
 echo "Updated apps/extension/manifest-firefox.ts -> $NEW_VERSION"
 
+# Update version in manifest-base.ts
+sed -i '' "s/version: '[0-9]*\.[0-9]*\.[0-9]*'/version: '$NEW_VERSION'/" apps/extension/manifest-base.ts
+echo "Updated apps/extension/manifest-base.ts -> $NEW_VERSION"
+
 # Update version in manifest-web.ts
 sed -i '' "s/version: '[0-9]*\.[0-9]*\.[0-9]*'/version: '$NEW_VERSION'/" apps/webpage/src/manifest-web.ts
 echo "Updated apps/webpage/src/manifest-web.ts -> $NEW_VERSION"

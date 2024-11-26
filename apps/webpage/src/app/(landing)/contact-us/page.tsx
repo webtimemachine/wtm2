@@ -1,6 +1,17 @@
 import { Metadata } from 'next';
-import { ContactForm } from './contact-form';
-import { Heading, Stack } from '@chakra-ui/react';
+
+import {
+  Button,
+  FormControl,
+  Heading,
+  Input,
+  Select,
+  Stack,
+  Textarea,
+} from '@chakra-ui/react';
+import { sendMessageToDiscord } from './action';
+
+import { ContactForm } from './form';
 
 export const metadata: Metadata = {
   title: 'WebTM | Contact Us',
@@ -16,7 +27,7 @@ export default function ContactUsPage() {
           Contact Us
         </Heading>
         <Stack justifyContent={'center'}>
-          <ContactForm />
+          <ContactForm action={sendMessageToDiscord} />
         </Stack>
       </Stack>
     </Stack>

@@ -162,9 +162,10 @@ jobs:
         env:
           API_KEY_BASE64: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
         run: |
-          echo -n "$API_KEY_BASE64" | base64 --decode -o "./AuthKey_${{ secrets.APPSTORE_API_KEY_ID }}.p8"
-          xcrun altool --validate-app -f build/wtm.ipa -t ios --apiKey ${{ secrets.APPSTORE_API_KEY_ID }} --apiIssuer ${{ secrets.APPSTORE_ISSUER_ID }}
-          xcrun altool --upload-app -f build/wtm.ipa -t ios --apiKey ${{ secrets.APPSTORE_API_KEY_ID }} --apiIssuer ${{ secrets.APPSTORE_ISSUER_ID }}
+          mkdir -p ./private_keys
+          echo -n "$API_KEY_BASE64" | base64 --decode -o "./private_keys/AuthKey_${{ secrets.APPSTORE_API_KEY_ID }}.p8"
+          xcrun altool --validate-app -f native/app_ios/wtm/build/wtm.ipa -t ios --apiKey ${{ secrets.APPSTORE_API_KEY_ID }} --apiIssuer ${{ secrets.APPSTORE_ISSUER_ID }}
+          xcrun altool --upload-app -f native/app_ios/wtm/build/wtm.ipa -t ios --apiKey ${{ secrets.APPSTORE_API_KEY_ID }} --apiIssuer ${{ secrets.APPSTORE_ISSUER_ID }}
 
   release:
     name: Create GitHub Release and Upload Assets

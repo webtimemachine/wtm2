@@ -2,7 +2,6 @@ name: Run Extension Tests
 
 on:
   pull_request:
-    branches: ['develop']
     paths: ['apps/extension/**']
 
 jobs:
@@ -19,9 +18,6 @@ jobs:
 
       - name: Install dependencies
         run: npm install --workspaces
-
-      - name: Build all packages
-        run: npm run build --workspace=packages/
 
       - name: Run Extension Tests
         run: npm run test:cov --workspace=@wtm/extension
