@@ -20,7 +20,7 @@ Web Time Machine (WebTM) is an open-source, cross-platform browser extension and
 
 ### Overview
 
-WebTM consists of a backend service, a browser extension compatible with multiple browsers, and a standalone web page. The backend is built with NestJS and integrated with OpenAI and Weaviate to provide AI-powered search capabilities and explicit content filtering. The browser extension is built with React, TypeScript, and Vite, while the web page is built with Next.js and offers a responsive UI for both desktop and mobile users.
+WebTM consists of a backend service, a browser extension compatible with multiple browsers, and a standalone web page. The backend is built with NestJS and integrated with OpenAI to provide AI-powered search capabilities and explicit content filtering. The browser extension is built with React, TypeScript, and Vite, while the web page is built with Next.js and offers a responsive UI for both desktop and mobile users.
 
 ### Core Components
 
@@ -28,7 +28,7 @@ WebTM consists of a backend service, a browser extension compatible with multipl
 
 - **Framework**: [NestJS](https://nestjs.com/)
 - **Database**: PostgreSQL (via Prisma ORM)
-- **AI Integration**: OpenAI, Weaviate
+- **AI Integration**: OpenAI
 - **Deployment**: Deployed on Vercel
 - **Functionality**: Provides REST API for user authentication, session management, data storage, AI-based search, and explicit content filtering.
 - **[Backend README](apps/backend/README.md)**: Detailed setup and usage instructions for the backend.
