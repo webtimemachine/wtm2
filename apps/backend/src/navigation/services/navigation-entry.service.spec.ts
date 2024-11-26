@@ -19,9 +19,6 @@ import { NavigationEntryService } from './navigation-entry.service';
 import { QueryService } from '../../query/services';
 import { QueryTestingModule } from '../../query/query.testing.module';
 
-import { IndexerService } from '../../encoder/services';
-import { EncoderTestingModule } from '../../encoder/encoder.testing.module';
-
 import { JWTPayload, JwtContext } from '../../auth/interfaces';
 import { CompleteUser } from '../../user/types';
 
@@ -274,7 +271,6 @@ jest.mock('@langchain/openai', () => {
 describe('NavigationEntryService', () => {
   let navigationEntryService: NavigationEntryService;
   let prismaService: PrismaService;
-  let indexerService: IndexerService;
   let queryService: QueryService;
   let explicitFilterService: ExplicitFilterService;
 
@@ -285,7 +281,6 @@ describe('NavigationEntryService', () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
         commonTestModule,
-        EncoderTestingModule.forTest(commonTestModule),
         QueryTestingModule.forTest(commonTestModule),
         ExplicitFilterTestingModule.forTest(commonTestModule),
       ],
@@ -296,7 +291,6 @@ describe('NavigationEntryService', () => {
       NavigationEntryService,
     );
     prismaService = module.get<PrismaService>(PrismaService);
-    indexerService = module.get<IndexerService>(IndexerService);
     queryService = module.get<QueryService>(QueryService);
     explicitFilterService = module.get<ExplicitFilterService>(
       ExplicitFilterService,
@@ -311,10 +305,6 @@ describe('NavigationEntryService', () => {
     expect(prismaService).toBeDefined();
   });
 
-  it('indexerService should be defined', () => {
-    expect(indexerService).toBeDefined();
-  });
-
   it('queryService should be defined', () => {
     expect(queryService).toBeDefined();
   });
@@ -324,9 +314,6 @@ describe('NavigationEntryService', () => {
 
   describe('createNavigationEntry', () => {
     it('should create a new navigation entry successfully', async () => {
-      const mockIndex = jest
-        .spyOn(indexerService, 'index')
-        .mockImplementation();
       const mockCreateMany = jest.fn();
       const mockFilter = jest
         .spyOn(explicitFilterService, 'filter')
@@ -356,22 +343,13 @@ describe('NavigationEntryService', () => {
         jwtContext,
         createNavigationEntryInputDto,
       );
-      expect(mockIndex).toHaveBeenCalledWith(
-        'Test content',
-        [],
-        'https://example.com',
-        1n,
-        true,
-      );
       expect(mockFilter).toHaveBeenCalledWith(
         'Test content',
         'https://example.com',
       );
     });
+
     it('should create a new navigation entry successfully on repetitive entry', async () => {
-      const mockIndex = jest
-        .spyOn(indexerService, 'index')
-        .mockImplementation();
       const mockFilter = jest
         .spyOn(explicitFilterService, 'filter')
         .mockImplementation();
@@ -403,13 +381,6 @@ describe('NavigationEntryService', () => {
       await navigationEntryService.createNavigationEntry(
         jwtContext,
         createNavigationEntryInputDto,
-      );
-      expect(mockIndex).toHaveBeenCalledWith(
-        'Test content',
-        [],
-        'https://example.com',
-        1n,
-        true,
       );
       expect(mockFilter).toHaveBeenCalledWith(
         'Test content',

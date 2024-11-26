@@ -3,7 +3,13 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["build/backend/**", "build/app_chrome/**", "dist/**", "build/app_firefox/**", "build/app_safari/**"]
+      "outputs": [
+        "build/backend/**",
+        "build/app_chrome/**",
+        "dist/**",
+        "build/app_firefox/**",
+        "build/app_safari/**"
+      ]
     },
     "dev": {
       "persistent": true,
@@ -26,8 +32,6 @@
         "JWT_RECOVERY_TOKEN_SECRET",
         "JWT_RECOVERY_TOKEN_EXPIRATION",
         "EMAIL_URI",
-        "WEAVIATE_SCHEME",
-        "WEAVIATE_HOST",
         "OPENAI_ACCESS_TOKEN",
         "AVOID_DOMAIN_LIST",
         "DATABASE_URL",
