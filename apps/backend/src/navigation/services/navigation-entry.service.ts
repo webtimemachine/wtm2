@@ -30,7 +30,6 @@ import { PrismaService } from '../../common/services';
 import { UserService } from '../../user/services';
 import { CompleteUser } from '../../user/types';
 
-import { QueryService } from '../../query/services';
 import { ExplicitFilterService } from '../../filter/services';
 import { appEnv } from '../../config';
 import { subDays } from 'date-fns';
@@ -53,7 +52,6 @@ export class NavigationEntryService {
 
   constructor(
     private readonly prismaService: PrismaService,
-    private readonly queryService: QueryService,
     private readonly explicitFilter: ExplicitFilterService,
   ) {}
 
@@ -461,14 +459,6 @@ export class NavigationEntryService {
       );
 
     const userQuery = query ? query : queryTsVector;
-
-    if (userQuery && count > 0) {
-      await this.queryService.newEntry(
-        userQuery,
-        completeNavigationEntries.map((entry) => entry.id),
-      );
-    }
-
     return plainToInstance(PaginationResponse<CompleteNavigationEntryDto>, {
       offset,
       limit,
