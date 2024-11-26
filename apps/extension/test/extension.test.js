@@ -30,9 +30,9 @@ describe('Chrome Extension E2E Tests', () => {
     test('Landing page renders correctly', async () => {
         // Verify the page title matches metadata
         const title = await page.title();
-        expect(title).toBe('WebTM | Home'); // Replace with the expected page title if different
+        expect(title).toBe('WebTM | Home'); 
 
-        // Check for specific text or an element unique to the Landing component
+        // Check for specific text
         const landingText = await page.evaluate(() => {
             return document.body.textContent.includes("Time Machine for your browser");
         });

@@ -13,7 +13,7 @@ describe('Login Page E2E Tests', () => {
   });
 
   test('Valid login', async () => {
-    await page.type('input[name="email"]', 'liza.saraviag@gmail.com');
+    await page.type('input[name="email"]', 'liza.saraviag@gmail.com'); //Using my user but should change to a test user
     await page.type('input[name="password"]', 'Test12345');
 
      // Wait for the button to appear and click it by text content
