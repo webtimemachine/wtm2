@@ -5,7 +5,6 @@ import { CommonModule } from './common/common.module';
 import { UserModule } from './user/user.module';
 import { NavigationModule } from './navigation/navigation.module';
 import { HealthModule } from './health/health.module';
-import { QueryModule } from './query/query.module';
 import { ExplicitFilterModule } from './filter/filter.module';
 import { SystemModule } from './system/system.module';
 @Module({
@@ -14,7 +13,6 @@ import { SystemModule } from './system/system.module';
     UserModule,
     NavigationModule,
     HealthModule,
-    QueryModule,
     ExplicitFilterModule,
     SystemModule,
   ],
