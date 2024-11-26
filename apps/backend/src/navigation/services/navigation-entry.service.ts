@@ -30,13 +30,13 @@ import { PrismaService } from '../../common/services';
 import { UserService } from '../../user/services';
 import { CompleteUser } from '../../user/types';
 
-import { IndexerService } from '../../encoder/services';
 import { ExplicitFilterService } from '../../filter/services';
 import { appEnv } from '../../config';
 import { subDays } from 'date-fns';
 import { CustomLogger } from '../../common/helpers/custom-logger';
 import { OpenAI } from '@langchain/openai';
 import { z } from 'zod';
+
 const SummaryPromptSchema = z.object({
   data: z.object({
     content: z.string(),
@@ -45,13 +45,13 @@ const SummaryPromptSchema = z.object({
   }),
 });
 type SummaryPromptResponse = z.infer<typeof SummaryPromptSchema>;
+
 @Injectable()
 export class NavigationEntryService {
   private readonly logger = new CustomLogger(NavigationEntryService.name);
 
   constructor(
     private readonly prismaService: PrismaService,
-    private readonly indexerService: IndexerService,
     private readonly explicitFilter: ExplicitFilterService,
   ) {}
 
@@ -76,7 +76,6 @@ export class NavigationEntryService {
   static completeNavigationEntryToDto(
     jwtContext: JwtContext,
     completeNavigationEntry: CompleteNavigationEntry,
-    relevantSegment?: string,
   ): CompleteNavigationEntryDto {
     const userDeviceDto = UserService.userDeviceToDto(
       jwtContext,
@@ -93,7 +92,6 @@ export class NavigationEntryService {
           jwtContext.user,
           completeNavigationEntry,
         ),
-        relevantSegment,
         aiGeneratedContent: completeNavigationEntry.aiGeneratedContent,
         tags:
           completeNavigationEntry?.entryTags?.map((entry) => entry.tag.name) ||
@@ -107,13 +105,11 @@ export class NavigationEntryService {
   static completeNavigationEntriesToDtos(
     jwtContext: JwtContext,
     completeNavigationEntries: CompleteNavigationEntry[],
-    relevantSegments?: Map<string, string>,
   ): CompleteNavigationEntryDto[] {
     return completeNavigationEntries.map((completeNavigationEntry) =>
       NavigationEntryService.completeNavigationEntryToDto(
         jwtContext,
         completeNavigationEntry,
-        relevantSegments?.get(completeNavigationEntry.url || ''),
       ),
     );
   }
@@ -128,6 +124,7 @@ export class NavigationEntryService {
       return navigationEntryExpirationInDays;
     }
   }
+
   private async saveTags(
     navEntry: NavigationEntry,
     parsedData: SummaryPromptResponse,
@@ -165,6 +162,7 @@ export class NavigationEntryService {
 
     if (hostname && noTrackingDomains.includes(hostname)) return;
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { content, images, ...entryData } = createNavigationEntryInputDto;
 
     const liteMode = !content;
@@ -190,20 +188,6 @@ export class NavigationEntryService {
         await this.explicitFilter.filter(
           content!,
           createNavigationEntryInputDto.url,
-        );
-      }
-
-      try {
-        await this.indexerService.index(
-          content!,
-          images,
-          createNavigationEntryInputDto.url,
-          jwtContext.user.id,
-          userPreference?.enableImageEncoding || false,
-        );
-      } catch (error) {
-        this.logger.error(
-          `An error occurred indexing '${createNavigationEntryInputDto.url}'. Cause: ${error.message}`,
         );
       }
     }
@@ -326,7 +310,7 @@ export class NavigationEntryService {
     addContextToNavigationEntryDto: AddContextToNavigationEntryDto,
   ) {
     try {
-      const { content, url } = addContextToNavigationEntryDto;
+      const { content } = addContextToNavigationEntryDto;
 
       const userPreference = await this.prismaService.userPreferences.findFirst(
         {
@@ -345,14 +329,6 @@ export class NavigationEntryService {
           addContextToNavigationEntryDto.url,
         );
       }
-
-      await this.indexerService.index(
-        content,
-        [],
-        url,
-        jwtContext.user.id,
-        false,
-      );
     } catch (error) {
       this.logger.error(
         `An error occurred indexing '${addContextToNavigationEntryDto.url}'. Cause: ${error.message}`,
@@ -379,8 +355,6 @@ export class NavigationEntryService {
       );
     }
     let whereQuery: Prisma.NavigationEntryWhereInput = {};
-
-    const mostRelevantResults: Map<string, string> | undefined = undefined;
 
     const queryFilter: Prisma.StringFilter<'NavigationEntry'> = {
       contains: query,
@@ -482,7 +456,6 @@ export class NavigationEntryService {
       NavigationEntryService.completeNavigationEntriesToDtos(
         jwtContext,
         completeNavigationEntries,
-        mostRelevantResults,
       );
 
     const userQuery = query ? query : queryTsVector;
@@ -511,7 +484,6 @@ export class NavigationEntryService {
     if (!navigationEntry) {
       throw new NotFoundException();
     }
-    this.indexerService.delete(navigationEntry.url, jwtContext.user.id);
     await this.prismaService.navigationEntry.delete({
       where: { id, userId: jwtContext.user.id },
     });
@@ -545,9 +517,6 @@ export class NavigationEntryService {
           userId: jwtContext.user.id,
         },
       });
-
-      const urlsToDelete = entries.map((entry) => entry.url);
-      await this.indexerService.bulkDelete(urlsToDelete, jwtContext.user.id);
     });
 
     return plainToInstance(MessageResponse, {
@@ -597,8 +566,6 @@ export class NavigationEntryService {
             });
 
             const entriesToDelete = entries.map((entry) => entry.id);
-            const uniqueUrls = [...new Set(entries.map((entry) => entry.url))];
-
             await this.prismaService.navigationEntry.deleteMany({
               where: {
                 id: {
@@ -606,8 +573,6 @@ export class NavigationEntryService {
                 },
               },
             });
-
-            await this.indexerService.bulkDelete(uniqueUrls, userId);
           } catch (error) {
             console.error(`Error getting entries of user ${userId}:`, error);
           }

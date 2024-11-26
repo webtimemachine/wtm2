@@ -11,32 +11,11 @@ services:
 
     volumes:
       - web-time-machine-db-data:/var/lib/postgresql/data/
-  weaviate:
-    command:
-      - --host
-      - 0.0.0.0
-      - --port
-      - "8080"
-      - --scheme
-      - http
-    image: semitechnologies/weaviate
-    volumes:
-      - weaviate_data_container:/var/lib/weaviate
-    ports:
-      - 8084:8080
-    restart: on-failure:0
-    environment:
-      QUERY_DEFAULTS_LIMIT: 25
-      AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED: "true"
-      PERSISTENCE_DATA_PATH: "/var/lib/weaviate"
-      DEFAULT_VECTORIZER_MODULE: "none"
-      CLUSTER_HOSTNAME: "node1"
 
 networks:
   default:
     name: web-time-machine-network
 
 volumes:
-  weaviate_data_container:
   web-time-machine-db-data:
     name: web-time-machine-db-data
