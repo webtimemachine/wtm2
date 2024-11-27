@@ -119,6 +119,7 @@ export const transformRawToCompleteNavigationEntries = (
         navigationDate: raw.navigationEntryNavigationDate,
         userDeviceId: raw.navigationEntryUserDeviceId,
         aiGeneratedContent: raw.navigationEntryAIGeneratedContent,
+        imageCaptions: [],
         userDevice: {
           id: raw.userDeviceId,
           createdAt: raw.userDeviceCreatedAt,
