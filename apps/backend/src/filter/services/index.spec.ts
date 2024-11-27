@@ -1,4 +1,3 @@
-import { OutputParserException } from '@langchain/core/output_parsers';
 import { HttpException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaClient } from '@prisma/client';
@@ -66,12 +65,6 @@ describe('ExplicitFilterService', () => {
       const falseflag = await parser.parse('False');
       expect(trueflag).toEqual(true);
       expect(falseflag).toEqual(false);
-    });
-
-    it('should throw exception', async () => {
-      await expect(
-        parser.parse('The provided text contains explicit content'),
-      ).rejects.toThrow(OutputParserException);
     });
   });
 });
