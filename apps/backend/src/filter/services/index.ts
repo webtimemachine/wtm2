@@ -17,14 +17,14 @@ export class FlagParser extends BaseOutputParser<boolean> {
 
   async parse(text: string): Promise<boolean> {
     const normalizedText = text.toLowerCase().trim();
-    const result = Boolean(normalizedText);
-    if (typeof result != 'boolean') {
+    const output = outputSchema.safeParse(!normalizedText.includes('false'));
+
+    if (!output.success) {
       throw new OutputParserException(
         `Failed to parse: ${text}. Expected "true" or "false".`,
       );
     }
-
-    outputSchema.parse(result);
+    const result = output.data.valueOf();
 
     return result;
   }
