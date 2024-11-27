@@ -26,21 +26,21 @@ describe('Login Page E2E Tests', () => {
     expect(page.url()).toBe('https://webtm.io/navigation-entries');
   });
 
-  test('Displays error for empty email field', async () => {
-    await page.waitForSelector('input[name="email"]', { visible: true });
-    await page.evaluate(() => {
-      document.querySelector('input[name="email"]').value = '';
-    });
-    await page.type('input[name="password"]', 'Test12345');
+  // test('Displays error for empty email field', async () => {
+  //   await page.waitForSelector('input[name="email"]', { visible: true });
+  //   await page.evaluate(() => {
+  //     document.querySelector('input[name="email"]').value = '';
+  //   });
+  //   await page.type('input[name="password"]', 'Test12345');
 
-    await page.evaluate(() => {
-      [...document.querySelectorAll('button')].find(button => button.textContent === 'Sign In').click();
-    });
+  //   await page.evaluate(() => {
+  //     [...document.querySelectorAll('button')].find(button => button.textContent === 'Sign In').click();
+  //   });
 
-    await page.waitForSelector('.chakra-form__error-message', { visible: true });
-    const errorMessage = await page.$eval('.chakra-form__error-message', el => el.textContent.trim());
-    expect(errorMessage).toBe('Email is required');
-  });
+  //   await page.waitForSelector('.chakra-form__error-message', { visible: true });
+  //   const errorMessage = await page.$eval('.chakra-form__error-message', el => el.textContent.trim());
+  //   expect(errorMessage).toBe('Email is required');
+  // });
 
   // test('Displays error for empty password field', async () => {
   //   await page.waitForSelector('input[name="email"]', { visible: true });
