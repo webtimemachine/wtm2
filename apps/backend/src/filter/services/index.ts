@@ -18,7 +18,7 @@ export class FlagParser extends BaseOutputParser<boolean> {
   async parse(text: string): Promise<boolean> {
     const normalizedText = text.toLowerCase().trim();
 
-    if (normalizedText !== 'true' && normalizedText !== 'false') {
+    if (normalizedText != 'true' && normalizedText != 'false') {
       throw new OutputParserException(
         `Failed to parse: ${text}. Expected "true" or "false".`,
       );
