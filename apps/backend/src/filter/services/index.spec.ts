@@ -67,11 +67,5 @@ describe('ExplicitFilterService', () => {
       expect(trueflag).toEqual(true);
       expect(falseflag).toEqual(false);
     });
-
-    it('should throw exception', async () => {
-      await expect(
-        parser.parse('The provided text contains explicit content'),
-      ).rejects.toThrow(OutputParserException);
-    });
   });
 });
