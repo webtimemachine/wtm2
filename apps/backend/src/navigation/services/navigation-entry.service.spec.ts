@@ -155,6 +155,7 @@ const mockedEntry: CompleteNavigationEntry = {
   createdAt: new Date('2024-02-09T12:00:00Z'),
   aiGeneratedContent: 'AI Generated Content 1',
   updateAt: null,
+  imageCaptions: [],
   userDevice: {
     id: BigInt(1),
     userId: BigInt(1),
