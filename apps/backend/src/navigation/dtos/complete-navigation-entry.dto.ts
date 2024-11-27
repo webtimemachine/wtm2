@@ -40,10 +40,6 @@ export class CompleteNavigationEntryDto {
   @Expose()
   expirationDate?: Date;
 
-  @ApiProperty({ required: false })
-  @Expose()
-  relevantSegment?: string;
-
   @ApiProperty()
   @Expose()
   aiGeneratedContent: string;

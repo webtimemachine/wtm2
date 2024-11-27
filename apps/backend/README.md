@@ -17,7 +17,7 @@ This is the backend service for the Web Time Machine project (WebTM), an open-so
 
 ## Overview
 
-The backend is responsible for handling user data, sessions, devices, preferences, and navigation entries. It uses a PostgreSQL database (managed via [Prisma ORM](https://www.prisma.io/)) to persist data and integrates with [OpenAI](https://openai.com/) and [Weaviate](https://weaviate.io/) for AI-enhanced features, such as semantic search and explicit content filtering.
+The backend is responsible for handling user data, sessions, devices, preferences, and navigation entries. It uses a PostgreSQL database (managed via [Prisma ORM](https://www.prisma.io/)) to persist data and integrates with [OpenAI](https://openai.com/).
 
 ## Features
 
@@ -31,7 +31,7 @@ The backend is responsible for handling user data, sessions, devices, preference
 ## Prerequisites
 
 - **Node.js**: Version 20 is required. Ensure your environment is set up accordingly.
-- **Docker**: For local development and running dependencies (PostgreSQL and Weaviate).
+- **Docker**: For local development and running dependencies (PostgreSQL).
 
 ## Installation
 
@@ -96,7 +96,7 @@ To see the full configuration file with all the variables and explanation, look 
 
 ## Docker Compose Setup
 
-For development purposes, you can use the `docker-compose.yml` file provided in the repository to spin up the required PostgreSQL and Weaviate databases locally.
+For development purposes, you can use the `docker-compose.yml` file provided in the repository to spin up the required PostgreSQL database locally.
 
 To start the services, run:
 
@@ -107,7 +107,6 @@ docker compose up
 This will start:
 
 - **PostgreSQL**: For storing user data, sessions, and navigation entries.
-- **Weaviate**: For storing and searching vector embeddings generated from navigation data.
 
 ## Database Migrations
 
@@ -135,7 +134,7 @@ This command will run all the tests defined in the project.
 
 ## Deployment
 
-The backend is deployed on Vercel, utilizing Vercel Postgres and Weaviate for production environments. Ensure your environment variables are properly set up in the production environment.
+The backend is deployed on Vercel, utilizing Vercel Postgres for production environments. Ensure your environment variables are properly set up in the production environment.
 
 ### Deploy WebTM backend on Vercel
 
