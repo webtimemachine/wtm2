@@ -1,4 +1,3 @@
-import { OutputParserException } from '@langchain/core/output_parsers';
 import { HttpException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaClient } from '@prisma/client';
