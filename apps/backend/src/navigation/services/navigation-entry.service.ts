@@ -36,6 +36,7 @@ import { subDays } from 'date-fns';
 import { CustomLogger } from '../../common/helpers/custom-logger';
 import { OpenAI } from '@langchain/openai';
 import { z } from 'zod';
+import { getImageCaptions } from '../utils';
 
 const SummaryPromptSchema = z.object({
   data: z.object({
@@ -202,6 +203,15 @@ export class NavigationEntryService {
       },
     });
 
+    const imageCaptions = await getImageCaptions(images);
+
+    let imageCaptionsMarkdown = '## Image Captions\n\n';
+    imageCaptionsMarkdown += imageCaptions
+      .map((caption, index) => {
+        return `${index + 1}. **Caption ${index + 1}:** ${caption}`;
+      })
+      .join('\n\n');
+
     const openai = new OpenAI({
       openAIApiKey: appEnv.OPENAI_ACCESS_TOKEN,
       modelName: 'gpt-4o-mini',
@@ -274,7 +284,8 @@ export class NavigationEntryService {
             data: {
               liteMode,
               userDeviceId: jwtContext.session.userDeviceId,
-              aiGeneratedContent: parsedData.data?.data.content,
+              aiGeneratedContent: `${parsedData.data?.data.content}\n\n${imageCaptions.length > 0 ? imageCaptionsMarkdown : ''}`,
+              imageCaptions: imageCaptions,
               ...entryData,
             },
             include: completeNavigationEntryInclude,
@@ -291,7 +302,8 @@ export class NavigationEntryService {
               liteMode,
               userId: jwtContext.user.id,
               userDeviceId: jwtContext.session.userDeviceId,
-              aiGeneratedContent: parsedData.data?.data.content,
+              aiGeneratedContent: `${parsedData.data?.data.content}\n\n${imageCaptions.length > 0 ? imageCaptionsMarkdown : ''}`,
+              imageCaptions: imageCaptions,
               ...entryData,
             },
             include: completeNavigationEntryInclude,
