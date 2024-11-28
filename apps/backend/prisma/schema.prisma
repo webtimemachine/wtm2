@@ -129,6 +129,7 @@ model NavigationEntry {
   createdAt          DateTime   @default(now()) @db.Timestamptz(0)
   updateAt           DateTime?  @updatedAt @db.Timestamptz(0)
   aiGeneratedContent String     @default("") @db.Text
+  imageCaptions      String[]   @default([])
   entryTags          EntryTag[]
 
   @@map("navigation_entry")
