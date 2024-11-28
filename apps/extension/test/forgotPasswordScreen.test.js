@@ -30,30 +30,6 @@ describe('ForgotPasswordScreen Component', () => {
     expect(isDisabled).toBe(false); // Button should be enabled now
   });
 
-  // test(
-  //   'sends code for a valid email and navigates to validation page',
-  //   async () => {
-  //     // Enter a valid email
-  //     await page.type('input[name="email"]', 'liza.saraviag@gmail.com');
-  
-  //     // Select the "Send Code" button by text content and click it
-  //     const sendCodeButton = await page.$x("//button[contains(., 'Send code')]");
-  //     await sendCodeButton[0].click();
-  
-  //     // Wait for the page to navigate by checking the URL
-  //     await page.waitForFunction(
-  //       'window.location.href.includes("validate-recovery-code")',
-  //       { timeout: 20000 } // wait for up to 20 seconds
-  //     );
-  
-  //     // Confirm the URL changed to the validation page
-  //     const currentUrl = await page.url();
-  //     expect(currentUrl).toContain('validate-recovery-code');
-  //   },
-  //   30000 // Set a longer test timeout (30 seconds)
-  // );
-  
-
   test('navigates back to login screen when clicking back icon', async () => {
     await page.goto('https://webtm.io/forgot-password'); // Reset to Forgot Password screen
     await page.click('button[aria-label="Back icon"]'); // Click the back icon
