@@ -9,6 +9,7 @@ Web Time Machine (WebTM) is an open-source, cross-platform browser extension and
    - [Backend](#backend)
    - [Browser Extension](#browser-extension)
    - [Web Page](#web-page)
+   - [E2E Tests](#e2e-tests)
 3. [Getting Started](#getting-started)
    - [Clone the Repository](#clone-the-repository)
    - [Install Dependencies](#install-dependencies)
@@ -52,6 +53,12 @@ WebTM consists of a backend service, a browser extension compatible with multipl
 - **Deployment**: Vercel
 - **Functionality**: Allows users to log in, view their browsing data, and utilize WebTM features without needing the extension.
 - **[Webpage README](apps/webpage/README.md)**: Detailed setup and usage instructions for the web page.
+
+#### E2E Tests
+
+- **Framework**: [Playwright](https://playwright.dev/)
+- **Functionality**: End-to-end tests to ensure the application works as expected from the user's perspective.
+- **[E2E Tests README](apps/e2e/README.md)**: Detailed setup and usage instructions for running E2E tests.
 
 ### Getting Started
 
@@ -119,6 +126,15 @@ Install dependencies for each core component:
    ```
 
    The web page will be available at [http://localhost:3000](http://localhost:3000).
+
+4. **E2E Tests**:
+
+   Start the E2E tests:
+
+   ```bash
+   cd e2e
+   npm run test
+   ```
 
 ### Folder Structure
 
