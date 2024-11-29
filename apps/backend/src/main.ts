@@ -13,7 +13,7 @@ import { options } from './swagger-options';
 import * as Sentry from '@sentry/node';
 import { nodeProfilingIntegration } from '@sentry/profiling-node';
 import { SentryFilter } from './sentry.filter';
-import { CustomLogger } from './common/helpers/custom-logger';
+import { WebTMLogger } from './common/helpers/webtm-logger';
 
 const initSentry = () => {
   Sentry.init({
@@ -25,7 +25,7 @@ const initSentry = () => {
 };
 
 async function bootstrap() {
-  const logger = new CustomLogger('bootstrap');
+  const logger = new WebTMLogger('bootstrap');
 
   const app = await NestFactory.create(AppModule);
 
