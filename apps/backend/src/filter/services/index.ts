@@ -1,13 +1,10 @@
-import {
-  BaseOutputParser,
-  OutputParserException,
-} from '@langchain/core/output_parsers';
+import { BaseOutputParser } from '@langchain/core/output_parsers';
 import { ChatOpenAI } from '@langchain/openai';
 import { ChatPromptTemplate } from '@langchain/core/prompts';
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { PrismaService } from '../../common/services';
 import { appEnv } from '../../config';
-import { CustomLogger } from '../../common/helpers/custom-logger';
+import { WebTMLogger } from '../../common/helpers/webtm-logger';
 import { z } from 'zod';
 
 const outputSchema = z.boolean();
@@ -20,9 +17,7 @@ export class FlagParser extends BaseOutputParser<boolean> {
     const output = outputSchema.safeParse(!normalizedText.includes('false'));
 
     if (!output.success) {
-      throw new OutputParserException(
-        `Failed to parse: ${text}. Expected "true" or "false".`,
-      );
+      throw new Error(`Failed to parse: ${text}. Expected "true" or "false".`);
     }
     const result = output.data.valueOf();
 
@@ -76,7 +71,7 @@ const filterPrompt = ChatPromptTemplate.fromMessages([
 
 @Injectable()
 export class ExplicitFilterService {
-  private readonly logger = new CustomLogger(ExplicitFilterService.name);
+  private readonly logger = new WebTMLogger(ExplicitFilterService.name);
 
   constructor(private readonly prismaService: PrismaService) {}
 
@@ -92,10 +87,9 @@ export class ExplicitFilterService {
     try {
       return await chain.invoke({ content });
     } catch (error) {
-      this.logger.error('Error parsing explicit content result', error);
-      throw new OutputParserException(
-        'Error while parsing content for explicit material.',
-      );
+      this.logger.error('Error parsing explicit content result');
+      this.logger.error(error);
+      throw error;
     }
   }
 
@@ -115,14 +109,14 @@ export class ExplicitFilterService {
         }
       }
     } catch (error) {
-      this.logger.error('Error while checking explicit content', error);
+      this.logger.error('Error while checking explicit content');
+      this.logger.error(error);
       return;
     }
 
     if (hasExplicitContent) {
-      throw new HttpException(
+      throw new UnprocessableEntityException(
         'Content contains explicit material',
-        HttpStatus.UNPROCESSABLE_ENTITY,
       );
     }
   }

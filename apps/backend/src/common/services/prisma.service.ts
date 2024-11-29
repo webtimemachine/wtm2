@@ -1,11 +1,11 @@
 import { INestApplication, Injectable, OnModuleInit } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 
-import { CustomLogger } from '../../common/helpers/custom-logger';
+import { WebTMLogger } from '../../common/helpers/webtm-logger';
 
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit {
-  private logger = new CustomLogger('PrismaService');
+  private logger = new WebTMLogger('PrismaService');
 
   constructor() {
     super();

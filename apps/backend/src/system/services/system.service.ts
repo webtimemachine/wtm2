@@ -1,8 +1,8 @@
-import { CustomLogger } from '../../common/helpers/custom-logger';
+import { WebTMLogger } from '../../common/helpers/webtm-logger';
 import { Injectable } from '@nestjs/common';
 @Injectable()
 export class SystemService {
-  private readonly logger = new CustomLogger(SystemService.name);
+  private readonly logger = new WebTMLogger(SystemService.name);
   constructor() {}
 
   getModelsInformation() {
