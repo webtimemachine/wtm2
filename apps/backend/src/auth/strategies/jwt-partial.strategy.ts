@@ -5,7 +5,7 @@ import { JWTPayload, PartialJwtContext } from '../interfaces';
 import { PrismaService } from '../../common/services';
 import { appEnv } from '../../config';
 
-import { CustomLogger } from '../../common/helpers/custom-logger';
+import { WebTMLogger } from '../../common/helpers/webtm-logger';
 
 const jwtFromRequest = ExtractJwt.fromExtractors([
   ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -16,7 +16,7 @@ export class JwtVerificationTokenStrategy extends PassportStrategy(
   Strategy,
   'jwt-partial-token',
 ) {
-  private readonly logger = new CustomLogger(JwtVerificationTokenStrategy.name);
+  private readonly logger = new WebTMLogger(JwtVerificationTokenStrategy.name);
 
   constructor(private readonly prismaService: PrismaService) {
     super({
@@ -41,10 +41,11 @@ export class JwtVerificationTokenStrategy extends PassportStrategy(
     });
 
     if (!user) {
-      this.logger.error(
+      const error = new UnauthorizedException(
         `Could not validate user from access token sub ${payload.sub}`,
       );
-      throw new UnauthorizedException('Authentication failed');
+      this.logger.error(error);
+      throw error;
     }
 
     return {

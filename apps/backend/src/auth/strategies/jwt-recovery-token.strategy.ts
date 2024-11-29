@@ -7,7 +7,7 @@ import { completeUserInclude } from '../../user/types';
 import { JWTPayload } from '../interfaces';
 import { RecoveryJwtContext } from '../interfaces/jwt-context.interface';
 
-import { CustomLogger } from '../../common/helpers/custom-logger';
+import { WebTMLogger } from '../../common/helpers/webtm-logger';
 
 const jwtFromRequest = ExtractJwt.fromExtractors([
   ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -18,7 +18,7 @@ export class JwtRecoveryTokenStrategy extends PassportStrategy(
   Strategy,
   'jwt-recovery-token',
 ) {
-  private readonly logger = new CustomLogger(JwtRecoveryTokenStrategy.name);
+  private readonly logger = new WebTMLogger(JwtRecoveryTokenStrategy.name);
 
   constructor(private readonly prismaService: PrismaService) {
     super({
