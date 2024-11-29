@@ -4,10 +4,10 @@ import { PrismaService } from './common/services';
 import { GetVersionResponse } from './dtos';
 import { getVersion } from './getVersion';
 
-import { CustomLogger } from './common/helpers/custom-logger';
+import { WebTMLogger } from './common/helpers/webtm-logger';
 
 export class AppService {
-  private readonly logger = new CustomLogger(AppService.name);
+  private readonly logger = new WebTMLogger(AppService.name);
 
   constructor(private readonly prismaService: PrismaService) {}
 
