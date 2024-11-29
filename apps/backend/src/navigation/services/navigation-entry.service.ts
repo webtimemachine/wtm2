@@ -33,7 +33,7 @@ import { CompleteUser } from '../../user/types';
 import { ExplicitFilterService } from '../../filter/services';
 import { appEnv } from '../../config';
 import { subDays } from 'date-fns';
-import { CustomLogger } from '../../common/helpers/custom-logger';
+import { WebTMLogger } from '../../common/helpers/webtm-logger';
 import { OpenAI } from '@langchain/openai';
 import { z } from 'zod';
 import { getImageCaptions } from '../utils';
@@ -49,7 +49,7 @@ type SummaryPromptResponse = z.infer<typeof SummaryPromptSchema>;
 
 @Injectable()
 export class NavigationEntryService {
-  private readonly logger = new CustomLogger(NavigationEntryService.name);
+  private readonly logger = new WebTMLogger(NavigationEntryService.name);
 
   constructor(
     private readonly prismaService: PrismaService,
@@ -343,7 +343,7 @@ export class NavigationEntryService {
       }
     } catch (error) {
       this.logger.error(
-        `An error occurred indexing '${addContextToNavigationEntryDto.url}'. Cause: ${error.message}`,
+        `An error occurred indexing '${addContextToNavigationEntryDto.url}'. Cause: ${error?.message}`,
       );
     }
   }
