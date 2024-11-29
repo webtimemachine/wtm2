@@ -22,11 +22,11 @@ import { CompleteUserDevice, completeUserDeviceInclude } from '../types';
 
 import { UAParser } from 'ua-parser-js';
 import { AuthService } from '../../auth/services';
-import { CustomLogger } from '../../common/helpers/custom-logger';
+import { WebTMLogger } from '../../common/helpers/webtm-logger';
 
 @Injectable()
 export class UserService {
-  private readonly logger = new CustomLogger(UserService.name);
+  private readonly logger = new WebTMLogger(UserService.name);
 
   constructor(
     private readonly prismaService: PrismaService,
