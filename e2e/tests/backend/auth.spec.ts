@@ -1,8 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { envConfig } from '../../utils/envConfig';
 
-console.log(envConfig);
-
 test.describe('Auth', () => {
   test('Should login successfully', async ({ request }) => {
     const response = await request.post(
