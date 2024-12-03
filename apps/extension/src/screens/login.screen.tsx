@@ -10,7 +10,7 @@ import {
 } from '@chakra-ui/react';
 import { ServerUrlEditable } from '../components';
 import { useLogin } from '../hooks';
-import { useAuthStore, useNavigation } from '../store';
+import { useAuthStore, useNavigation, useTabState } from '../store';
 import { isLoginRes, LoginResponse } from '@wtm/api';
 
 import clsx from 'clsx';
@@ -20,6 +20,12 @@ const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export const LoginScreen: React.FC<object> = () => {
   updateIcon(false);
+  const isDeferred = useTabState((state) => state.isDeferred);
+  const setDeferredState = useTabState((state) => state.setDeferredState);
+
+  const toggleDeferredState = () => {
+    setDeferredState(!isDeferred);
+  };
 
   const deviceKey = useAuthStore((state) => state.deviceKey);
 
@@ -80,100 +86,152 @@ export const LoginScreen: React.FC<object> = () => {
     if (loginMutation.isSuccess)
       if (isLoginRes(loginMutation.data)) {
         processLogin(loginMutation.data);
+        if (isDeferred) {
+          toggleDeferredState();
+
+          navigateTo('navigation-entries');
+
+          window.close();
+        }
       } else {
         navigateTo('validate-email');
       }
   }, [loginMutation.isSuccess, loginMutation.data]);
 
-  return (
-    <>
-      <div className='flex flex-col p-8 pt-10 items-center w-full'>
-        <div className='pb-4'>
-          <Text fontSize={'xx-large'} fontWeight={'bold'}>
-            WebTM
-          </Text>
-        </div>
-        <div className='pb-4 flex w-full'>
-          <ServerUrlEditable />
-        </div>
-
-        <FormControl isInvalid={!!emailError}>
-          <div
-            className={clsx(['flex flex-col w-full', !emailError && 'pb-4'])}
-          >
-            <Input
-              type='text'
-              name='email'
-              placeholder='Email'
-              value={email}
-              autoCapitalize={'off'}
-              onChange={(event) => {
-                setEmail(event.target.value);
-                if (emailError) setEmailError('');
-              }}
-              backgroundColor={'white'}
-            />
-            <div className='[&>div]:mt-1 [&>div]:mb-1'>
-              <FormErrorMessage>{emailError}</FormErrorMessage>
-            </div>
+  const handleDeferredLogin = () => {
+    console.log();
+    if (isDeferred) {
+      console.log('LLEGAMOS');
+    } else {
+      toggleDeferredState();
+      chrome.tabs.create({
+        url: chrome.runtime.getURL('index.html'),
+      });
+    }
+  };
+  console.log(isDeferred);
+  if (isDeferred) {
+    return (
+      <>
+        <div className='flex flex-col p-8 pt-10 justify-center items-center h-full w-full'>
+          <div className='pb-4'>
+            <Text fontSize={'xx-large'} fontWeight={'bold'}>
+              WebTM
+            </Text>
           </div>
-        </FormControl>
+          <div className='pb-4 flex w-full'>
+            <ServerUrlEditable />
+          </div>
 
-        <div className='flex flex-col w-full pb-4'>
-          <InputGroup size='md'>
-            <Input
-              pr='4.5rem'
-              type={showPass ? 'text' : 'password'}
-              name='password'
-              placeholder='Enter password'
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-              backgroundColor={'white'}
-              onKeyDown={(event) => {
-                if (event.key === 'Enter') {
-                  handleLogin();
-                }
+          <FormControl isInvalid={!!emailError}>
+            <div
+              className={clsx(['flex flex-col w-full', !emailError && 'pb-4'])}
+            >
+              <Input
+                type='text'
+                name='email'
+                placeholder='Email'
+                value={email}
+                autoCapitalize={'off'}
+                onChange={(event) => {
+                  setEmail(event.target.value);
+                  if (emailError) setEmailError('');
+                }}
+                backgroundColor={'white'}
+              />
+              <div className='[&>div]:mt-1 [&>div]:mb-1'>
+                <FormErrorMessage>{emailError}</FormErrorMessage>
+              </div>
+            </div>
+          </FormControl>
+
+          <div className='flex flex-col w-full pb-4'>
+            <InputGroup size='md'>
+              <Input
+                pr='4.5rem'
+                type={showPass ? 'text' : 'password'}
+                name='password'
+                placeholder='Enter password'
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+                backgroundColor={'white'}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter') {
+                    handleLogin();
+                  }
+                }}
+              />
+              <InputRightElement width='4.5rem'>
+                <Button
+                  h='1.75rem'
+                  size='sm'
+                  onClick={() => setShowPass(!showPass)}
+                >
+                  {showPass ? 'Hide' : 'Show'}
+                </Button>
+              </InputRightElement>
+            </InputGroup>
+          </div>
+
+          <div className='flex flex-row w-full justify-between pb-4'>
+            <Text
+              fontSize={'small'}
+              className='hover:cursor-pointer hover:underline'
+              onClick={() => navigateTo('forgot-password')}
+            >
+              Forgot password?
+            </Text>
+            <Text
+              fontSize={'small'}
+              className='hover:cursor-pointer hover:underline'
+              onClick={() => navigateTo('sign-up')}
+            >
+              Sign up
+            </Text>
+          </div>
+          <div className='flex gap-4'>
+            <Button
+              colorScheme='blue'
+              onClick={() => handleLogin()}
+              isDisabled={!email || !password || !!emailError}
+              isLoading={loginMutation.isPending}
+            >
+              Sign In
+            </Button>
+            <Button
+              colorScheme='blue'
+              onClick={() => {
+                handleDeferredLogin();
               }}
-            />
-            <InputRightElement width='4.5rem'>
-              <Button
-                h='1.75rem'
-                size='sm'
-                onClick={() => setShowPass(!showPass)}
-              >
-                {showPass ? 'Hide' : 'Show'}
-              </Button>
-            </InputRightElement>
-          </InputGroup>
+            >
+              Deferred Login
+            </Button>
+            <Button
+              colorScheme='blue'
+              onClick={() => {
+                toggleDeferredState();
+              }}
+            >
+              reset
+            </Button>
+          </div>
         </div>
-
-        <div className='flex flex-row w-full justify-between pb-4'>
-          <Text
-            fontSize={'small'}
-            className='hover:cursor-pointer hover:underline'
-            onClick={() => navigateTo('forgot-password')}
-          >
-            Forgot password?
-          </Text>
-          <Text
-            fontSize={'small'}
-            className='hover:cursor-pointer hover:underline'
-            onClick={() => navigateTo('sign-up')}
-          >
-            Sign up
-          </Text>
-        </div>
-        <div className='flex gap-4'>
+      </>
+    );
+  } else {
+    return (
+      <>
+        <div className='flex flex-col p-8 pt-10 items-center w-full'>
           <Button
             colorScheme='blue'
-            onClick={() => handleLogin()}
-            isDisabled={!email || !password || !!emailError}
-            isLoading={loginMutation.isPending}
+            onClick={() => {
+              handleDeferredLogin();
+            }}
           >
-            Sign In
+            Deferred Login
           </Button>
         </div>
-      </div>
-    </>
-  );
+      </>
+    );
+  }
 };
