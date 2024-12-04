@@ -33,7 +33,7 @@ git clone git@github.com:webtimemachine/wtm2.git
 ## 6. Setting Up the Project
 
 1. **Compose Up**: Run `docker-compose.yml` to set up Docker containers.
-2. **Environment Files**: Create `.env` and `db.env` files, ensuring they include the necessary environment variables.
+2. **Environment Files**: Create the `.env` file, ensuring they include the necessary environment variables.
 
 ## 7. Install Dependencies
 
