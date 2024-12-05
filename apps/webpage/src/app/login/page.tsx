@@ -176,7 +176,6 @@ const LoginScreen: React.FC<{}> = () => {
         <Button
           colorScheme='blue'
           variant={'outline'}
-          isLoading={loginMutation.isPending}
           className='w-full'
           onClick={() => navigateTo('sign-up')}
         >

@@ -140,10 +140,25 @@ Install dependencies for each core component:
 
 The repository is organized as follows:
 
-- **/backend**: Contains the NestJS backend application code.
-- **/app**: Contains the browser extension code built with React, TypeScript, and Vite.
-- **/webpage**: Contains the Next.js-based web page code.
-- **/lib**: Contains shared libraries and utilities used across multiple components.
+- **/.github**: Contains GitHub-specific files, such as workflows and issue templates.
+- **/apps**: Includes all the main applications of the repository:
+  - **/backend**: The backend application built with NestJS.
+  - **/extension**: The browser extension code built with React, TypeScript, and Vite.
+  - **/webpage**: The web application built with Next.js.
+- **/e2e**: Contains end-to-end (E2E) testing code and configurations.
+- **/gif-and-videos**: Assets such as GIFs and videos, likely for documentation or demos.
+- **/guides**: Documentation and guides for setting up and using the repository.
+- **/native**: Native application or platform-specific code.
+- **/packages**: Shared libraries and utilities used across multiple components.
+- **.gitignore**: Specifies files and folders to be ignored by Git.
+- **.nvmrc**: Node version manager file, specifying the Node.js version.
+- **jest.config.base.js**: Base configuration file for Jest testing.
+- **LICENSE**: The repository's license file.
+- **package.json**: Configuration file for managing dependencies and scripts.
+- **README.md**: Documentation and overview of the repository.
+- **SETUP.md**: Instructions for setting up the project.
+- **turbo.json**: TurboRepo configuration file.
+- **update-version.sh**: Script for updating the project version.
 
 ### Contributing
 
