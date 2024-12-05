@@ -2,7 +2,6 @@ name: Run Extension Lint
 
 on:
   pull_request:
-    branches: ['develop']
     paths: ['apps/extension/**']
 
 jobs:
