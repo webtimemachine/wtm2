@@ -33,16 +33,25 @@ export class OpenAIService {
    * @throws {Error} - If response parsing fails.
    */
   async generateEntrySummary(prompt: string): Promise<SummaryPromptResponse> {
-    const formattedResult = await this.openAI.invoke([prompt]);
-    const jsonParseFormattedResult = JSON.parse(formattedResult);
+    try {
+      const formattedResult = await this.openAI.invoke([prompt]);
+      const jsonParseFormattedResult = JSON.parse(formattedResult);
 
-    const parsedData = SummaryPromptSchema.safeParse(jsonParseFormattedResult);
+      const parsedData = SummaryPromptSchema.safeParse(
+        jsonParseFormattedResult,
+      );
 
-    if (!parsedData.success) {
-      this.logger.error(`Failed to parse response: ${parsedData.error.errors}`);
-      throw new Error('Failed to parse response');
-    } else {
-      return parsedData.data;
+      if (!parsedData.success) {
+        this.logger.error(
+          `Failed to parse response: ${parsedData.error.errors}`,
+        );
+        throw new Error('Failed to parse response');
+      } else {
+        return parsedData.data;
+      }
+    } catch (error) {
+      this.logger.error(`Failed to generate summary: ${error}`);
+      throw new Error('Failed to generate summary');
     }
   }
 
@@ -81,8 +90,8 @@ export class OpenAIService {
 
       return captions;
     } catch (error) {
-      console.error('Error captioning image:', error);
-      return [];
+      this.logger.error('Error captioning image:', error);
+      throw error;
     }
   }
 }
