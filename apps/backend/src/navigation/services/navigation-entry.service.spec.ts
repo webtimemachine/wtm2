@@ -18,6 +18,7 @@ import { NavigationEntryService } from './navigation-entry.service';
 
 import { JWTPayload, JwtContext } from '../../auth/interfaces';
 import { CompleteUser } from '../../user/types';
+import { OpenAITestingModule } from '../../openai/openai.testing.module';
 
 jest.mock('../../common/services/prisma.service');
 
@@ -243,29 +244,6 @@ const queryParams: GetNavigationEntryDto = {
   query: 'example',
 };
 
-jest.mock('@langchain/openai', () => {
-  return {
-    OpenAI: jest.fn().mockImplementation(() => {
-      return {
-        invoke: jest.fn().mockResolvedValue(
-          JSON.stringify({
-            data: {
-              content: 'relevant content',
-              tags: [],
-              source: 'example1.com',
-            },
-          }),
-        ),
-      };
-    }),
-    ChatOpenAI: jest.fn().mockImplementation(() => {
-      return {
-        call: jest.fn(() => Promise.resolve({})),
-      };
-    }),
-  };
-});
-
 describe('NavigationEntryService', () => {
   let navigationEntryService: NavigationEntryService;
   let prismaService: PrismaService;
@@ -279,6 +257,7 @@ describe('NavigationEntryService', () => {
       imports: [
         commonTestModule,
         ExplicitFilterTestingModule.forTest(commonTestModule),
+        OpenAITestingModule.forTest(),
       ],
       providers: [NavigationEntryService],
     }).compile();
