@@ -4,6 +4,7 @@ import { UserModule } from './user/user.module';
 import { NavigationModule } from './navigation/navigation.module';
 import { ExplicitFilterModule } from './filter/filter.module';
 import { SystemModule } from './system/system.module';
+import { OpenAIModule } from './openai/openai.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { SystemModule } from './system/system.module';
     NavigationModule,
     ExplicitFilterModule,
     SystemModule,
+    OpenAIModule,
   ],
 })
 export class AppModule {}
