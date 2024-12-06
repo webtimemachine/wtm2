@@ -64,6 +64,11 @@ async function bootstrap() {
     .addBearerAuth(bearerAuthJWT, 'recoveryToken')
     .addBearerAuth(bearerAuthJWT, 'partialToken')
     .addBearerAuth(bearerAuthJWT, 'cronJobSecret')
+    .addTag('Root')
+    .addTag('System')
+    .addTag('Auth')
+    .addTag('User')
+    .addTag('Navigation Entry')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

@@ -1,6 +1,6 @@
 # How to set the Backend environment variables
 
-Copy the `sample.env` to `.env` and `sample.db.env` to `db.env` on the backend folder and edit the values if necessary.
+Copy the `sample.env` to `.env` on the backend folder and edit the values if necessary.
 
 ### Env Variables:
 

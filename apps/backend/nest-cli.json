@@ -6,7 +6,8 @@
     "deleteOutDir": true,
     "assets": [
       {
-        "include": "assets/**/*"
+        "include": "common/templates/**/*",
+        "watchAssets": true
       }
     ]
   }

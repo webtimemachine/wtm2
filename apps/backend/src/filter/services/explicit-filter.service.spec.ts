@@ -3,7 +3,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaClient } from '@prisma/client';
 import { CommonTestingModule } from '../../common/common.testing.module';
 import { PrismaService } from '../../common/services';
-import { ExplicitFilterService, FlagParser } from '../services';
+import { ExplicitFilterService, FlagParser } from './explicit-filter.service';
 
 jest.mock('../../common/services/prisma.service');
 jest.mock('@langchain/openai', () => ({

@@ -1,13 +1,40 @@
 import { Controller, Get } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { HealthCheck, HealthCheckService } from '@nestjs/terminus';
+
 import { SystemService } from '../services';
+import { GetVersionResponse } from '../dtos';
 
 @ApiTags('System')
-@Controller('system')
+@Controller('')
 export class SystemController {
-  constructor(private readonly systemService: SystemService) {}
+  constructor(
+    private readonly systemService: SystemService,
+    private readonly health: HealthCheckService,
+  ) {}
 
-  @Get('/models')
+  @Get('/health')
+  @HealthCheck()
+  checkRoot() {
+    return this.health.check([]);
+  }
+
+  @Get('/system/health')
+  @HealthCheck()
+  check() {
+    return this.health.check([]);
+  }
+
+  @Get('/system/version')
+  @ApiOkResponse({
+    status: 200,
+    type: GetVersionResponse,
+  })
+  getVersion(): GetVersionResponse {
+    return this.systemService.getVersion();
+  }
+
+  @Get('/system/models')
   allModelsInformation() {
     return this.systemService.getModelsInformation();
   }
