@@ -1,14 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import { WebTMLogger } from 'src/common/helpers/webtm-logger';
-import { OpenAI } from '@langchain/openai';
+import { ChatOpenAI, OpenAI } from '@langchain/openai';
 import { appEnv } from 'src/config';
 import { SummaryPromptResponse, SummaryPromptSchema } from '../types';
 import { PROMPTS } from './open-ai.prompts';
+import { FlagParser } from '../utils';
 
 @Injectable()
 export class OpenAIService {
   private readonly logger = new WebTMLogger(OpenAIService.name);
-  private readonly openAI: OpenAI = new OpenAI({
+  private readonly chatModel: ChatOpenAI = new ChatOpenAI({
+    temperature: 0,
+    openAIApiKey: appEnv.OPENAI_ACCESS_TOKEN,
+    modelName: 'gpt-4o-mini',
+  });
+  private readonly model: OpenAI = new OpenAI({
     openAIApiKey: appEnv.OPENAI_ACCESS_TOKEN,
     modelName: 'gpt-4o-mini',
     temperature: 0.8,
@@ -25,6 +31,7 @@ export class OpenAIService {
     'image/gif',
     'image/webp',
   ];
+  private readonly outputParser = new FlagParser();
 
   /**
    * Generate a summary based on the provided prompt.
@@ -34,7 +41,7 @@ export class OpenAIService {
    */
   async generateEntrySummary(prompt: string): Promise<SummaryPromptResponse> {
     try {
-      const formattedResult = await this.openAI.invoke([prompt]);
+      const formattedResult = await this.model.invoke([prompt]);
       const jsonParseFormattedResult = JSON.parse(formattedResult);
 
       const parsedData = SummaryPromptSchema.safeParse(
@@ -91,6 +98,20 @@ export class OpenAIService {
       return captions;
     } catch (error) {
       this.logger.error('Error captioning image:', error);
+      throw error;
+    }
+  }
+
+  async checkForExplicitContent(content: string): Promise<boolean> {
+    const chain = PROMPTS.explicitFilter()
+      .pipe(this.chatModel)
+      .pipe(this.outputParser);
+
+    try {
+      return await chain.invoke({ content });
+    } catch (error) {
+      this.logger.error('Error parsing explicit content result');
+      this.logger.error(error);
       throw error;
     }
   }
