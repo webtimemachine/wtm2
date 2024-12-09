@@ -1,11 +1,21 @@
 import dotenv from 'dotenv';
 import path from 'path';
+import { z } from 'zod';
 
 dotenv.config({ path: path.resolve(__dirname, '..', '.env') });
 
-export const envConfig = {
-  E2E_BACKEND_BASE_URL: process.env.E2E_BACKEND_BASE_URL,
-  E2E_TEST_EMAIL: process.env.E2E_TEST_EMAIL,
-  E2E_TEST_PASSWORD: process.env.E2E_TEST_PASSWORD,
-  E2E_WEBPAGE_BASE_URL: process.env.E2E_WEBPAGE_BASE_URL,
-};
+const envSchema = z.object({
+  E2E_BACKEND_BASE_URL: z.string().url().nonempty(),
+  E2E_WEBPAGE_BASE_URL: z.string().url().nonempty(),
+  E2E_TEST_EMAIL: z.string().email().nonempty(),
+  E2E_TEST_PASSWORD: z.string().min(8),
+});
+
+const parsedEnv = envSchema.safeParse(process.env);
+
+if (!parsedEnv.success) {
+  console.error('Invalid environment variables:', parsedEnv.error.format());
+  throw new Error('Environment variable validation failed');
+}
+
+export const envConfig = parsedEnv.data;
