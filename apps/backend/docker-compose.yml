@@ -6,8 +6,11 @@ services:
     container_name: web-time-machine-db-postgres
     ports:
       - 5432:5432
-    env_file:
-      - db.env
+
+    environment:
+      POSTGRES_DB: web-time-machine-db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
 
     volumes:
       - web-time-machine-db-data:/var/lib/postgresql/data/
