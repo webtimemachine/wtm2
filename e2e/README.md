@@ -37,6 +37,7 @@ To install the dependencies required for E2E testing:
 
 ```sh
 npm install
+npx playwrigth install
 ```
 
 ---
