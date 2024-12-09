@@ -26,7 +26,6 @@ export const LoginScreen: React.FC<object> = () => {
   const toggleDeferredState = () => {
     setDeferredState(!isDeferred);
   };
-
   const deviceKey = useAuthStore((state) => state.deviceKey);
 
   const { loginMutation } = useLogin();
@@ -79,29 +78,27 @@ export const LoginScreen: React.FC<object> = () => {
       };
 
       chrome.runtime.sendNativeMessage('com.ttt246llc.wtm', message);
-
-      navigateTo('navigation-entries');
     };
 
     if (loginMutation.isSuccess)
       if (isLoginRes(loginMutation.data)) {
         processLogin(loginMutation.data);
-        if (isDeferred) {
-          toggleDeferredState();
 
-          navigateTo('navigation-entries');
+        setTimeout(() => {
+          if (isDeferred) {
+            toggleDeferredState();
+          }
 
           window.close();
-        }
+        }, 4000);
       } else {
         navigateTo('validate-email');
       }
   }, [loginMutation.isSuccess, loginMutation.data]);
 
   const handleDeferredLogin = () => {
-    console.log();
     if (isDeferred) {
-      console.log('LLEGAMOS');
+      handleLogin();
     } else {
       toggleDeferredState();
       chrome.tabs.create({
@@ -109,7 +106,6 @@ export const LoginScreen: React.FC<object> = () => {
       });
     }
   };
-  console.log(isDeferred);
   if (isDeferred) {
     return (
       <>
@@ -172,8 +168,39 @@ export const LoginScreen: React.FC<object> = () => {
               </InputRightElement>
             </InputGroup>
           </div>
+          <div className='flex flex-row w-full justify-start pb-4'>
+            <Text
+              fontSize={'small'}
+              className='hover:cursor-pointer hover:underline'
+              onClick={() => navigateTo('forgot-password')}
+            >
+              Forgot password?
+            </Text>
+          </div>
+          <div className='flex gap-4'>
+            <Button
+              colorScheme='blue'
+              onClick={() => {
+                handleDeferredLogin();
+              }}
+            >
+              Login
+            </Button>
+          </div>
+        </div>
+      </>
+    );
+  } else {
+    return (
+      <>
+        <div className='flex flex-col p-8 pt-10 justify-center items-center h-full w-full'>
+          <div className='pb-4'>
+            <Text fontSize={'xx-large'} fontWeight={'bold'}>
+              WebTM
+            </Text>
+          </div>
 
-          <div className='flex flex-row w-full justify-between pb-4'>
+          <div className='flex flex-row w-full justify-around pb-4'>
             <Text
               fontSize={'small'}
               className='hover:cursor-pointer hover:underline'
@@ -204,32 +231,9 @@ export const LoginScreen: React.FC<object> = () => {
                 handleDeferredLogin();
               }}
             >
-              Deferred Login
-            </Button>
-            <Button
-              colorScheme='blue'
-              onClick={() => {
-                toggleDeferredState();
-              }}
-            >
-              reset
+              Login
             </Button>
           </div>
-        </div>
-      </>
-    );
-  } else {
-    return (
-      <>
-        <div className='flex flex-col p-8 pt-10 items-center w-full'>
-          <Button
-            colorScheme='blue'
-            onClick={() => {
-              handleDeferredLogin();
-            }}
-          >
-            Deferred Login
-          </Button>
         </div>
       </>
     );

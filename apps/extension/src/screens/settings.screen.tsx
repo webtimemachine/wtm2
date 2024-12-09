@@ -3,7 +3,7 @@ import { Text, IconButton, Button, Icon } from '@chakra-ui/react';
 import { ArrowBackIcon } from '@chakra-ui/icons';
 
 import { useLogout } from '../hooks';
-import { useNavigation } from '../store';
+import { useNavigation, useTabState } from '../store';
 
 import { LuSettings2, LuPersonStanding } from 'react-icons/lu';
 import { BsPersonLock, BsInfoCircle } from 'react-icons/bs';
@@ -12,7 +12,12 @@ import { FaRegTrashAlt, FaSignOutAlt } from 'react-icons/fa';
 export const SettingsScreen: React.FC<object> = () => {
   const { navigateBack, navigateTo } = useNavigation();
   const { logout } = useLogout();
+  const setDeferredState = useTabState((state) => state.setDeferredState);
 
+  const handleLogout = () => {
+    setDeferredState(false);
+    logout();
+  };
   return (
     <>
       <div className='flex flex-col px-5 py-3 items-center w-full'>
@@ -69,7 +74,7 @@ export const SettingsScreen: React.FC<object> = () => {
           <Button
             rightIcon={<FaSignOutAlt />}
             colorScheme='blue'
-            onClick={() => logout()}
+            onClick={() => handleLogout()}
           >
             Logout
           </Button>
