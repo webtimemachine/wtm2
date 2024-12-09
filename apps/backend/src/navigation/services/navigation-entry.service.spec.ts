@@ -253,11 +253,15 @@ describe('NavigationEntryService', () => {
 
   beforeEach(async () => {
     const commonTestModule = CommonTestingModule.forTest(prismaClient);
+    const openAiTestingModule = OpenAITestingModule.forTest();
     const module: TestingModule = await Test.createTestingModule({
       imports: [
         commonTestModule,
-        ExplicitFilterTestingModule.forTest(commonTestModule),
-        OpenAITestingModule.forTest(),
+        ExplicitFilterTestingModule.forTest([
+          commonTestModule,
+          openAiTestingModule,
+        ]),
+        openAiTestingModule,
       ],
       providers: [NavigationEntryService],
     }).compile();

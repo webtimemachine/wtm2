@@ -1,3 +1,5 @@
+import { ChatPromptTemplate } from '@langchain/core/prompts';
+
 export const PROMPTS = {
   navigationEntrySummary: (url: string, content: string) => `
       # IDENTITY and PURPOSE
@@ -52,4 +54,42 @@ export const PROMPTS = {
 
   imageCaption: (img: string) =>
     `Please provide a concise description of the visual content in the provided image. Focus only on what is visibly depicted and ignore any textual elements within the image. \n\nImage: ${img}`,
+  explicitFilter: () =>
+    ChatPromptTemplate.fromMessages([
+      [
+        'system',
+        `
+      # Explicit Content Detection
+  
+      ## Description
+        Analyze the provided content to determine if it contains explicit material.
+  
+      ## Task
+        Explicit content is defined as material related to pornography, escort services, or sexually suggestive themes.
+        If the content appears in a news or informational format, it should be classified as non-explicit.
+  
+      ## Response Format
+        - Respond with **"true"** if the content is explicit.
+        - Respond with **"false"** if it is not.
+        - Do not include explanations or additional information.
+  
+      ## Examples
+  
+        ### Example 1
+          **Input:**
+            "This is an article discussing the rise of adult content on streaming platforms."
+  
+          **Output:**
+            "false"
+  
+        ### Example 2
+          **Input:**
+            "A website promoting escort services with explicit imagery."
+  
+          **Output:**
+            "true"
+      `,
+      ],
+      ['human', '{content}'],
+    ]),
 };
