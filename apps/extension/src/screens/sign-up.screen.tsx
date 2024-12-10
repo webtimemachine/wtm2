@@ -22,6 +22,7 @@ import {
   Portal,
 } from '@chakra-ui/react';
 import { ArrowBackIcon, InfoIcon } from '@chakra-ui/icons';
+import { useLocation } from 'wouter';
 
 import { ServerUrlEditable } from '../components';
 import { useSignUp } from '../hooks';
@@ -38,7 +39,7 @@ const passwordRegexMessage =
 
 export const SignUpScreen: React.FC = () => {
   const { signUpMutation } = useSignUp();
-  const { navigateBack } = useNavigation();
+  const [, navigate] = useLocation();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -145,9 +146,10 @@ export const SignUpScreen: React.FC = () => {
     <>
       <div className='flex flex-col p-8 pt-10 items-center w-full'>
         <div className='flex w-full justify-start pb-4 gap-4 items-center'>
-          <IconButton aria-label='Back icon' onClick={() => navigateBack()}>
+          <IconButton aria-label='Back icon' onClick={() => navigate('/login')}>
             <ArrowBackIcon boxSize={5} />
           </IconButton>
+
           <div className='flex w-full justify-center pr-[40px]'>
             <Text fontSize={'xx-large'} fontWeight={'bold'}>
               Sign Up

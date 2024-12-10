@@ -39,7 +39,8 @@ import {
   useNavigationEntries,
 } from '../hooks';
 
-import { useNavigation } from '../store';
+import { useLocation } from 'wouter';
+
 import { getBrowserIconFromDevice } from '@wtm/utils';
 import clsx from 'clsx';
 
@@ -252,7 +253,8 @@ const NavigationEntry = ({
 export const NavigationEntriesScreen: React.FC<object> = () => {
   updateIcon(true);
 
-  const { navigateTo } = useNavigation();
+  const [, navigate] = useLocation();
+
   const toast = useToast();
 
   const LIMIT = 16;
@@ -358,7 +360,7 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
             </div>
             <IconButton
               aria-label='Back icon'
-              onClick={() => navigateTo('settings')}
+              onClick={() => navigate('/settings')}
             >
               <SettingsIcon boxSize={5} />
             </IconButton>
