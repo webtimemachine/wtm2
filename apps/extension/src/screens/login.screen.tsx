@@ -111,7 +111,11 @@ export const LoginScreen: React.FC<object> = () => {
       <>
         <div className='flex flex-col p-8 pt-10 justify-center items-center h-full w-full'>
           <div className='pb-4'>
-            <Text fontSize={'xx-large'} fontWeight={'bold'}>
+            <Text
+              id='extension-login-header'
+              fontSize={'xx-large'}
+              fontWeight={'bold'}
+            >
               WebTM
             </Text>
           </div>
