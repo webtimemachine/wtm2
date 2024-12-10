@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   Avatar,
   Badge,
@@ -11,11 +12,10 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { useGetBasicUserInformation } from '../hooks/use-get-user-basic-information.hook';
-import React from 'react';
 import CustomInputBox from '../components/custom-input-box.component';
 import { relativeTime } from '@wtm/utils';
 import { ArrowBackIcon } from '@chakra-ui/icons';
-import { useNavigation } from '../store';
+import { useLocation } from 'wouter';
 import MaleOne from '../assets/Avatars/male_one.png';
 import MaleTwo from '../assets/Avatars/male_two.png';
 import FemaleOne from '../assets/Avatars/female_one.png';
@@ -25,7 +25,7 @@ import ChangeDisplayNameModal from '../components/change-display-name-modal.comp
 import ChangeAvatarModal from '../components/change-avatar-modal.component';
 
 export const ProfileScreen: React.FC<object> = () => {
-  const { navigateBack } = useNavigation();
+  const [, navigate] = useLocation();
   const { basicUserInformationQuery } = useGetBasicUserInformation();
   const user = basicUserInformationQuery.data;
 
@@ -49,7 +49,7 @@ export const ProfileScreen: React.FC<object> = () => {
     const currentUserAvatar = basicUserInformationQuery.data?.profilePicture;
     return (
       <div className='bg-white p-6 rounded-lg shadow-lg w-full'>
-        <div className='flex justify-between '>
+        <div className='flex justify-between'>
           <div className='flex flex-col items-center md:flex-row md:items-start w-full gap-2'>
             {currentUserAvatar && currentUserAvatar.length > 0 ? (
               <img src={avatars[currentUserAvatar]} className='w-[25%]' />
@@ -148,7 +148,10 @@ export const ProfileScreen: React.FC<object> = () => {
   return (
     <div className='flex flex-col h-full w-full px-5 py-3 justify-center items-center'>
       <div className='flex w-full justify-start pb-4 gap-4 items-center'>
-        <IconButton aria-label='Back icon' onClick={() => navigateBack()}>
+        <IconButton
+          aria-label='Back icon'
+          onClick={() => navigate('/settings')}
+        >
           <ArrowBackIcon boxSize={5} />
         </IconButton>
         <div className='flex flex-col leading-none w-full justify-center items-center pr-[40px] mb-5 h-[40px]'>
