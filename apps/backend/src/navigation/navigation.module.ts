@@ -4,7 +4,7 @@ import { ExplicitFilterModule } from '../filter/filter.module';
 
 import { NavigationEntryController } from './controllers';
 import { NavigationEntryService } from './services';
-import { OpenAIModule } from 'src/openai/openai.module';
+import { OpenAIModule } from '../openai/openai.module';
 
 @Module({
   imports: [CommonModule, ExplicitFilterModule, OpenAIModule],

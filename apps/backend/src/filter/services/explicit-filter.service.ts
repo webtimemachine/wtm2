@@ -1,7 +1,7 @@
 import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { PrismaService } from '../../common/services';
 import { WebTMLogger } from '../../common/helpers/webtm-logger';
-import { OpenAIService } from 'src/openai/service';
+import { OpenAIService } from '../../openai/service';
 
 @Injectable()
 export class ExplicitFilterService {
