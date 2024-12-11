@@ -4,9 +4,9 @@ import { PrismaClient } from '@prisma/client';
 import { CommonTestingModule } from '../../common/common.testing.module';
 import { PrismaService } from '../../common/services';
 import { ExplicitFilterService } from './explicit-filter.service';
-import { FlagParser } from 'src/openai/utils';
-import { OpenAITestingModule } from 'src/openai/openai.testing.module';
-import { OpenAIService } from 'src/openai/service';
+import { FlagParser } from '../../openai/utils';
+import { OpenAITestingModule } from '../../openai/openai.testing.module';
+import { OpenAIService } from '../../openai/service';
 
 jest.mock('../../common/services/prisma.service');
 
