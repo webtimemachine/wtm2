@@ -142,9 +142,17 @@ The backend is deployed on Vercel, utilizing Vercel Postgres for production envi
 
 ### Deploy WebTM backend on Vercel
 
-Deploy [this repository](https://github.com/webtimemachine/wtm2) into your vercel account using the following button. After the deploy is complete you will need to go to the project settings and change the root folder to `backend` and also set the env variables.
+Deploy [this backend project](https://github.com/webtimemachine/wtm2) into your vercel account using the following button.
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fwebtimemachine%2Fwtm2%2Ftree%2Fmain%2Fapps%2Fbackend)
+
+After the deploy is complete you will need to go to the project settings and update the default configuration.
+
+- On `Build & Development Settings` overrides the project setting with this followings commands:
+  - `Build Command` : `npm run backend:build`
+  - `Output Directory` : `./build/backend`
+
+Then, set up the `Environment Variables`, and finally create a new deployment manually.
 
 <br/>
 
