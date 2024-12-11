@@ -34,12 +34,12 @@ import {
   ApiPaginationResponse,
 } from '../../common/decorators';
 import { MessageResponse, PaginationResponse } from '../../common/dtos';
-import { CustomLogger } from '../../common/helpers/custom-logger';
+import { WebTMLogger } from '../../common/helpers/webtm-logger';
 
 @ApiTags('Navigation Entry')
 @Controller('navigation-entry')
 export class NavigationEntryController {
-  private readonly logger = new CustomLogger(NavigationEntryController.name);
+  private readonly logger = new WebTMLogger(NavigationEntryController.name);
 
   constructor(private readonly navigationService: NavigationEntryService) {}
 

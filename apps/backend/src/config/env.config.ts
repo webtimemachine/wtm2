@@ -36,6 +36,7 @@ const envSchemas = {
   DISCORD_LOG_WEBHOOK_URL: z.string().optional(),
   DISCORD_LOG: z.boolean().optional(),
   DISCORD_ERROR: z.boolean().optional(),
+  DISCORD_FATAL: z.boolean().optional(),
   DISCORD_WARN: z.boolean().optional(),
   DISCORD_DEBUG: z.boolean().optional(),
   DISCORD_VERBOSE: z.boolean().optional(),

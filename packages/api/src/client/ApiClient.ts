@@ -335,7 +335,7 @@ export class ApiClient {
   };
 
   gerVersion = async () => {
-    const res = await this.fetch('/api/version');
+    const res = await this.fetch('/api/system/version');
     const versionResponse: GetVersionResponse = await res.json();
     return versionResponse;
   };

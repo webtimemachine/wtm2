@@ -18,6 +18,9 @@ import { NavigationEntryService } from './navigation-entry.service';
 
 import { JWTPayload, JwtContext } from '../../auth/interfaces';
 import { CompleteUser } from '../../user/types';
+import { OpenAITestingModule } from '../../openai/openai.testing.module';
+import { OpenAIService } from 'src/openai/service';
+import { SummaryPromptResponse } from 'src/openai/types';
 
 jest.mock('../../common/services/prisma.service');
 
@@ -155,6 +158,7 @@ const mockedEntry: CompleteNavigationEntry = {
   createdAt: new Date('2024-02-09T12:00:00Z'),
   aiGeneratedContent: 'AI Generated Content 1',
   updateAt: null,
+  imageCaptions: [],
   userDevice: {
     id: BigInt(1),
     userId: BigInt(1),
@@ -242,42 +246,25 @@ const queryParams: GetNavigationEntryDto = {
   query: 'example',
 };
 
-jest.mock('@langchain/openai', () => {
-  return {
-    OpenAI: jest.fn().mockImplementation(() => {
-      return {
-        invoke: jest.fn().mockResolvedValue(
-          JSON.stringify({
-            data: {
-              content: 'relevant content',
-              tags: [],
-              source: 'example1.com',
-            },
-          }),
-        ),
-      };
-    }),
-    ChatOpenAI: jest.fn().mockImplementation(() => {
-      return {
-        call: jest.fn(() => Promise.resolve({})),
-      };
-    }),
-  };
-});
-
 describe('NavigationEntryService', () => {
   let navigationEntryService: NavigationEntryService;
   let prismaService: PrismaService;
   let explicitFilterService: ExplicitFilterService;
+  let openAIService: OpenAIService;
 
   const prismaClient = new PrismaClient();
 
   beforeEach(async () => {
     const commonTestModule = CommonTestingModule.forTest(prismaClient);
+    const openAiTestingModule = OpenAITestingModule.forTest();
     const module: TestingModule = await Test.createTestingModule({
       imports: [
         commonTestModule,
-        ExplicitFilterTestingModule.forTest(commonTestModule),
+        ExplicitFilterTestingModule.forTest([
+          commonTestModule,
+          openAiTestingModule,
+        ]),
+        openAiTestingModule,
       ],
       providers: [NavigationEntryService],
     }).compile();
@@ -289,6 +276,7 @@ describe('NavigationEntryService', () => {
     explicitFilterService = module.get<ExplicitFilterService>(
       ExplicitFilterService,
     );
+    openAIService = module.get<OpenAIService>(OpenAIService);
   });
 
   it('navigationEntryService should be defined', () => {
@@ -309,10 +297,19 @@ describe('NavigationEntryService', () => {
       const mockFilter = jest
         .spyOn(explicitFilterService, 'filter')
         .mockImplementation();
+      const mockGenerateImageCaptions = jest
+        .spyOn(openAIService, 'generateImageCaptions')
+        .mockResolvedValue(['Caption 1', 'Caption 2']);
+      const mockGenerateEntrySummary = jest
+        .spyOn(openAIService, 'generateEntrySummary')
+        .mockResolvedValue({
+          data: { content: 'AI Generated Content' },
+        } as SummaryPromptResponse);
+
       prismaService.tag.createMany = mockCreateMany;
       prismaService.tag.findMany = jest.fn().mockReturnValue([{ id: 1 }]);
       prismaService.entryTag.createMany = jest.fn();
-      prismaService.navigationEntry.findFirst = jest
+      prismaService.navigationEntry.findFirstOrThrow = jest
         .fn()
         .mockReturnValue(mockedEntry);
       prismaService.$transaction = jest
@@ -326,10 +323,13 @@ describe('NavigationEntryService', () => {
 
           return callback(prismaService);
         });
-      prismaService.userPreferences.findFirst = jest.fn().mockResolvedValue({
-        enableImageEncoding: true,
-        enableExplicitContentFilter: true,
-      });
+      prismaService.userPreferences.findFirstOrThrow = jest
+        .fn()
+        .mockResolvedValue({
+          enableImageEncoding: true,
+          enableExplicitContentFilter: true,
+          enableStopTracking: false,
+        });
       await navigationEntryService.createNavigationEntry(
         jwtContext,
         createNavigationEntryInputDto,
@@ -338,13 +338,24 @@ describe('NavigationEntryService', () => {
         'Test content',
         'https://example.com',
       );
+      expect(mockGenerateImageCaptions).toHaveBeenCalledWith([]);
+      expect(mockGenerateEntrySummary).toHaveBeenCalled();
     });
 
     it('should create a new navigation entry successfully on repetitive entry', async () => {
       const mockFilter = jest
         .spyOn(explicitFilterService, 'filter')
         .mockImplementation();
-      prismaService.navigationEntry.findFirst = jest
+      const mockGenerateImageCaptions = jest
+        .spyOn(openAIService, 'generateImageCaptions')
+        .mockResolvedValue(['Caption 1', 'Caption 2']);
+      const mockGenerateEntrySummary = jest
+        .spyOn(openAIService, 'generateEntrySummary')
+        .mockResolvedValue({
+          data: { content: 'AI Generated Content' },
+        } as SummaryPromptResponse);
+
+      prismaService.navigationEntry.findFirstOrThrow = jest
         .fn()
         .mockReturnValue(createdNavigationEntry);
       prismaService.$transaction = jest
@@ -365,10 +376,13 @@ describe('NavigationEntryService', () => {
           return callback(prismaService);
         });
 
-      prismaService.userPreferences.findFirst = jest.fn().mockResolvedValue({
-        enableImageEncoding: true,
-        enableExplicitContentFilter: true,
-      });
+      prismaService.userPreferences.findFirstOrThrow = jest
+        .fn()
+        .mockResolvedValue({
+          enableImageEncoding: true,
+          enableExplicitContentFilter: true,
+          enableStopTracking: false,
+        });
       await navigationEntryService.createNavigationEntry(
         jwtContext,
         createNavigationEntryInputDto,
@@ -377,6 +391,8 @@ describe('NavigationEntryService', () => {
         'Test content',
         'https://example.com',
       );
+      expect(mockGenerateImageCaptions).toHaveBeenCalledWith([]);
+      expect(mockGenerateEntrySummary).toHaveBeenCalled();
     });
   });
 

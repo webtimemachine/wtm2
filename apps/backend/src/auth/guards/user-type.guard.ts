@@ -9,11 +9,11 @@ import { Observable } from 'rxjs';
 import { Reflector } from '@nestjs/core';
 import { JwtContext } from '../interfaces';
 
-import { CustomLogger } from '../../common/helpers/custom-logger';
+import { WebTMLogger } from '../../common/helpers/webtm-logger';
 
 @Injectable()
 export class UserTypesGuard implements CanActivate {
-  private readonly logger = new CustomLogger(UserTypesGuard.name);
+  private readonly logger = new WebTMLogger(UserTypesGuard.name);
 
   constructor(private reflector: Reflector) {}
 
@@ -31,20 +31,23 @@ export class UserTypesGuard implements CanActivate {
     const request = executionContext.switchToHttp().getRequest();
 
     const context: JwtContext = request?.user;
-    if (!context) {
-      this.logger.error('Unable to obtain context from request');
-      throw new UnauthorizedException();
+
+    if (!context || !context.user) {
+      const error = new UnauthorizedException(
+        'Unable to obtain context from request',
+      );
+      this.logger.error(error);
+      throw error;
     }
 
-    const { user, payload } = context;
-
-    if (!user) {
-      this.logger.error('Unable to obtain user from context');
-      throw new UnauthorizedException();
-    }
+    const { payload } = context;
 
     if (!userTypes.includes(payload.userType)) {
-      throw new ForbiddenException();
+      const error = new ForbiddenException(
+        'Forbidden interaction because of missing permissions',
+      );
+      this.logger.error(error);
+      throw error;
     }
 
     return true;
