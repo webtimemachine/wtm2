@@ -14,8 +14,12 @@ test.describe('Login Page E2E Tests', () => {
     const signInButton = page.locator('button:has-text("Sign In")');
     await signInButton.click();
 
-    await page.waitForURL(`${envConfig.E2E_WEBPAGE_BASE_URL}navigation-entries`);
+    await page.waitForURL(
+      `${envConfig.E2E_WEBPAGE_BASE_URL}/navigation-entries`
+    );
 
-    await expect(page).toHaveURL(`${envConfig.E2E_WEBPAGE_BASE_URL}navigation-entries`);
+    await expect(page).toHaveURL(
+      `${envConfig.E2E_WEBPAGE_BASE_URL}/navigation-entries`
+    );
   });
 });
