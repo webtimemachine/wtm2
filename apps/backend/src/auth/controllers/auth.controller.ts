@@ -45,12 +45,12 @@ import { AuthService } from '../services';
 import { CompleteSessionDto } from '../dtos/complete-session.dto';
 import { LogoutSessionInputDto } from '../dtos/logout-session.input.dto';
 
-import { CustomLogger } from '../../common/helpers/custom-logger';
+import { WebTMLogger } from '../../common/helpers/webtm-logger';
 
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
-  private readonly logger = new CustomLogger(AuthController.name);
+  private readonly logger = new WebTMLogger(AuthController.name);
   constructor(private readonly authService: AuthService) {}
 
   @ApiInternalServerErrorMessageResponse()

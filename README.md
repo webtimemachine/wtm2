@@ -9,6 +9,7 @@ Web Time Machine (WebTM) is an open-source, cross-platform browser extension and
    - [Backend](#backend)
    - [Browser Extension](#browser-extension)
    - [Web Page](#web-page)
+   - [E2E Tests](#e2e-tests)
 3. [Getting Started](#getting-started)
    - [Clone the Repository](#clone-the-repository)
    - [Install Dependencies](#install-dependencies)
@@ -52,6 +53,12 @@ WebTM consists of a backend service, a browser extension compatible with multipl
 - **Deployment**: Vercel
 - **Functionality**: Allows users to log in, view their browsing data, and utilize WebTM features without needing the extension.
 - **[Webpage README](apps/webpage/README.md)**: Detailed setup and usage instructions for the web page.
+
+#### E2E Tests
+
+- **Framework**: [Playwright](https://playwright.dev/)
+- **Functionality**: End-to-end tests to ensure the application works as expected from the user's perspective.
+- **[E2E Tests README](apps/e2e/README.md)**: Detailed setup and usage instructions for running E2E tests.
 
 ### Getting Started
 
@@ -120,14 +127,38 @@ Install dependencies for each core component:
 
    The web page will be available at [http://localhost:3000](http://localhost:3000).
 
+4. **E2E Tests**:
+
+   Start the E2E tests:
+
+   ```bash
+   cd e2e
+   npm run test
+   ```
+
 ### Folder Structure
 
 The repository is organized as follows:
 
-- **/backend**: Contains the NestJS backend application code.
-- **/app**: Contains the browser extension code built with React, TypeScript, and Vite.
-- **/webpage**: Contains the Next.js-based web page code.
-- **/lib**: Contains shared libraries and utilities used across multiple components.
+- **/.github**: Contains GitHub-specific files, such as workflows and issue templates.
+- **/apps**: Includes all the main applications of the repository:
+  - **/backend**: The backend application built with NestJS.
+  - **/extension**: The browser extension code built with React, TypeScript, and Vite.
+  - **/webpage**: The web application built with Next.js.
+- **/e2e**: Contains end-to-end (E2E) testing code and configurations.
+- **/gif-and-videos**: Assets such as GIFs and videos, likely for documentation or demos.
+- **/guides**: Documentation and guides for setting up and using the repository.
+- **/native**: Native application or platform-specific code.
+- **/packages**: Shared libraries and utilities used across multiple components.
+- **.gitignore**: Specifies files and folders to be ignored by Git.
+- **.nvmrc**: Node version manager file, specifying the Node.js version.
+- **jest.config.base.js**: Base configuration file for Jest testing.
+- **LICENSE**: The repository's license file.
+- **package.json**: Configuration file for managing dependencies and scripts.
+- **README.md**: Documentation and overview of the repository.
+- **SETUP.md**: Instructions for setting up the project.
+- **turbo.json**: TurboRepo configuration file.
+- **update-version.sh**: Script for updating the project version.
 
 ### Contributing
 

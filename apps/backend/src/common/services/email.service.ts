@@ -1,10 +1,10 @@
 import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable } from '@nestjs/common';
-import { CustomLogger } from '../../common/helpers/custom-logger';
+import { WebTMLogger } from '../../common/helpers/webtm-logger';
 
 @Injectable()
 export class EmailService {
-  private logger = new CustomLogger('EmailService');
+  private logger = new WebTMLogger('EmailService');
 
   constructor(private readonly mailerService: MailerService) {}
 
@@ -19,7 +19,7 @@ export class EmailService {
           user: to,
         },
       });
-      this.logger.log(`verification code email sent to ${to}`);
+      this.logger.log(`Verification code email sent to ${to}`);
     } catch (error) {
       this.logger.error(error);
     }
@@ -41,8 +41,8 @@ export class EmailService {
         },
       });
       this.logger.log(`Password reset email sent to ${to}`);
-    } catch (err) {
-      this.logger.error(err);
+    } catch (error) {
+      this.logger.error(error);
     }
   }
 }

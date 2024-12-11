@@ -52,11 +52,11 @@ import { appEnv } from '../../config';
 import { CompleteSessionDto } from '../dtos/complete-session.dto';
 import { LogoutSessionInputDto } from '../dtos/logout-session.input.dto';
 
-import { CustomLogger } from '../../common/helpers/custom-logger';
+import { WebTMLogger } from '../../common/helpers/webtm-logger';
 
 @Injectable()
 export class AuthService {
-  private readonly logger = new CustomLogger(AuthService.name);
+  private readonly logger = new WebTMLogger(AuthService.name);
 
   constructor(
     private readonly prismaService: PrismaService,
@@ -367,19 +367,13 @@ export class AuthService {
       include: completeUserInclude,
     });
 
-    if (!user) {
-      this.logger.error('Unauthorized');
-      throw new UnauthorizedException();
+    if (user && bcrypt.compareSync(password, user.password)) {
+      return user;
+    } else {
+      const error = new UnauthorizedException();
+      this.logger.error(error);
+      throw error;
     }
-
-    const passwordMatch = bcrypt.compareSync(password, user.password);
-
-    if (!passwordMatch) {
-      this.logger.error('Unauthorized');
-      throw new UnauthorizedException();
-    }
-
-    return user;
   }
 
   async validateJwtAccessPayloadOrThrow(payload: JWTPayload) {
@@ -416,8 +410,9 @@ export class AuthService {
     });
 
     if (!user) {
-      this.logger.error('User does not exist');
-      throw new UnauthorizedException();
+      const error = new UnauthorizedException('User does not exist');
+      this.logger.error(error);
+      throw error;
     }
 
     await this.prismaService.session.findFirstOrThrow({

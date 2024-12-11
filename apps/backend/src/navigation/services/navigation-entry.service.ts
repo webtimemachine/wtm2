@@ -33,26 +33,19 @@ import { CompleteUser } from '../../user/types';
 import { ExplicitFilterService } from '../../filter/services';
 import { appEnv } from '../../config';
 import { subDays } from 'date-fns';
-import { CustomLogger } from '../../common/helpers/custom-logger';
-import { OpenAI } from '@langchain/openai';
-import { z } from 'zod';
-
-const SummaryPromptSchema = z.object({
-  data: z.object({
-    content: z.string(),
-    tags: z.array(z.string()),
-    source: z.string(),
-  }),
-});
-type SummaryPromptResponse = z.infer<typeof SummaryPromptSchema>;
+import { WebTMLogger } from '../../common/helpers/webtm-logger';
+import { PROMPTS } from 'src/openai/service/open-ai.prompts';
+import { OpenAIService } from 'src/openai/service';
+import { SummaryPromptResponse } from 'src/openai/types';
 
 @Injectable()
 export class NavigationEntryService {
-  private readonly logger = new CustomLogger(NavigationEntryService.name);
+  private readonly logger = new WebTMLogger(NavigationEntryService.name);
 
   constructor(
     private readonly prismaService: PrismaService,
     private readonly explicitFilter: ExplicitFilterService,
+    private readonly openAIService: OpenAIService,
   ) {}
 
   static getExpitationDate(
@@ -151,122 +144,88 @@ export class NavigationEntryService {
     });
   }
 
-  async createNavigationEntry(
-    jwtContext: JwtContext,
-    createNavigationEntryInputDto: CreateNavigationEntryInputDto,
-  ): Promise<void> {
-    const domains = appEnv.AVOID_DOMAIN_LIST;
-    const noTrackingDomains = (domains && domains.split(', ')) || [];
-
-    const { hostname } = new URL(createNavigationEntryInputDto.url);
-
-    if (hostname && noTrackingDomains.includes(hostname)) return;
-
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { content, images, ...entryData } = createNavigationEntryInputDto;
-
-    const liteMode = !content;
-
-    if (!liteMode) {
-      const userPreference = await this.prismaService.userPreferences.findFirst(
-        {
-          where: {
-            userId: jwtContext.user.id,
-          },
-          select: {
-            enableImageEncoding: true,
-            enableExplicitContentFilter: true,
-            enableStopTracking: true,
-          },
-        },
-      );
-      if (userPreference?.enableStopTracking) {
-        return;
-      }
-
-      if (userPreference?.enableExplicitContentFilter) {
-        await this.explicitFilter.filter(
-          content!,
-          createNavigationEntryInputDto.url,
-        );
-      }
-    }
-
-    const lastEntry = await this.prismaService.navigationEntry.findFirst({
+  private async getUserPreferences(userId: bigint) {
+    return await this.prismaService.userPreferences.findFirstOrThrow({
       where: {
-        userId: jwtContext.user.id,
+        userId,
+      },
+      select: {
+        enableImageEncoding: true,
+        enableExplicitContentFilter: true,
+        enableStopTracking: true,
+      },
+    });
+  }
+
+  private readonly getLastEntryFromUser = async (userId: bigint) => {
+    return await this.prismaService.navigationEntry.findFirstOrThrow({
+      where: {
+        userId,
       },
       take: 1,
       orderBy: {
         navigationDate: 'desc',
       },
     });
+  };
 
-    const openai = new OpenAI({
-      openAIApiKey: appEnv.OPENAI_ACCESS_TOKEN,
-      modelName: 'gpt-4o-mini',
-      temperature: 0.8,
-    });
+  private readonly formatImageCaptionsMarkdown = (
+    captions: string[],
+  ): string => {
+    const header = '## Image Captions\n\n';
+    const formattedCaptions = captions
+      .map(
+        (caption, index) =>
+          `${index + 1}. **Caption ${index + 1}:** ${caption}`,
+      )
+      .join('\n\n');
 
-    const formatPrompt = `
-      # IDENTITY and PURPOSE
-  
-      You are an expert content summarizer. You take semantic markdown content in and output a Markdown formatted summary using the format below. Also, you are an expert code formatter in markdown, making code more legible and well formatted.
-  
-      Take a deep breath and think step by step about how to best accomplish this goal using the following steps.
-  
-      # OUTPUT SECTIONS
-  
-      - Combine all of your understanding of the content into a single, 20-word sentence in a section called Summary:.
-      - Output the 10 if exists, including most important points of the content as a list with no more than 15 words per point into a section called Main Points:.
-      - Output a list of the 5 best takeaways from the content in a section called Takeaways:.
-      - Output code must be formatted with Prettier like.
-      - Output a section named Code: that shows a list of code present in INPUT content in markdown
-      - All previous outputs must be inside a property called content, which contains a single string with all the markdown
-      - Output a property on the object called tags that shows in a list of the most relevant tags present in the input content
-      - Output a property on the object called source that has the link of the content in a string
-  
-      # OUTPUT INSTRUCTIONS
-      - Create the output using the formatting above.
-      - You only output human readable Markdown.
-      - Sections MUST be in capital case.
-      - Sections must be h2 to lower.
-      - Output numbered lists, not bullets.
-      - Do not output warnings or notes—just the requested sections.
-      - Do not repeat items in the output sections.
-      - Do not start items with the same opening words.
-      - Do not show Code: section if no code is present on input provided.
-      - You must detect the type of code and add it to code block so markdown styles are applied.
-      - Set codes proper language if you can detect it.
-      - Detect code and apply format to it.
-      - The wrapped tags must be tags that you find from page information.
-      - Tags must be a link that redirects to source url.
-      - The object result must be in JSON format
-      - Object must be clean, the response starts with { and finishes with }
-      - Objects value is: data
-      - Object MUST have the following unique properties inside data: content, tags, source
-      - Each tag in object must be a list of strings
-      - Each tags name must be un uppercase, if a space or a . separates 2 words, apply a _ for separating
-      - Quantity of tags must be lower to 5
-      - Tags language must be en english, no matter the language of the content.
-      # INPUT:
-  
-      INPUT:
-  
-      The search result is:
-  
-      ### Source: ${createNavigationEntryInputDto.url}
-      ${content}
-      `;
+    return `${header}${formattedCaptions}`;
+  };
 
-    const formattedResult = await openai.invoke([formatPrompt]);
-    const jsonParseFormattedResult = JSON.parse(formattedResult);
+  async createNavigationEntry(
+    jwtContext: JwtContext,
+    createNavigationEntryInputDto: CreateNavigationEntryInputDto,
+  ): Promise<void> {
+    try {
+      const domains = appEnv.AVOID_DOMAIN_LIST;
+      const noTrackingDomains = (domains && domains.split(', ')) || [];
 
-    const parsedData = SummaryPromptSchema.safeParse(jsonParseFormattedResult);
+      const { hostname } = new URL(createNavigationEntryInputDto.url);
 
-    if (parsedData.success) {
+      if (hostname && noTrackingDomains.includes(hostname)) return;
+
+      const userPreference = await this.getUserPreferences(jwtContext.user.id);
+      if (userPreference.enableStopTracking) return;
+
+      const { content, images, ...entryData } = createNavigationEntryInputDto;
+
+      const liteMode = !content;
+
+      if (userPreference.enableExplicitContentFilter && content) {
+        await this.explicitFilter.filter(
+          content,
+          createNavigationEntryInputDto.url,
+        );
+      }
+
+      const lastEntry = await this.getLastEntryFromUser(jwtContext.user.id);
+
+      const imageCaptions =
+        await this.openAIService.generateImageCaptions(images);
+
+      const imageCaptionsMarkdown =
+        this.formatImageCaptionsMarkdown(imageCaptions);
+
+      const prompt = PROMPTS.navigationEntrySummary(
+        createNavigationEntryInputDto.url,
+        content || '',
+      );
+
+      const summary = await this.openAIService.generateEntrySummary(prompt);
+
       await this.prismaService.$transaction(async (prismaClient) => {
-        if (lastEntry?.url === createNavigationEntryInputDto.url) {
+        if (lastEntry.url === createNavigationEntryInputDto.url) {
           const navEntry = await prismaClient.navigationEntry.update({
             where: {
               id: lastEntry.id,
@@ -274,7 +233,8 @@ export class NavigationEntryService {
             data: {
               liteMode,
               userDeviceId: jwtContext.session.userDeviceId,
-              aiGeneratedContent: parsedData.data?.data.content,
+              aiGeneratedContent: `${summary.data.content}\n\n${imageCaptions.length > 0 ? imageCaptionsMarkdown : ''}`,
+              imageCaptions: imageCaptions,
               ...entryData,
             },
             include: completeNavigationEntryInclude,
@@ -284,25 +244,25 @@ export class NavigationEntryService {
               entryId: navEntry.id,
             },
           });
-          await this.saveTags(navEntry, parsedData.data, prismaClient);
+          await this.saveTags(navEntry, summary, prismaClient);
         } else {
           const navEntry = await prismaClient.navigationEntry.create({
             data: {
               liteMode,
               userId: jwtContext.user.id,
               userDeviceId: jwtContext.session.userDeviceId,
-              aiGeneratedContent: parsedData.data?.data.content,
+              aiGeneratedContent: `${summary.data.content}\n\n${imageCaptions.length > 0 ? imageCaptionsMarkdown : ''}`,
+              imageCaptions: imageCaptions,
               ...entryData,
             },
             include: completeNavigationEntryInclude,
           });
-          await this.saveTags(navEntry, parsedData.data, prismaClient);
+          await this.saveTags(navEntry, summary, prismaClient);
         }
       });
-    } else {
-      console.error('Error parsing formatted result:', parsedData.error);
+    } catch (error) {
+      console.error('Error parsing formatted result:', error);
     }
-    return;
   }
 
   async addContextToNavigationEntry(
@@ -331,7 +291,7 @@ export class NavigationEntryService {
       }
     } catch (error) {
       this.logger.error(
-        `An error occurred indexing '${addContextToNavigationEntryDto.url}'. Cause: ${error.message}`,
+        `An error occurred indexing '${addContextToNavigationEntryDto.url}'. Cause: ${error?.message}`,
       );
     }
   }

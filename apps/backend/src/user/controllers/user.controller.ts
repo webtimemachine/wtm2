@@ -23,12 +23,12 @@ import {
   UserDeviceDto,
 } from '../dtos';
 import { UserService } from '../services';
-import { CustomLogger } from '../../common/helpers/custom-logger';
+import { WebTMLogger } from '../../common/helpers/webtm-logger';
 
 @ApiTags('User')
 @Controller('user')
 export class UserController {
-  private readonly logger = new CustomLogger(UserController.name);
+  private readonly logger = new WebTMLogger(UserController.name);
   constructor(private readonly userService: UserService) {}
 
   @ApiOkResponse({
