@@ -159,5 +159,3 @@ Then, set up the `Environment Variables`, and finally create a new deployment ma
 ### Create a Vercel Postgres Serverless SQL
 
 The backend of WebTM uses a PostgressDB, we recommend using Vercel Postgres. In order to do that you need to go to your Vercel dashboard on the tab 'Storage' and create a new DB. Then you need to setup the connection with your app, open the Advanced Options an set `DATABASE` as the envaronment variables prefix. After doing that, you can do to the env variables of you project and get the DATABASE_URL and DATABASE_URL_NON_POOLING to use on your local, connect to the database using an SQL client like [DBeaver](https://dbeaver.io/) and update your repository secrets.
-
-![db-connect-project](../docs/db-connect-project.png)
