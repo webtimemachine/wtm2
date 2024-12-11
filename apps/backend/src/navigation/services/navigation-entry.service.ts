@@ -34,9 +34,9 @@ import { ExplicitFilterService } from '../../filter/services';
 import { appEnv } from '../../config';
 import { subDays } from 'date-fns';
 import { WebTMLogger } from '../../common/helpers/webtm-logger';
-import { PROMPTS } from 'src/openai/service/open-ai.prompts';
-import { OpenAIService } from 'src/openai/service';
-import { SummaryPromptResponse } from 'src/openai/types';
+import { PROMPTS } from '../../openai/service/open-ai.prompts';
+import { OpenAIService } from '../../openai/service';
+import { SummaryPromptResponse } from '../../openai/types';
 
 @Injectable()
 export class NavigationEntryService {
