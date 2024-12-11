@@ -19,8 +19,8 @@ import { NavigationEntryService } from './navigation-entry.service';
 import { JWTPayload, JwtContext } from '../../auth/interfaces';
 import { CompleteUser } from '../../user/types';
 import { OpenAITestingModule } from '../../openai/openai.testing.module';
-import { OpenAIService } from 'src/openai/service';
-import { SummaryPromptResponse } from 'src/openai/types';
+import { OpenAIService } from '../../openai/service';
+import { SummaryPromptResponse } from '../../openai/types';
 
 jest.mock('../../common/services/prisma.service');
 
