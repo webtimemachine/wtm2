@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { WebTMLogger } from 'src/common/helpers/webtm-logger';
 import { ChatOpenAI, OpenAI } from '@langchain/openai';
-import { appEnv } from 'src/config';
+import { WebTMLogger } from '../../common/helpers/webtm-logger';
 import { SummaryPromptResponse, SummaryPromptSchema } from '../types';
 import { PROMPTS } from './open-ai.prompts';
 import { FlagParser } from '../utils';
+import { appEnv } from '../../config';
 
 @Injectable()
 export class OpenAIService {
