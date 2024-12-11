@@ -3,7 +3,7 @@ import { envConfig } from '../../utils/envConfig';
 
 test.describe('ForgotPasswordScreen Component', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto(`${envConfig.E2E_WEBPAGE_BASE_URL}/forgot-password`);
+    await page.goto(`${envConfig.E2E_WEBPAGE_BASE_URL}forgot-password`);
   });
 
   test('disables "Send Code" button when email input is empty, enables when email is provided', async ({ page }) => {
@@ -21,6 +21,6 @@ test.describe('ForgotPasswordScreen Component', () => {
     const backIconButton = page.locator('button[aria-label="Back icon"]');
     await backIconButton.click();
 
-    await expect(page).toHaveURL(`${envConfig.E2E_WEBPAGE_BASE_URL}/login`);
+    await expect(page).toHaveURL(`${envConfig.E2E_WEBPAGE_BASE_URL}login`);
   });
 });
