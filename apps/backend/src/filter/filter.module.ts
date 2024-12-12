@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
 import { ExplicitFilterService } from './services';
 import { CommonModule } from '../common/common.module';
+import { OpenAIModule } from '../openai/openai.module';
 
 @Module({
-  imports: [CommonModule],
+  imports: [CommonModule, OpenAIModule],
   providers: [ExplicitFilterService],
   exports: [ExplicitFilterService],
 })

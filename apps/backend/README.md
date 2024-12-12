@@ -4,16 +4,20 @@ This is the backend service for the Web Time Machine project (WebTM), an open-so
 
 ## Table of Contents
 
-- [Overview](#overview)
-- [Features](#features)
-- [Prerequisites](#prerequisites)
-- [Installation](#installation)
-- [Running the Application](#running-the-application)
-- [Environment Variables](#environment-variables)
-- [Docker Compose Setup](#docker-compose-setup)
-- [Database Migrations](#database-migrations)
-- [Testing](#testing)
-- [Deployment](#deployment)
+- [WebTM Backend](#webtm-backend)
+  - [Table of Contents](#table-of-contents)
+  - [Overview](#overview)
+  - [Features](#features)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+  - [Running the Application](#running-the-application)
+  - [Environment Variables](#environment-variables)
+  - [Docker Compose Setup](#docker-compose-setup)
+  - [Database Migrations](#database-migrations)
+  - [Testing](#testing)
+  - [Deployment](#deployment)
+    - [Deploy WebTM backend on Vercel](#deploy-webtm-backend-on-vercel)
+    - [Create a Vercel Postgres Serverless SQL](#create-a-vercel-postgres-serverless-sql)
 
 ## Overview
 
@@ -138,14 +142,20 @@ The backend is deployed on Vercel, utilizing Vercel Postgres for production envi
 
 ### Deploy WebTM backend on Vercel
 
-Deploy [this repository](https://github.com/webtimemachine/wtm2) into your vercel account using the following button. After the deploy is complete you will need to go to the project settings and change the root folder to `backend` and also set the env variables.
+Deploy [this backend project](https://github.com/webtimemachine/wtm2) into your vercel account using the following button.
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fwebtimemachine%2Fwtm2)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fwebtimemachine%2Fwtm2%2Ftree%2Fmain%2Fapps%2Fbackend)
+
+After the deploy is complete you will need to go to the project settings and update the default configuration.
+
+- On `Build & Development Settings` overrides the project setting with this followings commands:
+  - `Build Command` : `npm run backend:build`
+  - `Output Directory` : `./build/backend`
+
+Then, set up the `Environment Variables`, and finally create a new deployment manually.
 
 <br/>
 
 ### Create a Vercel Postgres Serverless SQL
 
 The backend of WebTM uses a PostgressDB, we recommend using Vercel Postgres. In order to do that you need to go to your Vercel dashboard on the tab 'Storage' and create a new DB. Then you need to setup the connection with your app, open the Advanced Options an set `DATABASE` as the envaronment variables prefix. After doing that, you can do to the env variables of you project and get the DATABASE_URL and DATABASE_URL_NON_POOLING to use on your local, connect to the database using an SQL client like [DBeaver](https://dbeaver.io/) and update your repository secrets.
-
-![db-connect-project](../docs/db-connect-project.png)
