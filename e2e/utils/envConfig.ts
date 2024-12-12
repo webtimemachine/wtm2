@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 import path from 'path';
 import { z } from 'zod';
 
-dotenv.config({ path: path.resolve(__dirname, '..', '.env') });
+dotenv.config();
 
 const envSchema = z.object({
   E2E_BACKEND_BASE_URL: z.string().url().nonempty(),
