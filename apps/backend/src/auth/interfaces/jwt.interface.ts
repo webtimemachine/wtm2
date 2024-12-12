@@ -1,4 +1,5 @@
 import { UserType } from '@prisma/client';
+import z from 'zod';
 
 export interface JWTPayload {
   iat?: number;
@@ -8,3 +9,15 @@ export interface JWTPayload {
   userType: UserType;
   sessionId?: number | undefined;
 }
+
+export const jwtExternalClientPayloadSchema = z.object({
+  serverUrl: z.string(),
+  redirectUrl: z.string(),
+  deviceKey: z.string(),
+  userAgent: z.string(),
+  userAgentData: z.string(),
+});
+
+export type JwtExternalClientPayload = z.infer<
+  typeof jwtExternalClientPayloadSchema
+>;

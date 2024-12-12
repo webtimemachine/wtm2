@@ -11,8 +11,10 @@ import { JwtService } from '@nestjs/jwt';
 import {
   JWTPayload,
   JwtContext,
+  JwtExternalClientPayload,
   JwtRefreshContext,
   PartialJwtContext,
+  jwtExternalClientPayloadSchema,
 } from '../interfaces';
 
 import * as bcrypt from 'bcrypt';
@@ -31,6 +33,7 @@ import {
 } from '../../user/types';
 
 import {
+  ExternalLoginRequestDto,
   LoginResponseDto,
   RecoverPasswordDto,
   RecoveryValidationResponseDto,
@@ -39,6 +42,7 @@ import {
   SignUpResponseDto,
   ValidateRecoveryCodeDto,
   VerifyAccountDto,
+  VerifyExternalClientResponseDto,
 } from '../dtos';
 
 import { RefreshResponseDto } from '../dtos';
@@ -53,6 +57,8 @@ import { CompleteSessionDto } from '../dtos/complete-session.dto';
 import { LogoutSessionInputDto } from '../dtos/logout-session.input.dto';
 
 import { WebTMLogger } from '../../common/helpers/webtm-logger';
+
+import * as jwt from 'jsonwebtoken';
 
 @Injectable()
 export class AuthService {
@@ -722,5 +728,57 @@ export class AuthService {
 
       return { updatedUser };
     });
+  }
+
+  async verifyExternalClient(
+    token?: string,
+  ): Promise<VerifyExternalClientResponseDto> {
+    if (!token) throw new UnauthorizedException();
+
+    const externalLoginSecrets = appEnv.JWT_EXTERNAL_LOGIN_SECRETS;
+    if (!externalLoginSecrets || externalLoginSecrets.length <= 0) {
+      throw new UnauthorizedException();
+    }
+
+    let authorized = false;
+    let externalClientName;
+    for (const { secret, externalClientName: name } of externalLoginSecrets) {
+      try {
+        if (jwt.verify(token, secret)) {
+          authorized = true;
+          externalClientName = name;
+          break;
+        }
+      } catch (_) {}
+    }
+
+    if (!authorized) throw new UnauthorizedException();
+
+    const externalClientPayloadValidation =
+      jwtExternalClientPayloadSchema.safeParse(jwt.decode(token));
+    if (!externalClientPayloadValidation.success) {
+      throw new BadRequestException();
+    }
+
+    const payload: JwtExternalClientPayload =
+      externalClientPayloadValidation.data;
+
+    return plainToInstance(VerifyExternalClientResponseDto, {
+      payload,
+      externalClientName,
+    });
+  }
+
+  async externalLogin(
+    body: ExternalLoginRequestDto,
+    context: JwtContext,
+  ): Promise<LoginResponseDto> {
+    const { deviceKey, userAgent, userAgentData } = body;
+    return this.login(
+      deviceKey,
+      userAgent,
+      userAgentData,
+      context.user,
+    ) as unknown as LoginResponseDto;
   }
 }
