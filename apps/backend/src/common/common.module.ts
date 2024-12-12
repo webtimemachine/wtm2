@@ -15,8 +15,8 @@ import { EmailService, PrismaService } from './services';
       template: {
         dir:
           process.env.NODE_ENV === 'production'
-            ? join(__dirname, '../../', 'src/assets/email-templates')
-            : join(__dirname, '../assets/email-templates'),
+            ? join(__dirname, '../../', 'src/common/templates')
+            : join(__dirname, '/templates'),
         adapter: new HandlebarsAdapter(),
         options: {
           strict: true,
