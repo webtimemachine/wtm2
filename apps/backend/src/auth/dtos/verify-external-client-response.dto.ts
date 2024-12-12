@@ -5,11 +5,7 @@ import { Exclude, Expose } from 'class-transformer';
 class VerifyExternalClientPayloadResponseDto {
   @Expose()
   @ApiProperty()
-  serverUrl: string;
-
-  @Expose()
-  @ApiProperty()
-  redirectUrl: string;
+  externalClientName: string;
 
   @Expose()
   @ApiProperty()
@@ -26,10 +22,6 @@ class VerifyExternalClientPayloadResponseDto {
 
 @Exclude()
 export class VerifyExternalClientResponseDto {
-  @Expose()
-  @ApiProperty()
-  externalClientName: string;
-
   @Expose()
   @ApiProperty({ type: () => VerifyExternalClientPayloadResponseDto })
   payload: VerifyExternalClientPayloadResponseDto;

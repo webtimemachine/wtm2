@@ -38,6 +38,8 @@ import {
   RecoverPasswordDto,
   RecoveryValidationResponseDto,
   RestorePasswordDto,
+  RetrieveExternalLoginTokenDto,
+  RetrieveExternalLoginTokenResponseDto,
   SignUpRequestDto,
   SignUpResponseDto,
   ValidateRecoveryCodeDto,
@@ -730,27 +732,56 @@ export class AuthService {
     });
   }
 
+  async retrieveExternalLoginToken(
+    body: RetrieveExternalLoginTokenDto,
+  ): Promise<RetrieveExternalLoginTokenResponseDto> {
+    const {
+      externalClientId: encodedExternalClientId,
+      deviceKey,
+      userAgent,
+      userAgentData,
+    } = body;
+
+    const knownExternalClients = appEnv.KNOWN_EXTERNAL_CLIENTS;
+    if (!knownExternalClients || knownExternalClients.length <= 0) {
+      throw new UnauthorizedException();
+    }
+    const externalClientId = atob(encodedExternalClientId);
+
+    for (const knownExternalClient of knownExternalClients) {
+      const externalClientName = knownExternalClient.externalClientName;
+      if (externalClientId == knownExternalClient.externalClientId) {
+        const externalClientToken = jwt.sign(
+          {
+            externalClientName,
+            deviceKey,
+            userAgent,
+            userAgentData,
+          },
+          appEnv.JWT_EXTERNAL_LOGIN_SECRET,
+          {
+            expiresIn: appEnv.JWT_EXTERNAL_LOGIN_EXPIRATION,
+          },
+        );
+
+        return { externalClientToken };
+      }
+    }
+
+    throw new UnauthorizedException();
+  }
+
   async verifyExternalClient(
     token?: string,
   ): Promise<VerifyExternalClientResponseDto> {
     if (!token) throw new UnauthorizedException();
 
-    const externalLoginSecrets = appEnv.JWT_EXTERNAL_LOGIN_SECRETS;
-    if (!externalLoginSecrets || externalLoginSecrets.length <= 0) {
-      throw new UnauthorizedException();
-    }
-
     let authorized = false;
-    let externalClientName;
-    for (const { secret, externalClientName: name } of externalLoginSecrets) {
-      try {
-        if (jwt.verify(token, secret)) {
-          authorized = true;
-          externalClientName = name;
-          break;
-        }
-      } catch (_) {}
-    }
+    try {
+      if (jwt.verify(token, appEnv.JWT_EXTERNAL_LOGIN_SECRET)) {
+        authorized = true;
+      }
+    } catch (error) {}
 
     if (!authorized) throw new UnauthorizedException();
 
@@ -765,7 +796,6 @@ export class AuthService {
 
     return plainToInstance(VerifyExternalClientResponseDto, {
       payload,
-      externalClientName,
     });
   }
 

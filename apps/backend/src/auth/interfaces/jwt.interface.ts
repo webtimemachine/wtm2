@@ -11,8 +11,7 @@ export interface JWTPayload {
 }
 
 export const jwtExternalClientPayloadSchema = z.object({
-  serverUrl: z.string(),
-  redirectUrl: z.string(),
+  externalClientName: z.string(),
   deviceKey: z.string(),
   userAgent: z.string(),
   userAgentData: z.string(),
