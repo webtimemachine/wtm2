@@ -32,6 +32,8 @@ import {
   RecoveryValidationResponseDto,
   RefreshResponseDto,
   RestorePasswordDto,
+  RetrieveExternalLoginTokenDto,
+  RetrieveExternalLoginTokenResponseDto,
   SignUpRequestDto,
   SignUpResponseDto,
   ValidateRecoveryCodeDto,
@@ -218,6 +220,18 @@ export class AuthController {
     @Body() logoutSessionInputDto: LogoutSessionInputDto,
   ): Promise<MessageResponse> {
     return this.authService.logoutSession(logoutSessionInputDto);
+  }
+
+  @ApiOkResponse({
+    status: 200,
+    type: RetrieveExternalLoginTokenResponseDto,
+  })
+  @HttpCode(200)
+  @Post('retrieve-external-login-token')
+  retrieveExternalLoginToken(
+    @Body() body: RetrieveExternalLoginTokenDto,
+  ): Promise<RetrieveExternalLoginTokenResponseDto> {
+    return this.authService.retrieveExternalLoginToken(body);
   }
 
   @ApiOkResponse({

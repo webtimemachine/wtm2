@@ -11,16 +11,16 @@ BigInt.prototype['toJSON'] = function () {
 
 dotenv.config();
 
-const jwtExternalLoginSecretsSchema = z.array(
+const knownExternalClients = z.array(
   z.object({
     externalClientName: z.string(),
-    secret: z.string(),
+    externalClientId: z.string(),
   }),
 );
 
-interface JwtExternalLoginSecret {
+interface KnownExternalClient {
   externalClientName: string;
-  secret: string;
+  externalClientId: string;
 }
 
 const envSchemas = {
@@ -40,7 +40,9 @@ const envSchemas = {
   JWT_REFRESH_EXPIRATION: z.string(),
   JWT_RECOVERY_TOKEN_SECRET: z.string(),
   JWT_RECOVERY_TOKEN_EXPIRATION: z.string(),
-  JWT_EXTERNAL_LOGIN_SECRETS: z
+  JWT_EXTERNAL_LOGIN_SECRET: z.string(),
+  JWT_EXTERNAL_LOGIN_EXPIRATION: z.string(),
+  KNOWN_EXTERNAL_CLIENTS: z
     .string()
     .optional()
     .refine(
@@ -48,7 +50,7 @@ const envSchemas = {
         if (value) {
           try {
             const parsed = JSON.parse(value);
-            return jwtExternalLoginSecretsSchema.safeParse(parsed).success;
+            return knownExternalClients.safeParse(parsed).success;
           } catch (_) {
             return false;
           }
@@ -59,7 +61,7 @@ const envSchemas = {
     )
     .transform((value) => {
       if (!value) return undefined;
-      return [...(JSON.parse(value) as readonly JwtExternalLoginSecret[])];
+      return [...(JSON.parse(value) as readonly KnownExternalClient[])];
     }),
   EMAIL_URI: z.string(),
   OPENAI_ACCESS_TOKEN: z.string(),
