@@ -26,9 +26,11 @@ jobs:
       - name: Run E2E Tests
         working-directory: e2e
         run: |
+          npx playwright install
+          npx playwright install-deps
           npx playwright test tests/webpage
         env:
-          E2E_TEST_EMAIL: 'jmartel+e2e@intermediait.com'
-          E2E_TEST_PASSWORD: 'Aa121212!'
-          E2E_BACKEND_BASE_URL: 'https://wtm-back.vercel.app'
-          E2E_WEBPAGE_BASE_URL: 'https://webtm.io'
+          E2E_TEST_EMAIL: ${{ secrets.E2E_TEST_EMAIL }}
+          E2E_TEST_PASSWORD: ${{ secrets.E2E_TEST_PASSWORD }}
+          E2E_BACKEND_BASE_URL: ${{ secrets.E2E_BACKEND_BASE_URL }}
+          E2E_WEBPAGE_BASE_URL: ${{ secrets.E2E_WEBPAGE_BASE_URL }}
