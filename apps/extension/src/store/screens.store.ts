@@ -1,3 +1,5 @@
+// navigation.store.ts
+
 import { createStore } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { updateIcon } from '../utils/updateIcon';
@@ -32,6 +34,8 @@ interface ScreenStore extends ScreenState {
   notifyEmailValidation: () => void;
   notifyRecoveryCodeSent: () => void;
   notifyRecoveryCodeValidated: () => void;
+  notifyForgotPassword: () => void;
+  notifySignup: () => void;
 }
 
 export const screenStore = createStore<ScreenStore>()(
@@ -52,7 +56,16 @@ export const screenStore = createStore<ScreenStore>()(
             screenStack: newStack.length > 0 ? newStack : ['/'],
           };
         }),
-
+      notifyForgotPassword: () =>
+        set(() => ({
+          screenStack: ['/forgot-password'],
+          isLoggedIn: false,
+        })),
+      notifySignup: () =>
+        set(() => ({
+          screenStack: ['/sign-up'],
+          isLoggedIn: false,
+        })),
       notifyRecoveryCodeSent: () =>
         set(() => ({
           screenStack: ['/validate-recovery-code'],

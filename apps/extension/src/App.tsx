@@ -1,5 +1,5 @@
 import React from 'react';
-import { Router, Route, useParams, useLocation, useSearch } from 'wouter';
+import { Router, Route, useLocation } from 'wouter';
 import {
   LoginScreen,
   NavigationEntriesScreen,
@@ -48,7 +48,7 @@ const App: React.FC = () => {
           />
           <Route path='/about-wtm' component={AboutWTMScreen} />
           <Route path='/profile' component={ProfileScreen} />
-          <Route
+          {/* <Route
             path={'/testqueryparams/*'}
             component={() => {
               const [location, navigate] = useLocation();
@@ -79,10 +79,7 @@ const App: React.FC = () => {
                 </div>
               );
             }}
-          />
-
-          {/* Ruta de captura para 404 Not Found */}
-          {/* <Route path='*' component={() => <div>404 - Not Found</div>} /> */}
+          /> */}
         </Router>
       </div>
     </div>
