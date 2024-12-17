@@ -250,10 +250,9 @@ export class AuthController {
   verifyExternalClient(
     @Request() req,
   ): Promise<VerifyExternalClientResponseDto> {
-    const token =
-      (req.headers['webtm-ext-client-authorization'] || '').split(' ')?.[1] ||
-      '';
-    return this.authService.verifyExternalClient(token);
+    return this.authService.verifyExternalClient(
+      req.headers['webtm-ext-client-authorization'],
+    );
   }
 
   @ApiOkResponse({

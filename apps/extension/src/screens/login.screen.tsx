@@ -15,6 +15,7 @@ import { isLoginRes, LoginResponse } from '@wtm/api';
 
 import clsx from 'clsx';
 import { updateIcon } from '../utils/updateIcon';
+import { apiClient } from '../utils/api.client';
 
 import { ROUTES } from '../hooks/use-extension-navigation';
 
@@ -51,6 +52,8 @@ export const LoginScreen: React.FC = () => {
   const [showPass, setShowPass] = useState(false);
   const [emailError, setEmailError] = useState('');
 
+  const [loadingExternalLogin, setLoadingExternalLogin] = useState(false);
+
   const validateInputs = () => {
     let emailErrorFound = false;
 
@@ -76,6 +79,37 @@ export const LoginScreen: React.FC = () => {
         userAgentData: JSON.stringify(window?.navigator?.userAgentData || '{}'),
       };
       loginMutation.mutate(loginData);
+    }
+  };
+
+  const handleExternalLogin = async () => {
+    try {
+      setLoadingExternalLogin(true);
+
+      const response = await apiClient.retrieveExternalLoginToken({
+        externalClientId: btoa(chrome.runtime.id),
+        deviceKey,
+        userAgent: window.navigator.userAgent,
+        userAgentData: JSON.stringify(window?.navigator?.userAgentData || '{}'),
+      });
+
+      const webUrl = new URL('http://localhost:3000/external-login');
+      webUrl.searchParams.append(
+        'externalClientToken',
+        response.externalClientToken,
+      );
+      webUrl.searchParams.append(
+        'redirect',
+        'chrome-extension://' + chrome.runtime.id + '/index.html',
+      );
+
+      chrome.tabs.create({
+        url: webUrl.toString(),
+      });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoadingExternalLogin(false);
     }
   };
 

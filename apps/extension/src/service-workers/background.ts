@@ -91,7 +91,7 @@ const noTrackingIcons = {
  * @function setCorrectIconByUserPreferences
  * @returns {Promise<void>} Resolves when the icon has been set.
  */
-const setCorrectIconByUserPreferences = async () => {
+const setCorrectIconByUserPreferences = async (): Promise<void> => {
   const response = await apiClient.getUserPreferences();
   if (response?.enableStopTracking) {
     chrome.action.setIcon({
@@ -112,7 +112,7 @@ const setCorrectIconByUserPreferences = async () => {
  * @function refreshAccessToken
  * @returns {Promise<void>} Resolves when the token check and potential refresh are complete.
  */
-const refreshAccessToken = async () => {
+const refreshAccessToken = async (): Promise<void> => {
   try {
     const { accessToken, refreshToken } = await chrome.storage.local.get([
       'accessToken',
