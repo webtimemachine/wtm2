@@ -2,16 +2,19 @@ import React, { useEffect, useState } from 'react';
 import { Button, IconButton, Input, Text, useToast } from '@chakra-ui/react';
 import { RepeatIcon, Icon } from '@chakra-ui/icons';
 import { LuLogIn } from 'react-icons/lu';
-import { useLocation } from 'wouter';
 
 import { useAuthStore } from '../store';
 import { ServerUrlEditable } from '../components';
 import { useResendCode, useVerifyCode } from '../hooks';
+import {
+  ROUTES,
+  useExtensionNavigation,
+} from '../hooks/use-extension-navigation';
 
 export const ValidateEmailScreen: React.FC<object> = () => {
   const { deviceKey } = useAuthStore((state) => state);
+  const { navigateTo } = useExtensionNavigation();
 
-  const [, navigate] = useLocation();
   const [verificationCode, setVerificationCode] = useState('');
   const toast = useToast();
 
@@ -20,7 +23,7 @@ export const ValidateEmailScreen: React.FC<object> = () => {
 
   useEffect(() => {
     if (verificationCodeMutation.isSuccess) {
-      navigate('/navigation-entries');
+      navigateTo(ROUTES.NAVIGATION_ENTRIES);
     }
 
     if (verificationCodeMutation.isError) {
@@ -35,7 +38,7 @@ export const ValidateEmailScreen: React.FC<object> = () => {
   }, [
     verificationCodeMutation.isSuccess,
     verificationCodeMutation.isError,
-    navigate,
+    navigateTo,
     toast,
   ]);
 
@@ -51,7 +54,10 @@ export const ValidateEmailScreen: React.FC<object> = () => {
   return (
     <div className='flex flex-col p-8 pt-10 items-center w-full'>
       <div className='flex w-full justify-start pb-4 gap-4 items-center'>
-        <IconButton aria-label='Back icon' onClick={() => navigate('/login')}>
+        <IconButton
+          aria-label='Back icon'
+          onClick={() => navigateTo(ROUTES.LOGIN)}
+        >
           <Icon className='rotate-180' as={LuLogIn} boxSize={5} />
         </IconButton>
         <div className='flex w-full justify-center pr-[40px]'>

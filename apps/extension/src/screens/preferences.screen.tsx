@@ -10,7 +10,7 @@ import {
 } from '@chakra-ui/react';
 import { ArrowBackIcon } from '@chakra-ui/icons';
 import { useGetPreferences, useUpdatePreferences } from '../hooks';
-import { useLocation } from 'wouter';
+import { useExtensionNavigation } from '../hooks/use-extension-navigation';
 import { updateIcon } from '../utils/updateIcon';
 
 export const PreferencesScreen: React.FC<object> = () => {
@@ -23,15 +23,7 @@ export const PreferencesScreen: React.FC<object> = () => {
   const [webLLMEnabled, setWebLLMEnabled] = useState(false);
   const [days, setDays] = useState<number | null>(null);
 
-  const [, navigate] = useLocation();
-
-  const navigateBack = () => {
-    if (window.history.length > 1) {
-      window.history.back();
-    } else {
-      navigate('/');
-    }
-  };
+  const { goBack } = useExtensionNavigation();
 
   const { userPreferencesQuery } = useGetPreferences();
   const { updatePreferencesMutation } = useUpdatePreferences();
@@ -110,7 +102,7 @@ export const PreferencesScreen: React.FC<object> = () => {
   return (
     <div className='flex flex-col px-5 py-3 items-center w-full'>
       <div className='flex w-full justify-start pb-4 gap-4 items-center'>
-        <IconButton aria-label='Back icon' onClick={navigateBack}>
+        <IconButton aria-label='Back icon' onClick={goBack}>
           <ArrowBackIcon boxSize={5} />
         </IconButton>
         <div className='flex w-full justify-center pr-[40px]'>

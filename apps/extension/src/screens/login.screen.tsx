@@ -15,7 +15,11 @@ import { isLoginRes, LoginResponse } from '@wtm/api';
 
 import clsx from 'clsx';
 import { updateIcon } from '../utils/updateIcon';
-import { useLocation } from 'wouter';
+
+import {
+  ROUTES,
+  useExtensionNavigation,
+} from '../hooks/use-extension-navigation';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -24,7 +28,7 @@ export const LoginScreen: React.FC = () => {
 
   const deviceKey = useAuthStore((state) => state.deviceKey);
   const { loginMutation } = useLogin();
-  const [, navigate] = useLocation();
+  const { navigateTo } = useExtensionNavigation();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -71,17 +75,17 @@ export const LoginScreen: React.FC = () => {
 
       chrome.runtime.sendNativeMessage('com.ttt246llc.wtm', message);
 
-      navigate('/navigation-entries');
+      navigateTo(ROUTES.NAVIGATION_ENTRIES);
     };
 
     if (loginMutation.isSuccess) {
       if (isLoginRes(loginMutation.data)) {
         processLogin(loginMutation.data);
       } else {
-        navigate('/validate-email');
+        navigateTo(ROUTES.VALIDATE_EMAIL);
       }
     }
-  }, [loginMutation.isSuccess, loginMutation.data, navigate]);
+  }, [loginMutation.isSuccess, loginMutation.data, navigateTo]);
 
   return (
     <div className='flex flex-col p-8 pt-10 items-center w-full'>
@@ -147,14 +151,14 @@ export const LoginScreen: React.FC = () => {
         <Text
           fontSize='small'
           className='hover:cursor-pointer hover:underline'
-          onClick={() => navigate('/forgot-password')}
+          onClick={() => navigateTo(ROUTES.FORGOT_PASSWORD)}
         >
           Forgot password?
         </Text>
         <Text
           fontSize='small'
           className='hover:cursor-pointer hover:underline'
-          onClick={() => navigate('/sign-up')}
+          onClick={() => navigateTo(ROUTES.SIGN_UP)}
         >
           Sign up
         </Text>
@@ -169,14 +173,14 @@ export const LoginScreen: React.FC = () => {
         >
           Sign In
         </Button>
-        <Button
+        {/* <Button
           colorScheme='blue'
           onClick={() => {
-            navigate('/testqueryparams/?name=agustin');
+            navigateTo('/testqueryparams/?name=agustin');
           }}
         >
           test
-        </Button>
+        </Button> */}
       </div>
     </div>
   );

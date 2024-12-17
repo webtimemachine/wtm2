@@ -16,16 +16,20 @@ import { LuLogIn } from 'react-icons/lu';
 
 import { useAuthStore } from '../store';
 import { useRestorePassword } from '../hooks';
-import { useLocation } from 'wouter';
+
+import {
+  ROUTES,
+  useExtensionNavigation,
+} from '../hooks/use-extension-navigation';
 
 const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[^\s]{8,20}$/;
 const passwordRegexMessage =
   'Password must be between 8 and 20 characters long and contain at least one uppercase letter, one lowercase letter, and one digit. Spaces are not allowed.';
 
 export const RecoveryNewPassword: React.FC = () => {
-  const [, navigate] = useLocation();
   const { recoveryEmail, deviceKey } = useAuthStore((state) => state);
   const { restorePasswordMutation } = useRestorePassword();
+  const { navigateTo } = useExtensionNavigation();
 
   const [password, setPassword] = useState('');
   const [showPass, setShowPass] = useState(false);
@@ -80,14 +84,17 @@ export const RecoveryNewPassword: React.FC = () => {
 
   useEffect(() => {
     if (restorePasswordMutation.isSuccess) {
-      navigate('/navigation-entries');
+      navigateTo(ROUTES.NAVIGATION_ENTRIES);
     }
-  }, [restorePasswordMutation.isSuccess, navigate]);
+  }, [restorePasswordMutation.isSuccess, navigateTo]);
 
   return (
     <div className='flex flex-col p-8 pt-10 items-center w-full'>
       <div className='flex w-full justify-start pb-4 gap-4 items-center'>
-        <IconButton aria-label='Back icon' onClick={() => navigate('/login')}>
+        <IconButton
+          aria-label='Back icon'
+          onClick={() => navigateTo(ROUTES.LOGIN)}
+        >
           <Icon className='rotate-180' as={LuLogIn} boxSize={5} />
         </IconButton>
 

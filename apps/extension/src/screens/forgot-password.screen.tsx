@@ -15,12 +15,17 @@ import { useAuthStore } from '../store';
 import { ServerUrlEditable } from '../components';
 import clsx from 'clsx';
 import { useRecoverPassword } from '../hooks';
-import { useLocation } from 'wouter';
+
 import { screenStore } from '../store/screens.store';
+import {
+  ROUTES,
+  useExtensionNavigation,
+} from '../hooks/use-extension-navigation';
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export const ForgotPasswordScreen: React.FC = () => {
-  const [, navigate] = useLocation();
+  const { navigateTo } = useExtensionNavigation();
+
   const notifyRecoveryCodeSent = useAuthStore(
     (state) => state.notifyRecoveryCodeSent,
   );
@@ -56,13 +61,12 @@ export const ForgotPasswordScreen: React.FC = () => {
   }, []);
   useEffect(() => {
     if (recoverPasswordMutation.isSuccess) {
-      navigate('/validate-recovery-code');
+      navigateTo(ROUTES.VALIDATE_RECOVERY_CODE);
       notifyRecoveryCodeSent(email);
-    } else {
     }
   }, [
     recoverPasswordMutation.isSuccess,
-    navigate,
+    navigateTo,
     email,
     notifyRecoveryCodeSent,
   ]);
@@ -74,7 +78,7 @@ export const ForgotPasswordScreen: React.FC = () => {
           aria-label='Back icon'
           onClick={() => {
             screenStore.getState().goBack();
-            navigate('/');
+            navigateTo(ROUTES.LOGIN);
           }}
         >
           <ArrowBackIcon boxSize={5} />

@@ -1,8 +1,8 @@
-import { useLocation } from 'wouter';
 import { useAuthStore } from '../store';
+import { ROUTES, useExtensionNavigation } from './use-extension-navigation';
 
 export const useLogout = () => {
-  const [, navigate] = useLocation();
+  const { navigateTo } = useExtensionNavigation();
   const notifyLogout = useAuthStore((state) => state.notifyLogout);
 
   const logout = async () => {
@@ -14,7 +14,7 @@ export const useLogout = () => {
 
     chrome.runtime.sendNativeMessage('com.ttt246llc.wtm', message);
 
-    navigate('/');
+    navigateTo(ROUTES.LOGIN);
   };
 
   return { logout };

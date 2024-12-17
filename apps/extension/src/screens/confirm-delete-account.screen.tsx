@@ -2,24 +2,27 @@ import React, { useEffect } from 'react';
 import { Text, IconButton, Button } from '@chakra-ui/react';
 import { ArrowBackIcon } from '@chakra-ui/icons';
 import { useConfirmDeleteAccount } from '../hooks';
-import { useLocation } from 'wouter';
+import {
+  useExtensionNavigation,
+  ROUTES,
+} from '../hooks/use-extension-navigation';
 
 export const ConfirmDeleteAccountScreen: React.FC = () => {
-  const [, navigate] = useLocation();
   const { confirmDeleteAccountMutation } = useConfirmDeleteAccount();
+  const { navigateTo } = useExtensionNavigation();
 
   useEffect(() => {
     if (confirmDeleteAccountMutation.isSuccess) {
-      navigate('/login');
+      navigateTo(ROUTES.LOGIN);
     }
-  }, [confirmDeleteAccountMutation.isSuccess, navigate]);
+  }, [confirmDeleteAccountMutation.isSuccess, navigateTo]);
 
   return (
     <div className='flex flex-col px-5 py-3 min-h-screen items-center w-full'>
       <div className='flex w-full justify-start pb-4 gap-4 items-center'>
         <IconButton
           aria-label='Back icon'
-          onClick={() => navigate('/navigation-entries')}
+          onClick={() => navigateTo(ROUTES.NAVIGATION_ENTRIES)}
         >
           <ArrowBackIcon boxSize={5} />
         </IconButton>

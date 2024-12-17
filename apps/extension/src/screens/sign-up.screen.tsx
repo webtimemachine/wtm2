@@ -22,16 +22,17 @@ import {
   Portal,
 } from '@chakra-ui/react';
 import { ArrowBackIcon, InfoIcon } from '@chakra-ui/icons';
-import { useLocation } from 'wouter';
 
 import { ServerUrlEditable } from '../components';
 import { useSignUp } from '../hooks';
 
-import { useNavigation } from '../store';
-
 import clsx from 'clsx';
 import { generateSecurePassword } from '@wtm/utils';
 import { screenStore } from '../store/screens.store';
+import {
+  ROUTES,
+  useExtensionNavigation,
+} from '../hooks/use-extension-navigation';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[^\s]{8,20}$/;
@@ -40,7 +41,7 @@ const passwordRegexMessage =
 
 export const SignUpScreen: React.FC = () => {
   const { signUpMutation } = useSignUp();
-  const [, navigate] = useLocation();
+  const { navigateTo } = useExtensionNavigation();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -153,7 +154,7 @@ export const SignUpScreen: React.FC = () => {
             aria-label='Back icon'
             onClick={() => {
               screenStore.getState().goBack();
-              navigate('/');
+              navigateTo(ROUTES.LOGIN);
             }}
           >
             <ArrowBackIcon boxSize={5} />
