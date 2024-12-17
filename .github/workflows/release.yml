@@ -27,19 +27,19 @@ jobs:
           (cd ./build/app_firefox && zip -r ../../firefox-extension.zip .)
 
       - name: Upload Chrome artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: chrome-build-zip
           path: chrome-extension.zip
 
       - name: Upload ExportOptions artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: export-options-file
           path: apps/extension/ExportOptions.plist
 
       - name: Upload Firefox artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: firefox-build-zip
           path: firefox-extension.zip
@@ -81,7 +81,7 @@ jobs:
         run: (cd ./build/backend && zip -r ../../backend.zip .)
 
       - name: Upload Backend artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: backend-build-zip
           path: backend.zip
@@ -125,7 +125,7 @@ jobs:
           cp extension.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
 
       - name: Download Chrome artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: chrome-build-zip
           path: 'native/'
@@ -137,7 +137,7 @@ jobs:
           rm chrome-extension.zip
 
       - name: Download ExportOptions artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: export-options-file
           path: 'native/app_ios/wtm/'
@@ -153,7 +153,7 @@ jobs:
           xcodebuild -exportArchive -archivePath "$PWD/build/Web Time Machine.xcarchive" -exportOptionsPlist "$PWD/ExportOptions.plist" -exportPath "$PWD/build"
 
       - name: Upload iOS artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: webtm-ipa
           path: native/app_ios/wtm/build/wtm.ipa
@@ -176,25 +176,25 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Download Chrome artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: chrome-build-zip
           path: .
 
       - name: Download Firefox artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: firefox-build-zip
           path: .
 
       - name: Download Backend artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: backend-build-zip
           path: .
 
       - name: Download iOS artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: webtm-ipa
           path: .
