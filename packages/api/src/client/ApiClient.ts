@@ -729,7 +729,7 @@ export class ApiClient {
       const response = await this.securedFetch("/api/auth/verify-external-client", {
         method: 'POST',
         headers: {
-         "webtm-ext-client-authorization": externalClientToken,
+         "webtm-ext-client-authorization": `Bearer ${externalClientToken}`,
         },
       })
 
