@@ -21,7 +21,12 @@ jobs:
 
       - name: Install dependencies
         working-directory: e2e
-        run: npm install
+        run: |
+          npm install turbo --global
+          npm install
+
+      - name: Run turbo build
+        run: turbo run build --filter=@wtm/extension...
 
       - name: Run E2E Tests
         working-directory: e2e
