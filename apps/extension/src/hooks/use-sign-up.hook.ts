@@ -1,13 +1,14 @@
 import { useMutation } from '@tanstack/react-query';
 import { useToast } from '@chakra-ui/react';
 import { useAuthStore } from '../store';
-import { useLocation } from 'wouter';
 
 import { apiClient } from '../utils/api.client';
+import { useExtensionNavigation } from './use-extension-navigation';
+import { ROUTES } from './use-extension-navigation';
 
 export const useSignUp = () => {
   const toast = useToast();
-  const [, navigate] = useLocation();
+  const { navigateTo } = useExtensionNavigation();
   const notifyEmailValidation = useAuthStore(
     (state) => state.notifyEmailValidation,
   );
@@ -17,7 +18,7 @@ export const useSignUp = () => {
     onSuccess: (res) => {
       if (res.partialToken) {
         notifyEmailValidation();
-        navigate('/validate-email');
+        navigateTo(ROUTES.VALIDATE_EMAIL);
       }
     },
     onError: (error) => {

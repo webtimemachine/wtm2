@@ -2,14 +2,18 @@ import React, { useEffect, useState } from 'react';
 import { Button, IconButton, Input, Text } from '@chakra-ui/react';
 import { Icon } from '@chakra-ui/icons';
 import { LuLogIn } from 'react-icons/lu';
-import { useLocation } from 'wouter';
 
 import { useValidateRecoveryCode } from '../hooks';
 import { useAuthStore } from '../store';
+import {
+  ROUTES,
+  useExtensionNavigation,
+} from '../hooks/use-extension-navigation';
 
 export const ValidateRecoveryCode: React.FC<object> = () => {
+  const { navigateTo } = useExtensionNavigation();
+
   const [recoveryCode, setRecoveryCode] = useState('');
-  const [, navigate] = useLocation();
 
   const { recoveryEmail, notifyRecoveryCodeValidated } = useAuthStore(
     (state) => state,
@@ -19,12 +23,12 @@ export const ValidateRecoveryCode: React.FC<object> = () => {
 
   useEffect(() => {
     if (validateRecoveryCodeMutation.isSuccess) {
-      navigate('/recovery-new-password');
+      navigateTo(ROUTES.RECOVERY_NEW_PASSWORD);
       notifyRecoveryCodeValidated();
     }
   }, [
     validateRecoveryCodeMutation.isSuccess,
-    navigate,
+    navigateTo,
     notifyRecoveryCodeValidated,
   ]);
 
@@ -38,7 +42,10 @@ export const ValidateRecoveryCode: React.FC<object> = () => {
   return (
     <div className='flex flex-col p-8 pt-10 items-center w-full'>
       <div className='flex w-full justify-start pb-4 gap-4 items-center'>
-        <IconButton aria-label='Back icon' onClick={() => navigate('/')}>
+        <IconButton
+          aria-label='Back icon'
+          onClick={() => navigateTo(ROUTES.LOGIN)}
+        >
           <Icon className='rotate-180' as={LuLogIn} boxSize={5} />
         </IconButton>
 

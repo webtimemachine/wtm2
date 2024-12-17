@@ -15,8 +15,7 @@ import {
   Icon,
 } from '@chakra-ui/icons';
 import { MdLogout } from 'react-icons/md';
-import { useLocation } from 'wouter';
-
+import { useExtensionNavigation } from '../hooks/use-extension-navigation';
 import { ActiveSession } from '@wtm/api';
 import {
   useCloseActiveSession,
@@ -42,16 +41,7 @@ const moveCurrentSessionToFirst = (arr: ActiveSession[]) => {
 };
 
 export const ActiveSessionsScreen: React.FC<object> = () => {
-  const [, navigate] = useLocation();
-
-  const navigateBack = () => {
-    if (window.history.length > 1) {
-      window.history.back();
-    } else {
-      navigate('/');
-    }
-  };
-
+  const { goBack } = useExtensionNavigation();
   const { getActiveSessionsQuery } = useGetActiveSessions();
   const { closeActiveSessionMutation } = useCloseActiveSession();
   const { updateDeviceAliasMutation } = useUpdateDeviceAlias();
@@ -200,7 +190,7 @@ export const ActiveSessionsScreen: React.FC<object> = () => {
   return (
     <div className='flex flex-col px-5 py-3 items-center w-full'>
       <div className='flex w-full justify-start pb-4 gap-4 items-center'>
-        <IconButton aria-label='Back icon' onClick={navigateBack}>
+        <IconButton aria-label='Back icon' onClick={goBack}>
           <ArrowBackIcon boxSize={5} />
         </IconButton>
         <div className='flex w-full justify-center pr-[40px]'>

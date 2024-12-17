@@ -1,24 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { Text, IconButton } from '@chakra-ui/react';
 import { ArrowBackIcon } from '@chakra-ui/icons';
-import { useLocation } from 'wouter';
 import { useModelsInformation } from '../hooks';
 import { SystemModels } from '@wtm/api';
+import { useExtensionNavigation } from '../hooks/use-extension-navigation';
 
 export const AboutWTMScreen: React.FC<object> = () => {
   const [backendURL, setBackendURL] = useState<string>('');
   const { data } = useModelsInformation();
   const [models, setModels] = useState<SystemModels | null>(null);
 
-  const [, navigate] = useLocation();
-
-  const handleNavigateBack = () => {
-    if (window.history.length > 1) {
-      window.history.back();
-    } else {
-      navigate('/');
-    }
-  };
+  const { goBack } = useExtensionNavigation();
 
   useEffect(() => {
     const getBackendVersion = async () => {
@@ -35,7 +27,7 @@ export const AboutWTMScreen: React.FC<object> = () => {
   return (
     <div className='flex flex-col px-5 py-3 items-center w-full'>
       <div className='flex w-full justify-start pb-4 gap-4 items-center'>
-        <IconButton aria-label='Back icon' onClick={handleNavigateBack}>
+        <IconButton aria-label='Back icon' onClick={goBack}>
           <ArrowBackIcon boxSize={5} />
         </IconButton>
         <div className='flex w-full justify-center pr-[40px]'>

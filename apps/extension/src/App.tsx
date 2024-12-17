@@ -1,5 +1,5 @@
 import React from 'react';
-import { Router, Route, useLocation } from 'wouter';
+import { Router, Route } from 'wouter';
 import {
   LoginScreen,
   NavigationEntriesScreen,
@@ -16,7 +16,6 @@ import {
 } from './screens';
 import { ConfirmDeleteAccountScreen } from './screens/confirm-delete-account.screen';
 import { useHashLocation } from './hooks';
-import { Button, Text } from '@chakra-ui/react';
 
 const App: React.FC = () => {
   return (

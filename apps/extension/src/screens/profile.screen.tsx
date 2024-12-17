@@ -15,7 +15,7 @@ import { useGetBasicUserInformation } from '../hooks/use-get-user-basic-informat
 import CustomInputBox from '../components/custom-input-box.component';
 import { relativeTime } from '@wtm/utils';
 import { ArrowBackIcon } from '@chakra-ui/icons';
-import { useLocation } from 'wouter';
+
 import MaleOne from '../assets/Avatars/male_one.png';
 import MaleTwo from '../assets/Avatars/male_two.png';
 import FemaleOne from '../assets/Avatars/female_one.png';
@@ -23,9 +23,13 @@ import FemaleTwo from '../assets/Avatars/female_two.png';
 import ChangePasswordModal from '../components/change-password-modal.component';
 import ChangeDisplayNameModal from '../components/change-display-name-modal.component';
 import ChangeAvatarModal from '../components/change-avatar-modal.component';
+import {
+  ROUTES,
+  useExtensionNavigation,
+} from '../hooks/use-extension-navigation';
 
 export const ProfileScreen: React.FC<object> = () => {
-  const [, navigate] = useLocation();
+  const { navigateTo } = useExtensionNavigation();
   const { basicUserInformationQuery } = useGetBasicUserInformation();
   const user = basicUserInformationQuery.data;
 
@@ -150,7 +154,7 @@ export const ProfileScreen: React.FC<object> = () => {
       <div className='flex w-full justify-start pb-4 gap-4 items-center'>
         <IconButton
           aria-label='Back icon'
-          onClick={() => navigate('/settings')}
+          onClick={() => navigateTo(ROUTES.SETTINGS)}
         >
           <ArrowBackIcon boxSize={5} />
         </IconButton>
