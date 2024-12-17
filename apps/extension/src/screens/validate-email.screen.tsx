@@ -10,6 +10,7 @@ import { useResendCode, useVerifyCode } from '../hooks';
 
 export const ValidateEmailScreen: React.FC<object> = () => {
   const { deviceKey } = useAuthStore((state) => state);
+
   const [, navigate] = useLocation();
   const [verificationCode, setVerificationCode] = useState('');
   const toast = useToast();
