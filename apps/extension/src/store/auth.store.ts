@@ -83,7 +83,7 @@ export const authStore = createStore<AuthStore>()(
           });
 
           return {
-            persistedScreen: 'recovery-new-password',
+            persistedScreen: 'validate-recovery-code',
             isLoggedIn: false,
           };
         }),

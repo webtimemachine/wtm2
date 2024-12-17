@@ -38,7 +38,7 @@ export const ValidateRecoveryCode: React.FC<object> = () => {
   return (
     <div className='flex flex-col p-8 pt-10 items-center w-full'>
       <div className='flex w-full justify-start pb-4 gap-4 items-center'>
-        <IconButton aria-label='Back icon' onClick={() => navigate('/login')}>
+        <IconButton aria-label='Back icon' onClick={() => navigate('/')}>
           <Icon className='rotate-180' as={LuLogIn} boxSize={5} />
         </IconButton>
 

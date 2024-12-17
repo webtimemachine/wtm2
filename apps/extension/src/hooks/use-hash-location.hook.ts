@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { readAuthStateFromLocal } from '../store/auth.store';
+import { screenStore } from '../store/screens.store';
 
 const stripHash = (hash: string) => hash.replace(/^#/, '') || '/';
 
@@ -12,8 +12,13 @@ export function useHashLocation(): [string, (to: string) => void] {
     const onHashChange = () => {
       const newLocation = stripHash(window.location.hash);
 
-      const authState = readAuthStateFromLocal();
-      if (newLocation === '/' && authState?.isLoggedIn) {
+      const { screenStack, isLoggedIn } = screenStore.getState();
+      const persistedScreen = screenStack[screenStack.length - 1];
+
+      if (newLocation === '/' && persistedScreen) {
+        window.location.hash = persistedScreen;
+        setLocation(persistedScreen);
+      } else if (newLocation === '/' && isLoggedIn) {
         window.location.hash = '/navigation-entries';
         setLocation('/navigation-entries');
       } else {
@@ -23,6 +28,7 @@ export function useHashLocation(): [string, (to: string) => void] {
 
     window.addEventListener('hashchange', onHashChange);
     onHashChange();
+
     return () => window.removeEventListener('hashchange', onHashChange);
   }, []);
 

@@ -3,6 +3,7 @@ import { useToast } from '@chakra-ui/react';
 
 import { useAuthStore } from '../store';
 import { apiClient } from '../utils/api.client';
+import { screenStore } from '../store/screens.store';
 
 export const useVerifyCode = () => {
   const toast = useToast();
@@ -13,6 +14,7 @@ export const useVerifyCode = () => {
     onSuccess: (loginRes) => {
       console.log(loginRes);
       notifyLogin();
+      screenStore.getState().notifyLogin();
       toast({
         title: 'Welcome!',
         description: `Welcome ${loginRes.user.email}`,
