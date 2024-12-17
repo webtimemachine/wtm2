@@ -32,7 +32,7 @@ export const readAuthStateFromLocal = (): AuthState | undefined => {
 };
 
 export const authStore = createStore<AuthStore>()(
-  persist(
+  persist<AuthStore>(
     (set) => ({
       deviceKey: getRandomToken(),
       serverUrl: 'https://wtm-back.vercel.app',

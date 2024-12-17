@@ -35,3 +35,23 @@ export const isLoginRes = (
   loginRes: LoginResponse | VerifyEmailResponse,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): loginRes is LoginResponse => (loginRes as any)?.accessToken;
+
+export interface RetrieveExternalLoginPayload {
+  externalClientId: string,
+  deviceKey: string,
+  userAgent: string,
+  userAgentData: string
+}
+
+export interface ExternalClientPayload {
+    externalClientId: string;
+    deviceKey: string;
+    userAgent: string;
+    userAgentData: string;
+  }
+
+export interface ExternalLoginPayload {
+  deviceKey: string;
+  userAgent: string;
+  userAgentData: string;
+}

@@ -31,9 +31,14 @@ import {
   ChangeUserPassword,
   ChangeUserDisplayName,
   SystemModels,
+  ExternalClientPayload,
+  RetrieveExternalLoginPayload,
+  ExternalLoginPayload,
 } from '../interfaces';
 import { ChangeUserAvatar } from '../interfaces/change-user-avatar.interface';
 import { BulkDeleteNavigationEntriesData } from '../interfaces/navigation-entry.interface';
+
+let fetchRetries = 0;
 
 interface ApiClientOptions {
   getServerUrl: () => Promise<string>;
@@ -135,9 +140,14 @@ export class ApiClient {
       }
 
       return res;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-      if (error?.message === 'Unauthorized') {
+    } catch (error: unknown) {
+      if (error instanceof Error && error.message === 'Unauthorized') {
+        if (fetchRetries >= 4) {
+          throw error;
+        }
+
+        fetchRetries++;
+
         await this.refresh();
         console.log('ApiClient Retrying request after refresh', { endpoint });
         return this.securedFetch(endpoint, init);
@@ -685,4 +695,77 @@ export class ApiClient {
       }
     }
   };
+
+  retrieveExternalLoginToken = async (body: RetrieveExternalLoginPayload): Promise<{
+    externalClientToken: string
+  }> => {
+    try {
+      const response = await this.fetch('/api/auth/retrieve-external-login-token', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+      })
+
+      if (response.status !== 200) {
+        const errorJson = await response.json();
+        throw new Error(errorJson?.message || 'External Login Error');
+      }
+
+      const jsonRes = await response.json();
+
+      return jsonRes;
+
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  verifyExternalClient = async (externalClientToken: string): Promise<{
+    payload: ExternalClientPayload
+  }> => {
+    try {
+      const response = await this.securedFetch("/api/auth/verify-external-client", {
+        method: 'POST',
+        headers: {
+         "webtm-ext-client-authorization": externalClientToken,
+        },
+      })
+
+      if (response.status !== 200) {
+        const errorJson = await response.json();
+        throw new Error(errorJson?.message || 'External Login Error');
+      }
+
+      const jsonRes = await response.json();
+
+      return jsonRes;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  externalLogin = async (body: ExternalLoginPayload): Promise<LoginResponse> => {
+    try {
+      const response = await this.securedFetch("/api/auth/external-login", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+      })
+
+      if (response.status !== 200) {
+        const errorJson = await response.json();
+        throw new Error(errorJson?.message || 'External Login Error');
+      }
+
+      const jsonRes = await response.json();
+
+      return jsonRes;
+    } catch (error) {
+      throw error;
+    }
+  }
 }

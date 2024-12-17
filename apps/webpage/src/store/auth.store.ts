@@ -36,7 +36,7 @@ export interface AuthStore extends AuthState {
 }
 
 export const authStore = createStore<AuthStore>()(
-  persist(
+  persist<AuthStore>(
     (set) => ({
       deviceKey: getRandomToken(),
       serverUrl: 'https://wtm-back.vercel.app',
