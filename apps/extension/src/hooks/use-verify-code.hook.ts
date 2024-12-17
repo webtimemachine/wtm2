@@ -12,9 +12,7 @@ export const useVerifyCode = () => {
   const verificationCodeMutation = useMutation({
     mutationFn: apiClient.verificationCode,
     onSuccess: (loginRes) => {
-      console.log(loginRes);
       notifyLogin();
-      screenStore.getState().notifyLogin();
       toast({
         title: 'Welcome!',
         description: `Welcome ${loginRes.user.email}`,

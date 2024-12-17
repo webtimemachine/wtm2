@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Button,
   Input,
@@ -31,6 +31,7 @@ import { useNavigation } from '../store';
 
 import clsx from 'clsx';
 import { generateSecurePassword } from '@wtm/utils';
+import { screenStore } from '../store/screens.store';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[^\s]{8,20}$/;
@@ -64,7 +65,9 @@ export const SignUpScreen: React.FC = () => {
     onClose: passTooltipOnClose,
     onToggle: passTooltipOnToggle,
   } = useDisclosure();
-
+  useEffect(() => {
+    screenStore.getState().notifyForgotPassword();
+  }, []);
   const validateInputs = () => {
     let emailErrorFound = false;
     let passwordErrorFound = false;
@@ -146,7 +149,13 @@ export const SignUpScreen: React.FC = () => {
     <>
       <div className='flex flex-col p-8 pt-10 items-center w-full'>
         <div className='flex w-full justify-start pb-4 gap-4 items-center'>
-          <IconButton aria-label='Back icon' onClick={() => navigate('/login')}>
+          <IconButton
+            aria-label='Back icon'
+            onClick={() => {
+              screenStore.getState().goBack();
+              navigate('/');
+            }}
+          >
             <ArrowBackIcon boxSize={5} />
           </IconButton>
 

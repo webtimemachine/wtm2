@@ -16,7 +16,7 @@ import { ServerUrlEditable } from '../components';
 import clsx from 'clsx';
 import { useRecoverPassword } from '../hooks';
 import { useLocation } from 'wouter';
-
+import { screenStore } from '../store/screens.store';
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export const ForgotPasswordScreen: React.FC = () => {
@@ -51,11 +51,14 @@ export const ForgotPasswordScreen: React.FC = () => {
       recoverPasswordMutation.mutate({ email });
     }
   };
-
+  useEffect(() => {
+    screenStore.getState().notifyForgotPassword();
+  }, []);
   useEffect(() => {
     if (recoverPasswordMutation.isSuccess) {
       navigate('/validate-recovery-code');
       notifyRecoveryCodeSent(email);
+    } else {
     }
   }, [
     recoverPasswordMutation.isSuccess,
@@ -67,7 +70,13 @@ export const ForgotPasswordScreen: React.FC = () => {
   return (
     <div className='flex flex-col p-8 pt-10 items-center w-full'>
       <div className='flex w-full justify-start pb-4 gap-4 items-center'>
-        <IconButton aria-label='Back icon' onClick={() => navigate('/')}>
+        <IconButton
+          aria-label='Back icon'
+          onClick={() => {
+            screenStore.getState().goBack();
+            navigate('/');
+          }}
+        >
           <ArrowBackIcon boxSize={5} />
         </IconButton>
         <div className='flex w-full justify-center pr-[40px]'>
