@@ -11,7 +11,7 @@ test.describe('Chrome Extension E2E Tests', () => {
 
     // Launch browser with the extension loaded
     browser = await chromium.launchPersistentContext('', {
-      headless: false,
+      headless: true,
       args: [
         `--disable-extensions-except=${extensionPath}`,
         `--load-extension=${extensionPath}`,
