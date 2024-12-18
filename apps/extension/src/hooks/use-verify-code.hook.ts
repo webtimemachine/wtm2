@@ -3,7 +3,6 @@ import { useToast } from '@chakra-ui/react';
 
 import { useAuthStore } from '../store';
 import { apiClient } from '../utils/api.client';
-import { screenStore } from '../store/screens.store';
 
 export const useVerifyCode = () => {
   const toast = useToast();
