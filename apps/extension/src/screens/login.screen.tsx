@@ -18,6 +18,7 @@ import { updateIcon } from '../utils/updateIcon';
 import { apiClient } from '../utils/api.client';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const FRONTEND_URL = 'http://localhost:3000';
 
 export const LoginScreen: React.FC<object> = () => {
   updateIcon(false);
@@ -76,7 +77,7 @@ export const LoginScreen: React.FC<object> = () => {
         userAgentData: JSON.stringify(window?.navigator?.userAgentData || '{}'),
       });
 
-      const webUrl = new URL('http://localhost:3000/external-login');
+      const webUrl = new URL(FRONTEND_URL + '/external-login');
       webUrl.searchParams.append(
         'externalClientToken',
         response.externalClientToken,
