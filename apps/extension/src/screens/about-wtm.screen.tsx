@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Text, IconButton } from '@chakra-ui/react';
 import { ArrowBackIcon } from '@chakra-ui/icons';
-import { useModelsInformation } from '../hooks';
+import { useModelsInformation, useExtensionNavigation } from '../hooks';
 import { SystemModels } from '@wtm/api';
-import { useExtensionNavigation } from '../hooks/use-extension-navigation';
 
 export const AboutWTMScreen: React.FC<object> = () => {
   const [backendURL, setBackendURL] = useState<string>('');
