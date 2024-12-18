@@ -10,6 +10,19 @@ BigInt.prototype['toJSON'] = function () {
 };
 
 dotenv.config();
+
+const knownExternalClients = z.array(
+  z.object({
+    externalClientName: z.string(),
+    externalClientId: z.string(),
+  }),
+);
+
+interface KnownExternalClient {
+  externalClientName: string;
+  externalClientId: string;
+}
+
 const envSchemas = {
   PORT: z.number(),
   BASE_URL: z.string().default('http://localhost:3000'),
@@ -27,6 +40,29 @@ const envSchemas = {
   JWT_REFRESH_EXPIRATION: z.string(),
   JWT_RECOVERY_TOKEN_SECRET: z.string(),
   JWT_RECOVERY_TOKEN_EXPIRATION: z.string(),
+  JWT_EXTERNAL_LOGIN_SECRET: z.string(),
+  JWT_EXTERNAL_LOGIN_EXPIRATION: z.string(),
+  KNOWN_EXTERNAL_CLIENTS: z
+    .string()
+    .optional()
+    .refine(
+      (value) => {
+        if (value) {
+          try {
+            const parsed = JSON.parse(value);
+            return knownExternalClients.safeParse(parsed).success;
+          } catch (_) {
+            return false;
+          }
+        }
+        return true;
+      },
+      { message: 'Must be a JSON string representing a string array' },
+    )
+    .transform((value) => {
+      if (!value) return undefined;
+      return [...(JSON.parse(value) as readonly KnownExternalClient[])];
+    }),
   EMAIL_URI: z.string(),
   OPENAI_ACCESS_TOKEN: z.string(),
   SENTRY_DSN: z.string().optional(),
@@ -47,4 +83,7 @@ const envSchema = z.object({
 });
 
 export type EnvType = z.infer<typeof envSchema>;
-export const appEnv: EnvType = parseEnv(process.env, envSchemas);
+export const appEnv: EnvType = parseEnv(
+  process.env,
+  envSchemas,
+) as unknown as EnvType;
