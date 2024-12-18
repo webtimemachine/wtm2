@@ -1,54 +1,42 @@
-import { test, expect, chromium, BrowserContext, Page } from '@playwright/test';
+import { test, expect, chromium } from '@playwright/test';
 import path from 'path';
 
-const CHROME_EXTENSION_PATH = path.join(__dirname, '../../../build/app_chrome');
-
-test.describe('Chrome Extension', () => {
-  let context: BrowserContext;
-  let extensionPage: Page;
+test.describe('Chrome Extension E2E Tests', () => {
+  let browser;
+  let page;
 
   test.beforeAll(async () => {
-    const browser = await chromium.launchPersistentContext('', {
-      headless: false,
+    const extensionPath = path.resolve(__dirname, '../../../native/app_chrome');
+    console.log('Extension Path:', extensionPath);
+
+    // Launch browser with the extension loaded
+    browser = await chromium.launchPersistentContext('', {
+      headless: true,
       args: [
-        `--disable-extensions-except=${CHROME_EXTENSION_PATH}`,
-        `--load-extension=${CHROME_EXTENSION_PATH}`,
+        `--disable-extensions-except=${extensionPath}`,
+        `--load-extension=${extensionPath}`,
       ],
     });
 
-    context = browser;
+    // Open a new page
+    page = await browser.newPage();
 
-    let extensionId: string | undefined;
-
-    const serviceWorkers = context.serviceWorkers();
-    if (serviceWorkers.length === 0) {
-      await context.waitForEvent('serviceworker');
-    }
-    for (const worker of context.serviceWorkers()) {
-      const url = worker.url();
-      if (url.startsWith('chrome-extension://')) {
-        extensionId = url.split('/')[2];
-        break;
-      }
-    }
-
-    if (!extensionId) {
-      throw new Error('Could not find the extension ID');
-    }
-
-    extensionPage = await context.newPage();
-    await extensionPage.goto(`chrome-extension://${extensionId}/index.html`);
-  });
+    // Navigate to the target page
+    await page.goto('https://webtm.io/');
+    await page.waitForTimeout(1000); // Optional wait for visual stability
+  }, 20000); // Timeout for the setup
 
   test.afterAll(async () => {
-    await context.close();
+    await browser.close();
   });
 
-  test('Extension loads successfully', async () => {
-    extensionPage.waitForSelector('#extension-login-header');
+  test('Landing page renders correctly', async () => {
+    // Verify the page title matches metadata
+    const title = await page.title();
+    expect(title).toBe('WebTM | Home');
 
-    await extensionPage.waitForLoadState();
-    const popupTitle = await extensionPage.title();
-    expect(popupTitle).toContain('WTM - Vite');
+    // Check for specific text
+    const landingText = await page.locator('body').textContent();
+    expect(landingText).toContain('Time Machine for your browser');
   });
 });

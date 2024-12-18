@@ -39,35 +39,50 @@ Copy the `sample.env` to `.env` on the backend folder and edit the values if nec
     - Usage: Specifies the expiration time for JWT refresh tokens. In this case, "1d" indicates a validity period of one day.
 12. **JWT_PARTIAL_SECRET**:
     - Example: **`JWT_PARTIAL_SECRET=0f0d7c71-f0a0-421f-a0c4-9152072281b5`**
-    - Usage: It seems to be another secret key related to JWT, but its specific usage is not clear from the provided context.
-13. **EMAIL_URI**:
+    - Usage: Secret key used to sign and verify JWT partial tokens, typically on the process of verifying the user acount.
+13. **JWT_RECOVERY_TOKEN_SECRET**:
+    - Example: **`JWT_RECOVERY_TOKEN_SECRET=0f0d7c71-f0a0-421f-a0c4-9152072281b5`**
+    - Usage: Secret key used to sign and verify JWT recovery tokens, typically used on the password recovery process.
+14. **JWT_RECOVERY_TOKEN_EXPIRATION**:
+    - Example: **`JWT_RECOVERY_TOKEN_EXPIRATION=1d`**
+    - Usage: Specifies the expiration time for JWT recovery tokens. In this case, "1d" indicates a validity period of one day.
+15. **JWT_EXTERNAL_LOGIN_SECRET**:
+    - Example: **`JWT_EXTERNAL_LOGIN_SECRET=0f0d7c71-f0a0-421f-a0c4-9152072281b5`**
+    - Usage: Secret key used to sign and verify JWT external client tokens, used on the external login feature (auto-login on extension based on web's sessions).
+16. **JWT_EXTERNAL_LOGIN_EXPIRATION**:
+    - Example: **`JWT_EXTERNAL_LOGIN_EXPIRATION=5m`**
+    - Usage: Specifies the expiration time for JWT external client tokens. In this case, "5m" indicates a validity period of five minutes.
+17. **KNOWN_EXTERNAL_CLIENTS**:
+    - Example: **`KNOWN_EXTERNAL_CLIENTS='[{"externalClientName":"Chromium based Extension","externalClientId":"123456789"},...]'`**
+    - Usage: Specifies the list of external clients identifiers and names known to be able to login from the website session. These external clients are typically the extensions.
+18. **EMAIL_URI**:
     - Example: **`EMAIL_URI='smtps://mail@gmail.com:password@smtp.gmail.com'`**
     - Usage: SMTP mailer.
-14. **OPENAI_ACCESS_TOKEN**: To obtain a token, first, you need to create an account [here](https://auth0.openai.com/u/signup/identifier?state=hKFo2SBMLTJkWUFpa2dVWlBrTDdrTjdxbEp2ZGt6RmZBakdvbKFur3VuaXZlcnNhbC1sb2dpbqN0aWTZIEhleHE1SGYzQkdpMjhDM3d3dnFVZERmamF6TVpTMEpGo2NpZNkgRFJpdnNubTJNdTQyVDNLT3BxZHR3QjNOWXZpSFl6d0Q). Then, you can generate and get the access token [here](https://platform.openai.com/account/api-keys)
+19. **OPENAI_ACCESS_TOKEN**: To obtain a token, first, you need to create an account [here](https://auth0.openai.com/u/signup/identifier?state=hKFo2SBMLTJkWUFpa2dVWlBrTDdrTjdxbEp2ZGt6RmZBakdvbKFur3VuaXZlcnNhbC1sb2dpbqN0aWTZIEhleHE1SGYzQkdpMjhDM3d3dnFVZERmamF6TVpTMEpGo2NpZNkgRFJpdnNubTJNdTQyVDNLT3BxZHR3QjNOWXZpSFl6d0Q). Then, you can generate and get the access token [here](https://platform.openai.com/account/api-keys)
     - Example: **`OPENAI_ACCESS_TOKEN=sk-70s0d030f0thg043whsGsjBNV62skUiFz1LoPMm34BtrEs1I`**
     - Usage: Access token to use OpenAI's models.
-15. **AVOID_DOMAIN_LIST**:
+20. **AVOID_DOMAIN_LIST**:
     - Example: **`AVOID_DOMAIN_LIST='localhost, www.webtm.io, webtm.vercel.app'`**
     - Usage: Specifies the domains list to avoid to track.
-16. **CRON_SECRET**:
+21. **CRON_SECRET**:
     - Example: **`CRON_SECRET=4b2cfcf5-cf24-4fa7-b5d0-80920e3ff9ea`**
     - Usage: Used to secure recurring endpoints executed by scheduled tasks (cron jobs). The `CRON_SECRET` value is extracted from the bearer token in the backend and validated to authorize access to these endpoints. This environment variable is set in Vercel and sent in cron requests to securely authenticate the process.
-17. **DISCORD_LOG_WEBHOOK_URL**:
+22. **DISCORD_LOG_WEBHOOK_URL**:
     - Example: **`DISCORD_LOG_WEBHOOK_URL=https://discord.com/api/webhooks/your_webhook_url`**
     - Usage: The URL for the Discord webhook where logs will be sent. This should be the URL of the webhook in the Discord channel where you want to receive log messages.
-18. **DISCORD_LOG**:
+23. **DISCORD_LOG**:
     - Example: **`DISCORD_LOG=true`**
     - Usage: Enables or disables sending standard log messages to Discord. Set to `true` to activate or `false` to deactivate.
-19. **DISCORD_ERROR**:
+24. **DISCORD_ERROR**:
     - Example: **`DISCORD_ERROR=true`**
     - Usage: Enables or disables sending error messages to Discord. Set to `true` to send error logs to the specified Discord channel.
-20. **DISCORD_WARN**:
+25. **DISCORD_WARN**:
     - Example: **`DISCORD_WARN=true`**
     - Usage: Enables or disables sending warning messages to Discord. Set to `true` to send warning logs to the specified Discord channel.
-21. **DISCORD_DEBUG**:
+26. **DISCORD_DEBUG**:
     - Example: **`DISCORD_DEBUG=true`**
     - Usage: Enables or disables sending debug messages to Discord. Set to `true` to activate debug log messages in the Discord channel.
-22. **DISCORD_VERBOSE**:
+27. **DISCORD_VERBOSE**:
     - Example: **`DISCORD_VERBOSE=true`**
     - Usage: Enables or disables sending verbose messages to Discord. Set to `true` to send verbose logs to the Discord channel.
 
