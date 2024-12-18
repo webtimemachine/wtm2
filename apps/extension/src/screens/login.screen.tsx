@@ -20,6 +20,7 @@ import { apiClient } from '../utils/api.client';
 import { ROUTES } from '../hooks/use-extension-navigation';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const FRONTEND_URL = 'http://localhost:3000';
 
 interface NavigatorUABrandVersion {
   brand: string;
@@ -93,7 +94,7 @@ export const LoginScreen: React.FC = () => {
         userAgentData: JSON.stringify(window?.navigator?.userAgentData || '{}'),
       });
 
-      const webUrl = new URL('http://localhost:3000/external-login');
+      const webUrl = new URL(FRONTEND_URL + '/external-login');
       webUrl.searchParams.append(
         'externalClientToken',
         response.externalClientToken,

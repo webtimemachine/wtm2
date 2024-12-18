@@ -23,6 +23,8 @@ export default function ExternalLogin() {
   const externalClientToken = searchParams.get('externalClientToken') as string;
   const redirectUrl = searchParams.get('redirect') as string;
 
+  console.log(redirectUrl);
+
   const { basicUserInformationQuery } = useGetBasicUserInformation();
   const { getActiveSessionsQuery } = useGetActiveSessions();
   const { loginMutation } = useLogin();
@@ -35,30 +37,20 @@ export default function ExternalLogin() {
     useState<ExternalClientPayload>();
   const [currentSession, setCurrentSession] = useState<ActiveSession>();
 
-  // TODO: Detect if there is logged in user, if so, ask if want to login with the user that is already logged in.
-  // TODO: If user is logged in, show a button to login with the user that is already logged in (continue action) and a logout button.
-  // TODO: If not, show the login form.
-  // TODO: After login or the continue action send a message through the chrome api with the tokens and do the login in the extension.
-
-  // TODO: Use the current login layout.
-
-  // TODO: Propose project structure refactor to use nextjs layouts???
-  // Shared layout for authenticated and unauthenticated pages.
-  // Cleaner code, less repetition and more maintainable.
-
-  // TODO: Devicekey, useragent, useragentdata is really necessary?
-
-  // TODO: Open the popup from the web will be necessary?
-
   const handleContinue = async () => {
     if (!externalClientPayload) return;
 
     try {
-      await apiClient.externalLogin({
+      const response = await apiClient.externalLogin({
         deviceKey: externalClientPayload.deviceKey,
         userAgentData: externalClientPayload.userAgentData,
         userAgent: externalClientPayload.userAgent,
       });
+
+      const url = new URL(redirectUrl);
+      url.searchParams.append('c', btoa(JSON.stringify(response)));
+
+      window.open(url.toString(), '_blank');
     } catch (error) {
       console.log(error);
     }
