@@ -31,12 +31,24 @@ Before running tests, ensure the following components are up and running locally
 
 Refer to the main project README for instructions on setting up these components.
 
+#### Environment Variables
+
+Create a `.env` file in the `e2e` folder and configure the following environment variables:
+
+```dotenv
+E2E_TEST_EMAIL="user@email.com"
+E2E_TEST_PASSWORD="P4SSW0RD!"
+E2E_BACKEND_BASE_URL="https://wtm-back.vercel.app"
+E2E_WEBPAGE_BASE_URL="https://webtm.io"
+```
+
 ### Installation
 
 To install the dependencies required for E2E testing:
 
 ```sh
 npm install
+npx playwrigth install
 ```
 
 ---

@@ -11,8 +11,10 @@ import { JwtService } from '@nestjs/jwt';
 import {
   JWTPayload,
   JwtContext,
+  JwtExternalClientPayload,
   JwtRefreshContext,
   PartialJwtContext,
+  jwtExternalClientPayloadSchema,
 } from '../interfaces';
 
 import * as bcrypt from 'bcrypt';
@@ -31,14 +33,18 @@ import {
 } from '../../user/types';
 
 import {
+  ExternalLoginRequestDto,
   LoginResponseDto,
   RecoverPasswordDto,
   RecoveryValidationResponseDto,
   RestorePasswordDto,
+  RetrieveExternalLoginTokenDto,
+  RetrieveExternalLoginTokenResponseDto,
   SignUpRequestDto,
   SignUpResponseDto,
   ValidateRecoveryCodeDto,
   VerifyAccountDto,
+  VerifyExternalClientResponseDto,
 } from '../dtos';
 
 import { RefreshResponseDto } from '../dtos';
@@ -53,6 +59,8 @@ import { CompleteSessionDto } from '../dtos/complete-session.dto';
 import { LogoutSessionInputDto } from '../dtos/logout-session.input.dto';
 
 import { WebTMLogger } from '../../common/helpers/webtm-logger';
+
+import * as jwt from 'jsonwebtoken';
 
 @Injectable()
 export class AuthService {
@@ -722,5 +730,85 @@ export class AuthService {
 
       return { updatedUser };
     });
+  }
+
+  async retrieveExternalLoginToken(
+    body: RetrieveExternalLoginTokenDto,
+  ): Promise<RetrieveExternalLoginTokenResponseDto> {
+    const {
+      externalClientId: encodedExternalClientId,
+      deviceKey,
+      userAgent,
+      userAgentData,
+    } = body;
+
+    const knownExternalClients = appEnv.KNOWN_EXTERNAL_CLIENTS;
+    if (!knownExternalClients || knownExternalClients.length <= 0) {
+      throw new UnauthorizedException();
+    }
+    const externalClientId = atob(encodedExternalClientId);
+
+    for (const knownExternalClient of knownExternalClients) {
+      const externalClientName = knownExternalClient.externalClientName;
+      if (externalClientId == knownExternalClient.externalClientId) {
+        const externalClientToken = jwt.sign(
+          {
+            externalClientName,
+            deviceKey,
+            userAgent,
+            userAgentData,
+          },
+          appEnv.JWT_EXTERNAL_LOGIN_SECRET,
+          {
+            expiresIn: appEnv.JWT_EXTERNAL_LOGIN_EXPIRATION,
+          },
+        );
+
+        return { externalClientToken };
+      }
+    }
+
+    throw new UnauthorizedException();
+  }
+
+  async verifyExternalClient(
+    token?: string,
+  ): Promise<VerifyExternalClientResponseDto> {
+    if (!token) throw new UnauthorizedException();
+
+    let authorized = false;
+    try {
+      if (jwt.verify(token, appEnv.JWT_EXTERNAL_LOGIN_SECRET)) {
+        authorized = true;
+      }
+    } catch (error) {}
+
+    if (!authorized) throw new UnauthorizedException();
+
+    const externalClientPayloadValidation =
+      jwtExternalClientPayloadSchema.safeParse(jwt.decode(token));
+    if (!externalClientPayloadValidation.success) {
+      throw new BadRequestException();
+    }
+
+    const payload: JwtExternalClientPayload =
+      externalClientPayloadValidation.data;
+
+    return plainToInstance(VerifyExternalClientResponseDto, {
+      payload,
+    });
+  }
+
+  async externalLogin(
+    body: ExternalLoginRequestDto,
+    context: JwtContext,
+  ): Promise<LoginResponseDto> {
+    const { deviceKey, userAgent, userAgentData } = body;
+    return this.login(
+      deviceKey,
+      userAgent,
+      userAgentData,
+      context.user,
+    ) as unknown as LoginResponseDto;
   }
 }

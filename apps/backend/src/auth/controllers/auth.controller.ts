@@ -1,5 +1,6 @@
 import {
   Body,
+  Request,
   Controller,
   Get,
   HttpCode,
@@ -7,7 +8,7 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBody, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiHeader, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import {
   ApiBadRequestMessageResponse,
   ApiConflictMessageResponse,
@@ -24,16 +25,20 @@ import {
   JwtRequestContext,
 } from '../decorators';
 import {
+  ExternalLoginRequestDto,
   LoginRequestDto,
   LoginResponseDto,
   RecoverPasswordDto,
   RecoveryValidationResponseDto,
   RefreshResponseDto,
   RestorePasswordDto,
+  RetrieveExternalLoginTokenDto,
+  RetrieveExternalLoginTokenResponseDto,
   SignUpRequestDto,
   SignUpResponseDto,
   ValidateRecoveryCodeDto,
   VerifyAccountDto,
+  VerifyExternalClientResponseDto,
 } from '../dtos';
 import { LocalAuthGuard } from '../guards';
 import {
@@ -215,5 +220,53 @@ export class AuthController {
     @Body() logoutSessionInputDto: LogoutSessionInputDto,
   ): Promise<MessageResponse> {
     return this.authService.logoutSession(logoutSessionInputDto);
+  }
+
+  @ApiOkResponse({
+    status: 200,
+    type: RetrieveExternalLoginTokenResponseDto,
+  })
+  @HttpCode(200)
+  @Post('retrieve-external-login-token')
+  retrieveExternalLoginToken(
+    @Body() body: RetrieveExternalLoginTokenDto,
+  ): Promise<RetrieveExternalLoginTokenResponseDto> {
+    return this.authService.retrieveExternalLoginToken(body);
+  }
+
+  @ApiOkResponse({
+    status: 200,
+    type: VerifyExternalClientResponseDto,
+  })
+  @ApiHeader({
+    name: 'WebTM-Ext-Client-Authorization',
+    allowEmptyValue: false,
+    required: true,
+    description: '<b>(http, Bearer JWT)</b> | Please enter your JWT token',
+  })
+  @JwtAccessToken()
+  @HttpCode(200)
+  @Post('verify-external-client')
+  verifyExternalClient(
+    @Request() req,
+  ): Promise<VerifyExternalClientResponseDto> {
+    const token =
+      (req.headers['webtm-ext-client-authorization'] || '').split(' ')?.[1] ||
+      '';
+    return this.authService.verifyExternalClient(token);
+  }
+
+  @ApiOkResponse({
+    status: 200,
+    type: LoginResponseDto,
+  })
+  @JwtAccessToken()
+  @HttpCode(200)
+  @Post('external-login')
+  externalLogin(
+    @Body() body: ExternalLoginRequestDto,
+    @JwtRequestContext() context: JwtContext,
+  ): Promise<LoginResponseDto> {
+    return this.authService.externalLogin(body, context);
   }
 }

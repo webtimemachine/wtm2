@@ -10,3 +10,7 @@ export { SignUpResponseDto } from './signup-response.dto';
 export { UserResponseDto } from './user-response.dto';
 export { VerifyAccountDto } from './verify-account.dto';
 export { CompleteSessionDto } from './complete-session.dto';
+export { VerifyExternalClientResponseDto } from './verify-external-client-response.dto';
+export { ExternalLoginRequestDto } from './external-login-request.dto';
+export { RetrieveExternalLoginTokenDto } from './retrieve-external-login-token.dto';
+export { RetrieveExternalLoginTokenResponseDto } from './retrieve-external-login-token-response.dto';
