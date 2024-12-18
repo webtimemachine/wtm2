@@ -173,14 +173,6 @@ export const LoginScreen: React.FC = () => {
         >
           Sign In
         </Button>
-        {/* <Button
-          colorScheme='blue'
-          onClick={() => {
-            navigateTo('/testqueryparams/?name=agustin');
-          }}
-        >
-          test
-        </Button> */}
       </div>
     </div>
   );
