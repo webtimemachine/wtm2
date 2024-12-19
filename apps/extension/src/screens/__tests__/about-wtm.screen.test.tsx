@@ -1,24 +1,21 @@
 import React from 'react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { ChakraProvider } from '@chakra-ui/react';
-import { useNavigation } from '../../store';
 import { AboutWTMScreen } from '../about-wtm.screen';
-import { useModelsInformation } from '../../hooks';
+import { useModelsInformation, useExtensionNavigation } from '../../hooks';
 
-// Mock de useNavigation
-jest.mock('../../store', () => ({
-  useNavigation: jest.fn(),
-}));
 jest.mock('../../hooks', () => ({
   useModelsInformation: jest.fn(),
+  useExtensionNavigation: jest.fn(),
 }));
+
 (useModelsInformation as jest.Mock).mockReturnValue({
   text_processing_model: 'gpt-4o-mini',
   image_processing_model: 'gpt-4o-mini',
 });
 const mockNavigateBack = jest.fn();
-(useNavigation as jest.Mock).mockReturnValue({
-  navigateBack: mockNavigateBack,
+(useExtensionNavigation as jest.Mock).mockReturnValue({
+  goBack: mockNavigateBack,
 });
 
 // Mock de chrome.storage y chrome.runtime

@@ -11,7 +11,6 @@ export const useVerifyCode = () => {
   const verificationCodeMutation = useMutation({
     mutationFn: apiClient.verificationCode,
     onSuccess: (loginRes) => {
-      console.log(loginRes);
       notifyLogin();
       toast({
         title: 'Welcome!',
