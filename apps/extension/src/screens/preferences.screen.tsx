@@ -9,8 +9,11 @@ import {
   Spinner,
 } from '@chakra-ui/react';
 import { ArrowBackIcon } from '@chakra-ui/icons';
-import { useGetPreferences, useUpdatePreferences } from '../hooks';
-import { useExtensionNavigation } from '../hooks/use-extension-navigation';
+import {
+  useGetPreferences,
+  useUpdatePreferences,
+  useExtensionNavigation,
+} from '../hooks';
 import { updateIcon } from '../utils/updateIcon';
 
 export const PreferencesScreen: React.FC<object> = () => {
