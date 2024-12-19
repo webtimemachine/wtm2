@@ -37,6 +37,11 @@ jest.mock('../../hooks', () => ({
   useExtensionNavigation: jest.fn(),
 }));
 
+const mockNavigateTo = jest.fn();
+(useExtensionNavigation as jest.Mock).mockReturnValue({
+  navigateTo: mockNavigateTo,
+});
+
 // Mock de useAuthStore
 jest.mock('../../store', () => ({
   useAuthStore: jest.fn(),
@@ -53,6 +58,8 @@ jest.mock('@wtm/api', () => ({
 jest.mock('../../utils/updateIcon', () => ({
   updateIcon: jest.fn(),
 }));
+
+const mockDeviceKey = 'mockDeviceKey';
 
 global.chrome = {
   action: {
@@ -118,14 +125,8 @@ const mockLoginMutation = {
   },
 };
 
-const mockNavigateTo = jest.fn();
-const mockDeviceKey = 'mockDeviceKey';
-
 (useLogin as jest.Mock).mockReturnValue({ loginMutation: mockLoginMutation });
 (useAuthStore as jest.Mock).mockReturnValue({ deviceKey: mockDeviceKey });
-(useExtensionNavigation as jest.Mock).mockReturnValue({
-  navigateTo: mockNavigateTo,
-});
 
 const customRender = (ui: React.ReactElement) => {
   return render(<ChakraProvider>{ui}</ChakraProvider>);
