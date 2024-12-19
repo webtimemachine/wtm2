@@ -7,10 +7,8 @@ import { useLogout } from '../hooks';
 import { LuSettings2, LuPersonStanding } from 'react-icons/lu';
 import { BsPersonLock, BsInfoCircle } from 'react-icons/bs';
 import { FaRegTrashAlt, FaSignOutAlt } from 'react-icons/fa';
-import {
-  ROUTES,
-  useExtensionNavigation,
-} from '../hooks/use-extension-navigation';
+import { ROUTES } from '../hooks/use-extension-navigation';
+import { useExtensionNavigation } from '../hooks';
 
 export const SettingsScreen: React.FC<object> = () => {
   const { navigateTo } = useExtensionNavigation();

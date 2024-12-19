@@ -2,7 +2,7 @@ import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { ChakraProvider } from '@chakra-ui/react';
 import { useNavigation } from '../../store';
-import { useLogout } from '../../hooks';
+import { useLogout, useExtensionNavigation } from '../../hooks';
 import { SettingsScreen } from '../settings.screen';
 
 // Mock de useNavigation y useLogout
@@ -12,15 +12,20 @@ jest.mock('../../store', () => ({
 
 jest.mock('../../hooks', () => ({
   useLogout: jest.fn(),
+  useExtensionNavigation: jest.fn(),
 }));
 
-const mockNavigateBack = jest.fn();
 const mockNavigateTo = jest.fn();
+(useExtensionNavigation as jest.Mock).mockReturnValue({
+  navigateTo: mockNavigateTo,
+  goBack: jest.fn(),
+});
+
+const mockNavigateBack = jest.fn();
 const mockLogout = jest.fn();
 
 (useNavigation as jest.Mock).mockReturnValue({
   navigateBack: mockNavigateBack,
-  navigateTo: mockNavigateTo,
 });
 
 (useLogout as jest.Mock).mockReturnValue({
@@ -48,32 +53,23 @@ describe('SettingsScreen', () => {
     expect(screen.getByText('Logout')).toBeInTheDocument();
   });
 
-  test('calls navigateBack when back button is clicked', () => {
-    customRender(<SettingsScreen />);
-
-    const backButton = screen.getByLabelText('Settings icon');
-    fireEvent.click(backButton);
-
-    expect(mockNavigateBack).toHaveBeenCalled();
-  });
-
   test('navigates to correct screens when options are clicked', () => {
     customRender(<SettingsScreen />);
 
     fireEvent.click(screen.getByText('Profile'));
-    expect(mockNavigateTo).toHaveBeenCalledWith('profile');
+    expect(mockNavigateTo).toHaveBeenCalledWith('/profile');
 
     fireEvent.click(screen.getByText('Preferences'));
-    expect(mockNavigateTo).toHaveBeenCalledWith('preferences');
+    expect(mockNavigateTo).toHaveBeenCalledWith('/preferences');
 
     fireEvent.click(screen.getByText('Active Sessions'));
-    expect(mockNavigateTo).toHaveBeenCalledWith('active-sessions');
+    expect(mockNavigateTo).toHaveBeenCalledWith('/active-sessions');
 
     fireEvent.click(screen.getByText('About WebTM'));
-    expect(mockNavigateTo).toHaveBeenCalledWith('about-wtm');
+    expect(mockNavigateTo).toHaveBeenCalledWith('/about-wtm');
 
     fireEvent.click(screen.getByText('Delete account'));
-    expect(mockNavigateTo).toHaveBeenCalledWith('confirm-delete-account');
+    expect(mockNavigateTo).toHaveBeenCalledWith('/confirm-delete-account');
   });
 
   test('calls logout when logout button is clicked', () => {
