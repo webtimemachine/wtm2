@@ -23,6 +23,10 @@ jest.mock('@wtm/utils', () => ({
   generateSecurePassword: jest.fn(),
 }));
 
+jest.mock('wouter', () => ({
+  useLocation: jest.fn(),
+}));
+
 const mockNavigateBack = jest.fn();
 const mockMutate = jest.fn();
 

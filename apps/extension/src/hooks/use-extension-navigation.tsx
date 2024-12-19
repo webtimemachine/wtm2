@@ -1,4 +1,4 @@
-import { useBrowserLocation } from 'wouter/use-browser-location';
+import { useLocation } from 'wouter';
 
 export enum ROUTES {
   LOGIN = '/',
@@ -17,7 +17,7 @@ export enum ROUTES {
 }
 
 export const useExtensionNavigation = () => {
-  const [location, setLocation] = useBrowserLocation();
+  const [location, setLocation] = useLocation();
 
   const goBack = () => {
     if (window.history.length > 1) {

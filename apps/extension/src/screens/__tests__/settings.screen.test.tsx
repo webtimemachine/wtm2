@@ -15,6 +15,10 @@ jest.mock('../../hooks', () => ({
   useExtensionNavigation: jest.fn(),
 }));
 
+jest.mock('wouter', () => ({
+  useLocation: jest.fn(),
+}));
+
 const mockNavigateTo = jest.fn();
 (useExtensionNavigation as jest.Mock).mockReturnValue({
   navigateTo: mockNavigateTo,
