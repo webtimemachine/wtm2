@@ -9,17 +9,14 @@ import {
   FormErrorMessage,
 } from '@chakra-ui/react';
 import { ServerUrlEditable } from '../components';
-import { useLogin } from '../hooks';
+import { useLogin, useExtensionNavigation } from '../hooks';
 import { useAuthStore } from '../store';
 import { isLoginRes, LoginResponse } from '@wtm/api';
 
 import clsx from 'clsx';
 import { updateIcon } from '../utils/updateIcon';
 
-import {
-  ROUTES,
-  useExtensionNavigation,
-} from '../hooks/use-extension-navigation';
+import { ROUTES } from '../hooks/use-extension-navigation';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
