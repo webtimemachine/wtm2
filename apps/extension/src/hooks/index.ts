@@ -22,3 +22,5 @@ export { useChangeUserDisplayName } from './use-change-user-displayname.hook';
 export { useChangeUserPassword } from './use-change-user-password.hook';
 export { useModelsInformation } from './use-system-models.hook';
 export { useBulkDeleteNavigationEntries } from './use-bulk-delete.hook';
+export { useHashLocation } from './use-hash-location.hook';
+export { useExtensionNavigation } from './use-extension-navigation';

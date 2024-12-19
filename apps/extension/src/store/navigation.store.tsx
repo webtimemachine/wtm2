@@ -99,7 +99,7 @@ const useNavigationStore = create<NavigationStore>()((set) => ({
       };
     }),
 }));
-
+// TODO: Removed/Deprecated hook
 export const useNavigation = () => {
   const navigationStore = useNavigationStore();
   const { notifyLogout } = useAuthStore((state) => state);

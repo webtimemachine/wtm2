@@ -12,6 +12,8 @@ const config: JestConfigWithTsJest = {
     '\\.(gif|ttf|eot|svg|png)$': '<rootDir>/__mocks__/fileMock.ts',
     // '^.+\\.(css|less|scss|sass)$': '<rootDir>/config/jest/styleMock.ts',
     'react-markdown': '<rootDir>/__mocks__/react-markdown.ts',
+    'wouter/use-browser-location':
+      '<rootDir>/__mocks__/use-browser-location.ts',
   },
   setupFilesAfterEnv: ['./config/jest/setupTests.ts'],
   moduleFileExtensions: [
