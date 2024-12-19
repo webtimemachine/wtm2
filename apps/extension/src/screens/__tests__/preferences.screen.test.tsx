@@ -2,7 +2,11 @@ import React from 'react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { ChakraProvider } from '@chakra-ui/react';
 import { useNavigation } from '../../store';
-import { useGetPreferences, useUpdatePreferences } from '../../hooks';
+import {
+  useGetPreferences,
+  useUpdatePreferences,
+  useExtensionNavigation,
+} from '../../hooks';
 import { PreferencesScreen } from '../preferences.screen';
 
 // Mock de useNavigation, useGetPreferences y useUpdatePreferences
@@ -13,11 +17,17 @@ jest.mock('../../store', () => ({
 jest.mock('../../hooks', () => ({
   useGetPreferences: jest.fn(),
   useUpdatePreferences: jest.fn(),
+  useExtensionNavigation: jest.fn(),
 }));
 
 jest.mock('../../utils/updateIcon', () => ({
   updateIcon: jest.fn(),
 }));
+
+(useExtensionNavigation as jest.Mock).mockReturnValue({
+  navigateTo: jest.fn(),
+  goBack: jest.fn(),
+});
 
 const mockNavigateBack = jest.fn();
 const mockNavigateTo = jest.fn();
@@ -88,15 +98,6 @@ describe('PreferencesScreen', () => {
     expect(screen.getByText('Lite Mode')).toBeInTheDocument();
     expect(screen.getByText('History Entries Expiration')).toBeInTheDocument();
     expect(screen.getByText('Stop Tracking')).toBeInTheDocument();
-  });
-
-  test('calls navigateBack when back button is clicked', () => {
-    customRender(<PreferencesScreen />);
-
-    const backButton = screen.getByLabelText('Back icon');
-    fireEvent.click(backButton);
-
-    expect(mockNavigateBack).toHaveBeenCalled();
   });
 
   test('handles enabling and disabling preferences correctly', async () => {

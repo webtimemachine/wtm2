@@ -15,8 +15,7 @@ import {
   Icon,
 } from '@chakra-ui/icons';
 import { MdLogout } from 'react-icons/md';
-
-import { useNavigation } from '../store';
+import { useExtensionNavigation } from '../hooks/use-extension-navigation';
 import { ActiveSession } from '@wtm/api';
 import {
   useCloseActiveSession,
@@ -42,7 +41,7 @@ const moveCurrentSessionToFirst = (arr: ActiveSession[]) => {
 };
 
 export const ActiveSessionsScreen: React.FC<object> = () => {
-  const { navigateBack } = useNavigation();
+  const { goBack } = useExtensionNavigation();
   const { getActiveSessionsQuery } = useGetActiveSessions();
   const { closeActiveSessionMutation } = useCloseActiveSession();
   const { updateDeviceAliasMutation } = useUpdateDeviceAlias();
@@ -189,43 +188,41 @@ export const ActiveSessionsScreen: React.FC<object> = () => {
   const [currentSession, ...restSessions] = sessions;
 
   return (
-    <>
-      <div className='flex flex-col px-5 py-3 items-center w-full'>
-        <div className='flex w-full justify-start pb-4 gap-4 items-center'>
-          <IconButton aria-label='Back icon' onClick={() => navigateBack()}>
-            <ArrowBackIcon boxSize={5} />
-          </IconButton>
-          <div className='flex w-full justify-center pr-[40px]'>
-            <Text fontSize={'xx-large'} fontWeight={'bold'}>
-              Active Sessions
-            </Text>
+    <div className='flex flex-col px-5 py-3 items-center w-full'>
+      <div className='flex w-full justify-start pb-4 gap-4 items-center'>
+        <IconButton aria-label='Back icon' onClick={goBack}>
+          <ArrowBackIcon boxSize={5} />
+        </IconButton>
+        <div className='flex w-full justify-center pr-[40px]'>
+          <Text fontSize={'xx-large'} fontWeight={'bold'}>
+            Active Sessions
+          </Text>
+        </div>
+      </div>
+      {getActiveSessionsQuery.isLoading ? (
+        <div className='flex w-full h-full items-center justify-center'>
+          <Spinner size={'lg'} />
+        </div>
+      ) : (
+        <div className='flex flex-col w-full h-full'>
+          <Text fontSize={'medium'}>
+            Below you can see the complete list of active sessions:
+          </Text>
+
+          {currentSession && (
+            <div className='pt-5 pr-3'>
+              <ActiveSessionRow session={currentSession} />
+            </div>
+          )}
+          <Divider className='my-2' />
+          <div className='flex flex-col gap-2 w-full h-full overflow-y-auto scrollbar pr-1'>
+            {restSessions &&
+              restSessions.map((session) => (
+                <ActiveSessionRow session={session} />
+              ))}
           </div>
         </div>
-        {getActiveSessionsQuery.isLoading ? (
-          <div className='flex w-full h-full items-center justify-center'>
-            <Spinner size={'lg'} />
-          </div>
-        ) : (
-          <div className='flex flex-col w-full h-full'>
-            <Text fontSize={'medium'}>
-              Below you can see the complete list of active sessions:
-            </Text>
-
-            {currentSession && (
-              <div className='pt-5 pr-3'>
-                <ActiveSessionRow session={currentSession} />
-              </div>
-            )}
-            <Divider className='my-2' />
-            <div className='flex flex-col gap-2 w-full h-full overflow-y-auto scrollbar pr-1'>
-              {restSessions &&
-                restSessions.map((session) => (
-                  <ActiveSessionRow session={session} />
-                ))}
-            </div>
-          </div>
-        )}
-      </div>
-    </>
+      )}
+    </div>
   );
 };
