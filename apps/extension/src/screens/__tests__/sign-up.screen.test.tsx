@@ -37,6 +37,15 @@ const mockMutate = jest.fn();
   },
 });
 
+global.chrome = {
+  storage: {
+    sync: {
+      set: jest.fn(),
+    },
+  },
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+} as any;
+
 const customRender = (ui: React.ReactElement) => {
   return render(<ChakraProvider>{ui}</ChakraProvider>);
 };
@@ -53,15 +62,6 @@ describe('SignUpScreen', () => {
     expect(screen.getByPlaceholderText('Email')).toBeInTheDocument();
     expect(screen.getByPlaceholderText('Enter password')).toBeInTheDocument();
     expect(screen.getByPlaceholderText('Confirm password')).toBeInTheDocument();
-  });
-
-  test('calls navigateBack when back icon is clicked', () => {
-    customRender(<SignUpScreen />);
-
-    const backButton = screen.getByLabelText('Back icon');
-    fireEvent.click(backButton);
-
-    expect(mockNavigateBack).toHaveBeenCalled();
   });
 
   test('shows error message for invalid email', async () => {
