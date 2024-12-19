@@ -40,6 +40,10 @@ jest.mock('../../utils/updateIcon', () => ({
   updateIcon: jest.fn(),
 }));
 
+jest.mock('wouter', () => ({
+  useLocation: jest.fn(),
+}));
+
 const mockDeviceKey = 'mockDeviceKey';
 
 global.chrome = {

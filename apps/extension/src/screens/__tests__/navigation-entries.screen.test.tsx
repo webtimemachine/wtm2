@@ -31,6 +31,10 @@ jest.mock('../../utils/updateIcon', () => ({
   updateIcon: jest.fn(),
 }));
 
+jest.mock('wouter', () => ({
+  useLocation: jest.fn(),
+}));
+
 const mockNavigateTo = jest.fn();
 const mockMutate = jest.fn();
 const mockRefetch = jest.fn();
