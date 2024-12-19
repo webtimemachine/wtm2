@@ -24,15 +24,12 @@ import {
 import { ArrowBackIcon, InfoIcon } from '@chakra-ui/icons';
 
 import { ServerUrlEditable } from '../components';
-import { useSignUp } from '../hooks';
+import { useSignUp, useExtensionNavigation } from '../hooks';
 
 import clsx from 'clsx';
 import { generateSecurePassword } from '@wtm/utils';
 import { screenStore } from '../store/screens.store';
-import {
-  ROUTES,
-  useExtensionNavigation,
-} from '../hooks/use-extension-navigation';
+import { ROUTES } from '../hooks/use-extension-navigation';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[^\s]{8,20}$/;

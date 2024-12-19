@@ -1,8 +1,7 @@
 import React from 'react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { ChakraProvider } from '@chakra-ui/react';
-import { useNavigation } from '../../store';
-import { useSignUp } from '../../hooks';
+import { useSignUp, useExtensionNavigation } from '../../hooks';
 import { SignUpScreen } from '../sign-up.screen';
 
 // Mock de ServerUrlEditable
@@ -17,6 +16,7 @@ jest.mock('../../store', () => ({
 
 jest.mock('../../hooks', () => ({
   useSignUp: jest.fn(),
+  useExtensionNavigation: jest.fn(),
 }));
 
 jest.mock('@wtm/utils', () => ({
@@ -26,8 +26,8 @@ jest.mock('@wtm/utils', () => ({
 const mockNavigateBack = jest.fn();
 const mockMutate = jest.fn();
 
-(useNavigation as jest.Mock).mockReturnValue({
-  navigateBack: mockNavigateBack,
+(useExtensionNavigation as jest.Mock).mockReturnValue({
+  goBack: mockNavigateBack,
 });
 
 (useSignUp as jest.Mock).mockReturnValue({

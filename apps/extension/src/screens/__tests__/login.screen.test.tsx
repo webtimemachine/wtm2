@@ -1,10 +1,11 @@
 import React from 'react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { ChakraProvider } from '@chakra-ui/react';
-import { useLogin } from '../../hooks';
-import { useAuthStore, useNavigation } from '../../store';
+import { useLogin, useExtensionNavigation } from '../../hooks';
+import { useAuthStore } from '../../store';
 import { LoginScreen } from '../login.screen';
 import { isLoginRes } from '@wtm/api';
+import { ROUTES } from '../../hooks/use-extension-navigation';
 
 interface NavigatorUABrandVersion {
   brand: string;
@@ -33,6 +34,7 @@ jest.mock('../../components', () => ({
 // Mock del hook useLogin
 jest.mock('../../hooks', () => ({
   useLogin: jest.fn(),
+  useExtensionNavigation: jest.fn(),
 }));
 
 // Mock de useAuthStore
@@ -121,7 +123,9 @@ const mockDeviceKey = 'mockDeviceKey';
 
 (useLogin as jest.Mock).mockReturnValue({ loginMutation: mockLoginMutation });
 (useAuthStore as jest.Mock).mockReturnValue({ deviceKey: mockDeviceKey });
-(useNavigation as jest.Mock).mockReturnValue({ navigateTo: mockNavigateTo });
+(useExtensionNavigation as jest.Mock).mockReturnValue({
+  navigateTo: mockNavigateTo,
+});
 
 const customRender = (ui: React.ReactElement) => {
   return render(<ChakraProvider>{ui}</ChakraProvider>);
@@ -210,7 +214,7 @@ describe('LoginScreen', () => {
     customRender(<LoginScreen />);
 
     await waitFor(() =>
-      expect(mockNavigateTo).toHaveBeenCalledWith('navigation-entries'),
+      expect(mockNavigateTo).toHaveBeenCalledWith(ROUTES.NAVIGATION_ENTRIES),
     );
   });
 
@@ -222,7 +226,7 @@ describe('LoginScreen', () => {
     customRender(<LoginScreen />);
 
     await waitFor(() =>
-      expect(mockNavigateTo).toHaveBeenCalledWith('validate-email'),
+      expect(mockNavigateTo).toHaveBeenCalledWith(ROUTES.VALIDATE_EMAIL),
     );
   });
 
@@ -252,7 +256,7 @@ describe('LoginScreen', () => {
 
     fireEvent.click(forgotPasswordLink);
 
-    expect(mockNavigateTo).toHaveBeenCalledWith('forgot-password');
+    expect(mockNavigateTo).toHaveBeenCalledWith(ROUTES.FORGOT_PASSWORD);
   });
 
   test('navigates to sign up screen', () => {
@@ -262,6 +266,6 @@ describe('LoginScreen', () => {
 
     fireEvent.click(signUpLink);
 
-    expect(mockNavigateTo).toHaveBeenCalledWith('sign-up');
+    expect(mockNavigateTo).toHaveBeenCalledWith(ROUTES.SIGN_UP);
   });
 });
