@@ -45,7 +45,7 @@ import clsx from 'clsx';
 import { updateIcon } from '../utils/updateIcon';
 import Markdown from 'react-markdown';
 import { BiTrash } from 'react-icons/bi';
-import { useExtensionNavigation } from '../hooks/use-extension-navigation';
+import { useExtensionNavigation } from '../hooks';
 import { ROUTES } from '../hooks/use-extension-navigation';
 
 const getRandomColor = (): string => {
