@@ -224,6 +224,13 @@ export const LoginScreen: React.FC = () => {
         >
           Sign In
         </Button>
+        <Button
+          onClick={handleExternalLogin}
+          isLoading={loadingExternalLogin}
+          disabled={loadingExternalLogin}
+        >
+          External Login
+        </Button>
       </div>
     </div>
   );
