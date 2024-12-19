@@ -20,6 +20,25 @@ import { ROUTES } from '../hooks/use-extension-navigation';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+interface NavigatorUABrandVersion {
+  brand: string;
+  version: string;
+}
+
+interface NavigatorUAData {
+  brands: NavigatorUABrandVersion[];
+  mobile: boolean;
+  platform: string;
+  getHighEntropyValues(hints: string[]): Promise<Record<string, string>>;
+  toJSON(): object;
+}
+
+declare global {
+  interface Navigator {
+    userAgentData?: NavigatorUAData;
+  }
+}
+
 export const LoginScreen: React.FC = () => {
   updateIcon(false);
 

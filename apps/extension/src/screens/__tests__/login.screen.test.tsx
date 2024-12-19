@@ -7,25 +7,6 @@ import { LoginScreen } from '../login.screen';
 import { isLoginRes } from '@wtm/api';
 import { ROUTES } from '../../hooks/use-extension-navigation';
 
-interface NavigatorUABrandVersion {
-  brand: string;
-  version: string;
-}
-
-interface NavigatorUAData {
-  brands: NavigatorUABrandVersion[];
-  mobile: boolean;
-  platform: string;
-  getHighEntropyValues(hints: string[]): Promise<Record<string, string>>;
-  toJSON(): object;
-}
-
-declare global {
-  interface Navigator {
-    userAgentData?: NavigatorUAData;
-  }
-}
-
 // Mock de ServerUrlEditable
 jest.mock('../../components', () => ({
   ServerUrlEditable: jest.fn(() => <div>ServerUrlEditable Mock</div>),
@@ -195,7 +176,10 @@ describe('LoginScreen', () => {
       password: 'password',
       deviceKey: { deviceKey: mockDeviceKey },
       userAgent: window.navigator.userAgent,
-      userAgentData: JSON.stringify(window.navigator.userAgentData || '{}'),
+      userAgentData: JSON.stringify(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (window.navigator as any)?.userAgentData || '{}',
+      ),
     });
   });
 
