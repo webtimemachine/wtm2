@@ -18,7 +18,7 @@ import { useRecoverPassword } from '../hooks';
 
 import { screenStore } from '../store/screens.store';
 import {
-  ROUTES,
+  ExtensionRoutes,
   useExtensionNavigation,
 } from '../hooks/use-extension-navigation';
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -61,7 +61,7 @@ export const ForgotPasswordScreen: React.FC = () => {
   }, []);
   useEffect(() => {
     if (recoverPasswordMutation.isSuccess) {
-      navigateTo(ROUTES.VALIDATE_RECOVERY_CODE);
+      navigateTo(ExtensionRoutes.VALIDATE_RECOVERY_CODE);
       notifyRecoveryCodeSent(email);
     }
   }, [
@@ -78,7 +78,7 @@ export const ForgotPasswordScreen: React.FC = () => {
           aria-label='Back icon'
           onClick={() => {
             screenStore.getState().goBack();
-            navigateTo(ROUTES.LOGIN);
+            navigateTo(ExtensionRoutes.LOGIN);
           }}
         >
           <ArrowBackIcon boxSize={5} />

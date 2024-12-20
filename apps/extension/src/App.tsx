@@ -16,6 +16,7 @@ import {
 } from './screens';
 import { ConfirmDeleteAccountScreen } from './screens/confirm-delete-account.screen';
 import { useHashLocation } from './hooks';
+import { ExternalLoginScreen } from './screens/external-login';
 
 const App: React.FC = () => {
   return (
@@ -47,6 +48,7 @@ const App: React.FC = () => {
           />
           <Route path='/about-wtm' component={AboutWTMScreen} />
           <Route path='/profile' component={ProfileScreen} />
+          <Route path='/external-login/*' component={ExternalLoginScreen} />
           {/* <Route
             path={'/testqueryparams/*'}
             component={() => {

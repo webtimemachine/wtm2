@@ -6,7 +6,7 @@ import { LuLogIn } from 'react-icons/lu';
 import { useValidateRecoveryCode } from '../hooks';
 import { useAuthStore } from '../store';
 import {
-  ROUTES,
+  ExtensionRoutes,
   useExtensionNavigation,
 } from '../hooks/use-extension-navigation';
 
@@ -23,7 +23,7 @@ export const ValidateRecoveryCode: React.FC<object> = () => {
 
   useEffect(() => {
     if (validateRecoveryCodeMutation.isSuccess) {
-      navigateTo(ROUTES.RECOVERY_NEW_PASSWORD);
+      navigateTo(ExtensionRoutes.RECOVERY_NEW_PASSWORD);
       notifyRecoveryCodeValidated();
     }
   }, [
@@ -44,7 +44,7 @@ export const ValidateRecoveryCode: React.FC<object> = () => {
       <div className='flex w-full justify-start pb-4 gap-4 items-center'>
         <IconButton
           aria-label='Back icon'
-          onClick={() => navigateTo(ROUTES.LOGIN)}
+          onClick={() => navigateTo(ExtensionRoutes.LOGIN)}
         >
           <Icon className='rotate-180' as={LuLogIn} boxSize={5} />
         </IconButton>

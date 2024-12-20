@@ -1,6 +1,6 @@
 import { useLocation } from 'wouter';
 
-export enum ROUTES {
+export enum ExtensionRoutes {
   LOGIN = '/',
   NAVIGATION_ENTRIES = '/navigation-entries',
   SETTINGS = '/settings',
@@ -27,17 +27,13 @@ export const useExtensionNavigation = () => {
     }
   };
 
-  const navigateTo = (path: ROUTES, replace?: boolean) => {
+  const navigateTo = (path: ExtensionRoutes, replace?: boolean) => {
     setLocation(path, { replace });
-  };
-
-  const currentRoute = () => {
-    return location;
   };
 
   return {
     goBack,
     navigateTo,
-    currentRoute,
+    currentRoute: location,
   };
 };
