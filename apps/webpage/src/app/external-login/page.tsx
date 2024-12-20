@@ -29,7 +29,7 @@ export default function ExternalLogin() {
 
   const authState = readAuthStateFromLocal();
 
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const [externalClientPayload, setExternalClientPayload] =
     useState<ExternalClientPayload>();
@@ -97,7 +97,7 @@ export default function ExternalLogin() {
       return;
     }
     return getBrowserIconFromDevice(currentSession.userDevice.device);
-  }, []);
+  }, [currentSession]);
 
   const deviceName = useMemo(() => {
     if (!currentSession) {
