@@ -23,8 +23,6 @@ export default function ExternalLogin() {
   const externalClientToken = searchParams.get('externalClientToken') as string;
   const redirectUrl = searchParams.get('redirect') as string;
 
-  console.log(redirectUrl);
-
   const { basicUserInformationQuery } = useGetBasicUserInformation();
   const { getActiveSessionsQuery } = useGetActiveSessions();
   const { loginMutation } = useLogin();
@@ -47,8 +45,15 @@ export default function ExternalLogin() {
         userAgent: externalClientPayload.userAgent,
       });
 
-      const url = new URL(redirectUrl);
-      url.searchParams.append('c', btoa(JSON.stringify(response)));
+      const credentials = {
+        accessToken: response.accessToken,
+        refreshToken: response.refreshToken,
+        serverUrl: authState?.serverUrl,
+      };
+
+      const url = new URL(
+        redirectUrl + '/?c=' + btoa(JSON.stringify(credentials)),
+      );
 
       window.open(url.toString(), '_blank');
     } catch (error) {

@@ -46,7 +46,7 @@ import { updateIcon } from '../utils/updateIcon';
 import Markdown from 'react-markdown';
 import { BiTrash } from 'react-icons/bi';
 import { useExtensionNavigation } from '../hooks';
-import { ROUTES } from '../hooks/use-extension-navigation';
+import { ExtensionRoutes } from '../hooks/use-extension-navigation';
 
 const getRandomColor = (): string => {
   const colorTags: { [key: number]: string } = {
@@ -359,7 +359,7 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
             </div>
             <IconButton
               aria-label='Back icon'
-              onClick={() => navigateTo(ROUTES.SETTINGS)}
+              onClick={() => navigateTo(ExtensionRoutes.SETTINGS)}
             >
               <SettingsIcon boxSize={5} />
             </IconButton>

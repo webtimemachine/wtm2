@@ -7,7 +7,7 @@ import { useAuthStore } from '../store';
 import { ServerUrlEditable } from '../components';
 import { useResendCode, useVerifyCode } from '../hooks';
 import {
-  ROUTES,
+  ExtensionRoutes,
   useExtensionNavigation,
 } from '../hooks/use-extension-navigation';
 
@@ -23,7 +23,7 @@ export const ValidateEmailScreen: React.FC<object> = () => {
 
   useEffect(() => {
     if (verificationCodeMutation.isSuccess) {
-      navigateTo(ROUTES.NAVIGATION_ENTRIES);
+      navigateTo(ExtensionRoutes.NAVIGATION_ENTRIES);
     }
 
     if (verificationCodeMutation.isError) {
@@ -56,7 +56,7 @@ export const ValidateEmailScreen: React.FC<object> = () => {
       <div className='flex w-full justify-start pb-4 gap-4 items-center'>
         <IconButton
           aria-label='Back icon'
-          onClick={() => navigateTo(ROUTES.LOGIN)}
+          onClick={() => navigateTo(ExtensionRoutes.LOGIN)}
         >
           <Icon className='rotate-180' as={LuLogIn} boxSize={5} />
         </IconButton>

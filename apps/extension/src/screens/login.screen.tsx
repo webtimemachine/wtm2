@@ -17,7 +17,7 @@ import clsx from 'clsx';
 import { updateIcon } from '../utils/updateIcon';
 import { apiClient } from '../utils/api.client';
 
-import { ROUTES } from '../hooks/use-extension-navigation';
+import { ExtensionRoutes } from '../hooks/use-extension-navigation';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const FRONTEND_URL = 'http://localhost:3000';
@@ -101,7 +101,9 @@ export const LoginScreen: React.FC = () => {
       );
       webUrl.searchParams.append(
         'redirect',
-        'chrome-extension://' + chrome.runtime.id + '/index.html',
+        'chrome-extension://' +
+          chrome.runtime.id +
+          '/index.html#/external-login',
       );
 
       chrome.tabs.create({
@@ -126,14 +128,14 @@ export const LoginScreen: React.FC = () => {
 
       chrome.runtime.sendNativeMessage('com.ttt246llc.wtm', message);
 
-      navigateTo(ROUTES.NAVIGATION_ENTRIES);
+      navigateTo(ExtensionRoutes.NAVIGATION_ENTRIES);
     };
 
     if (loginMutation.isSuccess) {
       if (isLoginRes(loginMutation.data)) {
         processLogin(loginMutation.data);
       } else {
-        navigateTo(ROUTES.VALIDATE_EMAIL);
+        navigateTo(ExtensionRoutes.VALIDATE_EMAIL);
       }
     }
   }, [loginMutation.isSuccess, loginMutation.data, navigateTo]);
@@ -202,14 +204,14 @@ export const LoginScreen: React.FC = () => {
         <Text
           fontSize='small'
           className='hover:cursor-pointer hover:underline'
-          onClick={() => navigateTo(ROUTES.FORGOT_PASSWORD)}
+          onClick={() => navigateTo(ExtensionRoutes.FORGOT_PASSWORD)}
         >
           Forgot password?
         </Text>
         <Text
           fontSize='small'
           className='hover:cursor-pointer hover:underline'
-          onClick={() => navigateTo(ROUTES.SIGN_UP)}
+          onClick={() => navigateTo(ExtensionRoutes.SIGN_UP)}
         >
           Sign up
         </Text>

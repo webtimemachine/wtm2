@@ -14,7 +14,6 @@ export function useHashLocation(): [string, (to: string) => void] {
 
       const { screenStack, isLoggedIn } = screenStore.getState();
       const persistedScreen = screenStack[screenStack.length - 1];
-      console.log(persistedScreen, isLoggedIn, newLocation);
       if (isLoggedIn) {
         if (persistedScreen !== '/') {
           window.location.hash = persistedScreen;
