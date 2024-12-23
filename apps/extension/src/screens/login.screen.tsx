@@ -18,6 +18,7 @@ import { updateIcon } from '../utils/updateIcon';
 import { apiClient } from '../utils/api.client';
 
 import { ExtensionRoutes } from '../hooks/use-extension-navigation';
+import { readAuthStateFromLocal } from '../store/auth.store';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const FRONTEND_URL = 'http://localhost:3000';
@@ -47,6 +48,7 @@ export const LoginScreen: React.FC = () => {
   const deviceKey = useAuthStore((state) => state.deviceKey);
   const { loginMutation } = useLogin();
   const { navigateTo } = useExtensionNavigation();
+  const authState = readAuthStateFromLocal();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -139,6 +141,14 @@ export const LoginScreen: React.FC = () => {
       }
     }
   }, [loginMutation.isSuccess, loginMutation.data, navigateTo]);
+
+  useEffect(() => {
+    console.log('authState', authState);
+
+    if (authState?.isLoggedIn) {
+      navigateTo(ExtensionRoutes.NAVIGATION_ENTRIES);
+    }
+  }, [authState]);
 
   return (
     <div className='flex flex-col p-8 pt-10 items-center w-full'>

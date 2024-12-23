@@ -21,7 +21,6 @@ import { useEffect, useMemo, useState } from 'react';
 export default function ExternalLogin() {
   const searchParams = useSearchParams();
   const externalClientToken = searchParams.get('externalClientToken') as string;
-  const redirectUrl = searchParams.get('redirect') as string;
 
   const { basicUserInformationQuery } = useGetBasicUserInformation();
   const { getActiveSessionsQuery } = useGetActiveSessions();
@@ -29,14 +28,20 @@ export default function ExternalLogin() {
 
   const authState = readAuthStateFromLocal();
 
-  const [isLoading, setIsLoading] = useState(true);
+  const [userEmail, setUserEmail] = useState<string>();
 
   const [externalClientPayload, setExternalClientPayload] =
     useState<ExternalClientPayload>();
   const [currentSession, setCurrentSession] = useState<ActiveSession>();
 
+  const [pageState, setPageState] = useState<
+    'verifying' | 'loggingIn' | 'error' | 'verified' | 'loggedIn'
+  >('verifying');
+
   const handleContinue = async () => {
     if (!externalClientPayload) return;
+
+    setPageState('loggingIn');
 
     try {
       const response = await apiClient.externalLogin({
@@ -45,41 +50,45 @@ export default function ExternalLogin() {
         userAgent: externalClientPayload.userAgent,
       });
 
-      const credentials = {
-        accessToken: response.accessToken,
-        refreshToken: response.refreshToken,
-        serverUrl: authState?.serverUrl,
-      };
+      setUserEmail(response.user.email);
 
-      const url = new URL(
-        redirectUrl + '/?c=' + btoa(JSON.stringify(credentials)),
+      window.postMessage(
+        {
+          type: 'external_login',
+          accessToken: response.accessToken,
+          refreshToken: response.refreshToken,
+          serverUrl: authState?.serverUrl,
+        },
+        window.location.origin,
       );
 
-      window.open(url.toString(), '_blank');
+      setPageState('loggedIn');
     } catch (error) {
       console.log(error);
+      setPageState('error');
     }
   };
 
   useEffect(() => {
     const verifyExternalClient = async () => {
       try {
-        setIsLoading(true);
-
         const response =
           await apiClient.verifyExternalClient(externalClientToken);
 
         setExternalClientPayload(response.payload);
+
+        setPageState('verified');
       } catch (error) {
         console.log(error);
-      } finally {
-        setIsLoading(false);
+        setPageState('error');
       }
     };
 
     if (authState?.isLoggedIn) {
-      verifyExternalClient();
+      setPageState('verified');
     }
+
+    verifyExternalClient();
   }, []);
 
   useEffect(() => {
@@ -114,11 +123,13 @@ export default function ExternalLogin() {
         </Text>
       </Link>
 
-      {isLoading ? (
+      {(pageState === 'verifying' || pageState === 'loggingIn') && (
         <div className='flex items-center justify-center flex-1'>
           <Spinner />
         </div>
-      ) : (
+      )}
+
+      {pageState === 'verified' && (
         <div className='flex flex-col w-full gap-1 flex-1 justify-between'>
           <div>
             <Text fontSize={'large'} fontWeight={'bold'}>
@@ -145,6 +156,28 @@ export default function ExternalLogin() {
           >
             Continue as {basicUserInformationQuery.data?.email}
           </Button>
+        </div>
+      )}
+
+      {pageState === 'error' && (
+        <div className='flex flex-col w-full gap-1 flex-1 justify-center items-center'>
+          <Text fontSize={'medium'} color={'gray.500'}>
+            An error occurred while verifying your external client.
+          </Text>
+          <Link href='/'>
+            <Button>Go back</Button>
+          </Link>
+        </div>
+      )}
+
+      {pageState === 'loggedIn' && (
+        <div className='flex flex-col w-full gap-1 flex-1 justify-center items-center'>
+          <Text fontSize={'large'} fontWeight={'bold'}>
+            Success
+          </Text>
+          <Text fontSize={'medium'} color={'gray.500'}>
+            You have been logged in successfully as {userEmail}.
+          </Text>
         </div>
       )}
     </AuthLayout>
