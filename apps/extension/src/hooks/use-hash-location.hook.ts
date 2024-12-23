@@ -35,15 +35,6 @@ export function useHashLocation(): [string, (to: string) => void] {
           setLocation(newLocation);
         }
       }
-      // if (newLocation === '/' && persistedScreen !== '/') {
-      //   window.location.hash = persistedScreen;
-      //   setLocation(persistedScreen);
-      // } else if (newLocation === '/' && isLoggedIn) {
-      //   window.location.hash = '/navigation-entries';
-      //   setLocation('/navigation-entries');
-      // } else {
-      //   setLocation(newLocation);
-      // }
     };
 
     window.addEventListener('hashchange', onHashChange);

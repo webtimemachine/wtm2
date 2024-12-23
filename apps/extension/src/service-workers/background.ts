@@ -35,6 +35,18 @@ chrome.runtime.onConnect.addListener(async (port) => {
         break;
       }
 
+      case ServiceWorkerMessageType.EXTERNAL_LOGIN: {
+        const { accessToken, refreshToken, serverUrl } = message;
+
+        chrome.storage.local.set({
+          accessToken,
+          refreshToken,
+          serverUrl,
+        });
+
+        break;
+      }
+
       case ServiceWorkerMessageType.UPDATE_EXTENSION_ICON:
         setCorrectIconByUserPreferences();
         break;
