@@ -100,12 +100,6 @@ export const LoginScreen: React.FC = () => {
         'externalClientToken',
         response.externalClientToken,
       );
-      webUrl.searchParams.append(
-        'redirect',
-        'chrome-extension://' +
-          chrome.runtime.id +
-          '/index.html#/external-login',
-      );
 
       chrome.tabs.create({
         url: webUrl.toString(),

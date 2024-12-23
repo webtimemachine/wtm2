@@ -34,6 +34,7 @@ jest.mock('clsx');
 
 jest.mock('@wtm/api', () => ({
   isLoginRes: jest.fn(),
+  ApiClient: jest.fn(),
 }));
 
 jest.mock('../../utils/updateIcon', () => ({
