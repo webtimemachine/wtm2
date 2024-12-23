@@ -744,14 +744,10 @@ export class AuthService {
 
     const knownExternalClients = appEnv.KNOWN_EXTERNAL_CLIENTS;
 
-    console.log('knownExternalClients', knownExternalClients);
-
     if (!knownExternalClients || knownExternalClients.length <= 0) {
       throw new UnauthorizedException();
     }
     const externalClientId = atob(encodedExternalClientId);
-
-    console.log('externalClientId', externalClientId);
 
     for (const knownExternalClient of knownExternalClients) {
       const externalClientName = knownExternalClient.externalClientName;
