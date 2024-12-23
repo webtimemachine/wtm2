@@ -219,7 +219,7 @@ export class NavigationEntryService {
       const imageCaptionsMarkdown =
         this.formatImageCaptionsMarkdown(imageCaptions);
       const secureContentSized =
-        content?.length! <= 1048500 ? content : content?.slice(0, 1048500);
+        content?.length || 0 <= 1048500 ? content : content?.slice(0, 1048500);
       const prompt = PROMPTS.navigationEntrySummary(
         createNavigationEntryInputDto.url,
         secureContentSized || '',
