@@ -211,15 +211,18 @@ export class NavigationEntryService {
 
       const lastEntry = await this.getLastEntryFromUser(jwtContext.user.id);
 
-      const imageCaptions =
-        await this.openAIService.generateImageCaptions(images);
+      const imageCaptions = await this.openAIService.generateImageCaptions(
+        images,
+        hostname,
+      );
 
       const imageCaptionsMarkdown =
         this.formatImageCaptionsMarkdown(imageCaptions);
-
+      const secureContentSized =
+        content?.length! <= 1048500 ? content : content?.slice(0, 1048500);
       const prompt = PROMPTS.navigationEntrySummary(
         createNavigationEntryInputDto.url,
-        content || '',
+        secureContentSized || '',
       );
 
       const summary = await this.openAIService.generateEntrySummary(prompt);
