@@ -21,7 +21,7 @@ interface AuthStore extends AuthState {
   notifyRecoveryCodeSent: (email: string) => void;
   notifyRecoveryCodeValidated: () => void;
   updateServerUrl: (serverUrl: string) => void;
-  externalLogin: (accessToken: string, refreshToken: string) => void;
+  externalLogin: () => void;
 }
 
 export const readAuthStateFromLocal = (): AuthState | undefined => {
@@ -116,13 +116,8 @@ export const authStore = createStore<AuthStore>()(
           };
         }),
 
-      externalLogin: (accessToken: string, refreshToken: string) =>
+      externalLogin: () =>
         set(() => {
-          chrome.storage.local.set({
-            accessToken,
-            refreshToken,
-          });
-
           return {
             isLoggedIn: true,
             partialToken: '',
