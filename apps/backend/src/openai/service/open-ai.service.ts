@@ -51,7 +51,7 @@ export class OpenAIService {
       if (!parsedData.success) {
         const error = `Failed to parse response: \n${parsedData.error.errors.map(
           (error) => {
-            return `- ${error.code}: ${error.message} | Is Fatal: ${error.fatal} | Path: ${error.path} \n`;
+            return `- ${error.code}: ${error.message} | Is Fatal: ${error.fatal} | Path: ${error.path} \nJSON Result: ${jsonParseFormattedResult} \n`;
           },
         )}`;
         this.logger.error(error);
