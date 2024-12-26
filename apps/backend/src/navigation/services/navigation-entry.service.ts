@@ -158,7 +158,7 @@ export class NavigationEntryService {
   }
 
   private readonly getLastEntryFromUser = async (userId: bigint) => {
-    return await this.prismaService.navigationEntry.findFirstOrThrow({
+    return await this.prismaService.navigationEntry.findFirst({
       where: {
         userId,
       },
@@ -228,7 +228,7 @@ export class NavigationEntryService {
       const summary = await this.openAIService.generateEntrySummary(prompt);
 
       await this.prismaService.$transaction(async (prismaClient) => {
-        if (lastEntry.url === createNavigationEntryInputDto.url) {
+        if (lastEntry?.url === createNavigationEntryInputDto.url) {
           const navEntry = await prismaClient.navigationEntry.update({
             where: {
               id: lastEntry.id,
