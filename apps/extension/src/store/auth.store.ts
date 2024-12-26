@@ -2,7 +2,7 @@ import { useStore } from 'zustand';
 import { createStore } from 'zustand/vanilla';
 import { persist } from 'zustand/middleware';
 import { getRandomToken } from '@wtm/utils';
-
+import { screenStore } from './screens.store';
 import { ScreenName } from './navigation.store';
 import { updateIcon } from '../utils/updateIcon';
 
@@ -21,6 +21,7 @@ interface AuthStore extends AuthState {
   notifyRecoveryCodeSent: (email: string) => void;
   notifyRecoveryCodeValidated: () => void;
   updateServerUrl: (serverUrl: string) => void;
+  externalLogin: () => void;
 }
 
 export const readAuthStateFromLocal = (): AuthState | undefined => {
@@ -32,7 +33,7 @@ export const readAuthStateFromLocal = (): AuthState | undefined => {
 };
 
 export const authStore = createStore<AuthStore>()(
-  persist(
+  persist<AuthStore>(
     (set) => ({
       deviceKey: getRandomToken(),
       serverUrl: 'https://wtm-back.vercel.app',
@@ -49,10 +50,10 @@ export const authStore = createStore<AuthStore>()(
             partialToken: '',
             recoveryToken: '',
           });
+          screenStore.getState().notifyScreen('/');
 
           return {
             serverUrl,
-            persistedScreen: '',
             recoveryEmail: '',
             isLoggedIn: false,
           };
@@ -66,9 +67,8 @@ export const authStore = createStore<AuthStore>()(
             partialToken: '',
             recoveryToken: '',
           });
-
+          screenStore.getState().notifyRecoveryCodeSent();
           return {
-            persistedScreen: 'validate-recovery-code',
             recoveryEmail,
             isLoggedIn: false,
           };
@@ -81,9 +81,9 @@ export const authStore = createStore<AuthStore>()(
             refreshToken: '',
             partialToken: '',
           });
+          screenStore.getState().notifyRecoveryCodeValidated();
 
           return {
-            persistedScreen: 'recovery-new-password',
             isLoggedIn: false,
           };
         }),
@@ -95,9 +95,8 @@ export const authStore = createStore<AuthStore>()(
             refreshToken: '',
             recoveryToken: '',
           });
-
+          screenStore.getState().notifyEmailValidation();
           return {
-            persistedScreen: 'validate-email',
             recoveryEmail: '',
             isLoggedIn: false,
           };
@@ -109,12 +108,21 @@ export const authStore = createStore<AuthStore>()(
             partialToken: '',
             recoveryToken: '',
           });
-
+          screenStore.getState().notifyLogin();
           updateIcon(true);
           return {
-            persistedScreen: '',
             recoveryEmail: '',
             isLoggedIn: true,
+          };
+        }),
+
+      externalLogin: () =>
+        set(() => {
+          return {
+            isLoggedIn: true,
+            partialToken: '',
+            recoveryToken: '',
+            persistedScreen: '',
           };
         }),
 
@@ -128,8 +136,9 @@ export const authStore = createStore<AuthStore>()(
           });
 
           updateIcon(false);
+          screenStore.getState().notifyLogout();
+
           return {
-            persistedScreen: '',
             recoveryEmail: '',
             isLoggedIn: false,
           };

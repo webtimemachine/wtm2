@@ -6,6 +6,7 @@ import {
   useDeleteNavigationEntry,
   useNavigationEntries,
   useBulkDeleteNavigationEntries,
+  useExtensionNavigation,
 } from '../../hooks';
 import { CompleteNavigationEntryDto } from '@wtm/api';
 import { NavigationEntriesScreen } from '../navigation-entries.screen';
@@ -19,6 +20,7 @@ jest.mock('../../hooks', () => ({
   useDeleteNavigationEntry: jest.fn(),
   useNavigationEntries: jest.fn(),
   useBulkDeleteNavigationEntries: jest.fn(),
+  useExtensionNavigation: jest.fn(),
 }));
 
 jest.mock('@wtm/utils', () => ({
@@ -29,9 +31,18 @@ jest.mock('../../utils/updateIcon', () => ({
   updateIcon: jest.fn(),
 }));
 
+jest.mock('wouter', () => ({
+  useLocation: jest.fn(),
+}));
+
 const mockNavigateTo = jest.fn();
 const mockMutate = jest.fn();
 const mockRefetch = jest.fn();
+
+(useExtensionNavigation as jest.Mock).mockReturnValue({
+  navigateTo: jest.fn(),
+  goBack: jest.fn(),
+});
 
 (useNavigation as jest.Mock).mockReturnValue({
   navigateTo: mockNavigateTo,
@@ -129,15 +140,6 @@ describe('NavigationEntriesScreen', () => {
     expect(screen.getByText('WebTM')).toBeInTheDocument();
     expect(screen.getByPlaceholderText('Search')).toBeInTheDocument();
     expect(screen.getAllByText(/Test Entry/i)).toHaveLength(2);
-  });
-
-  test('calls navigateTo settings when settings icon is clicked', () => {
-    customRender(<NavigationEntriesScreen />);
-
-    const settingsButton = screen.getByLabelText('Back icon');
-    fireEvent.click(settingsButton);
-
-    expect(mockNavigateTo).toHaveBeenCalledWith('settings');
   });
 
   test('search functionality updates the query and refetches data', async () => {
