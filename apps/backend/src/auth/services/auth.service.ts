@@ -743,6 +743,7 @@ export class AuthService {
     } = body;
 
     const knownExternalClients = appEnv.KNOWN_EXTERNAL_CLIENTS;
+
     if (!knownExternalClients || knownExternalClients.length <= 0) {
       throw new UnauthorizedException();
     }

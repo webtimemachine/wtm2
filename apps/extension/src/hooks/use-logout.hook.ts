@@ -1,5 +1,8 @@
 import { useAuthStore } from '../store';
-import { ROUTES, useExtensionNavigation } from './use-extension-navigation';
+import {
+  ExtensionRoutes,
+  useExtensionNavigation,
+} from './use-extension-navigation';
 
 export const useLogout = () => {
   const { navigateTo } = useExtensionNavigation();
@@ -14,7 +17,7 @@ export const useLogout = () => {
 
     chrome.runtime.sendNativeMessage('com.ttt246llc.wtm', message);
 
-    navigateTo(ROUTES.LOGIN);
+    navigateTo(ExtensionRoutes.LOGIN);
   };
 
   return { logout };

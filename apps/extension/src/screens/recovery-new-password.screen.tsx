@@ -18,7 +18,7 @@ import { useAuthStore } from '../store';
 import { useRestorePassword } from '../hooks';
 
 import {
-  ROUTES,
+  ExtensionRoutes,
   useExtensionNavigation,
 } from '../hooks/use-extension-navigation';
 
@@ -84,7 +84,7 @@ export const RecoveryNewPassword: React.FC = () => {
 
   useEffect(() => {
     if (restorePasswordMutation.isSuccess) {
-      navigateTo(ROUTES.NAVIGATION_ENTRIES);
+      navigateTo(ExtensionRoutes.NAVIGATION_ENTRIES);
     }
   }, [restorePasswordMutation.isSuccess, navigateTo]);
 
@@ -93,7 +93,7 @@ export const RecoveryNewPassword: React.FC = () => {
       <div className='flex w-full justify-start pb-4 gap-4 items-center'>
         <IconButton
           aria-label='Back icon'
-          onClick={() => navigateTo(ROUTES.LOGIN)}
+          onClick={() => navigateTo(ExtensionRoutes.LOGIN)}
         >
           <Icon className='rotate-180' as={LuLogIn} boxSize={5} />
         </IconButton>

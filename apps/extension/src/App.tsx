@@ -47,38 +47,6 @@ const App: React.FC = () => {
           />
           <Route path='/about-wtm' component={AboutWTMScreen} />
           <Route path='/profile' component={ProfileScreen} />
-          {/* <Route
-            path={'/testqueryparams/*'}
-            component={() => {
-              const [location, navigate] = useLocation();
-              const searchParamsString = location.split('?')[1] || '';
-              const params = new URLSearchParams(searchParamsString);
-
-              const name = params.get('name');
-              const age = params.get('age');
-              console.log(name, age);
-              return (
-                <div className='p-4'>
-                  <Text fontSize='lg' fontWeight='bold'>
-                    Test Query Params
-                  </Text>
-                  <Text>Name: {name || 'No name provided'}</Text>
-                  <Text>Age: {age || 'No age provided'}</Text>
-
-                  <div className='mt-4'>
-                    <Button
-                      colorScheme='blue'
-                      onClick={() => {
-                        navigate('/');
-                      }}
-                    >
-                      Go Back to Login
-                    </Button>
-                  </div>
-                </div>
-              );
-            }}
-          /> */}
         </Router>
       </div>
     </div>

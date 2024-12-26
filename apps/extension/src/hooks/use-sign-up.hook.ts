@@ -4,7 +4,7 @@ import { useAuthStore } from '../store';
 
 import { apiClient } from '../utils/api.client';
 import { useExtensionNavigation } from './use-extension-navigation';
-import { ROUTES } from './use-extension-navigation';
+import { ExtensionRoutes } from './use-extension-navigation';
 
 export const useSignUp = () => {
   const toast = useToast();
@@ -18,7 +18,7 @@ export const useSignUp = () => {
     onSuccess: (res) => {
       if (res.partialToken) {
         notifyEmailValidation();
-        navigateTo(ROUTES.VALIDATE_EMAIL);
+        navigateTo(ExtensionRoutes.VALIDATE_EMAIL);
       }
     },
     onError: (error) => {

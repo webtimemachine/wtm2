@@ -15,10 +15,12 @@ import { isLoginRes, LoginResponse } from '@wtm/api';
 
 import clsx from 'clsx';
 import { updateIcon } from '../utils/updateIcon';
+import { apiClient } from '../utils/api.client';
 
-import { ROUTES } from '../hooks/use-extension-navigation';
+import { ExtensionRoutes } from '../hooks/use-extension-navigation';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const FRONTEND_URL = 'https://webtm.io/';
 
 interface NavigatorUABrandVersion {
   brand: string;
@@ -43,6 +45,7 @@ export const LoginScreen: React.FC = () => {
   updateIcon(false);
 
   const deviceKey = useAuthStore((state) => state.deviceKey);
+  const externalLogin = useAuthStore((state) => state.externalLogin);
   const { loginMutation } = useLogin();
   const { navigateTo } = useExtensionNavigation();
 
@@ -50,6 +53,8 @@ export const LoginScreen: React.FC = () => {
   const [password, setPassword] = useState('');
   const [showPass, setShowPass] = useState(false);
   const [emailError, setEmailError] = useState('');
+
+  const [loadingExternalLogin, setLoadingExternalLogin] = useState(false);
 
   const validateInputs = () => {
     let emailErrorFound = false;
@@ -79,6 +84,33 @@ export const LoginScreen: React.FC = () => {
     }
   };
 
+  const handleExternalLogin = async () => {
+    try {
+      setLoadingExternalLogin(true);
+
+      const response = await apiClient.retrieveExternalLoginToken({
+        externalClientId: btoa(chrome.runtime.id),
+        deviceKey,
+        userAgent: window.navigator.userAgent,
+        userAgentData: JSON.stringify(window?.navigator?.userAgentData || '{}'),
+      });
+
+      const webUrl = new URL(FRONTEND_URL + '/external-login');
+      webUrl.searchParams.append(
+        'externalClientToken',
+        response.externalClientToken,
+      );
+
+      chrome.tabs.create({
+        url: webUrl.toString(),
+      });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoadingExternalLogin(false);
+    }
+  };
+
   useEffect(() => {
     const processLogin = async (data: LoginResponse) => {
       const { serverUrl } = await chrome.storage.local.get(['serverUrl']);
@@ -91,17 +123,33 @@ export const LoginScreen: React.FC = () => {
 
       chrome.runtime.sendNativeMessage('com.ttt246llc.wtm', message);
 
-      navigateTo(ROUTES.NAVIGATION_ENTRIES);
+      navigateTo(ExtensionRoutes.NAVIGATION_ENTRIES);
     };
 
     if (loginMutation.isSuccess) {
       if (isLoginRes(loginMutation.data)) {
         processLogin(loginMutation.data);
       } else {
-        navigateTo(ROUTES.VALIDATE_EMAIL);
+        navigateTo(ExtensionRoutes.VALIDATE_EMAIL);
       }
     }
   }, [loginMutation.isSuccess, loginMutation.data, navigateTo]);
+
+  useEffect(() => {
+    const checkLogin = async () => {
+      const { accessToken, refreshToken } = await chrome.storage.local.get([
+        'accessToken',
+        'refreshToken',
+      ]);
+
+      if (accessToken && refreshToken) {
+        externalLogin();
+        navigateTo(ExtensionRoutes.NAVIGATION_ENTRIES);
+      }
+    };
+
+    checkLogin();
+  }, []);
 
   return (
     <div className='flex flex-col p-8 pt-10 items-center w-full'>
@@ -167,14 +215,14 @@ export const LoginScreen: React.FC = () => {
         <Text
           fontSize='small'
           className='hover:cursor-pointer hover:underline'
-          onClick={() => navigateTo(ROUTES.FORGOT_PASSWORD)}
+          onClick={() => navigateTo(ExtensionRoutes.FORGOT_PASSWORD)}
         >
           Forgot password?
         </Text>
         <Text
           fontSize='small'
           className='hover:cursor-pointer hover:underline'
-          onClick={() => navigateTo(ROUTES.SIGN_UP)}
+          onClick={() => navigateTo(ExtensionRoutes.SIGN_UP)}
         >
           Sign up
         </Text>
@@ -188,6 +236,13 @@ export const LoginScreen: React.FC = () => {
           isLoading={loginMutation.isPending}
         >
           Sign In
+        </Button>
+        <Button
+          onClick={handleExternalLogin}
+          isLoading={loadingExternalLogin}
+          disabled={loadingExternalLogin}
+        >
+          External Login
         </Button>
       </div>
     </div>
