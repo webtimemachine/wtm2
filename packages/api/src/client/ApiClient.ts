@@ -109,6 +109,7 @@ export class ApiClient {
   securedFetch = async (
     endpoint: string,
     init: RequestInit = {},
+    retry: number = 0
   ): Promise<Response> => {
     const serverUrl = await this.getServerUrl();
     const accessToken = await this.getAccessToken();
@@ -142,15 +143,13 @@ export class ApiClient {
       return res;
     } catch (error: unknown) {
       if (error instanceof Error && error.message === 'Unauthorized') {
-        if (fetchRetries >= 4) {
+        if (retry >= 3) {
           throw error;
         }
 
-        fetchRetries++;
-
         await this.refresh();
         console.log('ApiClient Retrying request after refresh', { endpoint });
-        return this.securedFetch(endpoint, init);
+        return this.securedFetch(endpoint, init, retry + 1);
       } else {
         throw error;
       }

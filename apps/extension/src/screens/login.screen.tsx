@@ -20,7 +20,7 @@ import { apiClient } from '../utils/api.client';
 import { ExtensionRoutes } from '../hooks/use-extension-navigation';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const FRONTEND_URL = 'http://localhost:3000';
+const FRONTEND_URL = 'https://webtm.io/';
 
 interface NavigatorUABrandVersion {
   brand: string;
