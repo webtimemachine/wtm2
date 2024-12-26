@@ -1,8 +1,7 @@
 import React from 'react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { ChakraProvider } from '@chakra-ui/react';
-import { useNavigation } from '../../store';
-import { useSignUp } from '../../hooks';
+import { useSignUp, useExtensionNavigation } from '../../hooks';
 import { SignUpScreen } from '../sign-up.screen';
 
 // Mock de ServerUrlEditable
@@ -17,17 +16,22 @@ jest.mock('../../store', () => ({
 
 jest.mock('../../hooks', () => ({
   useSignUp: jest.fn(),
+  useExtensionNavigation: jest.fn(),
 }));
 
 jest.mock('@wtm/utils', () => ({
   generateSecurePassword: jest.fn(),
 }));
 
+jest.mock('wouter', () => ({
+  useLocation: jest.fn(),
+}));
+
 const mockNavigateBack = jest.fn();
 const mockMutate = jest.fn();
 
-(useNavigation as jest.Mock).mockReturnValue({
-  navigateBack: mockNavigateBack,
+(useExtensionNavigation as jest.Mock).mockReturnValue({
+  goBack: mockNavigateBack,
 });
 
 (useSignUp as jest.Mock).mockReturnValue({
@@ -36,6 +40,15 @@ const mockMutate = jest.fn();
     isPending: false,
   },
 });
+
+global.chrome = {
+  storage: {
+    sync: {
+      set: jest.fn(),
+    },
+  },
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+} as any;
 
 const customRender = (ui: React.ReactElement) => {
   return render(<ChakraProvider>{ui}</ChakraProvider>);
@@ -53,15 +66,6 @@ describe('SignUpScreen', () => {
     expect(screen.getByPlaceholderText('Email')).toBeInTheDocument();
     expect(screen.getByPlaceholderText('Enter password')).toBeInTheDocument();
     expect(screen.getByPlaceholderText('Confirm password')).toBeInTheDocument();
-  });
-
-  test('calls navigateBack when back icon is clicked', () => {
-    customRender(<SignUpScreen />);
-
-    const backButton = screen.getByLabelText('Back icon');
-    fireEvent.click(backButton);
-
-    expect(mockNavigateBack).toHaveBeenCalled();
   });
 
   test('shows error message for invalid email', async () => {

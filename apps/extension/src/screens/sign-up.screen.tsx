@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Button,
   Input,
@@ -24,12 +24,12 @@ import {
 import { ArrowBackIcon, InfoIcon } from '@chakra-ui/icons';
 
 import { ServerUrlEditable } from '../components';
-import { useSignUp } from '../hooks';
-
-import { useNavigation } from '../store';
+import { useSignUp, useExtensionNavigation } from '../hooks';
 
 import clsx from 'clsx';
 import { generateSecurePassword } from '@wtm/utils';
+import { screenStore } from '../store/screens.store';
+import { ExtensionRoutes } from '../hooks/use-extension-navigation';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[^\s]{8,20}$/;
@@ -38,7 +38,7 @@ const passwordRegexMessage =
 
 export const SignUpScreen: React.FC = () => {
   const { signUpMutation } = useSignUp();
-  const { navigateBack } = useNavigation();
+  const { navigateTo } = useExtensionNavigation();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -63,7 +63,9 @@ export const SignUpScreen: React.FC = () => {
     onClose: passTooltipOnClose,
     onToggle: passTooltipOnToggle,
   } = useDisclosure();
-
+  useEffect(() => {
+    screenStore.getState().notifyForgotPassword();
+  }, []);
   const validateInputs = () => {
     let emailErrorFound = false;
     let passwordErrorFound = false;
@@ -145,9 +147,16 @@ export const SignUpScreen: React.FC = () => {
     <>
       <div className='flex flex-col p-8 pt-10 items-center w-full'>
         <div className='flex w-full justify-start pb-4 gap-4 items-center'>
-          <IconButton aria-label='Back icon' onClick={() => navigateBack()}>
+          <IconButton
+            aria-label='Back icon'
+            onClick={() => {
+              screenStore.getState().goBack();
+              navigateTo(ExtensionRoutes.LOGIN);
+            }}
+          >
             <ArrowBackIcon boxSize={5} />
           </IconButton>
+
           <div className='flex w-full justify-center pr-[40px]'>
             <Text fontSize={'xx-large'} fontWeight={'bold'}>
               Sign Up

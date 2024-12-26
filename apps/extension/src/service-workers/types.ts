@@ -5,6 +5,7 @@ export enum ServiceWorkerMessageType {
   GENERATE_COMPLETION = 'generate_completion',
   CREATE_NAVIGATION_ENTRY = 'create_navigation_entry',
   UPDATE_EXTENSION_ICON = 'update_extension_icon',
+  EXTERNAL_LOGIN = 'external_login',
 }
 
 export type ServiceWorkerPayload =
@@ -23,6 +24,12 @@ export type ServiceWorkerPayload =
     }
   | {
       type: ServiceWorkerMessageType.UPDATE_EXTENSION_ICON;
+    }
+  | {
+      type: ServiceWorkerMessageType.EXTERNAL_LOGIN;
+      accessToken: string;
+      refreshToken: string;
+      serverUrl: string;
     };
 
 export enum EngineStatus {

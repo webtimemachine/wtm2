@@ -39,13 +39,14 @@ import {
   useNavigationEntries,
 } from '../hooks';
 
-import { useNavigation } from '../store';
 import { getBrowserIconFromDevice } from '@wtm/utils';
 import clsx from 'clsx';
 
 import { updateIcon } from '../utils/updateIcon';
 import Markdown from 'react-markdown';
 import { BiTrash } from 'react-icons/bi';
+import { useExtensionNavigation } from '../hooks';
+import { ExtensionRoutes } from '../hooks/use-extension-navigation';
 
 const getRandomColor = (): string => {
   const colorTags: { [key: number]: string } = {
@@ -252,7 +253,7 @@ const NavigationEntry = ({
 export const NavigationEntriesScreen: React.FC<object> = () => {
   updateIcon(true);
 
-  const { navigateTo } = useNavigation();
+  const { navigateTo } = useExtensionNavigation();
   const toast = useToast();
 
   const LIMIT = 16;
@@ -358,7 +359,7 @@ export const NavigationEntriesScreen: React.FC<object> = () => {
             </div>
             <IconButton
               aria-label='Back icon'
-              onClick={() => navigateTo('settings')}
+              onClick={() => navigateTo(ExtensionRoutes.SETTINGS)}
             >
               <SettingsIcon boxSize={5} />
             </IconButton>
