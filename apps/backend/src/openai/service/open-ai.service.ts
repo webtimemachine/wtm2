@@ -49,10 +49,13 @@ export class OpenAIService {
       );
 
       if (!parsedData.success) {
-        this.logger.error(
-          `Failed to parse response: ${parsedData.error.errors}`,
-        );
-        throw new Error('Failed to parse response');
+        const error = `Failed to parse response: \n${parsedData.error.errors.map(
+          (error) => {
+            return `- ${error.code}: ${error.message} | Is Fatal: ${error.fatal} | Path: ${error.path} \n`;
+          },
+        )}`;
+        this.logger.error(error);
+        throw new Error(error);
       } else {
         return parsedData.data;
       }
@@ -68,7 +71,10 @@ export class OpenAIService {
    * @returns {Promise<string[]>} - A promise that resolves to an array of captions.
    * @throws {Error} - If an unsupported image format is encountered.
    */
-  async generateImageCaptions(images: string[]): Promise<string[]> {
+  async generateImageCaptions(
+    images: string[],
+    hostname: string,
+  ): Promise<string[]> {
     try {
       const captions = await Promise.all(
         images.map(async (img) => {
@@ -82,8 +88,13 @@ export class OpenAIService {
           }
 
           if (!mimeType || !this.allowedMimeTypes.includes(mimeType)) {
+            const reason = mimeType
+              ? !this.allowedMimeTypes.includes(mimeType)
+                ? 'Not an allowed Mime Type'
+                : null
+              : 'No Mime Type provided on image url.';
             throw new Error(
-              'Unsupported image format. Allowed formats: png, jpeg, gif, webp.',
+              `Unsupported image format. Allowed formats: png, jpeg, gif, webp.\nSource: ${hostname}\nImage Type Provided: ${mimeType}\nReason: ${reason}`,
             );
           }
 
