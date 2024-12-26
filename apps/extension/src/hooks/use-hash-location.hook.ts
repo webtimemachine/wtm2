@@ -14,7 +14,6 @@ export function useHashLocation(): [string, (to: string) => void] {
 
       const { screenStack, isLoggedIn } = screenStore.getState();
       const persistedScreen = screenStack[screenStack.length - 1];
-      console.log(persistedScreen, isLoggedIn, newLocation);
       if (isLoggedIn) {
         if (persistedScreen !== '/') {
           window.location.hash = persistedScreen;
@@ -36,15 +35,6 @@ export function useHashLocation(): [string, (to: string) => void] {
           setLocation(newLocation);
         }
       }
-      // if (newLocation === '/' && persistedScreen !== '/') {
-      //   window.location.hash = persistedScreen;
-      //   setLocation(persistedScreen);
-      // } else if (newLocation === '/' && isLoggedIn) {
-      //   window.location.hash = '/navigation-entries';
-      //   setLocation('/navigation-entries');
-      // } else {
-      //   setLocation(newLocation);
-      // }
     };
 
     window.addEventListener('hashchange', onHashChange);

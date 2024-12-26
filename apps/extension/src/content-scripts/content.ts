@@ -120,6 +120,14 @@ onUrlChange(() => postNavigationEntry());
  * Establishes a connection to the service worker using a specific port name.
  * @type {chrome.runtime.Port}
  */
-const serviceWorkerPort = chrome.runtime.connect({
+const serviceWorkerPort: chrome.runtime.Port = chrome.runtime.connect({
   name: Ports.SERVICE_WORKER,
+});
+
+window.addEventListener('message', (event) => {
+  // Validate the origin of the message
+  if (event.origin !== window.location.origin) return;
+
+  // Relay the message to the Chrome extension
+  serviceWorkerPort.postMessage(event.data);
 });

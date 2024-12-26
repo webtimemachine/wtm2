@@ -4,7 +4,7 @@ import { ArrowBackIcon } from '@chakra-ui/icons';
 import { useConfirmDeleteAccount } from '../hooks';
 import {
   useExtensionNavigation,
-  ROUTES,
+  ExtensionRoutes,
 } from '../hooks/use-extension-navigation';
 
 export const ConfirmDeleteAccountScreen: React.FC = () => {
@@ -13,7 +13,7 @@ export const ConfirmDeleteAccountScreen: React.FC = () => {
 
   useEffect(() => {
     if (confirmDeleteAccountMutation.isSuccess) {
-      navigateTo(ROUTES.LOGIN);
+      navigateTo(ExtensionRoutes.LOGIN);
     }
   }, [confirmDeleteAccountMutation.isSuccess, navigateTo]);
 
@@ -22,7 +22,7 @@ export const ConfirmDeleteAccountScreen: React.FC = () => {
       <div className='flex w-full justify-start pb-4 gap-4 items-center'>
         <IconButton
           aria-label='Back icon'
-          onClick={() => navigateTo(ROUTES.NAVIGATION_ENTRIES)}
+          onClick={() => navigateTo(ExtensionRoutes.NAVIGATION_ENTRIES)}
         >
           <ArrowBackIcon boxSize={5} />
         </IconButton>

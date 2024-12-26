@@ -21,6 +21,7 @@ interface AuthStore extends AuthState {
   notifyRecoveryCodeSent: (email: string) => void;
   notifyRecoveryCodeValidated: () => void;
   updateServerUrl: (serverUrl: string) => void;
+  externalLogin: () => void;
 }
 
 export const readAuthStateFromLocal = (): AuthState | undefined => {
@@ -32,7 +33,7 @@ export const readAuthStateFromLocal = (): AuthState | undefined => {
 };
 
 export const authStore = createStore<AuthStore>()(
-  persist(
+  persist<AuthStore>(
     (set) => ({
       deviceKey: getRandomToken(),
       serverUrl: 'https://wtm-back.vercel.app',
@@ -112,6 +113,16 @@ export const authStore = createStore<AuthStore>()(
           return {
             recoveryEmail: '',
             isLoggedIn: true,
+          };
+        }),
+
+      externalLogin: () =>
+        set(() => {
+          return {
+            isLoggedIn: true,
+            partialToken: '',
+            recoveryToken: '',
+            persistedScreen: '',
           };
         }),
 

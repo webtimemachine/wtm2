@@ -24,7 +24,7 @@ import ChangePasswordModal from '../components/change-password-modal.component';
 import ChangeDisplayNameModal from '../components/change-display-name-modal.component';
 import ChangeAvatarModal from '../components/change-avatar-modal.component';
 import {
-  ROUTES,
+  ExtensionRoutes,
   useExtensionNavigation,
 } from '../hooks/use-extension-navigation';
 
@@ -154,7 +154,7 @@ export const ProfileScreen: React.FC<object> = () => {
       <div className='flex w-full justify-start pb-4 gap-4 items-center'>
         <IconButton
           aria-label='Back icon'
-          onClick={() => navigateTo(ROUTES.SETTINGS)}
+          onClick={() => navigateTo(ExtensionRoutes.SETTINGS)}
         >
           <ArrowBackIcon boxSize={5} />
         </IconButton>

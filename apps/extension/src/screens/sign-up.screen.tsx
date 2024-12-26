@@ -29,7 +29,7 @@ import { useSignUp, useExtensionNavigation } from '../hooks';
 import clsx from 'clsx';
 import { generateSecurePassword } from '@wtm/utils';
 import { screenStore } from '../store/screens.store';
-import { ROUTES } from '../hooks/use-extension-navigation';
+import { ExtensionRoutes } from '../hooks/use-extension-navigation';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[^\s]{8,20}$/;
@@ -151,7 +151,7 @@ export const SignUpScreen: React.FC = () => {
             aria-label='Back icon'
             onClick={() => {
               screenStore.getState().goBack();
-              navigateTo(ROUTES.LOGIN);
+              navigateTo(ExtensionRoutes.LOGIN);
             }}
           >
             <ArrowBackIcon boxSize={5} />

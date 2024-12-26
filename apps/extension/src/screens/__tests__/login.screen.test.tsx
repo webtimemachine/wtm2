@@ -5,7 +5,7 @@ import { useLogin, useExtensionNavigation } from '../../hooks';
 import { useAuthStore } from '../../store';
 import { LoginScreen } from '../login.screen';
 import { isLoginRes } from '@wtm/api';
-import { ROUTES } from '../../hooks/use-extension-navigation';
+import { ExtensionRoutes } from '../../hooks/use-extension-navigation';
 
 // Mock de ServerUrlEditable
 jest.mock('../../components', () => ({
@@ -34,6 +34,7 @@ jest.mock('clsx');
 
 jest.mock('@wtm/api', () => ({
   isLoginRes: jest.fn(),
+  ApiClient: jest.fn(),
 }));
 
 jest.mock('../../utils/updateIcon', () => ({
@@ -203,7 +204,9 @@ describe('LoginScreen', () => {
     customRender(<LoginScreen />);
 
     await waitFor(() =>
-      expect(mockNavigateTo).toHaveBeenCalledWith(ROUTES.NAVIGATION_ENTRIES),
+      expect(mockNavigateTo).toHaveBeenCalledWith(
+        ExtensionRoutes.NAVIGATION_ENTRIES,
+      ),
     );
   });
 
@@ -215,7 +218,9 @@ describe('LoginScreen', () => {
     customRender(<LoginScreen />);
 
     await waitFor(() =>
-      expect(mockNavigateTo).toHaveBeenCalledWith(ROUTES.VALIDATE_EMAIL),
+      expect(mockNavigateTo).toHaveBeenCalledWith(
+        ExtensionRoutes.VALIDATE_EMAIL,
+      ),
     );
   });
 
@@ -245,7 +250,9 @@ describe('LoginScreen', () => {
 
     fireEvent.click(forgotPasswordLink);
 
-    expect(mockNavigateTo).toHaveBeenCalledWith(ROUTES.FORGOT_PASSWORD);
+    expect(mockNavigateTo).toHaveBeenCalledWith(
+      ExtensionRoutes.FORGOT_PASSWORD,
+    );
   });
 
   test('navigates to sign up screen', () => {
@@ -255,6 +262,6 @@ describe('LoginScreen', () => {
 
     fireEvent.click(signUpLink);
 
-    expect(mockNavigateTo).toHaveBeenCalledWith(ROUTES.SIGN_UP);
+    expect(mockNavigateTo).toHaveBeenCalledWith(ExtensionRoutes.SIGN_UP);
   });
 });
