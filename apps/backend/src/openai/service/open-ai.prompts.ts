@@ -42,6 +42,18 @@ export const PROMPTS = {
       - Each tags name must be un uppercase, if a space or a . separates 2 words, apply a _ for separating
       - Quantity of tags must be lower to 5
       - Tags language must be en english, no matter the language of the content.
+      - Maximum string lenght must be lower than 1048500 characters.
+      
+      # OUTPUT EXAMPLE
+      {
+        "data": {
+          "content": "## SUMMARY:\nSummarizing and formatting content effectively using Markdown and JSON standards.\n\n## MAIN POINTS:\n1. Concise summarization method.\n2. Markdown structure enforced.\n3. JSON output with semantic tags.\n4. Auto-detection of code and formatting.\n\n## TAKEAWAYS:\n1. Ensures clarity and brevity.\n2. Easy code formatting.\n3. Semantic tagging included.\n\n## CODE:\n'javascript\nconst summarize = (text) => text.substring(0, 20);\n'\n\n## TAGS:\n1. CONTENT_SUMMARY\n2. MARKDOWN_FORMATTING\n\n## SOURCE:\n[https://example.com](https://example.com)",
+          "tags": ["CONTENT_SUMMARY", "MARKDOWN_FORMATTING"],
+          "source": "https://example.com"
+        }
+      }
+
+
       # INPUT:
   
       INPUT:
