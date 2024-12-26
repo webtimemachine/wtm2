@@ -38,8 +38,6 @@ import {
 import { ChangeUserAvatar } from '../interfaces/change-user-avatar.interface';
 import { BulkDeleteNavigationEntriesData } from '../interfaces/navigation-entry.interface';
 
-let fetchRetries = 0;
-
 interface ApiClientOptions {
   getServerUrl: () => Promise<string>;
 
