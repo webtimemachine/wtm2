@@ -43,10 +43,21 @@ export class OpenAIService {
     try {
       const formattedResult = await this.model.invoke([prompt]);
       const jsonParseFormattedResult = JSON.parse(formattedResult);
+      const finalJsonParsed = {
+        data: {
+          content:
+            jsonParseFormattedResult?.data?.content ||
+            jsonParseFormattedResult?.content,
+          tags:
+            jsonParseFormattedResult?.data?.tags ||
+            jsonParseFormattedResult?.tags,
+          source:
+            jsonParseFormattedResult?.data?.source ||
+            jsonParseFormattedResult?.source,
+        },
+      };
 
-      const parsedData = SummaryPromptSchema.safeParse(
-        jsonParseFormattedResult,
-      );
+      const parsedData = SummaryPromptSchema.safeParse(finalJsonParsed);
 
       if (!parsedData.success) {
         const error = `Failed to parse response: \n${parsedData.error.errors.map(
