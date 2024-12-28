@@ -1,3 +1,5 @@
+require('newrelic');
+
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory, HttpAdapterHost } from '@nestjs/core';
 
