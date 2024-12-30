@@ -124,7 +124,9 @@ export class NavigationEntryService {
     prismaClient: Prisma.TransactionClient,
   ) {
     const tags = parsedData.data.tags;
-
+    if (!tags || tags.length === 0) {
+      return;
+    }
     await prismaClient.tag.createMany({
       data: tags.map((tagName) => ({ name: tagName })),
       skipDuplicates: true,
