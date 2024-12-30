@@ -17,7 +17,7 @@ export class OpenAIService {
   private readonly model: OpenAI = new OpenAI({
     openAIApiKey: appEnv.OPENAI_ACCESS_TOKEN,
     modelName: 'gpt-4o-mini',
-    temperature: 0.8,
+    temperature: 0.85,
   });
   private readonly captionerModel = new OpenAI({
     modelName: 'gpt-4o',
@@ -50,10 +50,12 @@ export class OpenAIService {
             jsonParseFormattedResult?.content,
           tags:
             jsonParseFormattedResult?.data?.tags ||
-            jsonParseFormattedResult?.tags,
+            jsonParseFormattedResult?.tags ||
+            [],
           source:
             jsonParseFormattedResult?.data?.source ||
-            jsonParseFormattedResult?.source,
+            jsonParseFormattedResult?.source ||
+            '',
         },
       };
 
