@@ -49,11 +49,13 @@ export class OpenAIService {
             jsonParseFormattedResult?.data?.content ||
             jsonParseFormattedResult?.content,
           tags:
-            jsonParseFormattedResult?.data?.tags! ||
-            jsonParseFormattedResult?.tags!,
+            jsonParseFormattedResult?.data?.tags ||
+            jsonParseFormattedResult?.tags ||
+            [],
           source:
-            jsonParseFormattedResult?.data?.source! ||
-            jsonParseFormattedResult?.source!,
+            jsonParseFormattedResult?.data?.source ||
+            jsonParseFormattedResult?.source ||
+            '',
         },
       };
 
