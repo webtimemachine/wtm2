@@ -4,11 +4,13 @@ import { crx } from '@crxjs/vite-plugin';
 
 import { manifestChrome } from './manifest-chrome';
 import { manifestFirefox } from './manifest-firefox';
+import { manifestIOS } from './manifest-ios';
 
 const browser = process.env.BROWSER || 'chrome';
-const isFirefox = browser === 'firefox';
 
-const manifest = isFirefox ? manifestFirefox : manifestChrome;
+let manifest = manifestChrome;
+if (browser == 'firefox') manifest = manifestFirefox;
+if (browser == 'ios_extension') manifest = manifestIOS;
 
 // https://vitejs.dev/config/
 export default defineConfig({

@@ -1,4 +1,5 @@
 app_chrome
+app_ios_extension
 app_firefox
 app_safari
 app/src/coverage

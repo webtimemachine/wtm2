@@ -6,10 +6,11 @@
   "scripts": {
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.tsx\" \"test/**/*.ts\"",
     "build": "npm run ensure-build-dir && npm run build:chrome && npm run build:firefox",
-    "build:chrome": "cross-env BROWSER=chrome npm run build:target && npm run copy:chrome",
+    "build:chrome": "cross-env BROWSER=chrome npm run build:target",
+    "build:ios": "cross-env BROWSER=ios_extension npm run build:target && npm run copy:ios",
     "build:firefox": "cross-env BROWSER=firefox npm run build:target",
     "build:target": "vite build && rm -rf ../../build/app_$BROWSER && mv $BROWSER ../../build/app_$BROWSER",
-    "copy:chrome": "mkdir -p ../../native && rm -rf ../../native/app_chrome && cp -r ../../build/app_chrome ../../native/",
+    "copy:ios": "mkdir -p ../../native && rm -rf ../../native/app_ios_extension && cp -r ../../build/app_ios_extension ../../native/",
     "dev": "npm run ensure-build-dir && concurrently \"npm run dev:chrome\" \"npm run dev:firefox\" --names chrome,firefox",
     "dev:chrome": "nodemon --exec npm run build:chrome",
     "dev:firefox": "nodemon --exec npm run build:firefox",

@@ -25,6 +25,13 @@ jobs:
         run: |
           (cd ./build/app_chrome && zip -r ../../chrome-extension.zip .)
           (cd ./build/app_firefox && zip -r ../../firefox-extension.zip .)
+          (cd ./build/app_ios_extension && zip -r ../../app_ios_extension.zip .)
+
+      - name: Upload JS build artifact for iOS build
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-ios-extension-zip
+          path: app_ios_extension.zip
 
       - name: Upload Chrome artifact
         uses: actions/upload-artifact@v4
@@ -124,17 +131,17 @@ jobs:
           cp app.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
           cp extension.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
 
-      - name: Download Chrome artifact
+      - name: Download JS build artifact
         uses: actions/download-artifact@v4
         with:
-          name: chrome-build-zip
+          name: app-ios-extension-zip
           path: 'native/'
 
-      - name: Unzip Chrome artifact
+      - name: Unzip JS build artifact
         working-directory: 'native'
         run: |
-          unzip chrome-extension.zip -d app_chrome
-          rm chrome-extension.zip
+          unzip app_ios_extension.zip -d app_ios_extension
+          rm app_ios_extension.zip
 
       - name: Download ExportOptions artifact
         uses: actions/download-artifact@v4
