@@ -143,26 +143,26 @@
 		ED65F6AF2C667500002564E2 /* wtm Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "wtm Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED65F6B42C667500002564E2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		ED65F6B52C667500002564E2 /* wtm.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = wtm.entitlements; sourceTree = "<group>"; };
-		ED65F6D52C667500002564E2 /* app-icon-grayscale-64.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "app-icon-grayscale-64.png"; path = "../../../app_chrome/app-icon-grayscale-64.png"; sourceTree = "<group>"; };
-		ED65F6D62C667500002564E2 /* app-icon-48.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "app-icon-48.png"; path = "../../../app_chrome/app-icon-48.png"; sourceTree = "<group>"; };
-		ED65F6D72C667500002564E2 /* popup.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = popup.js; path = ../../../app_chrome/popup.js; sourceTree = "<group>"; };
-		ED65F6D82C667500002564E2 /* index.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = index.html; path = ../../../app_chrome/index.html; sourceTree = "<group>"; };
-		ED65F6D92C667500002564E2 /* app-icon-64.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "app-icon-64.png"; path = "../../../app_chrome/app-icon-64.png"; sourceTree = "<group>"; };
-		ED65F6DA2C667500002564E2 /* app-icon-grayscale-48.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "app-icon-grayscale-48.png"; path = "../../../app_chrome/app-icon-grayscale-48.png"; sourceTree = "<group>"; };
-		ED65F6DB2C667500002564E2 /* background.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = background.js; path = ../../../app_chrome/background.js; sourceTree = "<group>"; };
-		ED65F6DC2C667500002564E2 /* app-icon-128.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "app-icon-128.png"; path = "../../../app_chrome/app-icon-128.png"; sourceTree = "<group>"; };
-		ED65F6DD2C667500002564E2 /* app-icon-16.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "app-icon-16.png"; path = "../../../app_chrome/app-icon-16.png"; sourceTree = "<group>"; };
-		ED65F6DE2C667500002564E2 /* app-icon-grayscale-16.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "app-icon-grayscale-16.png"; path = "../../../app_chrome/app-icon-grayscale-16.png"; sourceTree = "<group>"; };
-		ED65F6DF2C667500002564E2 /* index.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; name = index.css; path = ../../../app_chrome/index.css; sourceTree = "<group>"; };
-		ED65F6E02C667500002564E2 /* chunks */ = {isa = PBXFileReference; lastKnownFileType = folder; name = chunks; path = ../../../app_chrome/chunks; sourceTree = "<group>"; };
-		ED65F6E12C667500002564E2 /* app-icon-grayscale-32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "app-icon-grayscale-32.png"; path = "../../../app_chrome/app-icon-grayscale-32.png"; sourceTree = "<group>"; };
-		ED65F6E22C667500002564E2 /* app-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "app-icon.png"; path = "../../../app_chrome/app-icon.png"; sourceTree = "<group>"; };
-		ED65F6E32C667500002564E2 /* app-icon-32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "app-icon-32.png"; path = "../../../app_chrome/app-icon-32.png"; sourceTree = "<group>"; };
-		ED65F6E42C667500002564E2 /* manifest.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = manifest.json; path = ../../../app_chrome/manifest.json; sourceTree = "<group>"; };
-		ED65F6E52C667500002564E2 /* app-icon-grayscale.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "app-icon-grayscale.png"; path = "../../../app_chrome/app-icon-grayscale.png"; sourceTree = "<group>"; };
-		ED65F6E62C667500002564E2 /* app-icon-grayscale-128.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "app-icon-grayscale-128.png"; path = "../../../app_chrome/app-icon-grayscale-128.png"; sourceTree = "<group>"; };
-		ED65F6E72C667500002564E2 /* content.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = content.js; path = ../../../app_chrome/content.js; sourceTree = "<group>"; };
-		ED65F6E82C667500002564E2 /* content.ts-loader.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = "content.ts-loader.js"; path = "../../../app_chrome/content.ts-loader.js"; sourceTree = "<group>"; };
+		ED65F6D52C667500002564E2 /* app-icon-grayscale-64.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "app-icon-grayscale-64.png"; path = "../../../app_ios_extension/app-icon-grayscale-64.png"; sourceTree = "<group>"; };
+		ED65F6D62C667500002564E2 /* app-icon-48.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "app-icon-48.png"; path = "../../../app_ios_extension/app-icon-48.png"; sourceTree = "<group>"; };
+		ED65F6D72C667500002564E2 /* popup.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = popup.js; path = ../../../app_ios_extension/popup.js; sourceTree = "<group>"; };
+		ED65F6D82C667500002564E2 /* index.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = index.html; path = ../../../app_ios_extension/index.html; sourceTree = "<group>"; };
+		ED65F6D92C667500002564E2 /* app-icon-64.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "app-icon-64.png"; path = "../../../app_ios_extension/app-icon-64.png"; sourceTree = "<group>"; };
+		ED65F6DA2C667500002564E2 /* app-icon-grayscale-48.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "app-icon-grayscale-48.png"; path = "../../../app_ios_extension/app-icon-grayscale-48.png"; sourceTree = "<group>"; };
+		ED65F6DB2C667500002564E2 /* background.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = background.js; path = ../../../app_ios_extension/background.js; sourceTree = "<group>"; };
+		ED65F6DC2C667500002564E2 /* app-icon-128.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "app-icon-128.png"; path = "../../../app_ios_extension/app-icon-128.png"; sourceTree = "<group>"; };
+		ED65F6DD2C667500002564E2 /* app-icon-16.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "app-icon-16.png"; path = "../../../app_ios_extension/app-icon-16.png"; sourceTree = "<group>"; };
+		ED65F6DE2C667500002564E2 /* app-icon-grayscale-16.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "app-icon-grayscale-16.png"; path = "../../../app_ios_extension/app-icon-grayscale-16.png"; sourceTree = "<group>"; };
+		ED65F6DF2C667500002564E2 /* index.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; name = index.css; path = ../../../app_ios_extension/index.css; sourceTree = "<group>"; };
+		ED65F6E02C667500002564E2 /* chunks */ = {isa = PBXFileReference; lastKnownFileType = folder; name = chunks; path = ../../../app_ios_extension/chunks; sourceTree = "<group>"; };
+		ED65F6E12C667500002564E2 /* app-icon-grayscale-32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "app-icon-grayscale-32.png"; path = "../../../app_ios_extension/app-icon-grayscale-32.png"; sourceTree = "<group>"; };
+		ED65F6E22C667500002564E2 /* app-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "app-icon.png"; path = "../../../app_ios_extension/app-icon.png"; sourceTree = "<group>"; };
+		ED65F6E32C667500002564E2 /* app-icon-32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "app-icon-32.png"; path = "../../../app_ios_extension/app-icon-32.png"; sourceTree = "<group>"; };
+		ED65F6E42C667500002564E2 /* manifest.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = manifest.json; path = ../../../app_ios_extension/manifest.json; sourceTree = "<group>"; };
+		ED65F6E52C667500002564E2 /* app-icon-grayscale.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "app-icon-grayscale.png"; path = "../../../app_ios_extension/app-icon-grayscale.png"; sourceTree = "<group>"; };
+		ED65F6E62C667500002564E2 /* app-icon-grayscale-128.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "app-icon-grayscale-128.png"; path = "../../../app_ios_extension/app-icon-grayscale-128.png"; sourceTree = "<group>"; };
+		ED65F6E72C667500002564E2 /* content.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = content.js; path = ../../../app_ios_extension/content.js; sourceTree = "<group>"; };
+		ED65F6E82C667500002564E2 /* content.ts-loader.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = "content.ts-loader.js"; path = "../../../app_ios_extension/content-ios.ts-loader.js"; sourceTree = "<group>"; };
 		EDCF42162CBD9C0D00CF6DE6 /* wtm (iOS).entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "wtm (iOS).entitlements"; sourceTree = "<group>"; };
 		EDCF42172CBD9C1E00CF6DE6 /* wtm Extension (iOS).entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "wtm Extension (iOS).entitlements"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -751,7 +751,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.7.3;
+				MARKETING_VERSION = 1.7.4;
 				OTHER_LDFLAGS = (
 					"-framework",
 					SafariServices,
@@ -784,7 +784,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.7.3;
+				MARKETING_VERSION = 1.7.4;
 				OTHER_LDFLAGS = (
 					"-framework",
 					SafariServices,
@@ -825,7 +825,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.7.3;
+				MARKETING_VERSION = 1.7.4;
 				OTHER_LDFLAGS = (
 					"-framework",
 					SafariServices,
@@ -869,7 +869,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.7.3;
+				MARKETING_VERSION = 1.7.4;
 				OTHER_LDFLAGS = (
 					"-framework",
 					SafariServices,

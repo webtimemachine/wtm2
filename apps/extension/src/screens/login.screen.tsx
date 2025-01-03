@@ -137,13 +137,22 @@ export const LoginScreen: React.FC = () => {
 
   useEffect(() => {
     const checkLogin = async () => {
-      const { accessToken, refreshToken } = await chrome.storage.local.get([
-        'accessToken',
-        'refreshToken',
-      ]);
+      const { accessToken, refreshToken, serverUrl } =
+        await chrome.storage.local.get([
+          'accessToken',
+          'refreshToken',
+          'serverUrl',
+        ]);
 
       if (accessToken && refreshToken) {
         externalLogin();
+
+        chrome.runtime.sendNativeMessage('com.ttt246llc.wtm', {
+          refreshToken,
+          backUrl: serverUrl,
+          isLogin: true,
+        });
+
         navigateTo(ExtensionRoutes.NAVIGATION_ENTRIES);
       }
     };
