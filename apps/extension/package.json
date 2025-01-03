@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.tsx\" \"test/**/*.ts\"",
-    "build": "npm run ensure-build-dir && npm run build:chrome && npm run build:firefox",
+    "build": "npm run ensure-build-dir && npm run build:chrome && npm run build:firefox && npm run build:ios",
     "build:chrome": "cross-env BROWSER=chrome npm run build:target",
     "build:ios": "cross-env BROWSER=ios_extension npm run build:target && npm run copy:ios",
     "build:firefox": "cross-env BROWSER=firefox npm run build:target",
